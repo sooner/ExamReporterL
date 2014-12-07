@@ -1,0 +1,12 @@
+System.Data.MissingPrimaryKeyException: 表没有主键。
+   在 System.Data.DataTable.FindByPrimaryKey(Object value)
+   在 System.Data.DataRowCollection.Find(Object key)
+   在 ExamReport.WordCreator.creating_HK_word() 位置 D:\project\vs\ExamReport\ExamReport\WordCreator.cs:行号 90
+   在 ExamReport.ExecuteMethod.HK_process() 位置 D:\project\vs\ExamReport\ExamReport\ExecuteMethod.cs:行号 276
+   在 ExamReport.ExecuteMethod.pre_process() 位置 D:\project\vs\ExamReport\ExamReport\ExecuteMethod.cs:行号 159
+   在 ExamReport.Form1.startProcess.data_process() 位置 D:\project\vs\ExamReport\ExamReport\Form1.cs:行号 692
+   在 System.Threading.ThreadHelper.ThreadStart_Context(Object state)
+   在 System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   在 System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   在 System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+   在 System.Threading.ThreadHelper.ThreadStart()
