@@ -23,3 +23,16 @@ D:\project\vs\ExamReport\test_statistic\obj\Release\test_statistic.dll
 D:\project\vs\ExamReport\test_statistic\obj\Release\test_statistic.pdb
 D:\project\vs\ExamReport\test_statistic\bin\Release\Microsoft.Practices.EnterpriseLibrary.Common.dll
 D:\project\vs\ExamReport\test_statistic\bin\Release\Microsoft.Practices.ObjectBuilder.dll
+D:\project\ExamReporterL\ExamReporterL\test_statistic\bin\Release\test_statistic.dll
+D:\project\ExamReporterL\ExamReporterL\test_statistic\bin\Release\test_statistic.pdb
+D:\project\ExamReporterL\ExamReporterL\test_statistic\bin\Release\ExamReport.exe
+D:\project\ExamReporterL\ExamReporterL\test_statistic\bin\Release\Microsoft.Practices.EnterpriseLibrary.Common.dll
+D:\project\ExamReporterL\ExamReporterL\test_statistic\bin\Release\Microsoft.Practices.ObjectBuilder.dll
+D:\project\ExamReporterL\ExamReporterL\test_statistic\bin\Release\Microsoft.Vbe.Interop.dll
+D:\project\ExamReporterL\ExamReporterL\test_statistic\bin\Release\Microsoft.Office.Interop.SmartTag.dll
+D:\project\ExamReporterL\ExamReporterL\test_statistic\bin\Release\ExamReport.pdb
+D:\project\ExamReporterL\ExamReporterL\test_statistic\bin\Release\ExamReport_Accessor.exe
+D:\project\ExamReporterL\ExamReporterL\test_statistic\bin\Release\ExamReport_Accessor.pdb
+D:\project\ExamReporterL\ExamReporterL\test_statistic\obj\Release\test_statistic.csprojResolveAssemblyReference.cache
+D:\project\ExamReporterL\ExamReporterL\test_statistic\obj\Release\test_statistic.dll
+D:\project\ExamReporterL\ExamReporterL\test_statistic\obj\Release\test_statistic.pdb

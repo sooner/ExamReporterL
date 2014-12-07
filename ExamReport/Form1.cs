@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Threading;
+using System.Configuration;
 
 using System.Drawing.Drawing2D;
 
@@ -16,6 +17,7 @@ namespace ExamReport
     public delegate void ErrorMessage(string Message);
     public partial class Form1 : Form
     {
+        SchoolCodeConfig schoolcode;
         Thread thread;
          
         public Form1()
@@ -42,6 +44,7 @@ namespace ExamReport
             cancel.Enabled = false;
             save_address.Text = System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath);
 
+            schoolcode = (SchoolCodeConfig)ConfigurationManager.GetSection("SchoolCode");
             groupBox5.Enabled = false;
             int curryear = DateTime.Now.Year;
             for (int i = curryear - 10; i < curryear + 10; i++)
@@ -136,6 +139,7 @@ namespace ExamReport
                     report.Items.Add("总体");
                     report.Items.Add("区县");
                     report.ResetText();
+
                     break;
                 case 1:
                     Quxian_disable();
@@ -187,6 +191,7 @@ namespace ExamReport
                     report.Items.Add("区县");
                     report.Items.Add("两类示范校");
                     report.Items.Add("城郊");
+                    report.Items.Add("学校");
                     report.ResetText();
                     break;
                 default:
@@ -307,29 +312,16 @@ namespace ExamReport
         }
         void AddQX()
         {
-            QX_list.Items.Clear();
-            QX_list.Items.Add("东城区");
-            QX_list.Items.Add("西城区");
-            QX_list.Items.Add("朝阳区");
-            QX_list.Items.Add("丰台区");
-            QX_list.Items.Add("石景山区");
-            QX_list.Items.Add("海淀区");
-            QX_list.Items.Add("门头沟区");
-            QX_list.Items.Add("燕山区");
-            QX_list.Items.Add("房山区");
-            QX_list.Items.Add("通州区");
-            QX_list.Items.Add("顺义区");
-            QX_list.Items.Add("昌平区");
-            QX_list.Items.Add("大兴区");
-            QX_list.Items.Add("怀柔区");
-            QX_list.Items.Add("平谷区");
-            QX_list.Items.Add("密云县");
-            QX_list.Items.Add("延庆县");
+            SchoolCodeConfig schoolcode = (SchoolCodeConfig)ConfigurationManager.GetSection("DistrictCode");
+            QX_list.DataSource = schoolcode.KeyValues.Cast<MyKeyValueSetting>().ToDataTable();
+            QX_list.DisplayMember = "value";
+            QX_list.ValueMember = "key";
+
             QX_list.ResetText();
         }
         void deleteQX()
         {
-            QX_list.Items.Clear();
+            QX_list.DataSource = null;
             QX_list.ResetText();
         }
         private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
@@ -356,6 +348,13 @@ namespace ExamReport
                 CJ_enable();
                 SFX_disable();
                 deleteQX();
+            }
+            else if (report.SelectedItem.ToString().Trim().Equals("学校"))
+            {
+                Quxian_enable();
+                CJ_enable();
+                SFX_enable();
+                AddQX();
             }
             else{
                 Quxian_disable();
@@ -557,7 +556,7 @@ namespace ExamReport
                     exe.Quxian_catagory = QXS_address.Text;
 
                     exe.Cj_catagory = CJ_address.Text;
-                    exe.Quxian_list = QX_list.SelectedItem.ToString();
+                    exe.Quxian_list = QX_list.SelectedValue.ToString().Trim();
                     Utils.QX = QX_list.SelectedItem.ToString();
                 }
                 if (exe.Report_style.Equals("两类示范校"))
@@ -731,6 +730,37 @@ namespace ExamReport
                 run_button.Enabled = true;
             }
 
+        }
+
+        private void QX_list_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (QX_list.DataSource != null && report.SelectedItem.ToString().Trim().Equals("学校"))
+            {
+                string code_str = QX_list.SelectedValue.ToString();
+                if (!code_str.Contains(','))
+                {
+                    school.DataSource = schoolcode.KeyValues.Cast<MyKeyValueSetting>().Where(c => c.Key.StartsWith(code_str)).ToDataTable();
+                }
+                else
+                {
+                    string[] codes = code_str.Split(',');
+                    IEnumerable<MyKeyValueSetting> data = new List<MyKeyValueSetting>(); 
+                    foreach (string single_code in codes)
+                    {
+                        IEnumerable<MyKeyValueSetting> temp = schoolcode.KeyValues.Cast<MyKeyValueSetting>().Where(c => c.Key.StartsWith(single_code));
+                        data = data.Concat(temp).ToList();
+                    }
+                    school.DataSource = data.ToDataTable();
+                }
+                school.DisplayMember = "value";
+                school.ValueMember = "key";
+                school.ResetText();
+            }
+            else
+            {
+                school.DataSource = null;
+                school.ResetText();
+            }
         }
 
 

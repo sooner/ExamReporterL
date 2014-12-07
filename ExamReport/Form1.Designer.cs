@@ -134,8 +134,10 @@
             this.year_list = new System.Windows.Forms.ComboBox();
             this.label45 = new System.Windows.Forms.Label();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
-            this.label46 = new System.Windows.Forms.Label();
             this.currmonth = new System.Windows.Forms.ComboBox();
+            this.label46 = new System.Windows.Forms.Label();
+            this.label47 = new System.Windows.Forms.Label();
+            this.school = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).BeginInit();
@@ -318,7 +320,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(165, 12);
+            this.label2.Location = new System.Drawing.Point(163, 12);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(41, 12);
             this.label2.TabIndex = 25;
@@ -327,16 +329,16 @@
             // subject
             // 
             this.subject.FormattingEnabled = true;
-            this.subject.Location = new System.Drawing.Point(201, 9);
+            this.subject.Location = new System.Drawing.Point(199, 9);
             this.subject.Name = "subject";
-            this.subject.Size = new System.Drawing.Size(81, 20);
+            this.subject.Size = new System.Drawing.Size(69, 20);
             this.subject.TabIndex = 26;
             this.subject.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(294, 13);
+            this.label3.Location = new System.Drawing.Point(275, 12);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(65, 12);
             this.label3.TabIndex = 27;
@@ -345,7 +347,7 @@
             // report
             // 
             this.report.FormattingEnabled = true;
-            this.report.Location = new System.Drawing.Point(355, 9);
+            this.report.Location = new System.Drawing.Point(332, 8);
             this.report.Name = "report";
             this.report.Size = new System.Drawing.Size(79, 20);
             this.report.TabIndex = 28;
@@ -364,12 +366,12 @@
             // 
             this.data_address.Location = new System.Drawing.Point(81, 44);
             this.data_address.Name = "data_address";
-            this.data_address.Size = new System.Drawing.Size(502, 21);
+            this.data_address.Size = new System.Drawing.Size(517, 21);
             this.data_address.TabIndex = 30;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(595, 42);
+            this.button1.Location = new System.Drawing.Point(614, 42);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(111, 23);
             this.button1.TabIndex = 31;
@@ -390,12 +392,12 @@
             // 
             this.standard_ans.Location = new System.Drawing.Point(81, 78);
             this.standard_ans.Name = "standard_ans";
-            this.standard_ans.Size = new System.Drawing.Size(503, 21);
+            this.standard_ans.Size = new System.Drawing.Size(517, 21);
             this.standard_ans.TabIndex = 33;
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(595, 76);
+            this.button2.Location = new System.Drawing.Point(614, 76);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(111, 23);
             this.button2.TabIndex = 34;
@@ -416,12 +418,12 @@
             // 
             this.groups_address.Location = new System.Drawing.Point(81, 109);
             this.groups_address.Name = "groups_address";
-            this.groups_address.Size = new System.Drawing.Size(503, 21);
+            this.groups_address.Size = new System.Drawing.Size(517, 21);
             this.groups_address.TabIndex = 36;
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(595, 108);
+            this.button3.Location = new System.Drawing.Point(614, 107);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(111, 23);
             this.button3.TabIndex = 37;
@@ -442,12 +444,12 @@
             // 
             this.QXS_address.Location = new System.Drawing.Point(81, 174);
             this.QXS_address.Name = "QXS_address";
-            this.QXS_address.Size = new System.Drawing.Size(502, 21);
+            this.QXS_address.Size = new System.Drawing.Size(517, 21);
             this.QXS_address.TabIndex = 39;
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(595, 173);
+            this.button4.Location = new System.Drawing.Point(614, 174);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(111, 23);
             this.button4.TabIndex = 40;
@@ -803,12 +805,12 @@
             // 
             this.WLZ_address.Location = new System.Drawing.Point(81, 145);
             this.WLZ_address.Name = "WLZ_address";
-            this.WLZ_address.Size = new System.Drawing.Size(502, 21);
+            this.WLZ_address.Size = new System.Drawing.Size(517, 21);
             this.WLZ_address.TabIndex = 50;
             // 
             // button10
             // 
-            this.button10.Location = new System.Drawing.Point(595, 140);
+            this.button10.Location = new System.Drawing.Point(614, 140);
             this.button10.Name = "button10";
             this.button10.Size = new System.Drawing.Size(111, 23);
             this.button10.TabIndex = 51;
@@ -829,12 +831,12 @@
             // 
             this.SFX_address.Location = new System.Drawing.Point(81, 205);
             this.SFX_address.Name = "SFX_address";
-            this.SFX_address.Size = new System.Drawing.Size(503, 21);
+            this.SFX_address.Size = new System.Drawing.Size(517, 21);
             this.SFX_address.TabIndex = 53;
             // 
             // button11
             // 
-            this.button11.Location = new System.Drawing.Point(595, 204);
+            this.button11.Location = new System.Drawing.Point(614, 205);
             this.button11.Name = "button11";
             this.button11.Size = new System.Drawing.Size(111, 23);
             this.button11.TabIndex = 54;
@@ -855,12 +857,12 @@
             // 
             this.CJ_address.Location = new System.Drawing.Point(81, 238);
             this.CJ_address.Name = "CJ_address";
-            this.CJ_address.Size = new System.Drawing.Size(502, 21);
+            this.CJ_address.Size = new System.Drawing.Size(517, 21);
             this.CJ_address.TabIndex = 56;
             // 
             // button9
             // 
-            this.button9.Location = new System.Drawing.Point(595, 237);
+            this.button9.Location = new System.Drawing.Point(614, 238);
             this.button9.Name = "button9";
             this.button9.Size = new System.Drawing.Size(111, 23);
             this.button9.TabIndex = 57;
@@ -937,15 +939,16 @@
             // QX_list
             // 
             this.QX_list.FormattingEnabled = true;
-            this.QX_list.Location = new System.Drawing.Point(513, 8);
+            this.QX_list.Location = new System.Drawing.Point(479, 8);
             this.QX_list.Name = "QX_list";
-            this.QX_list.Size = new System.Drawing.Size(78, 20);
+            this.QX_list.Size = new System.Drawing.Size(69, 20);
             this.QX_list.TabIndex = 66;
+            this.QX_list.SelectedIndexChanged += new System.EventHandler(this.QX_list_SelectedIndexChanged);
             // 
             // label40
             // 
             this.label40.AutoSize = true;
-            this.label40.Location = new System.Drawing.Point(450, 12);
+            this.label40.Location = new System.Drawing.Point(417, 12);
             this.label40.Name = "label40";
             this.label40.Size = new System.Drawing.Size(65, 12);
             this.label40.TabIndex = 67;
@@ -1141,15 +1144,6 @@
             this.groupBox6.TabIndex = 74;
             this.groupBox6.TabStop = false;
             // 
-            // label46
-            // 
-            this.label46.AutoSize = true;
-            this.label46.Location = new System.Drawing.Point(147, 23);
-            this.label46.Name = "label46";
-            this.label46.Size = new System.Drawing.Size(41, 12);
-            this.label46.TabIndex = 74;
-            this.label46.Text = "月份：";
-            // 
             // currmonth
             // 
             this.currmonth.FormattingEnabled = true;
@@ -1171,12 +1165,40 @@
             this.currmonth.Size = new System.Drawing.Size(64, 20);
             this.currmonth.TabIndex = 75;
             // 
+            // label46
+            // 
+            this.label46.AutoSize = true;
+            this.label46.Location = new System.Drawing.Point(147, 23);
+            this.label46.Name = "label46";
+            this.label46.Size = new System.Drawing.Size(41, 12);
+            this.label46.TabIndex = 74;
+            this.label46.Text = "月份：";
+            // 
+            // label47
+            // 
+            this.label47.AutoSize = true;
+            this.label47.Location = new System.Drawing.Point(555, 11);
+            this.label47.Name = "label47";
+            this.label47.Size = new System.Drawing.Size(65, 12);
+            this.label47.TabIndex = 75;
+            this.label47.Text = "学校名称：";
+            // 
+            // school
+            // 
+            this.school.FormattingEnabled = true;
+            this.school.Location = new System.Drawing.Point(612, 8);
+            this.school.Name = "school";
+            this.school.Size = new System.Drawing.Size(113, 20);
+            this.school.TabIndex = 76;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.WhiteSmoke;
             this.ClientSize = new System.Drawing.Size(750, 666);
+            this.Controls.Add(this.school);
+            this.Controls.Add(this.label47);
             this.Controls.Add(this.groupBox6);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.groupBox1);
@@ -1371,6 +1393,8 @@
         private System.Windows.Forms.GroupBox groupBox6;
         private System.Windows.Forms.ComboBox currmonth;
         private System.Windows.Forms.Label label46;
+        private System.Windows.Forms.Label label47;
+        private System.Windows.Forms.ComboBox school;
     }
 }
 

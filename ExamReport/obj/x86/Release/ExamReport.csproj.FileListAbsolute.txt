@@ -28,3 +28,17 @@ D:\project\vs\ExamReport\ExamReport\obj\x86\Release\ExamReport.csprojResolveAsse
 D:\project\vs\ExamReport\ExamReport\obj\x86\Release\ExamReport.Form1.resources
 D:\project\vs\ExamReport\ExamReport\obj\x86\Release\ExamReport.Properties.Resources.resources
 D:\project\vs\ExamReport\ExamReport\obj\x86\Release\ExamReport.csproj.GenerateResource.Cache
+D:\project\ExamReporterL\ExamReporterL\ExamReport\bin\Release\ExamReport.exe.config
+D:\project\ExamReporterL\ExamReporterL\ExamReport\obj\x86\Release\ExamReport.csproj.ResolveComReference.cache
+D:\project\ExamReporterL\ExamReporterL\ExamReport\obj\x86\Release\ExamReport.exe
+D:\project\ExamReporterL\ExamReporterL\ExamReport\obj\x86\Release\ExamReport.pdb
+D:\project\ExamReporterL\ExamReporterL\ExamReport\bin\Release\ExamReport.exe
+D:\project\ExamReporterL\ExamReporterL\ExamReport\bin\Release\ExamReport.pdb
+D:\project\ExamReporterL\ExamReporterL\ExamReport\bin\Release\office.dll
+D:\project\ExamReporterL\ExamReporterL\ExamReport\bin\Release\Microsoft.Vbe.Interop.dll
+D:\project\ExamReporterL\ExamReporterL\ExamReport\bin\Release\Microsoft.Office.Interop.SmartTag.dll
+D:\project\ExamReporterL\ExamReporterL\ExamReport\bin\Release\office.xml
+D:\project\ExamReporterL\ExamReporterL\ExamReport\obj\x86\Release\ExamReport.csprojResolveAssemblyReference.cache
+D:\project\ExamReporterL\ExamReporterL\ExamReport\obj\x86\Release\ExamReport.Form1.resources
+D:\project\ExamReporterL\ExamReporterL\ExamReport\obj\x86\Release\ExamReport.Properties.Resources.resources
+D:\project\ExamReporterL\ExamReporterL\ExamReport\obj\x86\Release\ExamReport.csproj.GenerateResource.Cache

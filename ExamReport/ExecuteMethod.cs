@@ -140,8 +140,8 @@ namespace ExamReport
 
         public void pre_process()
         {
-            try
-            {
+            //try
+            //{
                 Utils.exam = style;
                 Utils.subject = subject;
 
@@ -196,14 +196,14 @@ namespace ExamReport
                     ZK_process();
                 if (style.Equals("高考"))
                     GK_process();
-            }
-            catch (System.Threading.ThreadAbortException e)
-            {
-            }
-            catch (Exception e)
-            {
-                form.ErrorM(e.Message.ToString());
-            }
+            //}
+            //catch (System.Threading.ThreadAbortException e)
+            //{
+            //}
+            //catch (Exception e)
+            //{
+            //    form.ErrorM(e.Message.ToString());
+            //}
             
         }
         public void ZK_process()
@@ -975,64 +975,75 @@ namespace ExamReport
 
         string[] QXTransfer(string QX)
         {
-            
-            switch (QX) 
+
+            if (QX.Contains(','))
             {
-                case "东城区":
-                    string[] dongcheng = { "01", "03" };
-                    return dongcheng;
-                case "西城区":
-                    string[] xicheng = { "02" };
-                    return xicheng;
-                case "朝阳区":
-                    string[] chaoyang = { "05" };
-                    return chaoyang;
-                case "丰台区":
-                    string[] fengtai = { "06" };
-                    return fengtai;
-                case "石景山区":
-                    string[] shijingshan = { "07" };
-                    return shijingshan;
-                case "海淀区":
-                    string[] haidian = { "08" };
-                    return haidian;
-                case "门头沟区":
-                    string[] mentougou = { "09" };
-                    return mentougou;
-                case "燕山区":
-                    string[] yanshan = { "10" };
-                    return yanshan;
-                case "房山区":
-                    string[] fangshan = { "11" };
-                    return fangshan;
-                case "通州区":
-                    string[] tongzhou = { "12" };
-                    return tongzhou;
-                case "顺义区":
-                    string[] shunyi = { "13" };
-                    return shunyi;
-                case "昌平区":
-                    string[] changping = { "14" };
-                    return changping;
-                case "大兴区":
-                    string[] daxing = { "15" };
-                    return daxing;
-                case "怀柔区":
-                    string[] huairou = { "16" };
-                    return huairou;
-                case "平谷区":
-                    string[] pinggu = { "17" };
-                    return pinggu;
-                case "密云县":
-                    string[] miyun = { "28" };
-                    return miyun;
-                case "延庆县":
-                    string[] yanqing = { "29" };
-                    return yanqing;
-                default:
-                    string[] def = { "" };
-                    return def;
+                string[] district = QX.Split(',');
+                return district;
             }
+            else
+            {
+                string[] other = { QX };
+                return other;
+            }
+            
+            //switch (QX) 
+            //{
+            //    case "东城区":
+            //        string[] dongcheng = { "01", "03" };
+            //        return dongcheng;
+            //    case "西城区":
+            //        string[] xicheng = { "02" };
+            //        return xicheng;
+            //    case "朝阳区":
+            //        string[] chaoyang = { "05" };
+            //        return chaoyang;
+            //    case "丰台区":
+            //        string[] fengtai = { "06" };
+            //        return fengtai;
+            //    case "石景山区":
+            //        string[] shijingshan = { "07" };
+            //        return shijingshan;
+            //    case "海淀区":
+            //        string[] haidian = { "08" };
+            //        return haidian;
+            //    case "门头沟区":
+            //        string[] mentougou = { "09" };
+            //        return mentougou;
+            //    case "燕山区":
+            //        string[] yanshan = { "10" };
+            //        return yanshan;
+            //    case "房山区":
+            //        string[] fangshan = { "11" };
+            //        return fangshan;
+            //    case "通州区":
+            //        string[] tongzhou = { "12" };
+            //        return tongzhou;
+            //    case "顺义区":
+            //        string[] shunyi = { "13" };
+            //        return shunyi;
+            //    case "昌平区":
+            //        string[] changping = { "14" };
+            //        return changping;
+            //    case "大兴区":
+            //        string[] daxing = { "15" };
+            //        return daxing;
+            //    case "怀柔区":
+            //        string[] huairou = { "16" };
+            //        return huairou;
+            //    case "平谷区":
+            //        string[] pinggu = { "17" };
+            //        return pinggu;
+            //    case "密云县":
+            //        string[] miyun = { "28" };
+            //        return miyun;
+            //    case "延庆县":
+            //        string[] yanqing = { "29" };
+            //        return yanqing;
+            //    default:
+            //        string[] def = { "" };
+            //        return def;
+            //}
         }
 
     }

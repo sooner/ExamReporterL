@@ -1,10 +1,10 @@
-System.Data.MissingPrimaryKeyException: 表没有主键。
-   在 System.Data.DataTable.FindByPrimaryKey(Object value)
-   在 System.Data.DataRowCollection.Find(Object key)
-   在 ExamReport.WordCreator.creating_HK_word() 位置 D:\project\vs\ExamReport\ExamReport\WordCreator.cs:行号 90
-   在 ExamReport.ExecuteMethod.HK_process() 位置 D:\project\vs\ExamReport\ExamReport\ExecuteMethod.cs:行号 276
-   在 ExamReport.ExecuteMethod.pre_process() 位置 D:\project\vs\ExamReport\ExamReport\ExecuteMethod.cs:行号 159
-   在 ExamReport.Form1.startProcess.data_process() 位置 D:\project\vs\ExamReport\ExamReport\Form1.cs:行号 692
+System.Runtime.InteropServices.COMException (0x80010001): 被呼叫方拒绝接收呼叫。 (异常来自 HRESULT:0x80010001 (RPC_E_CALL_REJECTED))
+   在 Microsoft.Office.Interop.Word.DocumentClass.get_Bookmarks()
+   在 ExamReport.Partition_wordcreator.insertTotalTable(String title, ArrayList totaldata) 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\Partition_wordcreator.cs:行号 1068
+   在 ExamReport.Partition_wordcreator.creating_ZH_QX_word(ArrayList ZH_totaldata, ArrayList ZH_sdata, DataTable ZH_group, Dictionary`2 wenli_group) 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\Partition_wordcreator.cs:行号 77
+   在 ExamReport.ExecuteMethod.GK_process() 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\ExecuteMethod.cs:行号 599
+   在 ExamReport.ExecuteMethod.pre_process() 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\ExecuteMethod.cs:行号 198
+   在 ExamReport.Form1.startProcess.data_process() 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\Form1.cs:行号 698
    在 System.Threading.ThreadHelper.ThreadStart_Context(Object state)
    在 System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
    在 System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
