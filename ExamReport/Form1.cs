@@ -8,6 +8,8 @@ using System.Text;
 using System.Windows.Forms;
 using System.Threading;
 using System.Configuration;
+using PresentationControls;
+
 
 using System.Drawing.Drawing2D;
 
@@ -50,7 +52,7 @@ namespace ExamReport
             for (int i = curryear - 10; i < curryear + 10; i++)
                 year_list.Items.Add(i);
             year_list.SelectedItem = curryear;
-            currmonth.SelectedItem = "7月";
+            currmonth.SelectedItem = DateTime.Now.Month.ToString() + "月";
         }
         public void ErrorM(string message)
         {
@@ -477,6 +479,7 @@ namespace ExamReport
         }
         void start_process()
         {
+            
             if (!ConfigCheck())
                 return;
             startProcess start = new startProcess(this);
@@ -526,7 +529,7 @@ namespace ExamReport
             exe.fullmark = fullmark.Value;
             if (!exam.SelectedItem.ToString().Trim().Equals("会考"))
             {
-                if (exe.Report_style.Equals("区县"))
+                if (exe.Report_style.Equals("区县") || exe.Report_style.Equals("学校"))
                 {
                     if (string.IsNullOrEmpty(QXS_address.Text.Trim()))
                     {
@@ -543,7 +546,7 @@ namespace ExamReport
                         exe.Shifan_catagory = SFX_address.Text;
                     }
 
-                    if (QX_list.SelectedItem == null)
+                    if (string.IsNullOrEmpty(QX_list.Text))
                     {
                         Error("请选择需要生成报告的区县！");
                         return;
@@ -553,11 +556,22 @@ namespace ExamReport
                         Error("请输入城郊分类文件地址！");
                         return;
                     }
+
                     exe.Quxian_catagory = QXS_address.Text;
 
                     exe.Cj_catagory = CJ_address.Text;
                     exe.Quxian_list = QX_list.SelectedValue.ToString().Trim();
                     Utils.QX = QX_list.Text.ToString().Trim();
+                    if (exe.Report_style.Equals("学校"))
+                    {
+                        if (string.IsNullOrEmpty(school.Text))
+                        {
+                            Error("请选择学校名称！");
+                            return;
+                        }
+
+                        exe.School_code = schoolCode(school.CheckBoxItems);
+                    }
                 }
                 if (exe.Report_style.Equals("两类示范校"))
                 {
@@ -683,7 +697,35 @@ namespace ExamReport
                 return Error("科目总分应为非负数");
             return true;
         }
+        public Dictionary<string, string> schoolCode(CheckBoxComboBoxItemList checkedcode)
+        {
+            Dictionary<string, string> result = new Dictionary<string, string>(); 
+            string code_str = QX_list.SelectedValue.ToString();
+            List<MyKeyValueSetting> kv;
+            if (!code_str.Contains(','))
+            {
+                 kv = schoolcode.KeyValues.Cast<MyKeyValueSetting>().Where(c => c.Key.StartsWith(code_str)).ToList<MyKeyValueSetting>();
+                
+            }
+            else
+            {
+                string[] codes = code_str.Split(',');
+                IEnumerable<MyKeyValueSetting> data = new List<MyKeyValueSetting>();
+                foreach (string single_code in codes)
+                {
+                    IEnumerable<MyKeyValueSetting> temp = schoolcode.KeyValues.Cast<MyKeyValueSetting>().Where(c => c.Key.StartsWith(single_code));
+                    data = data.Concat(temp).ToList();
+                }
+                kv = data.ToList<MyKeyValueSetting>();
 
+            }
+            for (int i = 0; i < checkedcode.Count; i++)
+            {
+                if (checkedcode[i].Checked)
+                    result.Add(kv[i].Key, kv[i].Value);
+            }
+            return result;
+        }
         public class startProcess
         {
             public ExecuteMethod exe;
@@ -736,10 +778,16 @@ namespace ExamReport
         {
             if (QX_list.DataSource != null && report.SelectedItem.ToString().Trim().Equals("学校"))
             {
+                
+
                 string code_str = QX_list.SelectedValue.ToString();
                 if (!code_str.Contains(','))
                 {
-                    school.DataSource = schoolcode.KeyValues.Cast<MyKeyValueSetting>().Where(c => c.Key.StartsWith(code_str)).ToDataTable();
+                    DataTable DT = schoolcode.KeyValues.Cast<MyKeyValueSetting>().Where(c => c.Key.StartsWith(code_str)).ToDataTable();
+                    school.DataSource = new ListSelectionWrapper<DataRow>(
+                    DT.Rows,
+                    "value"
+                    ); 
                 }
                 else
                 {
@@ -750,10 +798,15 @@ namespace ExamReport
                         IEnumerable<MyKeyValueSetting> temp = schoolcode.KeyValues.Cast<MyKeyValueSetting>().Where(c => c.Key.StartsWith(single_code));
                         data = data.Concat(temp).ToList();
                     }
-                    school.DataSource = data.ToDataTable();
+                    school.DataSource = new ListSelectionWrapper<DataRow>(
+                    data.ToDataTable().Rows,
+                    "value"
+                    );
                 }
-                school.DisplayMember = "value";
-                school.ValueMember = "key";
+                school.DisplayMemberSingleItem = "Name";
+                school.DisplayMember = "NameConcatenated";
+                school.ValueMember = "Selected";
+                
                 school.ResetText();
             }
             else
@@ -761,6 +814,11 @@ namespace ExamReport
                 school.DataSource = null;
                 school.ResetText();
             }
+        }
+
+        private void school_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
 
 

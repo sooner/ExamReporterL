@@ -24,6 +24,7 @@ namespace ExamReport
         public static string year;
         public static string month;
         public static ZK_database.GroupType group_type = ZK_database.GroupType.population;
+        public static string school_name;
 
         public static int smooth_degree = 10;
 
@@ -47,6 +48,7 @@ namespace ExamReport
         public static string GK_ZF_title_1 = "年北京市普通高考";
         public static string GK_ZF_title_2 = "试卷总分统计分析报告";
         public static string GK_WSLG_title_2 = "文史、理工类数据统计分析报告";
+        public static string XX_title = "学校数据统计分析报告";
 
 
         public static void WriteFrontPage(Microsoft.Office.Interop.Word._Document oDoc)
@@ -183,6 +185,27 @@ namespace ExamReport
                             else
                             {
                                 WriteIntoDocument(oDoc, "subject", subject);
+                            }
+                        }
+                        else if (report_style.Equals("学校"))
+                        {
+                            WriteIntoDocument(oDoc, "title_2", XX_title);
+                            if (subject.Contains("理综"))
+                            {
+                                WriteIntoDocument(oDoc, "QX", school_name);
+                                WriteIntoDocument(oDoc, "ZH", "理科综合");
+                                WriteIntoDocument(oDoc, "QX_ZH_subject", subject.Substring(3));
+                            }
+                            else if (subject.Contains("文综"))
+                            {
+                                WriteIntoDocument(oDoc, "QX", school_name);
+                                WriteIntoDocument(oDoc, "ZH", "文科综合");
+                                WriteIntoDocument(oDoc, "QX_ZH_subject", subject.Substring(3));
+                            }
+                            else
+                            {
+                                WriteIntoDocument(oDoc, "QX", school_name);
+                                WriteIntoDocument(oDoc, "QX_subject", subject);
                             }
                         }
 

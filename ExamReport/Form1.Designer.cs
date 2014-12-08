@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            PresentationControls.CheckBoxProperties checkBoxProperties1 = new PresentationControls.CheckBoxProperties();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
@@ -137,7 +138,7 @@
             this.currmonth = new System.Windows.Forms.ComboBox();
             this.label46 = new System.Windows.Forms.Label();
             this.label47 = new System.Windows.Forms.Label();
-            this.school = new System.Windows.Forms.ComboBox();
+            this.school = new PresentationControls.CheckBoxComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).BeginInit();
@@ -1185,11 +1186,15 @@
             // 
             // school
             // 
+            checkBoxProperties1.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.school.CheckBoxProperties = checkBoxProperties1;
+            this.school.DisplayMemberSingleItem = "";
             this.school.FormattingEnabled = true;
-            this.school.Location = new System.Drawing.Point(612, 8);
+            this.school.Location = new System.Drawing.Point(614, 8);
             this.school.Name = "school";
-            this.school.Size = new System.Drawing.Size(113, 20);
+            this.school.Size = new System.Drawing.Size(121, 20);
             this.school.TabIndex = 76;
+            this.school.SelectedIndexChanged += new System.EventHandler(this.school_SelectedIndexChanged);
             // 
             // Form1
             // 
@@ -1394,7 +1399,7 @@
         private System.Windows.Forms.ComboBox currmonth;
         private System.Windows.Forms.Label label46;
         private System.Windows.Forms.Label label47;
-        private System.Windows.Forms.ComboBox school;
+        private PresentationControls.CheckBoxComboBox school;
     }
 }
 

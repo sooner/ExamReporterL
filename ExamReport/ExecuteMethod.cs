@@ -116,6 +116,7 @@ namespace ExamReport
         }
 
         public string Quxian_list;
+        public Dictionary<string, string> School_code;
 
         public ZK_database.GroupType grouptype;
         public decimal divider;
@@ -724,7 +725,94 @@ namespace ExamReport
                     }
 
                 }
+                else if (report_style.Equals("学校"))
+                {
+                    List<PartitionData> total = new List<PartitionData>();
+                    PartitionXXDataProcess(total, db._basic_data, db._group_data, db._group_num);
+
+                    foreach (KeyValuePair<string, string> kv in School_code)
+                    {
+                        Utils.WSLG = true;
+                        PartitionXX(total, db._basic_data, db._group_data, db._group_num, kv.Key);
+                        WordData temp = TotalSchoolCal(db._basic_data, db._group_data, db._group_num, kv.Key);
+                        SchoolWordCreator swc = new SchoolWordCreator(temp, total, kv.Value);
+                        swc.creating_word();
+                    }
+
+                }
             }
+        }
+        WordData TotalSchoolCal(DataTable data, DataTable group, int groupnum, string school)
+        {
+            DataTable XX = data.filteredtable("schoolcode", new string[] { school });
+            DataTable XX_group = group.filteredtable("schoolcode", new string[] { school });
+
+            WordData result = new WordData(groups.groups_group);
+            Total_statistic stat = new Total_statistic(result, XX, fullmark, ans.dt, XX_group, groups.dt, groupnum);
+            stat.statistic_process(false);
+            if (data.Columns.Contains("XZ"))
+                stat.xz_postprocess(ans.xz_th);
+
+            return result;
+        }
+        void PartitionXX(List<PartitionData> result, DataTable data, DataTable group, int groupnum, string school)
+        {
+            DataTable XX = data.filteredtable("schoolcode", new string[] { school });
+            DataTable XX_group = group.filteredtable("schoolcode", new string[] { school });
+            Partition_statistic XX_stat = new Partition_statistic("本学校", XX, fullmark, ans.dt, XX_group, groups.dt, groupnum);
+            XX_stat.statistic_process(false);
+            if (data.Columns.Contains("XZ"))
+                XX_stat.xz_postprocess(ans.xz_th);
+            result.Insert(0, XX_stat.result);
+        }
+        void PartitionXXDataProcess(List<PartitionData> result, DataTable data, DataTable group, int groupnum)
+        {
+            
+            DataTable QX = data.filteredtable("QX", QXTransfer(Quxian_list));
+            DataTable QX_group = group.filteredtable("QX", QXTransfer(Quxian_list));
+            Partition_statistic qx_stat = new Partition_statistic("区整体", QX, fullmark, ans.dt, QX_group, groups.dt, groupnum);
+            qx_stat.statistic_process(false);
+            if (data.Columns.Contains("XZ"))
+                qx_stat.xz_postprocess(ans.xz_th);
+            result.Add(qx_stat.result);
+
+
+            Partition_statistic total = new Partition_statistic("市整体", data, fullmark, ans.dt, group, groups.dt, groupnum);
+            total.statistic_process(false);
+            if (data.Columns.Contains("XZ"))
+                total.xz_postprocess(ans.xz_th);
+            result.Add(total.result);
+
+            for (int i = 0; i < CJ_list.Count; i++)
+            {
+                ArrayList cj = CJ_list[i];
+                string[] xx_code = new string[cj.Count - 1];
+                for (int j = 1; j < cj.Count; j++)
+                    xx_code[j - 1] = cj[j].ToString().Trim();
+                DataTable temp = data.filteredtable("QX", xx_code);
+                DataTable temp_group = group.filteredtable("QX", xx_code);
+                Partition_statistic stat = new Partition_statistic(cj[0].ToString(), temp, fullmark, ans.dt, temp_group, groups.dt, groupnum);
+                stat.statistic_process(false);
+                if (data.Columns.Contains("XZ"))
+                    stat.xz_postprocess(ans.xz_th);
+                result.Add(stat.result);
+            }
+
+            for (int i = 0; i < SF_list.Count; i++)
+            {
+                ArrayList sf = SF_list[i];
+                string[] xx_code = new string[sf.Count - 1];
+                for (int j = 1; j < sf.Count; j++)
+                    xx_code[j - 1] = sf[j].ToString().Trim();
+                DataTable temp = data.filteredtable("schoolcode", xx_code);
+                DataTable temp_group = group.filteredtable("schoolcode", xx_code);
+                Partition_statistic stat = new Partition_statistic(sf[0].ToString(), temp, fullmark, ans.dt, temp_group, groups.dt, groupnum);
+                stat.statistic_process(false);
+                if (data.Columns.Contains("XZ"))
+                    stat.xz_postprocess(ans.xz_th);
+                result.Add(stat.result);
+            }
+
         }
         void XZ_group_separate(DataTable temp_dt)
         {

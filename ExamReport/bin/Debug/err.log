@@ -1,12 +1,24 @@
-System.Runtime.InteropServices.COMException (0x80010001): 被呼叫方拒绝接收呼叫。 (异常来自 HRESULT:0x80010001 (RPC_E_CALL_REJECTED))
-   在 Microsoft.Office.Interop.Word.DocumentClass.get_Bookmarks()
-   在 ExamReport.Partition_wordcreator.insertTotalTable(String title, ArrayList totaldata) 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\Partition_wordcreator.cs:行号 1068
-   在 ExamReport.Partition_wordcreator.creating_ZH_QX_word(ArrayList ZH_totaldata, ArrayList ZH_sdata, DataTable ZH_group, Dictionary`2 wenli_group) 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\Partition_wordcreator.cs:行号 77
-   在 ExamReport.ExecuteMethod.GK_process() 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\ExecuteMethod.cs:行号 599
-   在 ExamReport.ExecuteMethod.pre_process() 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\ExecuteMethod.cs:行号 198
-   在 ExamReport.Form1.startProcess.data_process() 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\Form1.cs:行号 698
-   在 System.Threading.ThreadHelper.ThreadStart_Context(Object state)
-   在 System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
-   在 System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
-   在 System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
-   在 System.Threading.ThreadHelper.ThreadStart()
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at PresentationControls.CheckBoxComboBoxItem.OnCheckedChanged(EventArgs e)
+   at System.Windows.Forms.CheckBox.set_CheckState(CheckState value)
+   at System.Windows.Forms.CheckBox.OnClick(EventArgs e)
+   at System.Windows.Forms.CheckBox.OnMouseUp(MouseEventArgs mevent)
+   at System.Windows.Forms.Control.WmMouseUp(Message& m, MouseButtons button, Int32 clicks)
+   at System.Windows.Forms.Control.WndProc(Message& m)
+   at System.Windows.Forms.ButtonBase.WndProc(Message& m)
+   at System.Windows.Forms.Control.ControlNativeWindow.OnMessage(Message& m)
+   at System.Windows.Forms.Control.ControlNativeWindow.WndProc(Message& m)
+   at System.Windows.Forms.NativeWindow.DebuggableCallback(IntPtr hWnd, Int32 msg, IntPtr wparam, IntPtr lparam)
+   at System.Windows.Forms.UnsafeNativeMethods.DispatchMessageW(MSG& msg)
+   at System.Windows.Forms.Application.ComponentManager.System.Windows.Forms.UnsafeNativeMethods.IMsoComponentManager.FPushMessageLoop(IntPtr dwComponentID, Int32 reason, Int32 pvLoopData)
+   at System.Windows.Forms.Application.ThreadContext.RunMessageLoopInner(Int32 reason, ApplicationContext context)
+   at System.Windows.Forms.Application.ThreadContext.RunMessageLoop(Int32 reason, ApplicationContext context)
+   at System.Windows.Forms.Application.Run(Form mainForm)
+   at ExamReport.Program.Main() in D:\project\ExamReporterL\ExamReporterL\ExamReport\Program.cs:line 21
+   at System.AppDomain._nExecuteAssembly(RuntimeAssembly assembly, String[] args)
+   at System.AppDomain.ExecuteAssembly(String assemblyFile, Evidence assemblySecurity, String[] args)
+   at Microsoft.VisualStudio.HostingProcess.HostProc.RunUsersAssembly()
+   at System.Threading.ThreadHelper.ThreadStart_Context(Object state)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean ignoreSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.ThreadHelper.ThreadStart()

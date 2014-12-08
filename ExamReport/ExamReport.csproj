@@ -34,6 +34,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CheckBoxComboBox, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\CheckBoxComboBox.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Office.Interop.Excel, Version=12.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
@@ -73,6 +77,7 @@
     <Compile Include="HK_worddata.cs" />
     <Compile Include="IEnumerableExtension.cs" />
     <Compile Include="Partition_wordcreator.cs" />
+    <Compile Include="SchoolWordCreator.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="WSLG_partitiondata.cs" />
     <Compile Include="ZedGraph.cs" />

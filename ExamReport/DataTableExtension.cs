@@ -84,6 +84,26 @@ namespace ExamReport
                 dv.Sort = "totalmark";
             else if (dt.Columns.Contains("zf"))
                 dv.Sort = "zf";
+
+            if (dv.ToTable().Rows.Count == 0)
+            {
+                string key;
+                switch (keyword)
+                {
+                    case "QX":
+                    case "qxdm":
+                        key = "区县代码";
+                        break;
+                    case "schoolcode":
+                        key = "学校代码";
+                        break;
+                    default:
+                        key = keyword;
+                        break;
+                }
+                
+                throw new ArgumentException("不存在" + key + "为" + string.Join(",", items) + "的数据");
+            }
             return dv.ToTable();
         }
 
