@@ -557,7 +557,7 @@ namespace ExamReport
 
                     exe.Cj_catagory = CJ_address.Text;
                     exe.Quxian_list = QX_list.SelectedValue.ToString().Trim();
-                    Utils.QX = QX_list.SelectedItem.ToString();
+                    Utils.QX = QX_list.Text.ToString().Trim();
                 }
                 if (exe.Report_style.Equals("两类示范校"))
                 {

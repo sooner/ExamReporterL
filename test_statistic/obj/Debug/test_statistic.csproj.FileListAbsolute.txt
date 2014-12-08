@@ -32,6 +32,6 @@ D:\project\ExamReporterL\ExamReporterL\test_statistic\bin\Debug\Microsoft.Office
 D:\project\ExamReporterL\ExamReporterL\test_statistic\bin\Debug\ExamReport.pdb
 D:\project\ExamReporterL\ExamReporterL\test_statistic\bin\Debug\ExamReport_Accessor.exe
 D:\project\ExamReporterL\ExamReporterL\test_statistic\bin\Debug\ExamReport_Accessor.pdb
-D:\project\ExamReporterL\ExamReporterL\test_statistic\obj\Debug\test_statistic.csprojResolveAssemblyReference.cache
 D:\project\ExamReporterL\ExamReporterL\test_statistic\obj\Debug\test_statistic.dll
 D:\project\ExamReporterL\ExamReporterL\test_statistic\obj\Debug\test_statistic.pdb
+D:\project\ExamReporterL\ExamReporterL\test_statistic\obj\Debug\ResolveAssemblyReference.cache
