@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Data;
+using System.Data.Linq;
 using System.Text.RegularExpressions;
 using System.Collections;
+using System.Diagnostics;
 
 namespace ExamReport
 {
@@ -52,9 +54,14 @@ namespace ExamReport
             result.min = (decimal) _basic_data.Compute("Min(" + totalmark_str + ")", "");
             result.avg = (decimal) _basic_data.Compute("Avg(" + totalmark_str + ")", "");
             decimal ZH_avg = (decimal)_basic_data.Compute("Avg(totalmark)", "");
-            
+            //result.stDev = Convert.ToDecimal(Math.Sqrt(Convert.ToDouble(_basic_data.AsEnumerable().Select(c => (c.Field<decimal>(totalmark_str) - result.avg) * (c.Field<decimal>(totalmark_str) - result.avg)).Average())));
             Regex number = new Regex("^[Tt]\\d");
             #region total analysis table process
+            //Stopwatch sw = new Stopwatch();
+            //sw.Start();
+            //decimal totalsum = _basic_data.AsEnumerable().Select(c => c.Field<decimal>("totalmark")).Sum();
+            //decimal y2 = _basic_data.AsEnumerable().Select(c => c.Field<decimal>("totalmark") * c.Field<decimal>("totalmark")).Sum();
+            //decimal y_result = y2 - totalsum * totalsum / result.total_num;
             foreach (DataColumn dc in _basic_data.Columns)
             {
                 if(number.IsMatch(dc.ColumnName))
@@ -81,11 +88,40 @@ namespace ExamReport
                     newR["WrongNum"] = 0.0;
                     newR["MultipleSum"] = 0.0;
                     newR["SquareSumX"] = 0.0;
-                    
+
                     if (!_standard_ans.Rows.Find(topic_num)["da"].Equals(""))
                         newR["objective"] = 1;
                     else
                         newR["objective"] = 0;
+                    //newR["max"] = _basic_data.AsEnumerable().Max(c => c.Field<decimal>(dc.ColumnName));
+                    //newR["min"] = _basic_data.AsEnumerable().Min(c => c.Field<decimal>(dc.ColumnName));
+                    //newR["avg"] = _basic_data.AsEnumerable().Average(c => c.Field<decimal>(dc.ColumnName));
+                    //newR["standardErr"] = Convert.ToDecimal(Math.Sqrt(_basic_data.AsEnumerable().Select(
+                    //    c => Math.Pow(Convert.ToDouble(c.Field<decimal>(dc.ColumnName) - (decimal)newR["avg"]), 2)).Average()));
+                    //newR["dfactor"] = (decimal)newR["standardErr"] / (decimal)newR["avg"];
+                    //newR["difficulty"] = (decimal)newR["avg"] / (decimal)newR["fullmark"];
+                    //if (!_standard_ans.Rows.Find(topic_num)["da"].Equals(""))
+                    //{
+
+                    //    newR["correlation"] = (_basic_data.AsEnumerable().Where(c => c.Field<decimal>(dc.ColumnName) > 0).Select(c => c.Field<decimal>("totalmark")).Average()
+                    //        - _basic_data.AsEnumerable().Where(c => c.Field<decimal>(dc.ColumnName) == 0).Select(c => c.Field<decimal>("totalmark")).Average())
+                    //        / result.stDev * Convert.ToDecimal(Math.Sqrt(Convert.ToDouble(_basic_data.AsEnumerable().Where(c => c.Field<decimal>(dc.ColumnName) > 0).Count() *
+                    //        _basic_data.AsEnumerable().Where(c => c.Field<decimal>(dc.ColumnName) == 0).Count())));
+                    //}
+                    //else
+                    //{
+                    //    decimal xy = _basic_data.AsEnumerable().Select(c => c.Field<decimal>(dc.ColumnName) * c.Field<decimal>("totalmark")).Sum();
+                    //    decimal xyn = (decimal)newR["avg"] * totalsum;
+                    //    decimal x2 = _basic_data.AsEnumerable().Select(c => c.Field<decimal>(dc.ColumnName) * c.Field<decimal>(dc.ColumnName)).Sum();
+                    //    decimal x_result = x2 - (decimal)newR["avg"] * (decimal)newR["avg"] * result.total_num;
+                    //    newR["correlation"] = xy - xyn / Convert.ToDecimal(Math.Sqrt(Convert.ToDouble(y_result * x_result)));
+
+                    //}
+                    //decimal PH = _basic_data.AsEnumerable().OrderByDescending(c => c.Field<decimal>("totalmark")).Take(Convert.ToInt32(PLN)).Select(c => c.Field<decimal>(dc.ColumnName)).Average();
+                    //decimal PL = _basic_data.AsEnumerable().OrderBy(c => c.Field<decimal>("totalmark")).Take(Convert.ToInt32(PLN)).Select(c => c.Field<decimal>(dc.ColumnName)).Average();
+                    //newR["discriminant"] = PH - PL;
+
+
                     result.total_analysis.Rows.Add(newR);
                 }
                 
@@ -103,46 +139,48 @@ namespace ExamReport
 
             decimal ZH_var = 0;
             Regex oddeven = new Regex("^[Tt]\\d+$");
-            foreach(DataRow  dr in _basic_data.Rows)
+            foreach (DataRow dr in _basic_data.Rows)
             {
                 decimal odd = 0.0m;
                 decimal even = 0.0m;
                 count++;
                 Var += ((decimal)dr[totalmark_str] - result.avg) * ((decimal)dr[totalmark_str] - result.avg);
-                if(!isZonghe)
+                if (!isZonghe)
                     ZH_var += ((decimal)dr["totalmark"] - ZH_avg) * ((decimal)dr["totalmark"] - ZH_avg);
                 ThreeMulti += Convert.ToDecimal(Math.Pow(Convert.ToDouble((decimal)dr[totalmark_str] - result.avg), 3.0));
                 FourMulti += Convert.ToDecimal(Math.Pow(Convert.ToDouble((decimal)dr[totalmark_str] - result.avg), 4.0));
                 SquareSumY += (decimal)dr["totalmark"] * (decimal)dr["totalmark"];
-                foreach(DataColumn dc in _basic_data.Columns)
+                foreach (DataColumn dc in _basic_data.Columns)
                 {
-                    if(result.total_analysis.Rows.Contains(dc.ColumnName))
+                    if (result.total_analysis.Rows.Contains(dc.ColumnName))
                     {
                         DataRow total_row = result.total_analysis.Rows.Find(dc.ColumnName);
                         decimal temp_avg = (decimal)total_row["avg"];
                         total_row["standardErr"] = (decimal)total_row["standardErr"] + (Convert.ToDecimal(dr[dc]) - temp_avg)
                             * (Convert.ToDecimal(dr[dc]) - temp_avg);
-                        
-                        if(count <= PLN)
+
+                        if (count <= PLN)
                             total_row["PLN"] = (decimal)total_row["PLN"] + Convert.ToDecimal(dr[dc]);
-                        else if(count > PHN)
+                        else if (count > PHN)
                             total_row["PHN"] = (decimal)total_row["PHN"] + Convert.ToDecimal(dr[dc]);
-                        if((int)total_row["objective"] == 1)
+                        if ((int)total_row["objective"] == 1)
                         {
-                            if(Convert.ToDouble(dr[dc]) > 0)
+                            if (Convert.ToDouble(dr[dc]) > 0)
                             {
                                 decimal temp_mark = (decimal)total_row["CorrectMark"] + Convert.ToDecimal(dr["totalmark"]);
-                                
+
                                 total_row["CorrectMark"] = temp_mark;
                                 total_row["CorrectNum"] = Convert.ToDecimal(total_row["CorrectNum"]) + 1;
                             }
-                            else{
+                            else
+                            {
                                 decimal temp_mark = (decimal)total_row["WrongMark"] + Convert.ToDecimal(dr["totalmark"]);
                                 total_row["WrongMark"] = temp_mark;
                                 total_row["WrongNum"] = Convert.ToDecimal(total_row["WrongNum"]) + 1;
                             }
                         }
-                        else{
+                        else
+                        {
                             decimal temp_mark = (decimal)total_row["MultipleSum"] + Convert.ToDecimal(dr["totalmark"]) * Convert.ToDecimal(dr[dc]);
                             total_row["MultipleSum"] = temp_mark;
                             temp_mark = (decimal)total_row["SquareSumX"] + Convert.ToDecimal(dr[dc]) * Convert.ToDecimal(dr[dc]);
@@ -159,7 +197,7 @@ namespace ExamReport
                         }
 
                     }
-                    
+
                 }
                 //alfaMultiplySum += odd * even;
                 alfaSquareX += odd * odd;
@@ -178,30 +216,43 @@ namespace ExamReport
             result.alfa = 2 * (1 - (oddDev + evenDev) / (Var / result.total_num));
             result.stDev = Convert.ToDecimal(Math.Sqrt(Convert.ToDouble(Var / result.total_num)));
             decimal ZH_stDev = result.stDev;
-            if(!isZonghe)
+            if (!isZonghe)
                 ZH_stDev = Convert.ToDecimal(Math.Sqrt(Convert.ToDouble(ZH_var / result.total_num)));
             decimal part2 = SquareSumY - ZH_avg * ZH_avg * result.total_num;
-            foreach(DataRow dr in result.total_analysis.Rows)
+            foreach (DataRow dr in result.total_analysis.Rows)
             {
                 decimal temp = Convert.ToDecimal(Math.Sqrt(Convert.ToDouble((decimal)dr["standardErr"] / result.total_num)));
                 dr["standardErr"] = temp;
-                dr["dfactor"] = temp / (decimal)dr["avg"];
+                if ((decimal)dr["avg"] == 0)
+                    dr["dfactor"] = 0;
+                else
+                    dr["dfactor"] = temp / (decimal)dr["avg"];
                 dr["difficulty"] = (decimal)dr["avg"] / (decimal)dr["fullmark"];
-                if((int)dr["objective"] == 1)
+                if ((int)dr["objective"] == 1)
                 {
                     decimal p = (decimal)dr["CorrectNum"] / result.total_num;
                     decimal q = (decimal)dr["WrongNum"] / result.total_num;
-                    dr["correlation"] = (((decimal)dr["CorrectMark"] / (decimal)dr["CorrectNum"]) - ((decimal)dr["WrongMark"] / (decimal)dr["WrongNum"])) * Convert.ToDecimal(Math.Sqrt(Convert.ToDouble(p * q))) / ZH_stDev;
+                    if (p == 0 || q == 0)
+                        dr["correlation"] = 0;
+                    else
+                        dr["correlation"] = (((decimal)dr["CorrectMark"] / (decimal)dr["CorrectNum"]) - ((decimal)dr["WrongMark"] / (decimal)dr["WrongNum"])) * Convert.ToDecimal(Math.Sqrt(Convert.ToDouble(p * q))) / ZH_stDev;
                 }
                 else
                 {
                     decimal numerator = (decimal)dr["MultipleSum"] - ZH_avg * (decimal)dr["avg"] * result.total_num;
                     decimal part1 = (decimal)dr["SquareSumX"] - (decimal)dr["avg"] * (decimal)dr["avg"] * result.total_num;
-                    dr["correlation"] = numerator / Convert.ToDecimal(Math.Sqrt(Convert.ToDouble(part1 * part2)));
+                    if (part1 == 0)
+                        dr["correlation"] = 0;
+                    else
+                        dr["correlation"] = numerator / Convert.ToDecimal(Math.Sqrt(Convert.ToDouble(part1 * part2)));
                 }
                 dr["discriminant"] = (((decimal)dr["PHN"] - (decimal)dr["PLN"]) / PLN) / (decimal)dr["fullmark"];
 
             }
+            //sw.Stop();
+            //string time = sw.ElapsedMilliseconds.ToString();
+            //decimal part2 = 0;
+            //decimal ZH_stDev = 0;
             #endregion
             #region frequency table process
             var freq = from row in _basic_data.AsEnumerable()
@@ -264,7 +315,7 @@ namespace ExamReport
             //    flag = result.fullmark - total_interval + 1;
             //else
             //    flag = result.fullmark - first_interval + 1;
-            
+
             //int last_freq = 0;
             //decimal last_mark = result.fullmark + 1;
 
@@ -286,26 +337,26 @@ namespace ExamReport
                 }
                 else
                 {
-                    dr["accumulateFreq"] = freqency+ item.count;
+                    dr["accumulateFreq"] = freqency + item.count;
                     dr["accumulateRate"] = ((int)dr["accumulateFreq"] / Convert.ToDecimal(result.total_num)) * 100;
-                    freqency = (int) dr["accumulateFreq"];
+                    freqency = (int)dr["accumulateFreq"];
 
                 }
-                
+
                 if (total_interval == 1.0m)
                     dist_num = Convert.ToInt32(Math.Floor((decimal)dr["totalmark"]));
                 else
                     dist_num = Convert.ToInt32(Math.Ceiling((decimal)dr["totalmark"] / total_interval));
-                if(dist_num > 20)
+                if (dist_num > 20)
                     result.totalmark_dist.Rows[20]["num"] = (int)result.totalmark_dist.Rows[20]["num"] + (int)dr["frequency"];
-                else if(dist_num == 0)
+                else if (dist_num == 0)
                     result.totalmark_dist.Rows[dist_num]["num"] = (int)result.totalmark_dist.Rows[dist_num]["num"] + (int)dr["frequency"];
                 else
                     result.totalmark_dist.Rows[dist_num - 1]["num"] = (int)result.totalmark_dist.Rows[dist_num - 1]["num"] + (int)dr["frequency"];
 
                 if (midCheck && (int)dr["accumulateFreq"] >= mid)
                 {
-                    
+
                     DataRow midRow = result.frequency_dist.Rows[result.frequency_dist.Rows.Count - 1];
                     if ((int)dr["frequency"] == 1)
                         if (isEven)
@@ -315,7 +366,7 @@ namespace ExamReport
                     else
                     {
                         int fb = (int)dr["accumulateFreq"] - (int)dr["frequency"];
-                        if(isEven)
+                        if (isEven)
                             result.mean = (decimal)dr["totalmark"] + 0.5m - (mid - fb) * (1.0m / (int)dr["frequency"]);
                         else
                             result.mean = (decimal)dr["totalmark"] + 0.5m - (mid - fb - 0.5m) * (1.0m / (int)dr["frequency"]);
@@ -330,7 +381,7 @@ namespace ExamReport
                 result.frequency_dist.Rows.Add(dr);
             }
             DataTable new_freq = result.frequency_dist.Clone();
-            new_freq.PrimaryKey = new DataColumn[] { new_freq.Columns["totalmark"]};
+            new_freq.PrimaryKey = new DataColumn[] { new_freq.Columns["totalmark"] };
             foreach (DataRow dr in result.frequency_dist.Rows)
             {
                 decimal keyMark = Convert.ToDecimal(Math.Floor(Convert.ToDouble(dr["totalmark"])));
@@ -348,7 +399,7 @@ namespace ExamReport
                     oldrow["accumulateFreq"] = (int)oldrow["accumulateFreq"] + (int)dr["frequency"];
                     oldrow["accumulateRate"] = ((int)oldrow["accumulateFreq"] / (decimal)result.total_num) * 100;
                 }
-                
+
             }
             result.frequency_dist = new_freq;
             #endregion
@@ -357,7 +408,7 @@ namespace ExamReport
             string spattern = "^\\d+~\\d+$";
 
             //边界问题
-            for (group_dc = 3; group_dc < _groups_table.Columns.Count - 2; group_dc++ )
+            for (group_dc = 3; group_dc < _groups_table.Columns.Count - 2; group_dc++)
             {
                 DataRow groups_row = result.group_analysis.NewRow();
                 groups_row["number"] = _groups_table.Columns[group_dc].ColumnName;
@@ -434,7 +485,7 @@ namespace ExamReport
                         else if (count >= PHN)
                             groups_dr["PHN"] = (decimal)groups_dr["PHN"] + Convert.ToDecimal(dr[dc]);
 
-                        decimal temp_mark = (decimal)groups_dr["MultipleSum"] + Convert.ToDecimal(_basic_data.Rows[count-1]["totalmark"]) * Convert.ToDecimal(dr[dc]);
+                        decimal temp_mark = (decimal)groups_dr["MultipleSum"] + Convert.ToDecimal(_basic_data.Rows[count - 1]["totalmark"]) * Convert.ToDecimal(dr[dc]);
                         groups_dr["MultipleSum"] = temp_mark;
                         temp_mark = (decimal)groups_dr["SquareSumX"] + Convert.ToDecimal(dr[dc]) * Convert.ToDecimal(dr[dc]);
                         groups_dr["SquareSumX"] = temp_mark;
@@ -602,6 +653,12 @@ namespace ExamReport
                                 };
                 DataRow total = temp.group_detail.NewRow();
                 DataRow avg = temp.group_detail.NewRow();
+                for (int k = 1; k <= _groupnum; k++)
+                {
+                    total["G" + k.ToString()] = 0;
+                    avg["G" + k.ToString()] = 0;
+                }
+
                 foreach (var item in gdata)
                 {
                     total[item.gtype.ToString().Trim()] = item.count;
@@ -731,6 +788,12 @@ namespace ExamReport
                         DataRow single_avg_row = temp.single_detail.NewRow();
                         single_total_row["mark"] = "合计";
                         single_avg_row["mark"] = "得分率";
+
+                        for (int k = 1; k <= _groupnum; k++)
+                        {
+                            single_total_row["G" + k.ToString()] = 0;
+                            single_avg_row["G" + k.ToString()] = 0;
+                        }
                         foreach (var item in vertical)
                         {
                             single_total_row[item.groups.ToString().Trim()] = Convert.ToDecimal(item.count);
@@ -849,7 +912,10 @@ namespace ExamReport
                                     if (!(temp_dr["mark"].ToString().Trim().Equals("未选或多选") ||
                                      temp_dr["mark"].ToString().Trim().Equals("合计") ||
                                      temp_dr["mark"].ToString().Trim().Equals("得分率")))
-                                        dist_row[temp_dr["mark"].ToString().Trim()] = (decimal)temp_dr["G" + i.ToString().Trim()] / total;
+                                        if (total != 0)
+                                            dist_row[temp_dr["mark"].ToString().Trim()] = (decimal)temp_dr["G" + i.ToString().Trim()] / total;
+                                        else
+                                            dist_row[temp_dr["mark"].ToString().Trim()] = 0;
                                 }
 
                                 temp.single_dist.Rows.Add(dist_row);
@@ -967,6 +1033,11 @@ namespace ExamReport
                         avg_dr["rate"] = 0m;
                         avg_dr["correlation"] = 0m;
 
+                        for (int k = 1; k <= _groupnum; k++)
+                        {
+                            total_dr["G" + k.ToString()] = 0;
+                            avg_dr["G" + k.ToString()] = 0;
+                        }
                         foreach (var item in vertical)
                         {
                             total_dr[item.groups.ToString().Trim()] = Convert.ToDecimal(item.count);
@@ -1614,6 +1685,8 @@ namespace ExamReport
             //    stDev = var2 - avg * avg;
             //else
             //    stDev = result.stDev;
+            if (num == 0 || num == frequency)
+                return 0;
             decimal xq = (total_avg * num - avg * frequency) / (num - frequency);
             decimal p = frequency / Convert.ToDecimal(num);
             decimal q = (num - frequency) / Convert.ToDecimal(num);

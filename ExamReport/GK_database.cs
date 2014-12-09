@@ -261,7 +261,8 @@ namespace ExamReport
             Regex topic = new Regex("^[Ss]\\d+$");
             dbfConnection = new OleDbConnection(conn);
 
-            OleDbDataAdapter adpt = new OleDbDataAdapter("select * from " + file + " where Qk<>1", dbfConnection);
+            OleDbDataAdapter adpt = new OleDbDataAdapter("select * from " + file, dbfConnection);
+            //OleDbDataAdapter adpt = new OleDbDataAdapter("select * from " + file + " where Qk<>1", dbfConnection);
             DataSet mySet = new DataSet();
 
             try

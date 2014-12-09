@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ExamReport
 {
-    class WSLG_partitiondata : PartitionData
+    public class WSLG_partitiondata : PartitionData
     {
         public decimal discriminant;
         public List<decimal> total_discriminant = new List<decimal>();

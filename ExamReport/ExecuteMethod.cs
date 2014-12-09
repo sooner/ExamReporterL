@@ -161,12 +161,10 @@ namespace ExamReport
                     return;
                 }
                 Utils.report_style = report_style;
-                if (report_style.Equals("区县"))
+                if (report_style.Equals("区县") || report_style.Equals("学校"))
                 {
                     excel_process QXSF = new excel_process(quxian_catagory);
                     QXSF_list = QXSF.getData();
-
-
 
                     excel_process CJ = new excel_process(cj_catagory);
                     CJ_list = CJ.getData();
@@ -599,6 +597,10 @@ namespace ExamReport
                     Partition_wordcreator create = new Partition_wordcreator(total, QX, groups.dt, groups.groups_group);
                     create.creating_ZH_QX_word(ZH_total, ZH_QX, wenli.dt, wenli.groups_group);
                 }
+                else if (report_style.Equals("学校"))
+                {
+
+                }
             }
             else
             {
@@ -727,15 +729,16 @@ namespace ExamReport
                 }
                 else if (report_style.Equals("学校"))
                 {
-                    List<PartitionData> total = new List<PartitionData>();
+                    List<WSLG_partitiondata> total = new List<WSLG_partitiondata>();
+                    Utils.WSLG = true;
                     PartitionXXDataProcess(total, db._basic_data, db._group_data, db._group_num);
 
                     foreach (KeyValuePair<string, string> kv in School_code)
                     {
-                        Utils.WSLG = true;
+                        
                         PartitionXX(total, db._basic_data, db._group_data, db._group_num, kv.Key);
                         WordData temp = TotalSchoolCal(db._basic_data, db._group_data, db._group_num, kv.Key);
-                        SchoolWordCreator swc = new SchoolWordCreator(temp, total, kv.Value);
+                        SchoolWordCreator swc = new SchoolWordCreator(temp, total, groups.dt, kv.Value, groups.groups_group);
                         swc.creating_word();
                     }
 
@@ -747,6 +750,9 @@ namespace ExamReport
             DataTable XX = data.filteredtable("schoolcode", new string[] { school });
             DataTable XX_group = group.filteredtable("schoolcode", new string[] { school });
 
+            XX.SeperateGroups(grouptype, Convert.ToDecimal(groupnum), "groups");
+            XX_group.SeperateGroups(grouptype, Convert.ToDecimal(groupnum), "groups");
+
             WordData result = new WordData(groups.groups_group);
             Total_statistic stat = new Total_statistic(result, XX, fullmark, ans.dt, XX_group, groups.dt, groupnum);
             stat.statistic_process(false);
@@ -755,7 +761,7 @@ namespace ExamReport
 
             return result;
         }
-        void PartitionXX(List<PartitionData> result, DataTable data, DataTable group, int groupnum, string school)
+        void PartitionXX(List<WSLG_partitiondata> result, DataTable data, DataTable group, int groupnum, string school)
         {
             DataTable XX = data.filteredtable("schoolcode", new string[] { school });
             DataTable XX_group = group.filteredtable("schoolcode", new string[] { school });
@@ -763,9 +769,9 @@ namespace ExamReport
             XX_stat.statistic_process(false);
             if (data.Columns.Contains("XZ"))
                 XX_stat.xz_postprocess(ans.xz_th);
-            result.Insert(0, XX_stat.result);
+            result.Insert(0, (WSLG_partitiondata)XX_stat.result);
         }
-        void PartitionXXDataProcess(List<PartitionData> result, DataTable data, DataTable group, int groupnum)
+        void PartitionXXDataProcess(List<WSLG_partitiondata> result, DataTable data, DataTable group, int groupnum)
         {
             
             DataTable QX = data.filteredtable("QX", QXTransfer(Quxian_list));
@@ -774,14 +780,14 @@ namespace ExamReport
             qx_stat.statistic_process(false);
             if (data.Columns.Contains("XZ"))
                 qx_stat.xz_postprocess(ans.xz_th);
-            result.Add(qx_stat.result);
+            result.Add((WSLG_partitiondata)qx_stat.result);
 
 
             Partition_statistic total = new Partition_statistic("市整体", data, fullmark, ans.dt, group, groups.dt, groupnum);
             total.statistic_process(false);
             if (data.Columns.Contains("XZ"))
                 total.xz_postprocess(ans.xz_th);
-            result.Add(total.result);
+            result.Add((WSLG_partitiondata)total.result);
 
             for (int i = 0; i < CJ_list.Count; i++)
             {
@@ -795,7 +801,7 @@ namespace ExamReport
                 stat.statistic_process(false);
                 if (data.Columns.Contains("XZ"))
                     stat.xz_postprocess(ans.xz_th);
-                result.Add(stat.result);
+                result.Add((WSLG_partitiondata)stat.result);
             }
 
             for (int i = 0; i < SF_list.Count; i++)
@@ -810,7 +816,7 @@ namespace ExamReport
                 stat.statistic_process(false);
                 if (data.Columns.Contains("XZ"))
                     stat.xz_postprocess(ans.xz_th);
-                result.Add(stat.result);
+                result.Add((WSLG_partitiondata)stat.result);
             }
 
         }

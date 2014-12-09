@@ -1,23 +1,11 @@
-System.NullReferenceException: Object reference not set to an instance of an object.
-   at PresentationControls.CheckBoxComboBoxItem.OnCheckedChanged(EventArgs e)
-   at System.Windows.Forms.CheckBox.set_CheckState(CheckState value)
-   at System.Windows.Forms.CheckBox.OnClick(EventArgs e)
-   at System.Windows.Forms.CheckBox.OnMouseUp(MouseEventArgs mevent)
-   at System.Windows.Forms.Control.WmMouseUp(Message& m, MouseButtons button, Int32 clicks)
-   at System.Windows.Forms.Control.WndProc(Message& m)
-   at System.Windows.Forms.ButtonBase.WndProc(Message& m)
-   at System.Windows.Forms.Control.ControlNativeWindow.OnMessage(Message& m)
-   at System.Windows.Forms.Control.ControlNativeWindow.WndProc(Message& m)
-   at System.Windows.Forms.NativeWindow.DebuggableCallback(IntPtr hWnd, Int32 msg, IntPtr wparam, IntPtr lparam)
-   at System.Windows.Forms.UnsafeNativeMethods.DispatchMessageW(MSG& msg)
-   at System.Windows.Forms.Application.ComponentManager.System.Windows.Forms.UnsafeNativeMethods.IMsoComponentManager.FPushMessageLoop(IntPtr dwComponentID, Int32 reason, Int32 pvLoopData)
-   at System.Windows.Forms.Application.ThreadContext.RunMessageLoopInner(Int32 reason, ApplicationContext context)
-   at System.Windows.Forms.Application.ThreadContext.RunMessageLoop(Int32 reason, ApplicationContext context)
-   at System.Windows.Forms.Application.Run(Form mainForm)
-   at ExamReport.Program.Main() in D:\project\ExamReporterL\ExamReporterL\ExamReport\Program.cs:line 21
-   at System.AppDomain._nExecuteAssembly(RuntimeAssembly assembly, String[] args)
-   at System.AppDomain.ExecuteAssembly(String assemblyFile, Evidence assemblySecurity, String[] args)
-   at Microsoft.VisualStudio.HostingProcess.HostProc.RunUsersAssembly()
+System.InvalidCastException: Object cannot be cast from DBNull to other types.
+   at System.DBNull.System.IConvertible.ToInt32(IFormatProvider provider)
+   at System.Convert.ToInt32(Object value)
+   at ExamReport.SchoolWordCreator.insertGroupSingleAnalysis(String title, DataTable single_group_dt) in D:\project\ExamReporterL\ExamReporterL\ExamReport\SchoolWordCreator.cs:line 339
+   at ExamReport.SchoolWordCreator.creating_word() in D:\project\ExamReporterL\ExamReporterL\ExamReport\SchoolWordCreator.cs:line 96
+   at ExamReport.ExecuteMethod.GK_process() in D:\project\ExamReporterL\ExamReporterL\ExamReport\ExecuteMethod.cs:line 738
+   at ExamReport.ExecuteMethod.pre_process() in D:\project\ExamReporterL\ExamReporterL\ExamReport\ExecuteMethod.cs:line 197
+   at ExamReport.Form1.startProcess.data_process() in D:\project\ExamReporterL\ExamReporterL\ExamReport\Form1.cs:line 740
    at System.Threading.ThreadHelper.ThreadStart_Context(Object state)
    at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean ignoreSyncCtx)
    at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)

@@ -6,7 +6,7 @@ using System.Data;
 
 namespace ExamReport
 {
-    class PartitionData
+    public class PartitionData
     {
         public DataTable _standard_ans;
         public DataTable _group_ans;
