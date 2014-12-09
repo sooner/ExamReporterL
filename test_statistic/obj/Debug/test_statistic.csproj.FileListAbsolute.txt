@@ -34,5 +34,5 @@ D:\project\ExamReporterL\ExamReporterL\test_statistic\bin\Debug\ExamReport_Acces
 D:\project\ExamReporterL\ExamReporterL\test_statistic\bin\Debug\ExamReport_Accessor.pdb
 D:\project\ExamReporterL\ExamReporterL\test_statistic\obj\Debug\test_statistic.dll
 D:\project\ExamReporterL\ExamReporterL\test_statistic\obj\Debug\test_statistic.pdb
-D:\project\ExamReporterL\ExamReporterL\test_statistic\obj\Debug\ResolveAssemblyReference.cache
 D:\project\ExamReporterL\ExamReporterL\test_statistic\bin\Debug\CheckBoxComboBox.dll
+D:\project\ExamReporterL\ExamReporterL\test_statistic\obj\Debug\test_statistic.csprojResolveAssemblyReference.cache

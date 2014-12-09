@@ -45,6 +45,57 @@ namespace ExamReport
             _groups = groups;
         }
 
+        public void creating_ZH_word(WordData zh_data, List<WSLG_partitiondata> zh_pdata, DataTable groups, Dictionary<string, List<string>> groups_group)
+        {
+            object filepath = @Utils.CurrentDirectory + @"\template2.dotx";
+            //Start Word and create a new document.
+
+            oWord = new Word.Application();
+
+            oWord.Visible = Utils.isVisible;
+            oDoc = oWord.Documents.Add(ref filepath, ref oMissing,
+            ref oMissing, ref oMissing);
+            Utils.WriteFrontPage(oDoc);
+
+            insertText(ExamTitle0, " 整体统计分析");
+            insertText(ExamTitle1, "总体分析");
+            insertTotalTable("    总分分析表", zh_pdata);
+            ChartCombine chartdata = new ChartCombine();
+            foreach (PartitionData temp in zh_pdata)
+            {
+                chartdata.Add(temp.total_dist, temp.name);
+            }
+            insertChart("    总分分布曲线图", chartdata.target, "分数", "人数", Excel.XlChartType.xlXYScatterLines, ((PartitionData)zh_pdata[0]).fullmark);
+            insertGroupTopic("    题组整体分析表", zh_pdata, 3);
+            insertFreqTable("    总分频数分布表", zh_pdata);
+            insertText(ExamTitle1, "题组分析");
+            List<string> keys = new List<string>(groups_group.Keys);
+            int group_count = 3;
+            for (int i = 1; i < groups_group.Count; i++)
+            {
+                insertText(ExamTitle2, keys[i]);
+                foreach (string group in groups_group[keys[i]])
+                {
+                    insertText(ExamTitle3, group);
+                    insertTH(groups.Rows[group_count]["th"].ToString().Trim());
+                    insertSingleGroupTotal("    " + group + "总分分析表", group_count, true, zh_pdata);
+                    ChartCombine tempdata = new ChartCombine();
+                    for (int j = 0; j < zh_pdata.Count; j++)
+                    {
+                        tempdata.Add(getGroupData(zh_pdata, j, group_count).group_dist, ((PartitionData)zh_pdata[j]).name);
+                    }
+                    insertChart("    " + group + "分数分布图", tempdata.target, "分数", "比率(%)", Excel.XlChartType.xlLineMarkers, (decimal)((PartitionData)zh_pdata[0]).groups_analysis.Rows[group_count]["fullmark"]);
+                    insertGroupDiffChart("    " + group + "难度曲线图", ((WordData.group_data)zh_data.single_group_analysis[group_count]).group_difficulty);
+                    insertGroupSingleAnalysis("    " + group + "分组分析表", ((WordData.group_data)zh_data.single_group_analysis[group_count]).group_detail);
+                    oDoc.Characters.Last.InsertBreak(oPagebreak);
+                    group_count++;
+                }
+            }
+            
+            insertText(ExamTitle0, " " + Utils.subject.Substring(3) + "统计分析");
+
+            creating_word_part2();
+        }
         public void creating_word()
         {
             object filepath = @Utils.CurrentDirectory + @"\template.dotx";
@@ -58,6 +109,10 @@ namespace ExamReport
             Utils.school_name = _schoolname;
             Utils.WriteFrontPage(oDoc);
 
+            creating_word_part2();
+        }
+        public void creating_word_part2()
+        {
             insertText(ExamTitle1, "总体分析");
             insertTotalTable("    总分分析表", _pdata);
 

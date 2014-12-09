@@ -420,7 +420,8 @@ namespace ExamReport
                         }
                     }
                     DataRow ans_row = temp.single_detail.Rows.Find(choiceTransfer(_standard_ans.Rows.Find(dr["number"].ToString().Substring(1))["da"].ToString().Trim()));
-                    ans_row["mark"] = "*" + ans_row["mark"];
+                    if(ans_row != null)
+                        ans_row["mark"] = "*" + ans_row["mark"];
 
 
                 }

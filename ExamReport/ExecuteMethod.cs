@@ -599,6 +599,23 @@ namespace ExamReport
                 }
                 else if (report_style.Equals("学校"))
                 {
+                    List<WSLG_partitiondata> total = new List<WSLG_partitiondata>();
+                    List<WSLG_partitiondata> single = new List<WSLG_partitiondata>();
+
+                    Utils.WSLG = true;
+                    PartitionXXDataProcess(total, db._basic_data, db.zh_group_data, db._group_num, ans.dt, wenli.dt);
+                    PartitionXXDataProcess(single, db.zh_single_data, db._group_data, db._group_num, wenli_standard, groups.dt);
+                    foreach (KeyValuePair<string, string> kv in School_code)
+                    {
+
+                        PartitionXX(total, db._basic_data, db.zh_group_data, db._group_num, kv.Key, ans.dt, wenli.dt);
+                        PartitionXX(single, db.zh_single_data, db._group_data, db._group_num, kv.Key, wenli_standard, groups.dt);
+                        WordData temp_total = TotalSchoolCal(db._basic_data, db.zh_group_data, db._group_num, kv.Key, ans.dt, wenli.dt, true);
+                        WordData temp_single = TotalSchoolCal(db.zh_single_data, db._group_data, db._group_num, kv.Key, wenli_standard, groups.dt, false);
+
+                        SchoolWordCreator swc = new SchoolWordCreator(temp_single, single, wenli.dt, kv.Value, wenli.groups_group);
+                        swc.creating_ZH_word(temp_total, total, groups.dt, groups.groups_group);
+                    }
 
                 }
             }
@@ -731,13 +748,13 @@ namespace ExamReport
                 {
                     List<WSLG_partitiondata> total = new List<WSLG_partitiondata>();
                     Utils.WSLG = true;
-                    PartitionXXDataProcess(total, db._basic_data, db._group_data, db._group_num);
+                    PartitionXXDataProcess(total, db._basic_data, db._group_data, db._group_num, ans.dt, groups.dt);
 
                     foreach (KeyValuePair<string, string> kv in School_code)
                     {
                         
-                        PartitionXX(total, db._basic_data, db._group_data, db._group_num, kv.Key);
-                        WordData temp = TotalSchoolCal(db._basic_data, db._group_data, db._group_num, kv.Key);
+                        PartitionXX(total, db._basic_data, db._group_data, db._group_num, kv.Key, ans.dt, groups.dt);
+                        WordData temp = TotalSchoolCal(db._basic_data, db._group_data, db._group_num, kv.Key, ans.dt, groups.dt, false);
                         SchoolWordCreator swc = new SchoolWordCreator(temp, total, groups.dt, kv.Value, groups.groups_group);
                         swc.creating_word();
                     }
@@ -745,7 +762,7 @@ namespace ExamReport
                 }
             }
         }
-        WordData TotalSchoolCal(DataTable data, DataTable group, int groupnum, string school)
+        WordData TotalSchoolCal(DataTable data, DataTable group, int groupnum, string school, DataTable my_ans, DataTable my_group, bool isZonghe)
         {
             DataTable XX = data.filteredtable("schoolcode", new string[] { school });
             DataTable XX_group = group.filteredtable("schoolcode", new string[] { school });
@@ -754,36 +771,36 @@ namespace ExamReport
             XX_group.SeperateGroups(grouptype, Convert.ToDecimal(groupnum), "groups");
 
             WordData result = new WordData(groups.groups_group);
-            Total_statistic stat = new Total_statistic(result, XX, fullmark, ans.dt, XX_group, groups.dt, groupnum);
-            stat.statistic_process(false);
+            Total_statistic stat = new Total_statistic(result, XX, fullmark, my_ans, XX_group, my_group, groupnum);
+            stat.statistic_process(isZonghe);
             if (data.Columns.Contains("XZ"))
                 stat.xz_postprocess(ans.xz_th);
 
             return result;
         }
-        void PartitionXX(List<WSLG_partitiondata> result, DataTable data, DataTable group, int groupnum, string school)
+        void PartitionXX(List<WSLG_partitiondata> result, DataTable data, DataTable group, int groupnum, string school, DataTable my_ans, DataTable my_group)
         {
             DataTable XX = data.filteredtable("schoolcode", new string[] { school });
             DataTable XX_group = group.filteredtable("schoolcode", new string[] { school });
-            Partition_statistic XX_stat = new Partition_statistic("本学校", XX, fullmark, ans.dt, XX_group, groups.dt, groupnum);
+            Partition_statistic XX_stat = new Partition_statistic("本学校", XX, fullmark, my_ans, XX_group, my_group, groupnum);
             XX_stat.statistic_process(false);
             if (data.Columns.Contains("XZ"))
                 XX_stat.xz_postprocess(ans.xz_th);
             result.Insert(0, (WSLG_partitiondata)XX_stat.result);
         }
-        void PartitionXXDataProcess(List<WSLG_partitiondata> result, DataTable data, DataTable group, int groupnum)
+        void PartitionXXDataProcess(List<WSLG_partitiondata> result, DataTable data, DataTable group, int groupnum, DataTable my_ans, DataTable my_group)
         {
             
             DataTable QX = data.filteredtable("QX", QXTransfer(Quxian_list));
             DataTable QX_group = group.filteredtable("QX", QXTransfer(Quxian_list));
-            Partition_statistic qx_stat = new Partition_statistic("区整体", QX, fullmark, ans.dt, QX_group, groups.dt, groupnum);
+            Partition_statistic qx_stat = new Partition_statistic("区整体", QX, fullmark, my_ans, QX_group, my_group, groupnum);
             qx_stat.statistic_process(false);
             if (data.Columns.Contains("XZ"))
                 qx_stat.xz_postprocess(ans.xz_th);
             result.Add((WSLG_partitiondata)qx_stat.result);
 
 
-            Partition_statistic total = new Partition_statistic("市整体", data, fullmark, ans.dt, group, groups.dt, groupnum);
+            Partition_statistic total = new Partition_statistic("市整体", data, fullmark, my_ans, group, my_group, groupnum);
             total.statistic_process(false);
             if (data.Columns.Contains("XZ"))
                 total.xz_postprocess(ans.xz_th);
@@ -797,7 +814,7 @@ namespace ExamReport
                     xx_code[j - 1] = cj[j].ToString().Trim();
                 DataTable temp = data.filteredtable("QX", xx_code);
                 DataTable temp_group = group.filteredtable("QX", xx_code);
-                Partition_statistic stat = new Partition_statistic(cj[0].ToString(), temp, fullmark, ans.dt, temp_group, groups.dt, groupnum);
+                Partition_statistic stat = new Partition_statistic(cj[0].ToString(), temp, fullmark, my_ans, temp_group, my_group, groupnum);
                 stat.statistic_process(false);
                 if (data.Columns.Contains("XZ"))
                     stat.xz_postprocess(ans.xz_th);
@@ -812,7 +829,7 @@ namespace ExamReport
                     xx_code[j - 1] = sf[j].ToString().Trim();
                 DataTable temp = data.filteredtable("schoolcode", xx_code);
                 DataTable temp_group = group.filteredtable("schoolcode", xx_code);
-                Partition_statistic stat = new Partition_statistic(sf[0].ToString(), temp, fullmark, ans.dt, temp_group, groups.dt, groupnum);
+                Partition_statistic stat = new Partition_statistic(sf[0].ToString(), temp, fullmark, my_ans, temp_group, my_group, groupnum);
                 stat.statistic_process(false);
                 if (data.Columns.Contains("XZ"))
                     stat.xz_postprocess(ans.xz_th);

@@ -1,12 +1,16 @@
-System.InvalidCastException: Object cannot be cast from DBNull to other types.
-   at System.DBNull.System.IConvertible.ToInt32(IFormatProvider provider)
-   at System.Convert.ToInt32(Object value)
-   at ExamReport.SchoolWordCreator.insertGroupSingleAnalysis(String title, DataTable single_group_dt) in D:\project\ExamReporterL\ExamReporterL\ExamReport\SchoolWordCreator.cs:line 339
-   at ExamReport.SchoolWordCreator.creating_word() in D:\project\ExamReporterL\ExamReporterL\ExamReport\SchoolWordCreator.cs:line 96
-   at ExamReport.ExecuteMethod.GK_process() in D:\project\ExamReporterL\ExamReporterL\ExamReport\ExecuteMethod.cs:line 738
-   at ExamReport.ExecuteMethod.pre_process() in D:\project\ExamReporterL\ExamReporterL\ExamReport\ExecuteMethod.cs:line 197
-   at ExamReport.Form1.startProcess.data_process() in D:\project\ExamReporterL\ExamReporterL\ExamReport\Form1.cs:line 740
-   at System.Threading.ThreadHelper.ThreadStart_Context(Object state)
-   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean ignoreSyncCtx)
-   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
-   at System.Threading.ThreadHelper.ThreadStart()
+System.ArgumentNullException: “column”参数不能为空。
+参数名: column
+   在 System.Data.DataRow.CheckColumn(DataColumn column)
+   在 System.Data.DataRow.get_Item(DataColumn column)
+   在 ExamReport.DataTableExtension.CalCor(DataTable dt, String Xname, String Yname) 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\DataTableExtension.cs:行号 146
+   在 ExamReport.Total_statistic.group_correlation() 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\Total_statistic.cs:行号 1672
+   在 ExamReport.Total_statistic.statistic_process(Boolean isZonghe) 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\Total_statistic.cs:行号 1072
+   在 ExamReport.ExecuteMethod.TotalSchoolCal(DataTable data, DataTable group, Int32 groupnum, String school, DataTable my_ans, DataTable my_group) 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\ExecuteMethod.cs:行号 775
+   在 ExamReport.ExecuteMethod.GK_process() 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\ExecuteMethod.cs:行号 613
+   在 ExamReport.ExecuteMethod.pre_process() 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\ExecuteMethod.cs:行号 197
+   在 ExamReport.Form1.startProcess.data_process() 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\Form1.cs:行号 740
+   在 System.Threading.ThreadHelper.ThreadStart_Context(Object state)
+   在 System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   在 System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   在 System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+   在 System.Threading.ThreadHelper.ThreadStart()
