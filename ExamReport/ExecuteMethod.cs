@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Data;
+using System.Threading;
 
 namespace ExamReport
 {
@@ -753,11 +754,17 @@ namespace ExamReport
 
                     foreach (KeyValuePair<string, string> kv in School_code)
                     {
-                        
-                        PartitionXX(total, db._basic_data, db._group_data, db._group_num, kv.Key, ans.dt, groups.dt, fullmark);
+                        List<WSLG_partitiondata> temp_list = new List<WSLG_partitiondata>();
+                        PartitionXX(temp_list, db._basic_data, db._group_data, db._group_num, kv.Key, ans.dt, groups.dt, fullmark);
+                        temp_list.AddRange(total);
                         WordData temp = TotalSchoolCal(db._basic_data, db._group_data, db._group_num, kv.Key, ans.dt, groups.dt, false, fullmark);
-                        SchoolWordCreator swc = new SchoolWordCreator(temp, total, groups.dt, kv.Value, groups.groups_group);
-                        swc.creating_word();
+                        SchoolWordCreator swc = new SchoolWordCreator(temp, temp_list, groups.dt, kv.Value, groups.groups_group);
+
+                        Thread thread = new Thread(new ThreadStart(swc.creating_word));
+                        thread.IsBackground = true;
+                        thread.SetApartmentState(ApartmentState.STA);
+                        thread.Start();
+                        //swc.creating_word();
                     }
                     Utils.WSLG = false;
 

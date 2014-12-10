@@ -496,11 +496,17 @@ namespace ExamReport
             {
                 decimal temp = Convert.ToDecimal(Math.Sqrt(Convert.ToDouble((decimal)dr["standardErr"] / result.total_num)));
                 dr["standardErr"] = temp;
-                dr["dfactor"] = temp / (decimal)dr["avg"];
+                if ((decimal)dr["avg"] == 0)
+                    dr["dfactor"] = 0;
+                else
+                    dr["dfactor"] = temp / (decimal)dr["avg"];
                 dr["difficulty"] = (decimal)dr["avg"] / (decimal)dr["fullmark"];
                 decimal numerator = (decimal)dr["MultipleSum"] - ZH_avg * (decimal)dr["avg"] * result.total_num;
                 decimal part1 = (decimal)dr["SquareSumX"] - (decimal)dr["avg"] * (decimal)dr["avg"] * result.total_num;
-                dr["correlation"] = numerator / Convert.ToDecimal(Math.Sqrt(Convert.ToDouble(part1 * part2)));
+                if (part1 == 0 || part2 == 0)
+                    dr["correlation"] = 0;
+                else
+                    dr["correlation"] = numerator / Convert.ToDecimal(Math.Sqrt(Convert.ToDouble(part1 * part2)));
                 dr["discriminant"] = (((decimal)dr["PHN"] - (decimal)dr["PLN"]) / PLN) / (decimal)dr["fullmark"];
             }
             #endregion
@@ -1068,7 +1074,7 @@ namespace ExamReport
 
                 
             }
-            if(!isZonghe)
+            if(!(isZonghe || Utils.report_style.Equals("学校")) )
                 group_correlation();
             if(isZonghe)
                 group_mark(_basic_data);
