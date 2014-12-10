@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.OleDb;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -19,9 +20,9 @@ namespace ExamReport
     public delegate void ErrorMessage(string Message);
     public partial class Form1 : Form
     {
-        SchoolCodeConfig schoolcode;
         Thread thread;
-         
+        DataTable schoolcode_table;
+        
         public Form1()
         {
             InitializeComponent();
@@ -46,13 +47,34 @@ namespace ExamReport
             cancel.Enabled = false;
             save_address.Text = System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath);
 
-            schoolcode = (SchoolCodeConfig)ConfigurationManager.GetSection("SchoolCode");
+            //schoolcode = (SchoolCodeConfig)ConfigurationManager.GetSection("SchoolCode");
             groupBox5.Enabled = false;
             int curryear = DateTime.Now.Year;
             for (int i = curryear - 10; i < curryear + 10; i++)
                 year_list.Items.Add(i);
             year_list.SelectedItem = curryear;
             currmonth.SelectedItem = DateTime.Now.Month.ToString() + "月";
+
+            string conn = @"Provider=vfpoledb;Data Source=" + save_address.Text + ";Collating Sequence=machine;";
+
+            OleDbConnection dbfConnection = new OleDbConnection(conn);
+
+            OleDbDataAdapter adpt = new OleDbDataAdapter("select * from " + "schoolcode", dbfConnection);
+            //OleDbDataAdapter adpt = new OleDbDataAdapter("select * from " + file + " where Qk<>1", dbfConnection);
+            DataSet mySet = new DataSet();
+
+            try
+            {
+                adpt.Fill(mySet);
+            }
+            catch (OleDbException e)
+            {
+                throw new Exception("数据库文件被占用，请关闭！");
+            }
+            dbfConnection.Close();
+
+            schoolcode_table = mySet.Tables[0];
+
         }
         public void ErrorM(string message)
         {
@@ -314,10 +336,16 @@ namespace ExamReport
         }
         void AddQX()
         {
-            SchoolCodeConfig schoolcode = (SchoolCodeConfig)ConfigurationManager.GetSection("DistrictCode");
-            QX_list.DataSource = schoolcode.KeyValues.Cast<MyKeyValueSetting>().ToDataTable();
-            QX_list.DisplayMember = "value";
-            QX_list.ValueMember = "key";
+            //SchoolCodeConfig schoolcode = (SchoolCodeConfig)ConfigurationManager.GetSection("DistrictCode");
+            //QX_list.DataSource = schoolcode.KeyValues.Cast<MyKeyValueSetting>().ToDataTable();
+            //QX_list.DisplayMember = "value";
+            //QX_list.ValueMember = "key";
+
+            QX_list.DataSource = schoolcode_table.AsEnumerable().GroupBy(c => c.Field<string>("qxmc")).Select(c => new {
+                school = c.Key.ToString().Trim(), code = string.Join(",", c.GroupBy(p => p.Field<string>("qxdm")).Select(p => p.Key.ToString().Trim()).ToArray())}).ToDataTable();
+            
+            QX_list.DisplayMember = "school";
+            QX_list.ValueMember = "code";
 
             QX_list.ResetText();
         }
@@ -700,30 +728,21 @@ namespace ExamReport
         public Dictionary<string, string> schoolCode(CheckBoxComboBoxItemList checkedcode)
         {
             Dictionary<string, string> result = new Dictionary<string, string>(); 
-            string code_str = QX_list.SelectedValue.ToString();
-            List<MyKeyValueSetting> kv;
-            if (!code_str.Contains(','))
-            {
-                 kv = schoolcode.KeyValues.Cast<MyKeyValueSetting>().Where(c => c.Key.StartsWith(code_str)).ToList<MyKeyValueSetting>();
-                
-            }
-            else
-            {
-                string[] codes = code_str.Split(',');
-                IEnumerable<MyKeyValueSetting> data = new List<MyKeyValueSetting>();
-                foreach (string single_code in codes)
-                {
-                    IEnumerable<MyKeyValueSetting> temp = schoolcode.KeyValues.Cast<MyKeyValueSetting>().Where(c => c.Key.StartsWith(single_code));
-                    data = data.Concat(temp).ToList();
-                }
-                kv = data.ToList<MyKeyValueSetting>();
+            string code_str = QX_list.Text;
+            var kv = schoolcode_table.AsEnumerable().Where(c => c.Field<string>("qxmc").ToString().Trim().Equals(code_str)).Select(c => new
+                 {
+                     code = c.Field<string>("zxdm").ToString().Trim(),
+                     school = c.Field<string>("zxmc").ToString().Trim()
+                 });
 
-            }
-            for (int i = 0; i < checkedcode.Count; i++)
+            int i = 0;
+            foreach (var item in kv)
             {
                 if (checkedcode[i].Checked)
-                    result.Add(kv[i].Key, kv[i].Value);
+                    result.Add(item.code, item.school);
+                i++;
             }
+            
             return result;
         }
         public class startProcess
@@ -780,33 +799,21 @@ namespace ExamReport
             {
                 
 
-                string code_str = QX_list.SelectedValue.ToString();
-                if (!code_str.Contains(','))
+                string code_str = QX_list.Text;
+                DataTable DT = schoolcode_table.AsEnumerable().Where(c => c.Field<string>("qxmc").ToString().Trim().Equals(code_str)).Select(c => new
                 {
-                    DataTable DT = schoolcode.KeyValues.Cast<MyKeyValueSetting>().Where(c => c.Key.StartsWith(code_str)).ToDataTable();
-                    school.DataSource = new ListSelectionWrapper<DataRow>(
+                    code = c.Field<string>("zxdm").ToString().Trim(),
+                    school = c.Field<string>("zxmc").ToString().Trim()
+                }).ToDataTable();
+                school.DataSource = new ListSelectionWrapper<DataRow>(
                     DT.Rows,
-                    "value"
-                    ); 
-                }
-                else
-                {
-                    string[] codes = code_str.Split(',');
-                    IEnumerable<MyKeyValueSetting> data = new List<MyKeyValueSetting>(); 
-                    foreach (string single_code in codes)
-                    {
-                        IEnumerable<MyKeyValueSetting> temp = schoolcode.KeyValues.Cast<MyKeyValueSetting>().Where(c => c.Key.StartsWith(single_code));
-                        data = data.Concat(temp).ToList();
-                    }
-                    school.DataSource = new ListSelectionWrapper<DataRow>(
-                    data.ToDataTable().Rows,
-                    "value"
+                    "school"
                     );
-                }
+                
                 school.DisplayMemberSingleItem = "Name";
                 school.DisplayMember = "NameConcatenated";
                 school.ValueMember = "Selected";
-                
+
                 school.ResetText();
             }
             else

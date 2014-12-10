@@ -192,7 +192,7 @@ namespace ExamReport
             oWord.Visible = Utils.isVisible;
             oDoc = oWord.Documents.Add(ref filepath, ref oMissing,
             ref oMissing, ref oMissing);
-            Utils.WriteFrontPage(oDoc);
+            
 
             object oPageBreak = Microsoft.Office.Interop.Word.WdBreakType.wdPageBreak;
             if (Utils.WSLG)
@@ -205,6 +205,7 @@ namespace ExamReport
         }
         public void creating_word_part3()
         {
+            Utils.WSLG_WriteFrontPage(oDoc);
             insertText(ExamTitle1, "总体分析");
             insertTotalTable("    总分分析表", _sdata);
 
@@ -273,6 +274,7 @@ namespace ExamReport
         }
         public void creating_word_part2()
         {
+            Utils.WriteFrontPage(oDoc);
             insertText(ExamTitle1, "总体分析");
             if (_report_type.Equals("区县"))
                 insertTotalTable("    总分分析表", _totaldata);

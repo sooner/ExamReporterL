@@ -139,6 +139,7 @@
             this.label46 = new System.Windows.Forms.Label();
             this.label47 = new System.Windows.Forms.Label();
             this.school = new PresentationControls.CheckBoxComboBox();
+            this.school.DropDownHeight = 500;
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).BeginInit();
@@ -171,9 +172,9 @@
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(24, 639);
+            this.progressBar1.Location = new System.Drawing.Point(20, 652);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(690, 15);
+            this.progressBar1.Size = new System.Drawing.Size(690, 10);
             this.progressBar1.TabIndex = 22;
             // 
             // radioButton2
@@ -314,14 +315,14 @@
             "高考"});
             this.exam.Location = new System.Drawing.Point(81, 9);
             this.exam.Name = "exam";
-            this.exam.Size = new System.Drawing.Size(73, 20);
+            this.exam.Size = new System.Drawing.Size(98, 20);
             this.exam.TabIndex = 24;
             this.exam.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged_1);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(163, 12);
+            this.label2.Location = new System.Drawing.Point(206, 12);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(41, 12);
             this.label2.TabIndex = 25;
@@ -330,16 +331,16 @@
             // subject
             // 
             this.subject.FormattingEnabled = true;
-            this.subject.Location = new System.Drawing.Point(199, 9);
+            this.subject.Location = new System.Drawing.Point(244, 9);
             this.subject.Name = "subject";
-            this.subject.Size = new System.Drawing.Size(69, 20);
+            this.subject.Size = new System.Drawing.Size(94, 20);
             this.subject.TabIndex = 26;
             this.subject.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(275, 12);
+            this.label3.Location = new System.Drawing.Point(363, 13);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(65, 12);
             this.label3.TabIndex = 27;
@@ -348,16 +349,16 @@
             // report
             // 
             this.report.FormattingEnabled = true;
-            this.report.Location = new System.Drawing.Point(332, 8);
+            this.report.Location = new System.Drawing.Point(426, 10);
             this.report.Name = "report";
-            this.report.Size = new System.Drawing.Size(79, 20);
+            this.report.Size = new System.Drawing.Size(89, 20);
             this.report.TabIndex = 28;
             this.report.SelectedIndexChanged += new System.EventHandler(this.comboBox3_SelectedIndexChanged);
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(20, 47);
+            this.label4.Location = new System.Drawing.Point(20, 71);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(65, 12);
             this.label4.TabIndex = 29;
@@ -365,14 +366,14 @@
             // 
             // data_address
             // 
-            this.data_address.Location = new System.Drawing.Point(81, 44);
+            this.data_address.Location = new System.Drawing.Point(81, 68);
             this.data_address.Name = "data_address";
             this.data_address.Size = new System.Drawing.Size(517, 21);
             this.data_address.TabIndex = 30;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(614, 42);
+            this.button1.Location = new System.Drawing.Point(614, 66);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(111, 23);
             this.button1.TabIndex = 31;
@@ -383,7 +384,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(20, 81);
+            this.label5.Location = new System.Drawing.Point(20, 103);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(65, 12);
             this.label5.TabIndex = 32;
@@ -391,14 +392,14 @@
             // 
             // standard_ans
             // 
-            this.standard_ans.Location = new System.Drawing.Point(81, 78);
+            this.standard_ans.Location = new System.Drawing.Point(81, 100);
             this.standard_ans.Name = "standard_ans";
             this.standard_ans.Size = new System.Drawing.Size(517, 21);
             this.standard_ans.TabIndex = 33;
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(614, 76);
+            this.button2.Location = new System.Drawing.Point(614, 98);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(111, 23);
             this.button2.TabIndex = 34;
@@ -409,7 +410,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(20, 112);
+            this.label10.Location = new System.Drawing.Point(20, 134);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(65, 12);
             this.label10.TabIndex = 35;
@@ -417,14 +418,14 @@
             // 
             // groups_address
             // 
-            this.groups_address.Location = new System.Drawing.Point(81, 109);
+            this.groups_address.Location = new System.Drawing.Point(81, 131);
             this.groups_address.Name = "groups_address";
             this.groups_address.Size = new System.Drawing.Size(517, 21);
             this.groups_address.TabIndex = 36;
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(614, 107);
+            this.button3.Location = new System.Drawing.Point(614, 129);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(111, 23);
             this.button3.TabIndex = 37;
@@ -435,7 +436,7 @@
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(2, 177);
+            this.label15.Location = new System.Drawing.Point(2, 199);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(89, 12);
             this.label15.TabIndex = 38;
@@ -443,14 +444,14 @@
             // 
             // QXS_address
             // 
-            this.QXS_address.Location = new System.Drawing.Point(81, 174);
+            this.QXS_address.Location = new System.Drawing.Point(81, 196);
             this.QXS_address.Name = "QXS_address";
             this.QXS_address.Size = new System.Drawing.Size(517, 21);
             this.QXS_address.TabIndex = 39;
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(614, 174);
+            this.button4.Location = new System.Drawing.Point(614, 196);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(111, 23);
             this.button4.TabIndex = 40;
@@ -468,7 +469,7 @@
             this.groupBox2.Controls.Add(this.label16);
             this.groupBox2.Controls.Add(this.Mark_choice);
             this.groupBox2.Controls.Add(this.Popu_choice);
-            this.groupBox2.Location = new System.Drawing.Point(395, 279);
+            this.groupBox2.Location = new System.Drawing.Point(395, 298);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(309, 96);
             this.groupBox2.TabIndex = 42;
@@ -571,7 +572,7 @@
             this.groupBox3.Controls.Add(this.label21);
             this.groupBox3.Controls.Add(this.excellent_low);
             this.groupBox3.Controls.Add(this.label20);
-            this.groupBox3.Location = new System.Drawing.Point(22, 279);
+            this.groupBox3.Location = new System.Drawing.Point(22, 298);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(309, 143);
             this.groupBox3.TabIndex = 43;
@@ -746,7 +747,7 @@
             // 
             this.groupBox4.Controls.Add(this.fullmark);
             this.groupBox4.Controls.Add(this.label34);
-            this.groupBox4.Location = new System.Drawing.Point(397, 381);
+            this.groupBox4.Location = new System.Drawing.Point(397, 400);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(308, 57);
             this.groupBox4.TabIndex = 47;
@@ -785,7 +786,7 @@
             // 
             // run_button
             // 
-            this.run_button.Location = new System.Drawing.Point(415, 585);
+            this.run_button.Location = new System.Drawing.Point(415, 604);
             this.run_button.Name = "run_button";
             this.run_button.Size = new System.Drawing.Size(100, 37);
             this.run_button.TabIndex = 48;
@@ -796,7 +797,7 @@
             // label35
             // 
             this.label35.AutoSize = true;
-            this.label35.Location = new System.Drawing.Point(9, 145);
+            this.label35.Location = new System.Drawing.Point(9, 167);
             this.label35.Name = "label35";
             this.label35.Size = new System.Drawing.Size(77, 12);
             this.label35.TabIndex = 49;
@@ -804,14 +805,14 @@
             // 
             // WLZ_address
             // 
-            this.WLZ_address.Location = new System.Drawing.Point(81, 145);
+            this.WLZ_address.Location = new System.Drawing.Point(81, 167);
             this.WLZ_address.Name = "WLZ_address";
             this.WLZ_address.Size = new System.Drawing.Size(517, 21);
             this.WLZ_address.TabIndex = 50;
             // 
             // button10
             // 
-            this.button10.Location = new System.Drawing.Point(614, 140);
+            this.button10.Location = new System.Drawing.Point(614, 162);
             this.button10.Name = "button10";
             this.button10.Size = new System.Drawing.Size(111, 23);
             this.button10.TabIndex = 51;
@@ -822,7 +823,7 @@
             // label36
             // 
             this.label36.AutoSize = true;
-            this.label36.Location = new System.Drawing.Point(9, 208);
+            this.label36.Location = new System.Drawing.Point(9, 230);
             this.label36.Name = "label36";
             this.label36.Size = new System.Drawing.Size(77, 12);
             this.label36.TabIndex = 52;
@@ -830,14 +831,14 @@
             // 
             // SFX_address
             // 
-            this.SFX_address.Location = new System.Drawing.Point(81, 205);
+            this.SFX_address.Location = new System.Drawing.Point(81, 227);
             this.SFX_address.Name = "SFX_address";
             this.SFX_address.Size = new System.Drawing.Size(517, 21);
             this.SFX_address.TabIndex = 53;
             // 
             // button11
             // 
-            this.button11.Location = new System.Drawing.Point(614, 205);
+            this.button11.Location = new System.Drawing.Point(614, 227);
             this.button11.Name = "button11";
             this.button11.Size = new System.Drawing.Size(111, 23);
             this.button11.TabIndex = 54;
@@ -848,7 +849,7 @@
             // label37
             // 
             this.label37.AutoSize = true;
-            this.label37.Location = new System.Drawing.Point(20, 238);
+            this.label37.Location = new System.Drawing.Point(20, 260);
             this.label37.Name = "label37";
             this.label37.Size = new System.Drawing.Size(65, 12);
             this.label37.TabIndex = 55;
@@ -856,14 +857,14 @@
             // 
             // CJ_address
             // 
-            this.CJ_address.Location = new System.Drawing.Point(81, 238);
+            this.CJ_address.Location = new System.Drawing.Point(81, 260);
             this.CJ_address.Name = "CJ_address";
             this.CJ_address.Size = new System.Drawing.Size(517, 21);
             this.CJ_address.TabIndex = 56;
             // 
             // button9
             // 
-            this.button9.Location = new System.Drawing.Point(614, 238);
+            this.button9.Location = new System.Drawing.Point(614, 260);
             this.button9.Name = "button9";
             this.button9.Size = new System.Drawing.Size(111, 23);
             this.button9.TabIndex = 57;
@@ -874,21 +875,21 @@
             // label38
             // 
             this.label38.AutoSize = true;
-            this.label38.Location = new System.Drawing.Point(22, 620);
+            this.label38.Location = new System.Drawing.Point(22, 639);
             this.label38.Name = "label38";
             this.label38.Size = new System.Drawing.Size(0, 12);
             this.label38.TabIndex = 58;
             // 
             // save_address
             // 
-            this.save_address.Location = new System.Drawing.Point(24, 596);
+            this.save_address.Location = new System.Drawing.Point(24, 615);
             this.save_address.Name = "save_address";
             this.save_address.Size = new System.Drawing.Size(220, 21);
             this.save_address.TabIndex = 60;
             // 
             // button12
             // 
-            this.button12.Location = new System.Drawing.Point(258, 596);
+            this.button12.Location = new System.Drawing.Point(258, 615);
             this.button12.Name = "button12";
             this.button12.Size = new System.Drawing.Size(75, 23);
             this.button12.TabIndex = 61;
@@ -899,7 +900,7 @@
             // label39
             // 
             this.label39.AutoSize = true;
-            this.label39.Location = new System.Drawing.Point(23, 577);
+            this.label39.Location = new System.Drawing.Point(23, 596);
             this.label39.Name = "label39";
             this.label39.Size = new System.Drawing.Size(53, 12);
             this.label39.TabIndex = 62;
@@ -929,7 +930,7 @@
             // 
             // cancel
             // 
-            this.cancel.Location = new System.Drawing.Point(595, 584);
+            this.cancel.Location = new System.Drawing.Point(595, 603);
             this.cancel.Name = "cancel";
             this.cancel.Size = new System.Drawing.Size(98, 37);
             this.cancel.TabIndex = 65;
@@ -940,16 +941,16 @@
             // QX_list
             // 
             this.QX_list.FormattingEnabled = true;
-            this.QX_list.Location = new System.Drawing.Point(479, 8);
+            this.QX_list.Location = new System.Drawing.Point(601, 9);
             this.QX_list.Name = "QX_list";
-            this.QX_list.Size = new System.Drawing.Size(69, 20);
+            this.QX_list.Size = new System.Drawing.Size(92, 20);
             this.QX_list.TabIndex = 66;
             this.QX_list.SelectedIndexChanged += new System.EventHandler(this.QX_list_SelectedIndexChanged);
             // 
             // label40
             // 
             this.label40.AutoSize = true;
-            this.label40.Location = new System.Drawing.Point(417, 12);
+            this.label40.Location = new System.Drawing.Point(533, 13);
             this.label40.Name = "label40";
             this.label40.Size = new System.Drawing.Size(65, 12);
             this.label40.TabIndex = 67;
@@ -986,7 +987,7 @@
             this.groupBox1.Controls.Add(this.fullmark_iszero);
             this.groupBox1.Controls.Add(this.checkBox2);
             this.groupBox1.Controls.Add(this.sub_iszero);
-            this.groupBox1.Location = new System.Drawing.Point(22, 428);
+            this.groupBox1.Location = new System.Drawing.Point(22, 447);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(309, 146);
             this.groupBox1.TabIndex = 70;
@@ -1046,7 +1047,7 @@
             this.groupBox5.Controls.Add(this.label42);
             this.groupBox5.Controls.Add(this.shengwu_zhengzhi);
             this.groupBox5.Controls.Add(this.label41);
-            this.groupBox5.Location = new System.Drawing.Point(398, 457);
+            this.groupBox5.Location = new System.Drawing.Point(398, 476);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(308, 55);
             this.groupBox5.TabIndex = 71;
@@ -1139,7 +1140,7 @@
             this.groupBox6.Controls.Add(this.label46);
             this.groupBox6.Controls.Add(this.year_list);
             this.groupBox6.Controls.Add(this.label45);
-            this.groupBox6.Location = new System.Drawing.Point(395, 526);
+            this.groupBox6.Location = new System.Drawing.Point(395, 545);
             this.groupBox6.Name = "groupBox6";
             this.groupBox6.Size = new System.Drawing.Size(311, 48);
             this.groupBox6.TabIndex = 74;
@@ -1178,7 +1179,7 @@
             // label47
             // 
             this.label47.AutoSize = true;
-            this.label47.Location = new System.Drawing.Point(555, 11);
+            this.label47.Location = new System.Drawing.Point(20, 42);
             this.label47.Name = "label47";
             this.label47.Size = new System.Drawing.Size(65, 12);
             this.label47.TabIndex = 75;
@@ -1190,9 +1191,10 @@
             this.school.CheckBoxProperties = checkBoxProperties1;
             this.school.DisplayMemberSingleItem = "";
             this.school.FormattingEnabled = true;
-            this.school.Location = new System.Drawing.Point(614, 8);
+            this.school.Location = new System.Drawing.Point(81, 38);
+            this.school.MaxDropDownItems = 100;
             this.school.Name = "school";
-            this.school.Size = new System.Drawing.Size(121, 20);
+            this.school.Size = new System.Drawing.Size(517, 20);
             this.school.TabIndex = 76;
             this.school.SelectedIndexChanged += new System.EventHandler(this.school_SelectedIndexChanged);
             // 

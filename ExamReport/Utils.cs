@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Data;
+using System.Data.OleDb;
+using System.Configuration;
 
 namespace ExamReport
 {
@@ -50,27 +53,26 @@ namespace ExamReport
         public static string GK_WSLG_title_2 = "文史、理工类数据统计分析报告";
         public static string XX_title = "学校数据统计分析报告";
 
+        public static void WSLG_WriteFrontPage(Microsoft.Office.Interop.Word._Document oDoc)
+        {
+            WriteIntoDocument(oDoc, "title_1", GK_title_1);
+            WriteIntoDocument(oDoc, "title_2", GK_WSLG_title_2);
+            if (report_style.Equals("区县"))
+            {
+                WriteIntoDocument(oDoc, "QX", QX);
+                WriteIntoDocument(oDoc, "QX_subject", subject);
+            }
+            else if (report_style.Equals("总体"))
+            {
+                WriteIntoDocument(oDoc, "QX", "全市");
+                WriteIntoDocument(oDoc, "QX_subject", subject);
+            }
+        }
 
         public static void WriteFrontPage(Microsoft.Office.Interop.Word._Document oDoc)
         {
             WriteIntoDocument(oDoc, "date", year + "年" + month);
-            if (WSLG)
-            {
-                WriteIntoDocument(oDoc, "title_1", GK_title_1);
-                WriteIntoDocument(oDoc, "title_2", GK_WSLG_title_2);
-                if (report_style.Equals("区县"))
-                {
-                    WriteIntoDocument(oDoc, "QX", QX);
-                    WriteIntoDocument(oDoc, "QX_subject", subject);
-                }
-                else if (report_style.Equals("总体"))
-                {
-                    WriteIntoDocument(oDoc, "QX", "全市");
-                    WriteIntoDocument(oDoc, "QX_subject", subject);
-                }
-            }
-            else
-            {
+            
                 if (exam.Equals("中考"))
                 {
                     WriteIntoDocument(oDoc, "title_1", ZK_title_1);
@@ -210,7 +212,7 @@ namespace ExamReport
                         }
 
                     }
-                }
+                
             }
 
         }
@@ -296,6 +298,13 @@ namespace ExamReport
                             final = year + "年" + subject.Substring(3) + "数据统计分析报告(最终版）.docx";
                         else
                             final = year + "年" + subject + "数据统计分析报告(最终版）.docx";
+                    }
+                    else if (report_style.Equals("学校"))
+                    {
+                        if (subject.Contains("理综") || subject.Contains("文综"))
+                            final = year + "年" + school_name + subject.Substring(3) + "学校数据统计分析报告(最终版）.docx";
+                        else
+                            final = year + "年" + school_name + subject + "学校数据统计分析报告(最终版）.docx";
                     }
                 }
             }
@@ -401,6 +410,69 @@ namespace ExamReport
                     return false;
             }
             return true;
+        }
+
+        public static void create_groups_table(DataTable groups_data, string filename)
+        {
+            string conn = @"Provider=vfpoledb;Data Source=" + save_address + ";Collating Sequence=machine;";
+            string charsize = ConfigurationManager.AppSettings["charsize"].ToString().Trim();
+            OleDbConnection dbfConnection = new OleDbConnection(conn);
+            StringBuilder objectdata = new StringBuilder();
+            objectdata.Clear();
+            int i = 0;
+            
+            objectdata.Append("CREATE TABLE `" + filename + "` (\n");
+            int count = 0;
+            foreach (DataColumn dc in groups_data.Columns)
+            {
+                objectdata.Append("\t`" + dc.ColumnName + "` ");
+                if (dc.DataType.ToString().Equals("System.String"))
+                    objectdata.Append("c(" + charsize + ")");
+                else if (dc.DataType.ToString().Equals("System.Decimal"))
+                    objectdata.Append("n(4,1)");
+                else
+                    i++;
+                count++;
+                if (count != groups_data.Columns.Count)
+                    objectdata.Append(",\n");
+                else
+                    objectdata.Append(");");
+            }
+            
+            OleDbCommand group_create = new OleDbCommand(objectdata.ToString(), dbfConnection);
+            dbfConnection.Open();
+            group_create.ExecuteNonQuery();
+            OleDbCommand group_insert = new OleDbCommand();
+            group_insert.Connection = dbfConnection;
+            OleDbTransaction group_trans = null;
+            group_trans = group_insert.Connection.BeginTransaction();
+            group_insert.Transaction = group_trans;
+
+            foreach (DataRow dr in groups_data.Rows)
+            {
+                objectdata.Clear();
+                objectdata.Append("INSERT INTO " + filename + " VALUES (");
+                
+                for (i = 0; i < groups_data.Columns.Count; i++)
+                {
+                    if (groups_data.Columns[i].DataType.ToString().Equals("System.String"))
+                        objectdata.Append("'" + dr[i].ToString().Trim() + "'");
+                    else if (groups_data.Columns[i].DataType.ToString().Equals("System.Decimal"))
+                        objectdata.Append((decimal)dr[i]);
+                    
+                    if (i != groups_data.Columns.Count - 1)
+                        objectdata.Append(",");
+                    else
+                        objectdata.Append(");");
+                    
+                }
+
+                group_insert.CommandText = objectdata.ToString();
+                group_insert.ExecuteNonQuery();
+
+            }
+            group_trans.Commit();
+            dbfConnection.Close();
         }
 
         

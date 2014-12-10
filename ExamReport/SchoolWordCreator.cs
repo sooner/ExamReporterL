@@ -31,7 +31,6 @@ namespace ExamReport
         Object oFalse = false;
         string _schoolname;
         object oClassType = "Excel.Chart.8";
-        string _addr;
 
         Dictionary<string, List<string>> _groups_group;
         DataTable _groups;
@@ -55,6 +54,7 @@ namespace ExamReport
             oWord.Visible = Utils.isVisible;
             oDoc = oWord.Documents.Add(ref filepath, ref oMissing,
             ref oMissing, ref oMissing);
+            Utils.school_name = _schoolname;
             Utils.WriteFrontPage(oDoc);
 
             insertText(ExamTitle0, " 整体统计分析");
@@ -113,6 +113,7 @@ namespace ExamReport
         }
         public void creating_word_part2()
         {
+            
             insertText(ExamTitle1, "总体分析");
             insertTotalTable("    总分分析表", _pdata);
 
@@ -168,7 +169,7 @@ namespace ExamReport
 
             foreach (Word.TableOfContents table in oDoc.TablesOfContents)
                 table.Update();
-            Utils.WSLG_Save(oDoc, oWord);
+            Utils.Save(oDoc, oWord);
         }
         public void insertGroupTable(string title, DataTable dt, WordData.single_type type)
         {
@@ -436,12 +437,8 @@ namespace ExamReport
         {
             Word.Table table;
             Word.Range range = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-            int col;
-            if (Utils.WSLG)
-                col = 10;
-            else
-                col = 9;
-            table = oDoc.Tables.Add(range, sdata.Count + 1, col, ref oMissing, oTrue);
+            
+            table = oDoc.Tables.Add(range, sdata.Count + 1, 10, ref oMissing, oTrue);
             table.Range.InsertCaption(oWord.CaptionLabels["表"], title, oMissing, Word.WdCaptionPosition.wdCaptionPositionAbove, oMissing);
             range.MoveEnd(Word.WdUnits.wdParagraph, 1);
             range.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
@@ -460,8 +457,7 @@ namespace ExamReport
             table.Cell(1, 7).Range.Text = "标准差";
             table.Cell(1, 8).Range.Text = "差异系数";
             table.Cell(1, 9).Range.Text = "得分率";
-            if (Utils.WSLG)
-                table.Cell(1, 10).Range.Text = "鉴别指数";
+            table.Cell(1, 10).Range.Text = "鉴别指数";
 
             for (int i = 0; i < sdata.Count; i++)
             {
@@ -480,13 +476,12 @@ namespace ExamReport
                 table.Cell(i + 2, 7).Range.Text = string.Format("{0:F2}", data.Rows[total]["stDev"]);
                 table.Cell(i + 2, 8).Range.Text = string.Format("{0:F2}", data.Rows[total]["dfactor"]);
                 table.Cell(i + 2, 9).Range.Text = string.Format("{0:F2}", data.Rows[total]["difficulty"]);
-                if (Utils.WSLG)
-                {
+                
                     if (isGroup)
                         table.Cell(i + 2, 10).Range.Text = string.Format("{0:F2}", ((WSLG_partitiondata)partition).group_discriminant[total]);
                     else
                         table.Cell(i + 2, 10).Range.Text = string.Format("{0:F2}", ((WSLG_partitiondata)partition).total_discriminant[total]);
-                }
+                
             }
             table.Select();
             oWord.Selection.set_Style(ref TableContent2);

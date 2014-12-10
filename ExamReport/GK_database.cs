@@ -187,7 +187,7 @@ namespace ExamReport
             }
             if (Utils.saveMidData)
             {
-                create_groups_table(zh_group_data, true);
+                //create_groups_table(zh_group_data, true);
             }
             //update_standard_ans();
             return multiple_choice_num;
@@ -564,8 +564,9 @@ namespace ExamReport
             create_groups();
             if (Utils.saveMidData)
             {
-                create_db_tables();
-                create_groups_table(_group_data, false);
+                Utils.create_groups_table(_basic_data, Utils.year + "高考" + Utils.subject + "基础数据");
+                Utils.create_groups_table(_group_data, Utils.year + "高考" + Utils.subject + "题组数据");
+
             }
             return "";
         }
@@ -831,64 +832,7 @@ namespace ExamReport
                 }
             }
         }
-        public void create_db_tables()
-        {
-            #region create table insert data
-            int i = 0;
-            StringBuilder objectdata = new StringBuilder();
-            string newTable = filename + "_full";
-            objectdata.Append("CREATE TABLE `" + newTable + "` (\n");
-            objectdata.Append("\t`studentid` c(10),\n");
-            objectdata.Append("\t`schoolcode` c(10),\n");
-            objectdata.Append("\t`totalmark` n(4,1),\n");
-
-            for (i = 3; i < _basic_data.Columns["d1"].Ordinal; i++)
-            {
-                objectdata.Append("\t`" + _basic_data.Columns[i].ColumnName + "` n(4,1),\n");
-            }
-            for (i = _basic_data.Columns["D1"].Ordinal; i < _basic_data.Columns.Count - 2; i++)
-            {
-                objectdata.Append("\t`" + _basic_data.Columns[i].ColumnName + "`c(1),\n");
-            }
-            objectdata.Append("\t`" + _basic_data.Columns[i].ColumnName + "` c(4),\n");
-            objectdata.Append("\t`" + _basic_data.Columns[i + 1].ColumnName + "` c(4));\n");
-
-            OleDbCommand createcommand = new OleDbCommand(objectdata.ToString(), dbfConnection);
-
-            OleDbCommand insertcommand = new OleDbCommand();
-            insertcommand.Connection = dbfConnection;
-            dbfConnection.Open();
-            createcommand.ExecuteNonQuery();
-            //form.ShowPro(40, 2);
-            OleDbTransaction trans = null;
-            trans = insertcommand.Connection.BeginTransaction();
-            insertcommand.Transaction = trans;
-
-            foreach (DataRow dr in _basic_data.Rows)
-            {
-                objectdata.Clear();
-                objectdata.Append("INSERT INTO " + newTable + " VALUES ('");
-                objectdata.Append(dr[0] + "','" + dr[1] + "',");
-
-                for (i = 2; i < _basic_data.Columns["D1"].Ordinal; i++)
-                {
-                    objectdata.Append(dr[i] + ",");
-                }
-                objectdata.Append("'");
-                for (i = _basic_data.Columns["D1"].Ordinal; i < _basic_data.Columns.Count - 1; i++)
-                    objectdata.Append(dr[i] + "','");
-
-                objectdata.Append(dr[_basic_data.Columns.Count - 1] + "');");
-                insertcommand.CommandText = objectdata.ToString();
-                insertcommand.ExecuteNonQuery();
-
-            }
-
-
-            trans.Commit();
-            dbfConnection.Close();
-            #endregion
-        }
+        
         public void create_groups()
         {
             #region divide the table into groups
@@ -953,54 +897,7 @@ namespace ExamReport
             #endregion
         }
 
-        public void create_groups_table(DataTable groups_data, bool isZH)
-        {
-            StringBuilder objectdata = new StringBuilder();
-            objectdata.Clear();
-            int i = 0;
-            string group_Table;
-            if(isZH)
-                group_Table = filename + "zh_groups";
-            else
-                group_Table = filename + "_groups";
-            objectdata.Append("CREATE TABLE `" + group_Table + "` (\n");
-            objectdata.Append("\t`studentid` c(10),\n");
-            objectdata.Append("\t`schoolcode` c(10),\n");
-            objectdata.Append("\t`totalmark` n(4,1),\n");
-            for (i = 3; i < groups_data.Columns.Count - 2; i++)
-            {
-                objectdata.Append("\t`" + groups_data.Columns[i].ColumnName + "` n(4,1),\n");
-            }
-            objectdata.Append("\t`" + groups_data.Columns[i].ColumnName + "` c(4),\n");
-            objectdata.Append("\t`" + groups_data.Columns[i + 1].ColumnName + "` c(4));");
-            OleDbCommand group_create = new OleDbCommand(objectdata.ToString(), dbfConnection);
-            dbfConnection.Open();
-            group_create.ExecuteNonQuery();
-            OleDbCommand group_insert = new OleDbCommand();
-            group_insert.Connection = dbfConnection;
-            OleDbTransaction group_trans = null;
-            group_trans = group_insert.Connection.BeginTransaction();
-            group_insert.Transaction = group_trans;
-
-            foreach (DataRow dr in groups_data.Rows)
-            {
-                objectdata.Clear();
-                objectdata.Append("INSERT INTO " + group_Table + " VALUES ('");
-                objectdata.Append(dr[0] + "','" + dr[1] + "',");
-
-                for (i = 2; i < groups_data.Columns.Count - 2; i++)
-                {
-                    objectdata.Append(dr[i] + ",");
-                }
-                objectdata.Append("'");
-                objectdata.Append(dr[groups_data.Columns.Count - 2] + "','" + dr[groups_data.Columns.Count - 1] + "');");
-                group_insert.CommandText = objectdata.ToString();
-                group_insert.ExecuteNonQuery();
-
-            }
-            group_trans.Commit();
-            dbfConnection.Close();
-        }
+        
 
 
 
