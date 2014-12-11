@@ -30,6 +30,110 @@ namespace ExamReport
         Object oFalse = false;
 
         object oClassType = "Excel.Chart.8";
+
+        private List<ZF_statistic> _xx_data;
+        private string _schoolname;
+
+        public ZF_wordcreator()
+        {
+        }
+        public ZF_wordcreator(List<ZF_statistic> data, string schoolname)
+        {
+            _xx_data = data;
+            _schoolname = schoolname;
+        }
+        public void XX_create()
+        {
+            object filepath = @Utils.CurrentDirectory + @"\template2.dotx";
+            //object filepath = @"D:\项目\给王卅的编程资料\中考\c.dotx";
+            //Start Word and create a new document.
+
+            oWord = new Word.Application();
+
+            oWord.Visible = Utils.isVisible;
+            oDoc = oWord.Documents.Add(ref filepath, ref oMissing,
+            ref oMissing, ref oMissing);
+            Utils.WriteFrontPage(oDoc, _schoolname);
+
+            
+            
+
+
+            object oPageBreak = Microsoft.Office.Interop.Word.WdBreakType.wdPageBreak;
+            insertText(ExamTitle0, "文科");
+            insertText(ExamTitle1, "文科试卷总分分析");
+            insertTotalTable("文科试卷总分分析表", _xx_data, true);
+            insertText(ExamTitle1, "文科总分分布曲线图");
+            Partition_wordcreator.ChartCombine comb = new Partition_wordcreator.ChartCombine();
+            decimal chart_fullmark = _xx_data[6].w_result.fullmark;
+            comb.Add(_xx_data[6].w_result.dist, _xx_data[6]._name);
+            
+            insertChart("总分分布曲线图", comb.target, "分数", "人数百分比", Excel.XlChartType.xlLineMarkers, chart_fullmark);
+
+            insertText(ExamTitle1, "文科总分分数分布表");
+            insertTotalFreqTable("文科总分分数分布表", _xx_data[6].w_result.frequency);
+
+            oDoc.Characters.Last.InsertBreak(oPageBreak);
+            insertText(ExamTitle0, "理科");
+            insertText(ExamTitle1, "理科试卷总分分析");
+            insertTotalTable("理科试卷总分分析表", _xx_data, false);
+            insertText(ExamTitle1, "理科总分分布曲线图");
+            comb = new Partition_wordcreator.ChartCombine();
+            comb.Add(_xx_data[6].l_result.dist, _xx_data[6]._name);
+            chart_fullmark = _xx_data[6].l_result.fullmark;
+            insertChart("总分分布曲线图", comb.target, "分数", "人数百分比", Excel.XlChartType.xlLineMarkers, chart_fullmark);
+            insertText(ExamTitle1, "理科总分分数分布表");
+            insertTotalFreqTable("理科总分分数分布表", _xx_data[6].l_result.frequency);
+
+            foreach (Word.TableOfContents table in oDoc.TablesOfContents)
+                table.Update();
+            Utils.Save(oDoc, oWord, _schoolname);
+        }
+
+        public void insertTotalFreqTable(string title, DataTable data)
+        {
+            Word.Table freq_table;
+            Word.Range freq_rng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+
+            freq_table = oDoc.Tables.Add(freq_rng, data.Rows.Count + 1, 5, ref oMissing, oTrue);
+            freq_table.Rows[1].HeadingFormat = -1;
+            freq_table.Range.InsertCaption(oWord.CaptionLabels["表"], title, oMissing, Word.WdCaptionPosition.wdCaptionPositionAbove, oMissing);
+            freq_rng.MoveEnd(Word.WdUnits.wdParagraph, 1);
+            freq_rng.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+            //freq_table.Range.set_Style(ref TableContent2);
+
+            //freq_table.Range.Select();
+            //oWord.Selection.Cells.VerticalAlignment = Word.WdCellVerticalAlignment.wdCellAlignVerticalCenter;
+            //oWord.Selection.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+            //freq_table.Range.ParagraphFormat.Space1();
+            freq_table.Borders.OutsideLineStyle = Word.WdLineStyle.wdLineStyleSingle;
+            freq_table.Borders.InsideLineStyle = Word.WdLineStyle.wdLineStyleSingle;
+
+            //freq_table.Range.Paragraphs.OutlineLevel = Word.WdOutlineLevel.wdOutlineLevelBodyText;
+            //freq_table.Range.Font.Size = 10;
+            //freq_table.Range.Font.Name = "黑体";
+
+            freq_table.Cell(1, 1).Range.Text = "分值";
+            freq_table.Cell(1, 2).Range.Text = "人数";
+            freq_table.Cell(1, 3).Range.Text = "百分比率(%)";
+            freq_table.Cell(1, 4).Range.Text = "累计人数";
+            freq_table.Cell(1, 5).Range.Text = "累计百分比率（%）";
+
+            for (int i = 0; i < data.Rows.Count; i++)
+            {
+                freq_table.Cell(i + 2, 1).Range.Text = string.Format("{0:F0}", data.Rows[i]["totalmark"]) + "～";
+                freq_table.Cell(i + 2, 2).Range.Text = data.Rows[i]["frequency"].ToString();
+                freq_table.Cell(i + 2, 3).Range.Text = string.Format("{0:F2}", data.Rows[i]["rate"]);
+                freq_table.Cell(i + 2, 4).Range.Text = data.Rows[i]["accumulateFreq"].ToString();
+                freq_table.Cell(i + 2, 5).Range.Text = string.Format("{0:F2}", data.Rows[i]["accumulateRate"]);
+
+            }
+            freq_table.Select();
+            oWord.Selection.set_Style(ref TableContent2);
+
+            freq_rng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+            freq_rng.InsertParagraphAfter();
+        }
         public void total_create(ZF_statistic data)
         {
             object filepath = @Utils.CurrentDirectory + @"\template.dotx";

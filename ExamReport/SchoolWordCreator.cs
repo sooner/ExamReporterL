@@ -54,8 +54,7 @@ namespace ExamReport
             oWord.Visible = Utils.isVisible;
             oDoc = oWord.Documents.Add(ref filepath, ref oMissing,
             ref oMissing, ref oMissing);
-            Utils.school_name = _schoolname;
-            Utils.WriteFrontPage(oDoc);
+            Utils.WriteFrontPage(oDoc, _schoolname);
 
             insertText(ExamTitle0, " 整体统计分析");
             insertText(ExamTitle1, "总体分析");
@@ -106,8 +105,7 @@ namespace ExamReport
             oWord.Visible = Utils.isVisible;
             oDoc = oWord.Documents.Add(ref filepath, ref oMissing,
             ref oMissing, ref oMissing);
-            Utils.school_name = _schoolname;
-            Utils.WriteFrontPage(oDoc);
+            Utils.WriteFrontPage(oDoc, _schoolname);
 
             creating_word_part2();
         }
@@ -169,7 +167,7 @@ namespace ExamReport
 
             foreach (Word.TableOfContents table in oDoc.TablesOfContents)
                 table.Update();
-            Utils.Save(oDoc, oWord);
+            Utils.Save(oDoc, oWord, _schoolname);
         }
         public void insertGroupTable(string title, DataTable dt, WordData.single_type type)
         {

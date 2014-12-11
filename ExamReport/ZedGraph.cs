@@ -16,7 +16,7 @@ namespace ExamReport
     {
         public static List<Color> mycolor = new List<Color>{ Color.Red, Color.Blue, Color.Black, Color.Gray, Color.Brown, Color.Chocolate, Color.Purple, Color.Gray};
         public static List<SymbolType> mySymbol = new List<SymbolType> { SymbolType.Circle, SymbolType.Square, SymbolType.Diamond, SymbolType.Star, SymbolType.Plus, SymbolType.Triangle, SymbolType.HDash };
-        public static List<myStyle> myDashStyle = new List<System.Drawing.Drawing2D.DashStyle> { myStyle.Custom, myStyle.Dash, myStyle.DashDot, myStyle.DashDotDot, myStyle.Solid, myStyle.Dot, myStyle.Custom, myStyle.Dash, myStyle.DashDot };
+        public static List<myStyle> myDashStyle = new List<System.Drawing.Drawing2D.DashStyle> { myStyle.Solid, myStyle.Dash, myStyle.DashDot, myStyle.DashDotDot, myStyle.Custom, myStyle.Dot, myStyle.Custom, myStyle.Dash, myStyle.DashDot };
         public static List<float> myWidth = new List<float> { 2, 5, 2, 5, 2, 5, 5, 2, 5, 2, 5, 2};
         public static void createDiffCuve(double[][] cuveData, double minX, double maxX)
         {
@@ -202,6 +202,7 @@ namespace ExamReport
             Bitmap sourceBitmap = new Bitmap(zgc.Width, zgc.Height);
             zgc.DrawToBitmap(sourceBitmap, new Rectangle(0, 0, zgc.Width, zgc.Height));
             //Thread.CurrentThread.SetApartmentState(ApartmentState.STA);
+            
             Clipboard.Clear();
             Clipboard.SetImage(sourceBitmap);
         }

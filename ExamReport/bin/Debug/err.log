@@ -1,10 +1,11 @@
-System.Exception: 数据库文件被占用，请关闭！
-   at ExamReport.Form1..ctor() in D:\project\ExamReporterL\ExamReporterL\ExamReport\Form1.cs:line 72
-   at ExamReport.Program.Main() in D:\project\ExamReporterL\ExamReporterL\ExamReport\Program.cs:line 21
-   at System.AppDomain._nExecuteAssembly(RuntimeAssembly assembly, String[] args)
-   at System.AppDomain.ExecuteAssembly(String assemblyFile, Evidence assemblySecurity, String[] args)
-   at Microsoft.VisualStudio.HostingProcess.HostProc.RunUsersAssembly()
-   at System.Threading.ThreadHelper.ThreadStart_Context(Object state)
+System.Threading.ThreadStateException: Current thread must be set to single thread apartment (STA) mode before OLE calls can be made. Ensure that your Main function has STAThreadAttribute marked on it.
+   at System.Windows.Forms.Clipboard.SetDataObject(Object data, Boolean copy, Int32 retryTimes, Int32 retryDelay)
+   at System.Windows.Forms.Clipboard.Clear()
+   at ExamReport.ZedGraph.createMultipleCuve(DataTable dt, String xStr, String yStr, Double minX, Double maxX, Decimal fullmark) in D:\project\ExamReporterL\ExamReporterL\ExamReport\ZedGraph.cs:line 206
+   at ExamReport.ZF_wordcreator.insertChart(String title, DataTable dt, String x_axis, String y_axis, Object type, Decimal fullmark) in D:\project\ExamReporterL\ExamReporterL\ExamReport\ZF_wordcreator.cs:line 645
+   at ExamReport.ZF_wordcreator.XX_create(Object obj) in D:\project\ExamReporterL\ExamReporterL\ExamReport\ZF_wordcreator.cs:line 71
+   at System.Threading.QueueUserWorkItemCallback.WaitCallback_Context(Object state)
    at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean ignoreSyncCtx)
-   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
-   at System.Threading.ThreadHelper.ThreadStart()
+   at System.Threading.QueueUserWorkItemCallback.System.Threading.IThreadPoolWorkItem.ExecuteWorkItem()
+   at System.Threading.ThreadPoolWorkQueue.Dispatch()
+   at System.Threading._ThreadPoolWaitCallback.PerformWaitCallback()

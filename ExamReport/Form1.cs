@@ -17,11 +17,15 @@ using System.Drawing.Drawing2D;
 namespace ExamReport
 {
     public delegate void MyDelegate(int i, int status);
+    public delegate void ThreadEventHandler(Thread thread);
     public delegate void ErrorMessage(string Message);
+    
     public partial class Form1 : Form
     {
         Thread thread;
         DataTable schoolcode_table;
+
+        public List<Thread> thread_table;
         
         public Form1()
         {
@@ -75,6 +79,8 @@ namespace ExamReport
 
             schoolcode_table = mySet.Tables[0];
 
+            thread_table = new List<Thread>();
+
         }
         public void ErrorM(string message)
         {
@@ -91,6 +97,17 @@ namespace ExamReport
                     ShowPro(100, 5);
                 }
 
+            }
+        }
+        public void ThreadControl(Thread thread)
+        {
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new ThreadEventHandler(ThreadControl), thread);
+            }
+            else
+            {
+                thread_table.Add(thread);
             }
         }
         public void ShowPro(int value, int status)
@@ -783,14 +800,27 @@ namespace ExamReport
 
         private void cancel_Click(object sender, EventArgs e)
         {
+            if (thread_table.Count != 0)
+            {
+                foreach (Thread t in thread_table)
+                {
+                    if (t.IsAlive)
+                        t.Abort();
+                }
+                
+                
+            }
             if (thread.IsAlive)
             {
                 thread.Abort();
-                ShowPro(100, 5);
-                cancel.Enabled = false;
-                run_button.Enabled = true;
+                
             }
 
+            ShowPro(100, 5);
+            cancel.Enabled = false;
+            run_button.Enabled = true;
+
+            thread_table.Clear();
         }
 
         private void QX_list_SelectedIndexChanged(object sender, EventArgs e)

@@ -39,6 +39,8 @@ namespace ExamReport
         public static decimal wuli_lishi;
         public static decimal huaxue_dili;
 
+        public static object clipboardLock;
+
         public static string ZK_title_1 = "北京市高级中等学校招生考试";
         public static string ZK_title_2 = "实测数据统计分析报告";
         public static string ZK_QX_title_2 = "分类校数据统计分析报告";
@@ -66,6 +68,38 @@ namespace ExamReport
             {
                 WriteIntoDocument(oDoc, "QX", "全市");
                 WriteIntoDocument(oDoc, "QX_subject", subject);
+            }
+        }
+
+        public static void WriteFrontPage(Microsoft.Office.Interop.Word._Document oDoc, string school)
+        {
+            if (subject.Equals("总分"))
+            {
+                WriteIntoDocument(oDoc, "title_1", year + GK_ZF_title_1);
+                WriteIntoDocument(oDoc, "title_2", GK_ZF_title_2);
+                WriteIntoDocument(oDoc, "subject", school);
+            }
+
+            else
+            {
+                WriteIntoDocument(oDoc, "title_2", XX_title);
+                if (subject.Contains("理综"))
+                {
+                    WriteIntoDocument(oDoc, "QX", school);
+                    WriteIntoDocument(oDoc, "ZH", "理科综合");
+                    WriteIntoDocument(oDoc, "QX_ZH_subject", subject.Substring(3));
+                }
+                else if (subject.Contains("文综"))
+                {
+                    WriteIntoDocument(oDoc, "QX", school);
+                    WriteIntoDocument(oDoc, "ZH", "文科综合");
+                    WriteIntoDocument(oDoc, "QX_ZH_subject", subject.Substring(3));
+                }
+                else
+                {
+                    WriteIntoDocument(oDoc, "QX", school);
+                    WriteIntoDocument(oDoc, "QX_subject", subject);
+                }
             }
         }
 
@@ -108,6 +142,7 @@ namespace ExamReport
                             WriteIntoDocument(oDoc, "subject", QX);
                         else if (report_style.Equals("总体"))
                             WriteIntoDocument(oDoc, "subject", "全市");
+                        
                     }
                     else
                     {
@@ -189,27 +224,7 @@ namespace ExamReport
                                 WriteIntoDocument(oDoc, "subject", subject);
                             }
                         }
-                        else if (report_style.Equals("学校"))
-                        {
-                            WriteIntoDocument(oDoc, "title_2", XX_title);
-                            if (subject.Contains("理综"))
-                            {
-                                WriteIntoDocument(oDoc, "QX", school_name);
-                                WriteIntoDocument(oDoc, "ZH", "理科综合");
-                                WriteIntoDocument(oDoc, "QX_ZH_subject", subject.Substring(3));
-                            }
-                            else if (subject.Contains("文综"))
-                            {
-                                WriteIntoDocument(oDoc, "QX", school_name);
-                                WriteIntoDocument(oDoc, "ZH", "文科综合");
-                                WriteIntoDocument(oDoc, "QX_ZH_subject", subject.Substring(3));
-                            }
-                            else
-                            {
-                                WriteIntoDocument(oDoc, "QX", school_name);
-                                WriteIntoDocument(oDoc, "QX_subject", subject);
-                            }
-                        }
+                        
 
                     }
                 
@@ -234,6 +249,30 @@ namespace ExamReport
             oDoc.Close(oMissing, oMissing, oMissing);
             oWord.Quit(oMissing, oMissing, oMissing);
 
+        }
+        public static void Save(Microsoft.Office.Interop.Word._Document oDoc, Microsoft.Office.Interop.Word._Application oWord, string school)
+        {
+            insertAddons(oDoc);
+            object oMissing = System.Reflection.Missing.Value;
+            string addr = save_address + @"\";
+            string final = "a.docx";
+
+            if (subject.Equals("总分"))
+            {
+                final = year + "年总分统计分析报告(" + school + ").docx";
+            }
+            else
+            {
+                if (subject.Contains("理综") || subject.Contains("文综"))
+                    final = year + "年北京市" + school + subject.Substring(3) + "学校数据统计分析报告.docx";
+                else
+                    final = year + "年北京市" + school + subject + "学校数据统计分析报告.docx";
+            }
+
+            final = addr + final;
+            oDoc.SaveAs(final, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing);
+            oDoc.Close(oMissing, oMissing, oMissing);
+            oWord.Quit(oMissing, oMissing, oMissing);
         }
         public static void Save(Microsoft.Office.Interop.Word._Document oDoc, Microsoft.Office.Interop.Word._Application oWord)
         {
@@ -268,6 +307,7 @@ namespace ExamReport
                         final = year + "北京市普通高考试卷总分统计分析报告（" + QX + "）.docx";
                     else if (report_style.Equals("总体"))
                         final = year + "年北京市普通高考试卷总分统计分析报告(全市).docx";
+                    
                 }
                 else
                 {
@@ -299,13 +339,7 @@ namespace ExamReport
                         else
                             final = year + "年" + subject + "数据统计分析报告(最终版）.docx";
                     }
-                    else if (report_style.Equals("学校"))
-                    {
-                        if (subject.Contains("理综") || subject.Contains("文综"))
-                            final = year + "年" + school_name + subject.Substring(3) + "学校数据统计分析报告(最终版）.docx";
-                        else
-                            final = year + "年" + school_name + subject + "学校数据统计分析报告(最终版）.docx";
-                    }
+                    
                 }
             }
             final = addr + final;

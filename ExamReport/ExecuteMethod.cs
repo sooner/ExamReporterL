@@ -8,6 +8,7 @@ using System.Threading;
 
 namespace ExamReport
 {
+     
     public class ExecuteMethod
     {
         public Form1 form;
@@ -355,7 +356,7 @@ namespace ExamReport
                         string[] SF_code = new string[SF_list[i].Count - 1];
                         for (int j = 1; j < SF_list[i].Count; j++)
                             SF_code[j - 1] = SF_list[i][j].ToString().Trim();
-                        DataTable temp = db._basic_data.filteredtable("schoolcode", SF_code);
+                        DataTable temp = db._basic_data.filteredtable("xxdm", SF_code);
                         ZF_statistic stat = new ZF_statistic(temp, fullmark, SF_list[i][0].ToString().Trim());
                         stat.partition_process();
                         result.Add(stat);
@@ -391,7 +392,63 @@ namespace ExamReport
                     ZF_wordcreator create = new ZF_wordcreator();
                     create.total_create(stat);
                 }
+                if (report_style.Equals("学校"))
+                {
+                    List<ZF_statistic> result = new List<ZF_statistic>();
+                    GK_database db = new GK_database();
+                    db.ZF_data_process(database_address);
+                    form.ShowPro(40, 3);
+                    ZF_statistic total = new ZF_statistic(db._basic_data, fullmark, "市整体");
+                    total.partition_process();
+                    result.Add(total);
+                    for (int i = 0; i < SF_list.Count; i++)
+                    {
+                        string[] SF_code = new string[SF_list[i].Count - 1];
+                        for (int j = 1; j < SF_list[i].Count; j++)
+                            SF_code[j - 1] = SF_list[i][j].ToString().Trim();
+                        DataTable temp = db._basic_data.filteredtable("xxdm", SF_code);
+                        ZF_statistic stat = new ZF_statistic(temp, fullmark, SF_list[i][0].ToString().Trim());
+                        stat.partition_process();
+                        result.Add(stat);
+                    }
+                    for (int i = 0; i < CJ_list.Count; i++)
+                    {
+                        string[] cj_code = new string[CJ_list[i].Count - 1];
+                        for (int j = 1; j < CJ_list[i].Count; j++)
+                            cj_code[j - 1] = CJ_list[i][j].ToString().Trim();
+                        DataTable temp = db._basic_data.filteredtable("qxdm", cj_code);
+                        ZF_statistic stat = new ZF_statistic(temp, fullmark, CJ_list[i][0].ToString().Trim());
+                        stat.partition_process();
+                        result.Add(stat);
+                    }
+                    DataTable bq_data = db._basic_data.filteredtable("qxdm", QXTransfer(Quxian_list));
+                    ZF_statistic bq = new ZF_statistic(bq_data, fullmark, "本区");
+                    bq.partition_process();
+                    result.Add(bq);
+                    
+                    foreach (KeyValuePair<string, string> kv in School_code)
+                    {
+                        DataTable bx_data = db._basic_data.filteredtable("xxdm", new string[] { kv.Key });
+                        ZF_statistic bx = new ZF_statistic(bx_data, fullmark, "本校");
+                        bx.partition_process();
+                        List<ZF_statistic> temp_result = new List<ZF_statistic>();
+                        temp_result.AddRange(result);
+                        temp_result.Add(bx);
 
+                        ZF_wordcreator create = new ZF_wordcreator(temp_result, kv.Value);
+                        Thread thread = new Thread(new ThreadStart(create.XX_create));
+                        thread.IsBackground = true;
+                        thread.SetApartmentState(ApartmentState.STA);
+                        thread.Start();
+
+                        form.ThreadControl(thread);
+                    }
+                    foreach (Thread t in form.thread_table)
+                    {
+                        t.Join();
+                    }
+                    
+                }
             }
             else if (subject.Contains("理综") ||
                     subject.Contains("文综"))
@@ -764,8 +821,11 @@ namespace ExamReport
                         thread.IsBackground = true;
                         thread.SetApartmentState(ApartmentState.STA);
                         thread.Start();
+
+                        form.ThreadControl(thread);
                         //swc.creating_word();
                     }
+
                     Utils.WSLG = false;
 
                 }
@@ -1026,7 +1086,7 @@ namespace ExamReport
                 }
             }
 
-            DataTable flztdata = total.filteredtable("schoolcode", SF_code);
+            DataTable flztdata = total.filteredtable("xxdm", SF_code);
             ZF_statistic flzt = new ZF_statistic(flztdata, fullmark, "分类整体");
             flzt.partition_process();
             result.Add(flzt);
@@ -1037,7 +1097,7 @@ namespace ExamReport
                 string[] xx_code = new string[temp.Count - 1];
                 for (int j = 1; j < temp.Count; j++)
                     xx_code[j - 1] = temp[j].ToString().Trim();
-                DataTable data = flztdata.filteredtable("schoolcode", xx_code);
+                DataTable data = flztdata.filteredtable("xxdm", xx_code);
                 ZF_statistic stat = new ZF_statistic(data, fullmark, temp[0].ToString().Trim());
                 stat.partition_process();
                 result.Add(stat);
