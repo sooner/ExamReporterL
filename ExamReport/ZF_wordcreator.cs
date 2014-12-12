@@ -660,6 +660,7 @@ namespace ExamReport
             }
             Word.Range dist_rng = oDoc.Bookmarks.get_Item(oEndOfDoc).Range;
             dist_rng.Paste();
+            Utils.mutex_clipboard.ReleaseMutex();
             //Excel.Application eapp = new Excel.Application();
             //eapp.Visible = false;
             //Excel.Workbooks wk = eapp.Workbooks;

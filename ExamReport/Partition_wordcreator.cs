@@ -952,6 +952,7 @@ namespace ExamReport
             
             Word.Range dist_rng = oDoc.Bookmarks.get_Item(oEndOfDoc).Range;
             dist_rng.Paste();
+            Utils.mutex_clipboard.ReleaseMutex();
             dist_rng.InsertCaption(oWord.CaptionLabels["图"], title, oMissing, Word.WdCaptionPosition.wdCaptionPositionAbove, oMissing);
             dist_rng.MoveEnd(Word.WdUnits.wdParagraph, 1);
             dist_rng.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;

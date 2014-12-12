@@ -35,6 +35,11 @@ namespace ExamReport
         Dictionary<string, List<string>> _groups_group;
         DataTable _groups;
 
+        WordData zh_data;
+        List<WSLG_partitiondata> zh_pdata;
+        DataTable groups;
+        Dictionary<string, List<string>> groups_group;
+
         public SchoolWordCreator(WordData sdata, List<WSLG_partitiondata> pdata, DataTable groups, string schoolname, Dictionary<string, List<string>> groups_group)
         {
             _sdata = sdata;
@@ -44,7 +49,15 @@ namespace ExamReport
             _groups = groups;
         }
 
-        public void creating_ZH_word(WordData zh_data, List<WSLG_partitiondata> zh_pdata, DataTable groups, Dictionary<string, List<string>> groups_group)
+        public void SetUpZHparam(WordData zh_data_, List<WSLG_partitiondata> zh_pdata_, DataTable groups_, Dictionary<string, List<string>> groups_group_)
+        {
+            zh_data = zh_data_;
+            zh_pdata = zh_pdata_;
+            groups = groups_;
+            groups_group = groups_group_;
+        }
+
+        public void creating_ZH_word()
         {
             object filepath = @Utils.CurrentDirectory + @"\template2.dotx";
             //Start Word and create a new document.
@@ -285,6 +298,7 @@ namespace ExamReport
             ZedGraph.createMultipleChoiceCuve(dt, x_axis, y_axis);
             Word.Range dist_rng = oDoc.Bookmarks.get_Item(oEndOfDoc).Range;
             dist_rng.Paste();
+            Utils.mutex_clipboard.ReleaseMutex();
             dist_rng.InsertCaption(oWord.CaptionLabels["图"], title, oMissing, Word.WdCaptionPosition.wdCaptionPositionAbove, oMissing);
             dist_rng.MoveEnd(Word.WdUnits.wdParagraph, 1);
             dist_rng.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
@@ -310,6 +324,7 @@ namespace ExamReport
             ZedGraph.createDiffCuve(data, Convert.ToDouble(dt.Compute("Min([" + dt.Columns[0].ColumnName + "])", "")), Convert.ToDouble(dt.Compute("Max([" + dt.Columns[0].ColumnName + "])", "")));
             Word.Range dist_rng = oDoc.Bookmarks.get_Item(oEndOfDoc).Range;
             dist_rng.Paste();
+            Utils.mutex_clipboard.ReleaseMutex();
             dist_rng.InsertCaption(oWord.CaptionLabels["图"], title, oMissing, Word.WdCaptionPosition.wdCaptionPositionAbove, oMissing);
             dist_rng.MoveEnd(Word.WdUnits.wdParagraph, 1);
             dist_rng.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
@@ -417,6 +432,7 @@ namespace ExamReport
             ZedGraph.createDiffCuve(data, Convert.ToDouble(dt.Compute("Min([" + dt.Columns[0].ColumnName + "])", "")), Convert.ToDouble(dt.Compute("Max([" + dt.Columns[0].ColumnName + "])", "")));
             Word.Range dist_rng = oDoc.Bookmarks.get_Item(oEndOfDoc).Range;
             dist_rng.Paste();
+            Utils.mutex_clipboard.ReleaseMutex();
             dist_rng.InsertCaption(oWord.CaptionLabels["图"], title, oMissing, Word.WdCaptionPosition.wdCaptionPositionAbove, oMissing);
             dist_rng.MoveEnd(Word.WdUnits.wdParagraph, 1);
             dist_rng.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
@@ -720,6 +736,7 @@ namespace ExamReport
 
             Word.Range dist_rng = oDoc.Bookmarks.get_Item(oEndOfDoc).Range;
             dist_rng.Paste();
+            Utils.mutex_clipboard.ReleaseMutex();
             dist_rng.InsertCaption(oWord.CaptionLabels["图"], title, oMissing, Word.WdCaptionPosition.wdCaptionPositionAbove, oMissing);
             dist_rng.MoveEnd(Word.WdUnits.wdParagraph, 1);
             dist_rng.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;

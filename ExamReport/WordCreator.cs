@@ -289,6 +289,7 @@ namespace ExamReport
             ZedGraph.createDiffCuve(data, Convert.ToDouble(dt.Compute("Min([" + dt.Columns[0].ColumnName + "])", "")), Convert.ToDouble(dt.Compute("Max([" + dt.Columns[0].ColumnName + "])", "")));
             Word.Range dist_rng = oDoc.Bookmarks.get_Item(oEndOfDoc).Range;
             dist_rng.Paste();
+            Utils.mutex_clipboard.ReleaseMutex();
             dist_rng.InsertCaption(oWord.CaptionLabels["图"], title, oMissing, Word.WdCaptionPosition.wdCaptionPositionAbove, oMissing);
             dist_rng.MoveEnd(Word.WdUnits.wdParagraph, 1);
             dist_rng.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
@@ -370,6 +371,7 @@ namespace ExamReport
             ZedGraph.createCuveAndBar(cuvedata, data, Convert.ToDouble(_sdata.group_analysis.Rows[group_num]["max"]));
             Word.Range dist_rng = oDoc.Bookmarks.get_Item(oEndOfDoc).Range;
             dist_rng.Paste();
+            Utils.mutex_clipboard.ReleaseMutex();
             dist_rng.InsertCaption(oWord.CaptionLabels["图"], title, oMissing, Word.WdCaptionPosition.wdCaptionPositionAbove, oMissing);
             dist_rng.MoveEnd(Word.WdUnits.wdParagraph, 1);
             dist_rng.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
@@ -1351,6 +1353,7 @@ namespace ExamReport
             ZedGraph.createDiffCuve(data, Convert.ToDouble(dt.Compute("Min([" + dt.Columns[0].ColumnName + "])", "")), Convert.ToDouble(dt.Compute("Max([" + dt.Columns[0].ColumnName + "])", "")));
             Word.Range dist_rng = oDoc.Bookmarks.get_Item(oEndOfDoc).Range;
             dist_rng.Paste();
+            Utils.mutex_clipboard.ReleaseMutex();
             dist_rng.InsertCaption(oWord.CaptionLabels["图"], title, oMissing, Word.WdCaptionPosition.wdCaptionPositionAbove, oMissing);
             dist_rng.MoveEnd(Word.WdUnits.wdParagraph, 1);
             dist_rng.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
@@ -1433,6 +1436,7 @@ namespace ExamReport
             ZedGraph.createBar(data);
             Word.Range dist_rng = oDoc.Bookmarks.get_Item(oEndOfDoc).Range;
             dist_rng.Paste();
+            Utils.mutex_clipboard.ReleaseMutex();
             dist_rng.InsertCaption(oWord.CaptionLabels["图"], title, oMissing, Word.WdCaptionPosition.wdCaptionPositionAbove, oMissing);
             dist_rng.MoveEnd(Word.WdUnits.wdParagraph, 1);
             dist_rng.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
@@ -1514,6 +1518,7 @@ namespace ExamReport
             ZedGraph.createGradient(data);
             Word.Range dist_rng = oDoc.Bookmarks.get_Item(oEndOfDoc).Range;
             dist_rng.Paste();
+            Utils.mutex_clipboard.ReleaseMutex();
             dist_rng.InsertCaption(oWord.CaptionLabels["图"], "    题目难度与区分度坐标图", oMissing, Word.WdCaptionPosition.wdCaptionPositionAbove, oMissing);
             dist_rng.MoveEnd(Word.WdUnits.wdParagraph, 1);
             dist_rng.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
@@ -1659,6 +1664,7 @@ namespace ExamReport
             ZedGraph.createDiffCuve(data, Convert.ToDouble(dt.Compute("Min([" + dt.Columns[0].ColumnName + "])", "")), Convert.ToDouble(dt.Compute("Max([" + dt.Columns[0].ColumnName + "])", "")));
             Word.Range dist_rng = oDoc.Bookmarks.get_Item(oEndOfDoc).Range;
             dist_rng.Paste();
+            Utils.mutex_clipboard.ReleaseMutex();
             dist_rng.InsertCaption(oWord.CaptionLabels["图"], title, oMissing, Word.WdCaptionPosition.wdCaptionPositionAbove, oMissing);
             dist_rng.MoveEnd(Word.WdUnits.wdParagraph, 1);
             dist_rng.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
@@ -1731,6 +1737,7 @@ namespace ExamReport
             ZedGraph.createMultipleChoiceCuve(dt, x_axis, y_axis);
             Word.Range dist_rng = oDoc.Bookmarks.get_Item(oEndOfDoc).Range;
             dist_rng.Paste();
+            Utils.mutex_clipboard.ReleaseMutex();
             dist_rng.InsertCaption(oWord.CaptionLabels["图"], title, oMissing, Word.WdCaptionPosition.wdCaptionPositionAbove, oMissing);
             dist_rng.MoveEnd(Word.WdUnits.wdParagraph, 1);
             dist_rng.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
@@ -1985,110 +1992,7 @@ namespace ExamReport
             dist_rng.set_Style(ExamTitle1);
             dist_rng.InsertBefore("next page" + "\n");
         }
-        public void createCuve(string cuveBmpPath, double[][] cuveData, double maxSource, Word.Range dist_rng)
-        {
-
-            ZedGraphControl zgc = new ZedGraphControl();
-            GraphPane myPane = zgc.GraphPane;
-            zgc.Width = 531;
-            zgc.Height = 350;
-
-
-            // Set the title and axis labels
-            myPane.Title.Text = " ";
-            myPane.XAxis.Title.Text = "分数";
-            myPane.YAxis.Title.Text = "难度";
-
-            // Enter some calculated data constants
-            double[] x = new double[cuveData.Length];
-            double[] y = new double[cuveData.Length];
-
-            for (int i = 0; i < cuveData.Length; i++)
-            {
-                x[i] = cuveData[i][0];
-                y[i] = cuveData[i][1];
-
-            }
-
-
-            double[] cuveX = new double[cuveData.Length];
-            double[] cuveY = new double[cuveData.Length];
-
-            for (int i = 0; i < cuveData.Length; i++)
-            {
-                cuveX[i] = cuveData[i][0];
-                cuveY[i] = cuveData[i][1];
-
-            }
-            PointPairList ppCurve = new PointPairList(cuveX, cuveY);
-            LineItem myCurve = myPane.AddCurve("", ppCurve, Color.Red, SymbolType.Diamond);
-            myCurve.Line.Style = System.Drawing.Drawing2D.DashStyle.Dot;
-            myCurve.Line.Width = 5;
-            myCurve.Line.IsSmooth = true;
-            //myCurve.Symbol.Size = 12;
-            
-            //myCurve.Line.SmoothTension = 1F;//
-            //myCurve.Symbol.Type = SymbolType.None;
-
-
-
-            // Turn off the line, so the curve will by symbols only
-            myCurve.Line.IsVisible = true;
-
-
-
-            // Set the x and y scale and title font sizes to 14
-            myPane.XAxis.Scale.FontSpec.Size = 14;
-            myPane.XAxis.Title.FontSpec.Size = 14;
-            myPane.YAxis.Scale.FontSpec.Size = 14;
-            myPane.YAxis.Title.FontSpec.Size = 14;
-            myPane.XAxis.Title.FontSpec.Family = "黑体";
-            myPane.YAxis.Title.FontSpec.Family = "黑体";
-
-
-
-            myPane.XAxis.Scale.Max = maxSource;
-            myPane.XAxis.Scale.Min = 0.00;
-            myPane.XAxis.Scale.MajorStep = maxSource / 10;
-            myPane.YAxis.Scale.Max = 50.00;
-            //myPane.YAxis.Scale.MajorStep = 0.5;
-
-            // Set the GraphPane title font size to 16
-            myPane.Title.FontSpec.Size = 16;
-            // Turn off the legend
-            myPane.Legend.IsVisible = false;
-            myPane.Title.IsVisible = true;
-            myPane.Chart.Fill = new Fill(Color.White);
-            zgc.AxisChange();
-
-
-            //添加一条线
-            LineObj line = new LineObj(0.00, 0.5, maxSource, 0.50);
-            line.Line.Style = System.Drawing.Drawing2D.DashStyle.DashDot;
-            
-            line.Line.DashOn = 10f;
-            line.Line.DashOff = 8f;
-            line.IsClippedToChartRect = true;
-            line.Line.Color = Color.LightSteelBlue;
-            line.ZOrder = ZOrder.F_BehindGrid;
-            line.Location.AlignH = AlignH.Left;
-            line.Location.AlignV = AlignV.Top;
-            line.Location.CoordinateFrame = CoordType.AxisXYScale;
-            myPane.GraphObjList.Add(line);
-
-
-            zgc.AxisChange();
-            BarItem.CreateBarLabels(myPane, false, null);
-            zgc.Refresh();
-
-            Bitmap sourceBitmap = new Bitmap(zgc.Width, zgc.Height);
-            
-            zgc.DrawToBitmap(sourceBitmap, new Rectangle(0, 0, zgc.Width, zgc.Height));
-            Clipboard.SetImage(sourceBitmap);
-            dist_rng.Paste();
-            //sourceBitmap.Save(cuveBmpPath + @"\testCuve.bmp");
-            //dist_rng.InlineShapes.AddPicture(sourceBitmap., false, true, dist_rng);
-        }
+        
         public void insertTotalChart(string title, WordData sdata)
         {
             DataTable dt = sdata.totalmark_dist;
@@ -2106,6 +2010,7 @@ namespace ExamReport
             ZedGraph.createCuveAndBar(cuvedata, data, Convert.ToDouble(sdata.max));
             Word.Range dist_rng = oDoc.Bookmarks.get_Item(oEndOfDoc).Range;
             dist_rng.Paste();
+            Utils.mutex_clipboard.ReleaseMutex();
             dist_rng.InsertCaption(oWord.CaptionLabels["图"], title, oMissing, Word.WdCaptionPosition.wdCaptionPositionAbove, oMissing);
             dist_rng.MoveEnd(Word.WdUnits.wdParagraph, 1);
             dist_rng.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;

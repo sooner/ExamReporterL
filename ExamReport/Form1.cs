@@ -142,6 +142,7 @@ namespace ExamReport
                         this.label38.Text = "完成！";
                         run_button.Enabled = true;
                         cancel.Enabled = false;
+                        thread_table.Clear();
                         break;
                     case 6:
                         this.label38.Text = "文史理工报告生成...";
@@ -521,6 +522,7 @@ namespace ExamReport
         void reset_param()
         {
             Utils.GroupMark.Clear();
+            Utils.WSLG = false;
         }
         void start_process()
         {
@@ -775,6 +777,7 @@ namespace ExamReport
                 exe.form.ShowPro(0, 0);
                 exe.pre_process();
                 exe.form.ShowPro(100, 5);
+                
             }
         }
 

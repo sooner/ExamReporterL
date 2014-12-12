@@ -1,11 +1,10 @@
-System.Threading.ThreadStateException: Current thread must be set to single thread apartment (STA) mode before OLE calls can be made. Ensure that your Main function has STAThreadAttribute marked on it.
-   at System.Windows.Forms.Clipboard.SetDataObject(Object data, Boolean copy, Int32 retryTimes, Int32 retryDelay)
-   at System.Windows.Forms.Clipboard.Clear()
-   at ExamReport.ZedGraph.createMultipleCuve(DataTable dt, String xStr, String yStr, Double minX, Double maxX, Decimal fullmark) in D:\project\ExamReporterL\ExamReporterL\ExamReport\ZedGraph.cs:line 206
-   at ExamReport.ZF_wordcreator.insertChart(String title, DataTable dt, String x_axis, String y_axis, Object type, Decimal fullmark) in D:\project\ExamReporterL\ExamReporterL\ExamReport\ZF_wordcreator.cs:line 645
-   at ExamReport.ZF_wordcreator.XX_create(Object obj) in D:\project\ExamReporterL\ExamReporterL\ExamReport\ZF_wordcreator.cs:line 71
-   at System.Threading.QueueUserWorkItemCallback.WaitCallback_Context(Object state)
+System.IndexOutOfRangeException: Index was outside the bounds of the array.
+   at ExamReport.ZedGraph.SmoothData(Double[][] data, Int32 smooth_degree) in D:\project\ExamReporterL\ExamReporterL\ExamReport\ZedGraph.cs:line 759
+   at ExamReport.ZedGraph.createCuve(String xStr, String yStr, Double[][] init_cuveData, Double minX, Double maxX, Double maxY) in D:\project\ExamReporterL\ExamReporterL\ExamReport\ZedGraph.cs:line 229
+   at ExamReport.ZedGraph.createDiffCuve(Double[][] cuveData, Double minX, Double maxX) in D:\project\ExamReporterL\ExamReporterL\ExamReport\ZedGraph.cs:line 23
+   at ExamReport.SchoolWordCreator.insertGroupDiffChart(String title, DataTable difficulty_data) in D:\project\ExamReporterL\ExamReporterL\ExamReport\SchoolWordCreator.cs:line 432
+   at ExamReport.SchoolWordCreator.creating_ZH_word() in D:\project\ExamReporterL\ExamReporterL\ExamReport\SchoolWordCreator.cs:line 100
+   at System.Threading.ThreadHelper.ThreadStart_Context(Object state)
    at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean ignoreSyncCtx)
-   at System.Threading.QueueUserWorkItemCallback.System.Threading.IThreadPoolWorkItem.ExecuteWorkItem()
-   at System.Threading.ThreadPoolWorkQueue.Dispatch()
-   at System.Threading._ThreadPoolWaitCallback.PerformWaitCallback()
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.ThreadHelper.ThreadStart()

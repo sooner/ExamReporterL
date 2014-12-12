@@ -5,6 +5,7 @@ using System.Text;
 using System.Data;
 using System.Data.OleDb;
 using System.Configuration;
+using System.Threading;
 
 namespace ExamReport
 {
@@ -39,7 +40,7 @@ namespace ExamReport
         public static decimal wuli_lishi;
         public static decimal huaxue_dili;
 
-        public static object clipboardLock;
+        public static Mutex mutex_clipboard = new Mutex();
 
         public static string ZK_title_1 = "北京市高级中等学校招生考试";
         public static string ZK_title_2 = "实测数据统计分析报告";
@@ -240,7 +241,7 @@ namespace ExamReport
         }
         public static void WSLG_Save(Microsoft.Office.Interop.Word._Document oDoc, Microsoft.Office.Interop.Word._Application oWord)
         {
-            insertAddons(oDoc);
+            insertAddons(oDoc, oWord);
             object oMissing = System.Reflection.Missing.Value;
             string addr = save_address + @"\";
             string final = year + "年" + subject + "文史、理工类数据统计分析报告(最终版）.docx";;
@@ -252,7 +253,7 @@ namespace ExamReport
         }
         public static void Save(Microsoft.Office.Interop.Word._Document oDoc, Microsoft.Office.Interop.Word._Application oWord, string school)
         {
-            insertAddons(oDoc);
+            insertAddons(oDoc, oWord);
             object oMissing = System.Reflection.Missing.Value;
             string addr = save_address + @"\";
             string final = "a.docx";
@@ -276,7 +277,7 @@ namespace ExamReport
         }
         public static void Save(Microsoft.Office.Interop.Word._Document oDoc, Microsoft.Office.Interop.Word._Application oWord)
         {
-            insertAddons(oDoc);
+            insertAddons(oDoc, oWord);
             object oMissing = System.Reflection.Missing.Value;
             string addr = save_address + @"\";
             string final = "a.docx";
@@ -347,13 +348,31 @@ namespace ExamReport
             oDoc.Close(oMissing, oMissing, oMissing);
             oWord.Quit(oMissing, oMissing, oMissing);
         }
-        public static void insertAddons(Microsoft.Office.Interop.Word._Document doc)
+        public static void insertAddons(Microsoft.Office.Interop.Word._Document doc, Microsoft.Office.Interop.Word._Application oWord)
         {
+            doc.Characters.Last.InsertBreak(Microsoft.Office.Interop.Word.WdBreakType.wdPageBreak);
             object oEndOfDoc = "\\endofdoc";
             object oMissing = System.Reflection.Missing.Value;
+
+            Microsoft.Office.Interop.Word.Range first = doc.Paragraphs.Add(ref oMissing).Range;
             
+
+            if (subject.Contains("理综") || subject.Contains("文综") || (subject.Equals("总分") && !report_style.Equals("总体")))
+                first.set_Style("ExamTitle0");
+            else
+                first.set_Style("ExamTitle1");
+            first.InsertBefore("附录" + "\n");
+
+            doc.Characters.Last.Select();
+            oWord.Selection.HomeKey(Microsoft.Office.Interop.Word.WdUnits.wdLine, oMissing);
+            oWord.Selection.Delete(Microsoft.Office.Interop.Word.WdUnits.wdCharacter, oMissing);
+            oWord.Selection.Range.set_Style("ExamBodyText");
+
             Microsoft.Office.Interop.Word.Range range = doc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+
             range.InsertFile(@CurrentDirectory + @"\addon.doc", oMissing, false, false, false);
+            foreach (Microsoft.Office.Interop.Word.TableOfContents table in doc.TablesOfContents)
+                table.Update();
         }
         public static string choiceTransfer(string choice)
         {

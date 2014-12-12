@@ -665,14 +665,28 @@ namespace ExamReport
                     PartitionXXDataProcess(single, db.zh_single_data, db._group_data, db._group_num, wenli_standard, groups.dt, sub_fullmark);
                     foreach (KeyValuePair<string, string> kv in School_code)
                     {
+                        List<WSLG_partitiondata> t_total = new List<WSLG_partitiondata>();
+                        List<WSLG_partitiondata> t_single = new List<WSLG_partitiondata>();
 
-                        PartitionXX(total, db._basic_data, db.zh_group_data, db._group_num, kv.Key, ans.dt, wenli.dt, fullmark);
-                        PartitionXX(single, db.zh_single_data, db._group_data, db._group_num, kv.Key, wenli_standard, groups.dt, sub_fullmark);
+                        PartitionXX(t_total, db._basic_data, db.zh_group_data, db._group_num, kv.Key, ans.dt, wenli.dt, fullmark);
+                        PartitionXX(t_single, db.zh_single_data, db._group_data, db._group_num, kv.Key, wenli_standard, groups.dt, sub_fullmark);
+                        t_total.AddRange(total);
+                        t_single.AddRange(single);
                         WordData temp_total = TotalSchoolCal(db._basic_data, db.zh_group_data, db._group_num, kv.Key, ans.dt, wenli.dt, true, fullmark);
                         WordData temp_single = TotalSchoolCal(db.zh_single_data, db._group_data, db._group_num, kv.Key, wenli_standard, groups.dt, false, sub_fullmark);
+                        form.ShowPro(70, 4);
+                        SchoolWordCreator swc = new SchoolWordCreator(temp_single, t_single, groups.dt, kv.Value, groups.groups_group);
+                        swc.SetUpZHparam(temp_total, t_total, wenli.dt, wenli.groups_group);
+                        Thread thread = new Thread(new ThreadStart(swc.creating_ZH_word));
+                        thread.IsBackground = true;
+                        thread.SetApartmentState(ApartmentState.STA);
+                        thread.Start();
 
-                        SchoolWordCreator swc = new SchoolWordCreator(temp_single, single, groups.dt, kv.Value, groups.groups_group);
-                        swc.creating_ZH_word(temp_total, total, wenli.dt, wenli.groups_group);
+                        form.ThreadControl(thread);
+                    }
+                    foreach (Thread t in form.thread_table)
+                    {
+                        t.Join();
                     }
                     Utils.WSLG = false;
 
@@ -766,40 +780,15 @@ namespace ExamReport
                         form.ShowPro(80, 6);
                         Utils.WSLG = true;
                         ArrayList WSLG = new ArrayList();
-                        DataTable QX_data = db._basic_data.filteredtable("schoolcode", PartitionSFcode(QXSF_list));
-                        DataTable QX_group = db._group_data.filteredtable("schoolcode", PartitionSFcode(QXSF_list));
+                        DataTable QX_data = db._basic_data.filteredtable("QX", QXTransfer(Quxian_list));
+                        DataTable QX_group = db._group_data.filteredtable("QX", QXTransfer(Quxian_list));
 
-                        int group = QX_data.SeperateGroups(grouptype, divider, "groups");
-                        QX_group.SeperateGroups(grouptype, divider, "groups");
-                        if (db._basic_data.Columns.Contains("XZ"))
-                            XZ_group_separate(QX_data);
-                        DataTable W_data = QX_data.Likefilter("studentid", "'1*'");
-                        DataTable W_group = QX_group.Likefilter("studentid", "'1*'");
-
-                        Partition_statistic w_stat = new Partition_statistic("文科", W_data, fullmark, ans.dt, W_group, groups.dt, group);
-                        w_stat.statistic_process(false);
-                        if (db._basic_data.Columns.Contains("XZ"))
-                            w_stat.xz_postprocess(ans.xz_th);
-                        WSLG.Add(w_stat.result);
-
-                        DataTable l_data = QX_data.Likefilter("studentid", "'5*'");
-                        DataTable l_group = QX_group.Likefilter("studentid", "'5*'");
-
-                        Partition_statistic l_stat = new Partition_statistic("理科", l_data, fullmark, ans.dt, l_group, groups.dt, group);
-                        l_stat.statistic_process(false);
-                        if (db._basic_data.Columns.Contains("XZ"))
-                            l_stat.xz_postprocess(ans.xz_th);
-                        WSLG.Add(l_stat.result);
-
-                        Partition_statistic total_stat = new Partition_statistic("分类整体", QX_data, fullmark, ans.dt, QX_group, groups.dt, group);
-                        total_stat.statistic_process(false);
-                        if (db._basic_data.Columns.Contains("XZ"))
-                            total_stat.xz_postprocess(ans.xz_th);
-                        WSLG.Add(total_stat.result);
+                        WSLGCal(QX_data, QX_group, WSLG);
 
                         Partition_wordcreator create2 = new Partition_wordcreator(WSLG, groups.dt, groups.groups_group);
                         create2.creating_word();
                         Utils.WSLG = false;
+                        
                     }
 
                 }
@@ -808,7 +797,7 @@ namespace ExamReport
                     List<WSLG_partitiondata> total = new List<WSLG_partitiondata>();
                     Utils.WSLG = true;
                     PartitionXXDataProcess(total, db._basic_data, db._group_data, db._group_num, ans.dt, groups.dt, fullmark);
-
+                    form.ShowPro(70, 4);
                     foreach (KeyValuePair<string, string> kv in School_code)
                     {
                         List<WSLG_partitiondata> temp_list = new List<WSLG_partitiondata>();
@@ -825,11 +814,71 @@ namespace ExamReport
                         form.ThreadControl(thread);
                         //swc.creating_word();
                     }
+                    
+                    
 
+                    if (subject.Equals("语文") || subject.Equals("英语"))
+                    {
+                        form.ShowPro(80, 6);
+                        foreach (KeyValuePair<string, string> kv in School_code)
+                        {
+                            ArrayList WSLG = new ArrayList();
+                            DataTable XX_data = db._basic_data.filteredtable("schoolcode", new string[] { kv.Key });
+                            DataTable XX_group = db._group_data.filteredtable("schoolcode", new string[] { kv.Key });
+
+                            WSLGCal(XX_data, XX_data, WSLG);
+                            Partition_wordcreator create2 = new Partition_wordcreator(WSLG, groups.dt, groups.groups_group);
+                            Thread thread = new Thread(new ThreadStart(create2.creating_word));
+                            thread.IsBackground = true;
+                            thread.SetApartmentState(ApartmentState.STA);
+                            thread.Start();
+
+                            form.ThreadControl(thread);
+                        }
+                    }
+
+                    foreach (Thread t in form.thread_table)
+                    {
+                        t.Join();
+                    }
                     Utils.WSLG = false;
 
                 }
             }
+        }
+        void WSLGCal(DataTable QX_data, DataTable QX_group, ArrayList WSLG)
+        {
+            
+
+            int group = QX_data.SeperateGroups(grouptype, divider, "groups");
+            QX_group.SeperateGroups(grouptype, divider, "groups");
+            if (QX_data.Columns.Contains("XZ"))
+                XZ_group_separate(QX_data);
+            DataTable W_data = QX_data.Likefilter("studentid", "'1*'");
+            DataTable W_group = QX_group.Likefilter("studentid", "'1*'");
+
+            Partition_statistic w_stat = new Partition_statistic("文科", W_data, fullmark, ans.dt, W_group, groups.dt, group);
+            w_stat.statistic_process(false);
+            if (QX_data.Columns.Contains("XZ"))
+                w_stat.xz_postprocess(ans.xz_th);
+            WSLG.Add(w_stat.result);
+
+            DataTable l_data = QX_data.Likefilter("studentid", "'5*'");
+            DataTable l_group = QX_group.Likefilter("studentid", "'5*'");
+
+            Partition_statistic l_stat = new Partition_statistic("理科", l_data, fullmark, ans.dt, l_group, groups.dt, group);
+            l_stat.statistic_process(false);
+            if (QX_data.Columns.Contains("XZ"))
+                l_stat.xz_postprocess(ans.xz_th);
+            WSLG.Add(l_stat.result);
+
+            Partition_statistic total_stat = new Partition_statistic("分类整体", QX_data, fullmark, ans.dt, QX_group, groups.dt, group);
+            total_stat.statistic_process(false);
+            if (QX_data.Columns.Contains("XZ"))
+                total_stat.xz_postprocess(ans.xz_th);
+            WSLG.Add(total_stat.result);
+
+            
         }
         WordData TotalSchoolCal(DataTable data, DataTable group, int groupnum, string school, DataTable my_ans, DataTable my_group, bool isZonghe, decimal my_mark)
         {

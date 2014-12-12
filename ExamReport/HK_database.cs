@@ -266,8 +266,9 @@ namespace ExamReport
             create_groups();
             if (Utils.saveMidData)
             {
-                create_db_tables();
-                create_groups_file();
+                Utils.create_groups_table(_basic_data, Utils.year + "会考" + Utils.subject + "基础数据");
+                Utils.create_groups_table(_group_data, Utils.year + "会考" + Utils.subject + "题组数据");
+
             }
 
             return "";

@@ -211,61 +211,7 @@ namespace ExamReport
                     }
                     _group_num = dividerCount;
                 }
-                if (Utils.saveMidData)
-                {
-                    #region create table insert data
-                    StringBuilder objectdata = new StringBuilder();
-                    string newTable = filename + "_full";
-                    objectdata.Append("CREATE TABLE `" + newTable + "` (\n");
-                    objectdata.Append("\t`studentid` c(10),\n");
-                    objectdata.Append("\t`schoolcode` c(10),\n");
-                    objectdata.Append("\t`totalmark` n(4,1),\n");
-
-                    for (i = 3; i < _basic_data.Columns["d" + _standard_ans.Rows[0]["th"].ToString().Trim()].Ordinal; i++)
-                    {
-                        objectdata.Append("\t`" + _basic_data.Columns[i].ColumnName + "` n(4,1),\n");
-                    }
-                    for (i = _basic_data.Columns["d" + _standard_ans.Rows[0]["th"].ToString().Trim()].Ordinal; i < _basic_data.Columns.Count - 2; i++)
-                    {
-                        objectdata.Append("\t`" + _basic_data.Columns[i].ColumnName + "`c(1),\n");
-                    }
-                    objectdata.Append("\t`" + _basic_data.Columns[i].ColumnName + "` c(4),\n");
-                    objectdata.Append("\t`" + _basic_data.Columns[i + 1].ColumnName + "` c(4));\n");
-
-                    OleDbCommand createcommand = new OleDbCommand(objectdata.ToString(), dbfConnection);
-
-                    OleDbCommand insertcommand = new OleDbCommand();
-                    insertcommand.Connection = dbfConnection;
-                    dbfConnection.Open();
-                    createcommand.ExecuteNonQuery();
-                    form.ShowPro(40, 2);
-                    OleDbTransaction trans = null;
-                    trans = insertcommand.Connection.BeginTransaction();
-                    insertcommand.Transaction = trans;
-
-                    foreach (DataRow dr in _basic_data.Rows)
-                    {
-                        objectdata.Clear();
-                        objectdata.Append("INSERT INTO " + newTable + " VALUES ('");
-                        objectdata.Append(dr[0] + "','" + dr[1] + "',");
-
-                        for (i = 2; i < _basic_data.Columns["d" + _standard_ans.Rows[0]["th"].ToString().Trim()].Ordinal; i++)
-                        {
-                            objectdata.Append(dr[i] + ",");
-                        }
-                        objectdata.Append("'");
-                        for (i = _basic_data.Columns["d" + _standard_ans.Rows[0]["th"].ToString().Trim()].Ordinal; i < _basic_data.Columns.Count - 1; i++)
-                            objectdata.Append(dr[i] + "','");
-
-                        objectdata.Append(dr[_basic_data.Columns.Count - 1] + "');");
-                        insertcommand.CommandText = objectdata.ToString();
-                        insertcommand.ExecuteNonQuery();
-
-                    }
-                    trans.Commit();
-                    dbfConnection.Close();
-                    #endregion
-                }
+                
                 #region divide the table into groups
                 //StringBuilder objectdata = new StringBuilder();
                 _group_data.Columns.Add("studentid", System.Type.GetType("System.String"));
@@ -325,50 +271,15 @@ namespace ExamReport
                     }
                     _group_data.Rows.Add(newRow);
                 }
+                #endregion
                 if (Utils.saveMidData)
                 {
-                    StringBuilder objectdata = new StringBuilder(); ;
-                    string group_Table = filename + "_groups";
-                    objectdata.Append("CREATE TABLE `" + group_Table + "` (\n");
-                    objectdata.Append("\t`studentid` c(10),\n");
-                    objectdata.Append("\t`schoolcode` c(10),\n");
-                    objectdata.Append("\t`totalmark` n(4,1),\n");
-                    for (i = 3; i < _group_data.Columns.Count - 2; i++)
-                    {
-                        objectdata.Append("\t`" + _group_data.Columns[i].ColumnName + "` n(4,1),\n");
-                    }
-                    objectdata.Append("\t`" + _group_data.Columns[i].ColumnName + "` c(4),\n");
-                    objectdata.Append("\t`" + _group_data.Columns[i + 1].ColumnName + "` c(4));");
-                    OleDbCommand group_create = new OleDbCommand(objectdata.ToString(), dbfConnection);
-                    dbfConnection.Open();
-                    group_create.ExecuteNonQuery();
-                    OleDbCommand group_insert = new OleDbCommand();
-                    group_insert.Connection = dbfConnection;
-                    OleDbTransaction group_trans = null;
-                    group_trans = group_insert.Connection.BeginTransaction();
-                    group_insert.Transaction = group_trans;
+                    Utils.create_groups_table(_basic_data, Utils.year + "高考" + Utils.subject + "基础数据");
+                    Utils.create_groups_table(_group_data, Utils.year + "高考" + Utils.subject + "题组数据");
 
-                    foreach (DataRow dr in _group_data.Rows)
-                    {
-                        objectdata.Clear();
-                        objectdata.Append("INSERT INTO " + group_Table + " VALUES ('");
-                        objectdata.Append(dr[0] + "','" + dr[1] + "',");
-
-                        for (i = 2; i < _group_data.Columns.Count - 2; i++)
-                        {
-                            objectdata.Append(dr[i] + ",");
-                        }
-                        objectdata.Append("'");
-                        objectdata.Append(dr[_group_data.Columns.Count - 2] + "','" + dr[_group_data.Columns.Count - 1] + "');");
-                        group_insert.CommandText = objectdata.ToString();
-                        group_insert.ExecuteNonQuery();
-
-                    }
-                    group_trans.Commit();
-                    dbfConnection.Close();
                 }
                 st.Stop();
-                #endregion
+                
                 return st.ElapsedMilliseconds.ToString();
             } 
             

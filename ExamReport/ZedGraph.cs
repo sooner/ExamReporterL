@@ -111,6 +111,7 @@ namespace ExamReport
             Bitmap sourceBitmap = new Bitmap(zgc.Width, zgc.Height);
             zgc.DrawToBitmap(sourceBitmap, new Rectangle(0, 0, zgc.Width, zgc.Height));
             //Thread.CurrentThread.SetApartmentState(ApartmentState.STA);
+            Utils.mutex_clipboard.WaitOne();
             Clipboard.Clear();
             Clipboard.SetImage(sourceBitmap);
         }
@@ -202,7 +203,7 @@ namespace ExamReport
             Bitmap sourceBitmap = new Bitmap(zgc.Width, zgc.Height);
             zgc.DrawToBitmap(sourceBitmap, new Rectangle(0, 0, zgc.Width, zgc.Height));
             //Thread.CurrentThread.SetApartmentState(ApartmentState.STA);
-            
+            Utils.mutex_clipboard.WaitOne();
             Clipboard.Clear();
             Clipboard.SetImage(sourceBitmap);
         }
@@ -339,6 +340,7 @@ namespace ExamReport
             Bitmap sourceBitmap = new Bitmap(zgc.Width, zgc.Height);
             zgc.DrawToBitmap(sourceBitmap, new Rectangle(0, 0, zgc.Width, zgc.Height));
             //Thread.CurrentThread.SetApartmentState(ApartmentState.STA);
+            Utils.mutex_clipboard.WaitOne();
             Clipboard.Clear();
             Clipboard.SetImage(sourceBitmap);
             //sourceBitmap.Save(cuveBmpPath + @"\testCuve.bmp");
@@ -480,6 +482,7 @@ namespace ExamReport
             Bitmap sourceBitmap = new Bitmap(zgc.Width, zgc.Height);
             zgc.DrawToBitmap(sourceBitmap, new Rectangle(0, 0, zgc.Width, zgc.Height));
             //Thread.CurrentThread.SetApartmentState(ApartmentState.STA);
+            Utils.mutex_clipboard.WaitOne();
             Clipboard.Clear();
             Clipboard.SetImage(sourceBitmap);
             //sourceBitmap.Save(cuveBmpPath + @"\testCuve.bmp");
@@ -592,6 +595,7 @@ namespace ExamReport
             Bitmap sourceBitmap = new Bitmap(zgc.Width, zgc.Height);
             zgc.DrawToBitmap(sourceBitmap, new Rectangle(0, 0, zgc.Width, zgc.Height));
             //Thread.CurrentThread.SetApartmentState(ApartmentState.STA);
+            Utils.mutex_clipboard.WaitOne();
             Clipboard.Clear();
             Clipboard.SetImage(sourceBitmap);
             //sourceBitmap.Save(cuveBmpPath + @"\testCuve.bmp");
@@ -687,6 +691,7 @@ namespace ExamReport
             Bitmap sourceBitmap = new Bitmap(zgc.Width, zgc.Height);
             zgc.DrawToBitmap(sourceBitmap, new Rectangle(0, 0, zgc.Width, zgc.Height));
             //Thread.CurrentThread.SetApartmentState(ApartmentState.STA);
+            Utils.mutex_clipboard.WaitOne();
             Clipboard.Clear();
             Clipboard.SetImage(sourceBitmap);
             //sourceBitmap.Save(cuveBmpPath + @"\testCuve.bmp");
@@ -732,6 +737,8 @@ namespace ExamReport
 
         public static double[][] SmoothData(double[][] data, int smooth_degree)
         {
+            if (data.Length < smooth_degree * 2)
+                return data;
             double[][] newdata = new double[data.Length][];
             int count = 2 * smooth_degree + 1;
             for (int i = 0; i < data.Length; i++)
