@@ -826,7 +826,7 @@ namespace ExamReport
                             DataTable XX_data = db._basic_data.filteredtable("schoolcode", new string[] { kv.Key });
                             DataTable XX_group = db._group_data.filteredtable("schoolcode", new string[] { kv.Key });
 
-                            WSLGCal(XX_data, XX_data, WSLG);
+                            WSLGCal(XX_data, XX_group, WSLG);
                             Partition_wordcreator create2 = new Partition_wordcreator(WSLG, groups.dt, groups.groups_group);
                             Thread thread = new Thread(new ThreadStart(create2.creating_word));
                             thread.IsBackground = true;

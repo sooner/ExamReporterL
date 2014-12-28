@@ -1242,9 +1242,14 @@ namespace ExamReport
             decimal part2 = SquareSumY - avg * avg * count;
             foreach (DataRow dr in xz_total_analysis.Rows)
             {
-                decimal temp = Convert.ToDecimal(Math.Sqrt(Convert.ToDouble((decimal)dr["standardErr"] / count)));
+                decimal temp = 0;
+                if(count != 0)
+                    temp = Convert.ToDecimal(Math.Sqrt(Convert.ToDouble((decimal)dr["standardErr"] / count)));
                 dr["standardErr"] = temp;
-                dr["dfactor"] = temp / (decimal)dr["avg"];
+                if ((decimal)dr["avg"] == 0)
+                    dr["dfactor"] = 0;
+                else
+                    dr["dfactor"] = temp / (decimal)dr["avg"];
                 dr["difficulty"] = (decimal)dr["avg"] / (decimal)dr["fullmark"];
                 if ((int)dr["objective"] == 1)
                 {
@@ -1256,7 +1261,10 @@ namespace ExamReport
                 {
                     decimal numerator = (decimal)dr["MultipleSum"] - avg * (decimal)dr["avg"] * count;
                     decimal part1 = (decimal)dr["SquareSumX"] - (decimal)dr["avg"] * (decimal)dr["avg"] * count;
-                    dr["correlation"] = numerator / Convert.ToDecimal(Math.Sqrt(Convert.ToDouble(part1 * part2)));
+                    if (part1 == 0 || part2 == 0)
+                        dr["correlation"] = 0;
+                    else
+                        dr["correlation"] = numerator / Convert.ToDecimal(Math.Sqrt(Convert.ToDouble(part1 * part2)));
                 }
                 dr["discriminant"] = (((decimal)dr["PHN"] - (decimal)dr["PLN"]) / my_pln) / (decimal)dr["fullmark"];
 
