@@ -29,6 +29,7 @@ namespace ExamReport
         public static string month;
         public static ZK_database.GroupType group_type = ZK_database.GroupType.population;
         public static string school_name;
+        public static bool OnlyQZT = false;
 
         public static int smooth_degree = 10;
 

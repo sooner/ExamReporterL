@@ -932,7 +932,7 @@ namespace ExamReport
         }
         public void insertChart(string title, DataTable dt, string x_axis, string y_axis, object type, decimal fullmark)
         {
-            if (dt.Columns.Count > 2)
+            if (dt.Columns.Count > 2 || Utils.OnlyQZT)
             {
                 ZedGraph.createMultipleCuve(dt, "分数", y_axis, Convert.ToDouble(dt.Compute("Min([" + dt.Columns[0].ColumnName + "])", "")), Convert.ToDouble(dt.Compute("Max([" + dt.Columns[0].ColumnName + "])", "")), fullmark);
             }

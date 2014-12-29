@@ -849,7 +849,6 @@ namespace ExamReport
         void WSLGCal(DataTable QX_data, DataTable QX_group, ArrayList WSLG)
         {
             
-
             int group = QX_data.SeperateGroups(grouptype, divider, "groups");
             QX_group.SeperateGroups(grouptype, divider, "groups");
             if (QX_data.Columns.Contains("XZ"))
@@ -1046,8 +1045,15 @@ namespace ExamReport
             if (data.Columns.Contains("XZ"))
                 qx_stat.xz_postprocess(ans.xz_th);
             result.Add(qx_stat.result);
-            PartitionDataProcess(result, QXSF_list, "schoolcode", QX, QX_group, groupnum, true);
-            PartitionDataProcess(sresult, QXSF_list, "schoolcode", QX, QX_group, groupnum, false);
+            if (!Utils.OnlyQZT)
+            {
+                PartitionDataProcess(result, QXSF_list, "schoolcode", QX, QX_group, groupnum, true);
+                PartitionDataProcess(sresult, QXSF_list, "schoolcode", QX, QX_group, groupnum, false);
+            }
+            else
+            {
+                sresult.Add(qx_stat.result);
+            }
 
         }
         void PartitionDataProcess(ArrayList result, List<ArrayList> list, String filter, DataTable data, DataTable group, int groupnum, bool isQXSF)

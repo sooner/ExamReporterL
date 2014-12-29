@@ -523,6 +523,7 @@ namespace ExamReport
         {
             Utils.GroupMark.Clear();
             Utils.WSLG = false;
+            Utils.OnlyQZT = false;
         }
         void start_process()
         {
@@ -580,8 +581,12 @@ namespace ExamReport
                 {
                     if (string.IsNullOrEmpty(QXS_address.Text.Trim()))
                     {
-                        Error("请输入区县学校分类文件地址！");
-                        return;
+                        MessageBoxButtons messButton = MessageBoxButtons.OKCancel;
+                        DialogResult dr = MessageBox.Show("区县学校分类文件地址为空，是否生成区县整体报告？", "是否继续", messButton);
+                        if (dr == DialogResult.Cancel)
+                            return;
+                        Utils.OnlyQZT = true;
+
                     }
                     if (exam.SelectedItem.ToString().Trim().Equals("高考"))
                     {
