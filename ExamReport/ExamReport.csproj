@@ -54,10 +54,15 @@
     <Reference Include="Microsoft.Practices.ObjectBuilder">
       <HintPath>D:\项目\王卅-zedGraph画图\所需dll\Microsoft.Practices.ObjectBuilder.dll</HintPath>
     </Reference>
+    <Reference Include="MySql.Data">
+      <HintPath>..\..\MySql.Data.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -66,6 +71,14 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="Telerik.WinControls, Version=2012.3.1017.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e" />
+    <Reference Include="Telerik.WinControls.ChartView, Version=2012.3.1017.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e, processorArchitecture=MSIL" />
+    <Reference Include="Telerik.WinControls.GridView, Version=2012.3.1017.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e, processorArchitecture=MSIL" />
+    <Reference Include="Telerik.WinControls.RadDock, Version=2012.3.1017.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e, processorArchitecture=MSIL" />
+    <Reference Include="Telerik.WinControls.RichTextBox, Version=2012.3.1017.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e, processorArchitecture=MSIL" />
+    <Reference Include="Telerik.WinControls.Themes.Breeze, Version=2012.3.1017.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e, processorArchitecture=MSIL" />
+    <Reference Include="Telerik.WinControls.UI, Version=2012.3.1017.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e, processorArchitecture=MSIL" />
+    <Reference Include="TelerikCommon, Version=2012.3.1017.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e" />
     <Reference Include="ZedGraph">
       <HintPath>D:\项目\王卅-zedGraph画图\所需dll\ZedGraph.dll</HintPath>
     </Reference>
@@ -73,10 +86,17 @@
   <ItemGroup>
     <Compile Include="Config\SchoolCodeConfig.cs" />
     <Compile Include="DataTableExtension.cs" />
+    <Compile Include="MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="GK_database.cs" />
     <Compile Include="HK_database.cs" />
     <Compile Include="HK_worddata.cs" />
     <Compile Include="IEnumerableExtension.cs" />
+    <Compile Include="MySqlHelper.cs" />
     <Compile Include="Partition_wordcreator.cs" />
     <Compile Include="SchoolWordCreator.cs" />
     <Compile Include="Utils.cs" />
@@ -103,6 +123,9 @@
     <Compile Include="WordData.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

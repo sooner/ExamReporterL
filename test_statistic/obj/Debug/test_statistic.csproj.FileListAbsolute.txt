@@ -36,3 +36,4 @@ D:\project\ExamReporterL\ExamReporterL\test_statistic\obj\Debug\test_statistic.d
 D:\project\ExamReporterL\ExamReporterL\test_statistic\obj\Debug\test_statistic.pdb
 D:\project\ExamReporterL\ExamReporterL\test_statistic\bin\Debug\CheckBoxComboBox.dll
 D:\project\ExamReporterL\ExamReporterL\test_statistic\obj\Debug\ResolveAssemblyReference.cache
+D:\project\ExamReporterL\ExamReporterL\test_statistic\bin\Debug\MySql.Data.dll

@@ -46,3 +46,5 @@ D:\project\ExamReporterL\ExamReporterL\ExamReport\bin\Debug\ZedGraph.dll
 D:\project\ExamReporterL\ExamReporterL\ExamReport\obj\x86\Debug\ResolveAssemblyReference.cache
 D:\project\ExamReporterL\ExamReporterL\ExamReport\obj\x86\Debug\GenerateResource.read.1.tlog
 D:\project\ExamReporterL\ExamReporterL\ExamReport\obj\x86\Debug\GenerateResource.write.1.tlog
+D:\project\ExamReporterL\ExamReporterL\ExamReport\obj\x86\Debug\ExamReport.MainForm.resources
+D:\project\ExamReporterL\ExamReporterL\ExamReport\bin\Debug\MySql.Data.dll
