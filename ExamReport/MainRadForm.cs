@@ -28,5 +28,10 @@ namespace ExamReport
             zk_qx_panel.Show();
             zk_zt_panel.Hide();
         }
+
+        private void button11_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
