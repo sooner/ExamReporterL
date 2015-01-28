@@ -77,6 +77,7 @@
     <Reference Include="Telerik.WinControls.RadDock, Version=2012.3.1017.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e, processorArchitecture=MSIL" />
     <Reference Include="Telerik.WinControls.RichTextBox, Version=2012.3.1017.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e, processorArchitecture=MSIL" />
     <Reference Include="Telerik.WinControls.Themes.Breeze, Version=2012.3.1017.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e, processorArchitecture=MSIL" />
+    <Reference Include="Telerik.WinControls.Themes.Windows7, Version=2012.3.1017.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e" />
     <Reference Include="Telerik.WinControls.UI, Version=2012.3.1017.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e, processorArchitecture=MSIL" />
     <Reference Include="TelerikCommon, Version=2012.3.1017.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e" />
     <Reference Include="ZedGraph">
@@ -86,17 +87,23 @@
   <ItemGroup>
     <Compile Include="Config\SchoolCodeConfig.cs" />
     <Compile Include="DataTableExtension.cs" />
-    <Compile Include="MainForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MainForm.Designer.cs">
-      <DependentUpon>MainForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="GK_database.cs" />
     <Compile Include="HK_database.cs" />
     <Compile Include="HK_worddata.cs" />
     <Compile Include="IEnumerableExtension.cs" />
+    <Compile Include="MainRadForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainRadForm.Designer.cs">
+      <DependentUpon>MainRadForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="MySqlHelper.cs" />
+    <Compile Include="MyWizard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MyWizard.Designer.cs">
+      <DependentUpon>MyWizard.cs</DependentUpon>
+    </Compile>
     <Compile Include="Partition_wordcreator.cs" />
     <Compile Include="SchoolWordCreator.cs" />
     <Compile Include="Utils.cs" />
@@ -124,11 +131,14 @@
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MainForm.resx">
-      <DependentUpon>MainForm.cs</DependentUpon>
+    <EmbeddedResource Include="MainRadForm.resx">
+      <DependentUpon>MainRadForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MyWizard.resx">
+      <DependentUpon>MyWizard.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -165,7 +175,18 @@
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\add-item.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\delete-item.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\pie.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\pie2.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

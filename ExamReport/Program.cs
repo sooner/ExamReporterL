@@ -18,7 +18,7 @@ namespace ExamReport
             Application.EnableVisualStyles();
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledExceptionEventHandler);
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm());
+            Application.Run(new mainform());
 
         }
         static void UnhandledExceptionEventHandler(object sender, UnhandledExceptionEventArgs e)

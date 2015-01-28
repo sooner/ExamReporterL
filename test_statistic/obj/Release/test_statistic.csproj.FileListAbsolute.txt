@@ -33,6 +33,8 @@ D:\project\ExamReporterL\ExamReporterL\test_statistic\bin\Release\Microsoft.Offi
 D:\project\ExamReporterL\ExamReporterL\test_statistic\bin\Release\ExamReport.pdb
 D:\project\ExamReporterL\ExamReporterL\test_statistic\bin\Release\ExamReport_Accessor.exe
 D:\project\ExamReporterL\ExamReporterL\test_statistic\bin\Release\ExamReport_Accessor.pdb
-D:\project\ExamReporterL\ExamReporterL\test_statistic\obj\Release\test_statistic.csprojResolveAssemblyReference.cache
 D:\project\ExamReporterL\ExamReporterL\test_statistic\obj\Release\test_statistic.dll
 D:\project\ExamReporterL\ExamReporterL\test_statistic\obj\Release\test_statistic.pdb
+D:\project\ExamReporterL\ExamReporterL\test_statistic\obj\Release\ResolveAssemblyReference.cache
+D:\project\ExamReporterL\ExamReporterL\test_statistic\bin\Release\MySql.Data.dll
+D:\project\ExamReporterL\ExamReporterL\test_statistic\bin\Release\CheckBoxComboBox.dll

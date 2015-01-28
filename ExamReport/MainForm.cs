@@ -40,29 +40,56 @@ namespace ExamReport
             //}
             //dbfConnection.Close();
 
-            DatabaseGridView.BeginUpdate();
-            DataTable dt = MySqlHelper.GetDataSet(MySqlHelper.Conn, CommandType.Text, "select * from exam_meta_data", null).Tables[0];
-            DatabaseGridView.DataSource = dt;
+            //DatabaseGridView.BeginUpdate();
+            //DataTable dt = MySqlHelper.GetDataSet(MySqlHelper.Conn, CommandType.Text, "select * from exam_meta_data", null).Tables[0];
+            //DatabaseGridView.DataSource = dt;
             
 
 
-            //DatabaseGridView.MasterTemplate.AutoExpandGroups = true;
-            //DatabaseGridView.MasterTemplate.EnableFiltering = true;
-            //DatabaseGridView.ShowGroupPanel = true;
-            //DatabaseGridView.EnableHotTracking = true;
+            ////DatabaseGridView.MasterTemplate.AutoExpandGroups = true;
+            ////DatabaseGridView.MasterTemplate.EnableFiltering = true;
+            ////DatabaseGridView.ShowGroupPanel = true;
+            ////DatabaseGridView.EnableHotTracking = true;
 
-            this.DatabaseGridView.TableElement.EndUpdate(false);
+            //this.DatabaseGridView.TableElement.EndUpdate(false);
 
 
-            //DatabaseGridView.TableElement.CellSpacing = -1;
-            DatabaseGridView.TableElement.TableHeaderHeight = 35;
-            DatabaseGridView.TableElement.GroupHeaderHeight = 30;
-            DatabaseGridView.TableElement.RowHeight = 25;
+            ////DatabaseGridView.TableElement.CellSpacing = -1;
+            //DatabaseGridView.TableElement.TableHeaderHeight = 35;
+            //DatabaseGridView.TableElement.GroupHeaderHeight = 30;
+            //DatabaseGridView.TableElement.RowHeight = 25;
 
-            DatabaseGridView.GroupDescriptors.Clear();
-            DatabaseGridView.GroupDescriptors.Add(new GridGroupByExpression("exam as exam format \"{0}: {1}\" Group By exam"));
+            //DatabaseGridView.GroupDescriptors.Clear();
+            //DatabaseGridView.GroupDescriptors.Add(new GridGroupByExpression("exam as exam format \"{0}: {1}\" Group By exam"));
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            MyWizard wizard = new MyWizard();
+            wizard.Show();
+        }
+
+        private void zk_zt_button_Click(object sender, EventArgs e)
+        {
+            zk_zt_panel.Visible = true;
+            zk_qx_panel.Visible = false;
+
+
+        }
+
+        private void zk_qx_button_Click(object sender, EventArgs e)
+        {
+            zk_qx_panel.Visible = true;
+            zk_zt_panel.Visible = false;
+        }
+
+        private void radPageViewPage1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+
+        
 
       
 

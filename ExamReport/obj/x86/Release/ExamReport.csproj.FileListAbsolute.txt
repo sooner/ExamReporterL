@@ -38,7 +38,15 @@ D:\project\ExamReporterL\ExamReporterL\ExamReport\bin\Release\office.dll
 D:\project\ExamReporterL\ExamReporterL\ExamReport\bin\Release\Microsoft.Vbe.Interop.dll
 D:\project\ExamReporterL\ExamReporterL\ExamReport\bin\Release\Microsoft.Office.Interop.SmartTag.dll
 D:\project\ExamReporterL\ExamReporterL\ExamReport\bin\Release\office.xml
-D:\project\ExamReporterL\ExamReporterL\ExamReport\obj\x86\Release\ExamReport.csprojResolveAssemblyReference.cache
 D:\project\ExamReporterL\ExamReporterL\ExamReport\obj\x86\Release\ExamReport.Form1.resources
 D:\project\ExamReporterL\ExamReporterL\ExamReport\obj\x86\Release\ExamReport.Properties.Resources.resources
-D:\project\ExamReporterL\ExamReporterL\ExamReport\obj\x86\Release\ExamReport.csproj.GenerateResource.Cache
+D:\project\ExamReporterL\ExamReporterL\ExamReport\obj\x86\Release\ResolveAssemblyReference.cache
+D:\project\ExamReporterL\ExamReporterL\ExamReport\obj\x86\Release\ExamReport.MainForm.resources
+D:\project\ExamReporterL\ExamReporterL\ExamReport\obj\x86\Release\ExamReport.MyWizard.resources
+D:\project\ExamReporterL\ExamReporterL\ExamReport\obj\x86\Release\GenerateResource.read.1.tlog
+D:\project\ExamReporterL\ExamReporterL\ExamReport\obj\x86\Release\GenerateResource.write.1.tlog
+D:\project\ExamReporterL\ExamReporterL\ExamReport\bin\Release\CheckBoxComboBox.dll
+D:\project\ExamReporterL\ExamReporterL\ExamReport\bin\Release\Microsoft.Practices.EnterpriseLibrary.Common.dll
+D:\project\ExamReporterL\ExamReporterL\ExamReport\bin\Release\Microsoft.Practices.ObjectBuilder.dll
+D:\project\ExamReporterL\ExamReporterL\ExamReport\bin\Release\MySql.Data.dll
+D:\project\ExamReporterL\ExamReporterL\ExamReport\bin\Release\ZedGraph.dll
