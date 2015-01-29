@@ -91,6 +91,7 @@
     <Compile Include="HK_database.cs" />
     <Compile Include="HK_worddata.cs" />
     <Compile Include="IEnumerableExtension.cs" />
+    <Compile Include="LoadDatabase.cs" />
     <Compile Include="MainRadForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -186,6 +187,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\pie2.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\pie3.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\pie4.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\pie5.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

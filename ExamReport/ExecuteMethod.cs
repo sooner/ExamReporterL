@@ -212,7 +212,7 @@ namespace ExamReport
             if(report_style.Equals("总体"))
             {
                 ZK_database db = new ZK_database(ans.dt, groups.dt, grouptype, divider);
-                db.DBF_data_process(database_address, form);
+                //db.DBF_data_process(database_address, form);
                 WordData result = new WordData(groups.groups_group);
                 if (db._basic_data.Columns.Contains("XZ"))
                 {
@@ -234,7 +234,7 @@ namespace ExamReport
 
                 ZK_database db = new ZK_database(ans.dt, groups.dt, grouptype, divider);
                 
-                db.DBF_data_process(database_address, form);
+                //db.DBF_data_process(database_address, form);
                 form.ShowPro(40, 3);
                 if (db._basic_data.Columns.Contains("XZ"))
                 {

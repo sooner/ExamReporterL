@@ -37,4 +37,4 @@ D:\project\ExamReporterL\ExamReporterL\test_statistic\obj\Release\test_statistic
 D:\project\ExamReporterL\ExamReporterL\test_statistic\obj\Release\test_statistic.pdb
 D:\project\ExamReporterL\ExamReporterL\test_statistic\bin\Release\MySql.Data.dll
 D:\project\ExamReporterL\ExamReporterL\test_statistic\bin\Release\CheckBoxComboBox.dll
-D:\project\ExamReporterL\ExamReporterL\test_statistic\obj\Release\test_statistic.csprojResolveAssemblyReference.cache
+D:\project\ExamReporterL\ExamReporterL\test_statistic\obj\Release\ResolveAssemblyReference.cache

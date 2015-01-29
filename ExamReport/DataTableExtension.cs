@@ -8,6 +8,89 @@ namespace ExamReport
 {
     public static class DataTableExtension
     {
+        public static DataTable LanguageTrans(this DataTable dt)
+        {
+            foreach (DataRow dr in dt.Rows)
+            {
+                foreach (DataColumn dc in dt.Columns)
+                {
+                    if (dc.ColumnName.Trim().Equals("sub"))
+                    {
+                        switch (dr[dc].ToString())
+                        {
+                            case "sx":
+                                dr[dc] = "数学";
+                                break;
+                            case "yw":
+                                dr[dc] = "语文";
+                                break;
+                            case "yy":
+                                dr[dc] = "英语";
+                                break;
+                            case "wl":
+                                dr[dc] = "物理";
+                                break;
+                            case "hx":
+                                dr[dc] = "化学";
+                                break;
+                            case "sw":
+                                dr[dc] = "生物";
+                                break;
+                            case "zz":
+                                dr[dc] = "政治";
+                                break;
+                            case "ls":
+                                dr[dc] = "历史";
+                                break;
+                            case "dl":
+                                dr[dc] = "地理";
+                                break;
+                            case "lz":
+                                dr[dc] = "理综";
+                                break;
+                            case "wz":
+                                dr[dc] = "文综";
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    else if(dc.ColumnName.Trim().Equals("exam"))
+                    {
+                        switch (dr[dc].ToString())
+                        {
+                            case "zk":
+                                dr[dc] = "中考";
+                                break;
+                            case "hk":
+                                dr[dc] = "会考";
+                                break;
+                            case "gk":
+                                dr[dc] = "高考";
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    else if (dc.ColumnName.Trim().Equals("ans") || dc.ColumnName.Trim().Equals("grp") || dc.ColumnName.Trim().Equals("zh"))
+                    {
+                        switch (dr[dc].ToString())
+                        {
+                            case "1":
+                                dr[dc] = "已录入";
+                                break;
+                            case "0":
+                                dr[dc] = "未录入";
+                                break;
+                            default:
+                                break;
+                        } 
+                    }
+
+                }
+            }
+            return dt;
+        }
         public static int SeperateGroups(this DataTable dt, ZK_database.GroupType gtype, decimal divider, string groupname)
         {
             int _group_num = 0;

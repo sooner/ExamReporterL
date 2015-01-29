@@ -30,7 +30,7 @@ namespace ExamReport
             _basic_data = new DataTable();
             _group_data = new DataTable();
         }
-        public string DBF_data_process(string fileadd, Form1 form)
+        public string DBF_data_process(string fileadd, MyWizard form)
         {
             Stopwatch st = new Stopwatch();
             st.Start();

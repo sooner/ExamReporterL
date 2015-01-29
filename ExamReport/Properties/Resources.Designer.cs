@@ -95,6 +95,27 @@ namespace ExamReport.Properties {
             }
         }
         
+        public static System.Drawing.Bitmap pie3 {
+            get {
+                object obj = ResourceManager.GetObject("pie3", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        public static System.Drawing.Bitmap pie4 {
+            get {
+                object obj = ResourceManager.GetObject("pie4", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        public static System.Drawing.Bitmap pie5 {
+            get {
+                object obj = ResourceManager.GetObject("pie5", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         public static System.Drawing.Bitmap plus {
             get {
                 object obj = ResourceManager.GetObject("plus", resourceCulture);
