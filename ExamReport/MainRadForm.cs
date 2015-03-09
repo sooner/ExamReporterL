@@ -199,16 +199,43 @@ namespace ExamReport
             RadTreeViewElement element = sender as RadTreeViewElement;
             if (element.SelectedNode.Text.Trim().Equals("总体"))
             {
+                gk_zt_panel.Show();
+                gk_sf_panel.Hide();
+                gk_cj_panel.Hide();
+                gk_qx_panel.Hide();
+                gk_data_pre_panel.Hide();
             }
             else if (element.SelectedNode.Text.Trim().Equals("区县") || (element.SelectedNode.Parent != null && element.SelectedNode.Parent.Text.Trim().Equals("区县")))
             {
+                gk_zt_panel.Hide();
+                gk_sf_panel.Hide();
+                gk_cj_panel.Hide();
+                gk_qx_panel.Show();
+                gk_data_pre_panel.Hide();
             }
             else if (element.SelectedNode.Text.Trim().Equals("数据录入"))
             {
-
+                gk_zt_panel.Hide();
+                gk_sf_panel.Hide();
+                gk_cj_panel.Hide();
+                gk_qx_panel.Hide();
+                gk_data_pre_panel.Show();
             }
-            else if (element.SelectedNode.Text.Trim().Equals("总体"))
+            else if (element.SelectedNode.Text.Trim().Equals("示范校"))
             {
+                gk_zt_panel.Hide();
+                gk_sf_panel.Show();
+                gk_cj_panel.Hide();
+                gk_qx_panel.Hide();
+                gk_data_pre_panel.Hide();
+            }
+            else if (element.SelectedNode.Text.Trim().Equals("城郊"))
+            {
+                gk_zt_panel.Hide();
+                gk_sf_panel.Hide();
+                gk_cj_panel.Show();
+                gk_qx_panel.Hide();
+                gk_data_pre_panel.Hide();
             }
         }
         private void ZKTreeNode_Selected(object sender, RadTreeViewEventArgs e)
