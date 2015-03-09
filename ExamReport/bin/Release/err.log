@@ -1,16 +1,11 @@
-System.Data.ConstraintException: 列“mark”被约束为是唯一的。值“未选”已存在。
-   在 System.Data.UniqueConstraint.CheckConstraint(DataRow row, DataRowAction action)
-   在 System.Data.DataTable.RaiseRowChanging(DataRowChangeEventArgs args, DataRow eRow, DataRowAction eAction, Boolean fireEvent)
-   在 System.Data.DataTable.SetNewRecordWorker(DataRow row, Int32 proposedRecord, DataRowAction action, Boolean isInMerge, Boolean suppressEnsurePropertyChanged, Int32 position, Boolean fireEvent, Exception& deferredException)
-   在 System.Data.DataTable.InsertRow(DataRow row, Int64 proposedID, Int32 pos, Boolean fireEvent)
-   在 System.Data.DataRowCollection.Add(DataRow row)
-   在 ExamReport.Partition_statistic.single_topic_analysis() 位置 D:\project\vs\ExamReport\ExamReport\Partition_statistic.cs:行号 252
-   在 ExamReport.Partition_statistic.statistic_process(Boolean isZonghe) 位置 D:\project\vs\ExamReport\ExamReport\Partition_statistic.cs:行号 206
-   在 ExamReport.ExecuteMethod.ZK_process() 位置 D:\project\vs\ExamReport\ExamReport\ExecuteMethod.cs:行号 243
-   在 ExamReport.ExecuteMethod.pre_process() 位置 D:\project\vs\ExamReport\ExamReport\ExecuteMethod.cs:行号 196
-   在 ExamReport.Form1.startProcess.data_process() 位置 D:\project\vs\ExamReport\ExamReport\Form1.cs:行号 699
-   在 System.Threading.ThreadHelper.ThreadStart_Context(Object state)
-   在 System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
-   在 System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
-   在 System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
-   在 System.Threading.ThreadHelper.ThreadStart()
+System.Exception: 数据库文件被占用，请关闭！
+   at ExamReport.mainform.TreeLoadData() in D:\project\ExamReporterL\ExamReporterL\ExamReport\MainRadForm.cs:line 115
+   at ExamReport.mainform..ctor() in D:\project\ExamReporterL\ExamReporterL\ExamReport\MainRadForm.cs:line 25
+   at ExamReport.Program.Main() in D:\project\ExamReporterL\ExamReporterL\ExamReport\Program.cs:line 21
+   at System.AppDomain._nExecuteAssembly(RuntimeAssembly assembly, String[] args)
+   at System.AppDomain.ExecuteAssembly(String assemblyFile, Evidence assemblySecurity, String[] args)
+   at Microsoft.VisualStudio.HostingProcess.HostProc.RunUsersAssembly()
+   at System.Threading.ThreadHelper.ThreadStart_Context(Object state)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean ignoreSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.ThreadHelper.ThreadStart()

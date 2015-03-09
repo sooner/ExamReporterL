@@ -85,8 +85,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Analysis.cs" />
     <Compile Include="Config\SchoolCodeConfig.cs" />
     <Compile Include="DataTableExtension.cs" />
+    <Compile Include="DBHelper.cs" />
     <Compile Include="GK_database.cs" />
     <Compile Include="HK_database.cs" />
     <Compile Include="HK_worddata.cs" />
@@ -98,6 +100,7 @@
     <Compile Include="MainRadForm.Designer.cs">
       <DependentUpon>MainRadForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="MetaData.cs" />
     <Compile Include="MySqlHelper.cs" />
     <Compile Include="MyWizard.cs">
       <SubType>Form</SubType>

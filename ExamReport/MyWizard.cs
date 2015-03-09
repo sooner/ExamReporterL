@@ -16,18 +16,37 @@ namespace ExamReport
     public partial class MyWizard : Form
     {
         Thread thread;
-        public MyWizard()
+        public LoadDatabase ld;
+        public mainform _form;
+        public MyWizard(string sub, mainform form)
         {
             InitializeComponent();
+            _form = form;
+            exam.SelectedItem = sub;
             int curryear = DateTime.Now.Year;
             for (int i = curryear - 10; i < curryear + 10; i++)
                 exam_date.Items.Add(i);
             exam_date.SelectedItem = curryear;
 
             radWizard1.Next += new WizardCancelEventHandler(radWizard_Next);
+            radWizard1.Cancel += new EventHandler(radWizard1_Cancel);
+            radWizard1.Finish += new EventHandler(radWizard_Finish);
 
             zf_panel.Show();
             zh_panel.Hide();
+            zh_panel2.Hide();
+        }
+
+        void radWizard1_Cancel(object sender, EventArgs e)
+        {
+            if (this.radWizard1.SelectedPage == this.radWizard1.Pages[1])
+            {
+                if (thread.IsAlive)
+                {
+                    thread.Abort();
+                    ShowPro(100, 2);
+                }
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -76,16 +95,49 @@ namespace ExamReport
 
         }
 
+        public void radWizard_Finish(object sender, EventArgs e)
+        {
+            _form.Grid_load();
+            this.Close();
+        }
+
+        
+
         private void start_process()
         {
-            LoadDatabase ld = new LoadDatabase();
+            ld = new LoadDatabase();
             ld.wizard = this;
+            ld.year = exam_date.SelectedItem.ToString();
             ld.exam = exam.SelectedItem.ToString();
             ld.sub = subject.SelectedItem.ToString();
             ld.database_str = database_addr.Text;
             ld.ans_str = ans_addr.Text;
             ld.group_str = group_addr.Text;
 
+            if (ld.sub.Contains("理综") || ld.sub.Contains("文综"))
+            {
+                
+
+                if (string.IsNullOrEmpty(zh_addr.Text.Trim()))
+                {
+                    Error("请输入综合分类文件地址！");
+                    return;
+                }
+                if (Math.Abs(single_fullmark.Value) != single_fullmark.Value)
+                {
+                    Error("单科总分不能为负！");
+                    return;
+                }
+                if (single_fullmark.Value > fullmark.Value)
+                {
+                    Error("单科成绩不能大于总成绩！");
+                    return;
+                }
+                ld.wenli_str = zh_addr.Text;
+
+                ld.sub_fullmark = single_fullmark.Value;
+                
+            }
             if (Popu_choice.Checked)
             {
                 ld.grouptype = ZK_database.GroupType.population;
@@ -130,14 +182,23 @@ namespace ExamReport
                     case 1:
                         break;
                     case 2:
+                        radWizard1.NextButton.Enabled = true;
+                        radWizard1.BackButton.Enabled = true;
                         break;
                     case 3:
-                        this.radWizard1.SelectedPage = this.radWizard1.Pages[2];
+                        after_process();
                         break;
                     default:
                         break;
                 }
             }
+        }
+
+        private void after_process()
+        {
+            basic_gridView.DataSource = ld.basic_data;
+            group_gridView.DataSource = ld.group_data;
+            this.radWizard1.SelectedPage = this.radWizard1.Pages[2];
         }
         private void exam_type_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -192,7 +253,54 @@ namespace ExamReport
 
             }
         }
+        public void ErrorM(string message)
+        {
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new ErrorMessage(ErrorM), message);
+            }
+            else
+            {
+                Error(message);
+                if (thread.IsAlive)
+                {
+                    thread.Abort();
+                    ShowPro(100, 2);
+                }
 
+            }
+        }
+
+        private bool Error(string errormessage)
+        {
+            MessageBox.Show(errormessage, "提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return false;
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+            openFileDialog1.InitialDirectory = "C://";
+            openFileDialog1.Filter = "Excel files (*.xls,*.xlsx)|*.xls;*.xlsx|All files (*.*)|*.*";
+            openFileDialog1.FilterIndex = 1;
+            openFileDialog1.RestoreDirectory = true;
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+                zh_addr.Text = openFileDialog1.FileName;
+        }
+
+        private void subject_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if(subject.SelectedItem.ToString().Contains("理综") || subject.SelectedItem.ToString().Contains("文综"))
+            {
+                zh_panel2.Show();
+                zh_panel.Show();
+            }
+            else
+            {
+                zh_panel.Hide();
+                zh_panel2.Hide();
+            }
+        }
     
     }
 }

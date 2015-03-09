@@ -11,17 +11,27 @@ namespace ExamReport
         public MyWizard wizard;
         excel_process ans;
         excel_process groups;
+        excel_process wenli;
 
+        public string year;
         public string exam;
         public string database_str;
         public string ans_str;
         public string group_str;
-
+        public string wenli_str;
+        
         public string sub;
 
         public decimal fullmark;
+        public decimal sub_fullmark;
         public ZK_database.GroupType grouptype;
         public decimal divider;
+
+        public DataTable basic_data;
+        public DataTable group_data;
+        public DataTable zh_group_data;
+        public DataTable zh_single_data;
+        
 
         public void start_process()
         {
@@ -32,7 +42,39 @@ namespace ExamReport
                 wizard.ShowPro(5, 1);
                 groups = new excel_process(group_str);
                 groups.run(false);
-                wizard.ShowPro(10, 2);
+                if (sub.Contains("理综") || sub.Contains("文综"))
+                {
+                    wenli = new excel_process(wenli_str);
+                    wenli.run(false);
+                }
+
+                wizard.ShowPro(10, 1);
+            }
+
+            MetaData md = new MetaData(year,
+                Utils.language_trans(exam),
+                Utils.language_trans(sub));
+            if (sub.Contains("理综") || sub.Contains("文综"))
+            {
+                md._fullmark = sub_fullmark;
+            }
+            else
+                md._fullmark = fullmark;
+            md._grouptype = grouptype;
+            md._group_num = Convert.ToInt32(divider);
+
+            try
+            {
+                md.insert_data();
+            }
+            catch (DuplicateNameException ex)
+            {
+                wizard.ErrorM("该数据已存储，请先删除后再添加");
+            }
+            catch (Exception ex)
+            {
+                wizard.ErrorM(ex.Message);
+
             }
 
             switch (exam)
@@ -55,6 +97,8 @@ namespace ExamReport
 
         public void zk_database_process()
         {
+            
+
             ZK_database db = new ZK_database(ans.dt, groups.dt, grouptype, divider);
             db.DBF_data_process(database_str, wizard);
 
@@ -62,6 +106,14 @@ namespace ExamReport
             {
                 XZ_group_separate(db._basic_data);
             }
+            basic_data = db._basic_data;
+            group_data = db._group_data;
+
+            
+            DBHelper.create_mysql_table(basic_data, Utils.get_basic_tablename(year, Utils.language_trans(exam), Utils.language_trans(sub)));
+            DBHelper.create_mysql_table(group_data, Utils.get_group_tablename(year, Utils.language_trans(exam), Utils.language_trans(sub)));
+            DBHelper.create_ans_table(Utils.get_tablename(year, Utils.language_trans(exam), Utils.language_trans(sub)), db.newStandard, ans.xz_th);
+            DBHelper.create_fz_table(Utils.get_tablename(year, Utils.language_trans(exam), Utils.language_trans(sub)), groups.dt, groups.groups_group);
             wizard.ShowPro(100, 3);
 
         }
@@ -75,6 +127,7 @@ namespace ExamReport
 
         public void gk_database_process()
         {
+
             if (sub.Equals("总分"))
             {
                 GK_database db = new GK_database();
@@ -83,7 +136,46 @@ namespace ExamReport
             else if (sub.Contains("理综") ||
                     sub.Contains("文综"))
             {
+                int ch_num = 0;
+                GK_database db = new GK_database(ans.dt, groups.dt, grouptype, divider);
+                db.DBF_data_process(database_str);
 
+                ch_num = db.ZH_postprocess(wenli.dt, sub.Substring(3));
+
+                basic_data = db._basic_data;
+                group_data = db._group_data;
+                zh_single_data = db.zh_single_data;
+                zh_group_data = db.zh_group_data;
+
+                DBHelper.create_mysql_table(basic_data, "zh_" + Utils.get_basic_tablename(year, Utils.language_trans(exam), Utils.language_trans(sub)));
+                DBHelper.create_mysql_table(zh_group_data, "zh_" + Utils.get_group_tablename(year, Utils.language_trans(exam), Utils.language_trans(sub)));
+                DBHelper.create_ans_table("zh_" + Utils.get_tablename(year, Utils.language_trans(exam), Utils.language_trans(sub)), db.newStandard, ans.xz_th);
+                DBHelper.create_fz_table("zh_" + Utils.get_tablename(year, Utils.language_trans(exam), Utils.language_trans(sub)), wenli.dt, wenli.groups_group);
+
+                DBHelper.create_mysql_table(zh_single_data, Utils.get_basic_tablename(year, Utils.language_trans(exam), Utils.language_trans(sub)));
+                DBHelper.create_mysql_table(group_data, Utils.get_group_tablename(year, Utils.language_trans(exam), Utils.language_trans(sub)));
+                DBHelper.create_ans_table(Utils.get_tablename(year, Utils.language_trans(exam), Utils.language_trans(sub)), db.ZH_standard_ans, ans.xz_th);
+                DBHelper.create_fz_table(Utils.get_tablename(year, Utils.language_trans(exam), Utils.language_trans(sub)), groups.dt, groups.groups_group);
+                wizard.ShowPro(100, 3);
+            }
+            else
+            {
+                GK_database db = new GK_database(ans.dt, groups.dt, grouptype, divider);
+                db.DBF_data_process(database_str);
+
+                if (db._basic_data.Columns.Contains("XZ"))
+                {
+                    XZ_group_separate(db._basic_data);
+                }
+
+                basic_data = db._basic_data;
+                group_data = db._group_data;
+
+                DBHelper.create_mysql_table(basic_data, Utils.get_basic_tablename(year, Utils.language_trans(exam), Utils.language_trans(sub)));
+                DBHelper.create_mysql_table(group_data, Utils.get_group_tablename(year, Utils.language_trans(exam), Utils.language_trans(sub)));
+                DBHelper.create_ans_table(Utils.get_tablename(year, Utils.language_trans(exam), Utils.language_trans(sub)), db.newStandard, ans.xz_th);
+                DBHelper.create_fz_table(Utils.get_tablename(year, Utils.language_trans(exam), Utils.language_trans(sub)), groups.dt, groups.groups_group);
+                wizard.ShowPro(100, 3);
             }
         }
 

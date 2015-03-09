@@ -27,13 +27,13 @@ D:\project\ExamReporterL\ExamReporterL\test_statistic\bin\Debug\test_statistic.p
 D:\project\ExamReporterL\ExamReporterL\test_statistic\bin\Debug\ExamReport.exe
 D:\project\ExamReporterL\ExamReporterL\test_statistic\bin\Debug\Microsoft.Practices.EnterpriseLibrary.Common.dll
 D:\project\ExamReporterL\ExamReporterL\test_statistic\bin\Debug\Microsoft.Practices.ObjectBuilder.dll
+D:\project\ExamReporterL\ExamReporterL\test_statistic\bin\Debug\MySql.Data.dll
+D:\project\ExamReporterL\ExamReporterL\test_statistic\bin\Debug\CheckBoxComboBox.dll
 D:\project\ExamReporterL\ExamReporterL\test_statistic\bin\Debug\Microsoft.Vbe.Interop.dll
 D:\project\ExamReporterL\ExamReporterL\test_statistic\bin\Debug\Microsoft.Office.Interop.SmartTag.dll
 D:\project\ExamReporterL\ExamReporterL\test_statistic\bin\Debug\ExamReport.pdb
 D:\project\ExamReporterL\ExamReporterL\test_statistic\bin\Debug\ExamReport_Accessor.exe
 D:\project\ExamReporterL\ExamReporterL\test_statistic\bin\Debug\ExamReport_Accessor.pdb
+D:\project\ExamReporterL\ExamReporterL\test_statistic\obj\Debug\ResolveAssemblyReference.cache
 D:\project\ExamReporterL\ExamReporterL\test_statistic\obj\Debug\test_statistic.dll
 D:\project\ExamReporterL\ExamReporterL\test_statistic\obj\Debug\test_statistic.pdb
-D:\project\ExamReporterL\ExamReporterL\test_statistic\bin\Debug\CheckBoxComboBox.dll
-D:\project\ExamReporterL\ExamReporterL\test_statistic\obj\Debug\ResolveAssemblyReference.cache
-D:\project\ExamReporterL\ExamReporterL\test_statistic\bin\Debug\MySql.Data.dll

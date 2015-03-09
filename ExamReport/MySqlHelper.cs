@@ -13,7 +13,15 @@ namespace ExamReport
     public abstract class MySqlHelper
     {
         //数据库连接字符串
-        public static string Conn = "Database='examdata';Data Source='133.133.134.121';User Id='root';Password='123456';charset='utf8';pooling=true";
+        public static string Conn = "Database='" 
+            + ConfigurationManager.AppSettings["database"].ToString().Trim() + 
+            "';Data Source='" 
+            + ConfigurationManager.AppSettings["server"].ToString().Trim() +
+            "';User Id='" 
+            + ConfigurationManager.AppSettings["username"].ToString().Trim() +
+            "';Password='" 
+            + ConfigurationManager.AppSettings["password"].ToString().Trim() + 
+            "';charset='utf8';pooling=true";
 
         // 用于缓存参数的HASH表
         private static Hashtable parmCache = Hashtable.Synchronized(new Hashtable());

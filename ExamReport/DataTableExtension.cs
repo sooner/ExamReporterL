@@ -86,6 +86,20 @@ namespace ExamReport
                                 break;
                         } 
                     }
+                    else if (dc.ColumnName.Trim().Equals("gtype"))
+                    {
+                        switch (dr[dc].ToString())
+                        {
+                            case "p":
+                                dr[dc] = "按人数分";
+                                break;
+                            case "m":
+                                dr[dc] = "按分数分";
+                                break;
+                            default:
+                                break;
+                        } 
+                    }
 
                 }
             }

@@ -6,6 +6,7 @@ using System.Data;
 using System.Data.OleDb;
 using System.Diagnostics;
 using System.Collections;
+using System.Text.RegularExpressions;
 
 namespace ExamReport
 {
@@ -21,6 +22,10 @@ namespace ExamReport
         public DataTable _group_data;
         public int _group_num;
 
+
+        List<List<string>> name_list;
+        public DataTable newStandard;
+
         public ZK_database(DataTable standard_ans, DataTable groups, GroupType gtype, decimal divider)
         {
             _groups = groups;
@@ -29,6 +34,8 @@ namespace ExamReport
             _standard_ans = standard_ans;
             _basic_data = new DataTable();
             _group_data = new DataTable();
+
+            name_list = new List<List<string>>();
         }
         public string DBF_data_process(string fileadd, MyWizard form)
         {
@@ -54,12 +61,15 @@ namespace ExamReport
                 DataTable dt = mySet.Tables[0];
                 int count = dt.Columns.Count;
                 int i;
+
+                newStandard = StandardAnsRecontruction(_standard_ans, name_list);
+
                 DataTable basic_data = new DataTable();
                 basic_data.Columns.Add("studentid", System.Type.GetType("System.String"));
                 basic_data.Columns.Add("schoolcode", System.Type.GetType("System.String"));
                 basic_data.Columns.Add("totalmark", typeof(decimal));
-                for (i = 0; i < _standard_ans.Rows.Count; i++)
-                    basic_data.Columns.Add("T" + ((string)_standard_ans.Rows[i]["th"]).Trim(), System.Type.GetType("System.Decimal"));
+                for (i = 0; i < newStandard.Rows.Count; i++)
+                    basic_data.Columns.Add("T" + ((string)newStandard.Rows[i]["th"]).Trim(), System.Type.GetType("System.Decimal"));
                 bool first = true;
 
                 string omrstr = dt.Columns.Contains("Omrstr") ? "Omrstr" : "Info";
@@ -73,10 +83,10 @@ namespace ExamReport
 
                     if (first)
                     {
-                        for (i = 0; i < _standard_ans.Rows.Count; i++)
+                        for (i = 0; i < newStandard.Rows.Count; i++)
                         {
-                            if(!_standard_ans.Rows[i]["da"].ToString().Trim().Equals(""))
-                                basic_data.Columns.Add("D" + _standard_ans.Rows[i]["th"].ToString().Trim(), typeof(string));
+                            if(!newStandard.Rows[i]["da"].ToString().Trim().Equals(""))
+                                basic_data.Columns.Add("D" + newStandard.Rows[i]["th"].ToString().Trim(), typeof(string));
                         }
                         first = false;
                         basic_data.Columns.Add("Groups",typeof(string));
@@ -103,15 +113,29 @@ namespace ExamReport
                             break;
                         }
                     }
-                    foreach (DataRow ans_dr in _standard_ans.Rows)
+
+                    int total_count = 0;
+                    foreach (DataRow ans_dr in newStandard.Rows)
                     {
                         if (ans_dr["da"].ToString().Trim().Equals(""))
                         {
-                            if ((decimal)dr[sub_count] > Convert.ToDecimal(ans_dr["fs"]))
-                                throw new ArgumentException("第" + (string)ans_dr["th"] + "题满分值小于实际分值！");
-                            newRow["T" + (string)ans_dr["th"]] = (decimal)dr[sub_count];
-                            sub_mark += (decimal)dr[sub_count];
-                            sub_count++;
+                            if (name_list[total_count] == null)
+                            {
+                                if ((decimal)dr[sub_count + obj_count] > Convert.ToDecimal(ans_dr["fs"]))
+                                    throw new ArgumentException("第" + (string)ans_dr["th"] + "题满分值小于实际分值！");
+                                newRow["T" + (string)ans_dr["th"]] = (decimal)dr[sub_count + obj_count];
+                                sub_mark += (decimal)dr[sub_count];
+                                sub_count++;
+                            }
+                            else
+                            {
+                                decimal temp_mark = 0;
+                                foreach (string temp_th in name_list[total_count])
+                                {
+                                    temp_mark += (decimal)newRow["T" + temp_th];
+                                }
+                                newRow["T" + (string)ans_dr["th"]] = temp_mark;
+                            }
                         }
                         else
                         {
@@ -144,6 +168,7 @@ namespace ExamReport
                             else
                                 throw new ArgumentException("标准答案选择题数量大于数据库中选择题数量");
                         }
+                        total_count++;
                     }
                     
                     if (Utils.sub_iszero && sub_mark == 0)
@@ -272,18 +297,129 @@ namespace ExamReport
                     _group_data.Rows.Add(newRow);
                 }
                 #endregion
-                if (Utils.saveMidData)
-                {
-                    Utils.create_groups_table(_basic_data, Utils.year + "高考" + Utils.subject + "基础数据");
-                    Utils.create_groups_table(_group_data, Utils.year + "高考" + Utils.subject + "题组数据");
 
-                }
+
                 st.Stop();
                 
                 return st.ElapsedMilliseconds.ToString();
             } 
             
         }
-       
+        public DataTable StandardAnsRecontruction(DataTable dt, List<List<string>> name)
+        {
+            DataTable newtable = dt.Clone();
+            Stack<string> sk = new Stack<string>();
+
+            newtable.PrimaryKey = new DataColumn[] { newtable.Columns["th"] };
+            foreach (DataRow dr in dt.Rows)
+            {
+                DataRow newrow = newtable.NewRow();
+                string th = dr["th"].ToString().Trim();
+                //if (!th.Contains("_"))
+                //{
+                //    newrow.ItemArray = dr.ItemArray;
+                //    newtable.Rows.Add(newrow);
+                //    name.Add(null);
+                //    continue;
+                //}
+                if (sk.Count == 0)
+                {
+                    if (th.Contains("_"))
+                        sk.Push(th);
+                    newrow.ItemArray = dr.ItemArray;
+                    newtable.Rows.Add(newrow);
+                    name.Add(null);
+                }
+                else
+                {
+                    string prefix = omit_tail(sk.Peek());
+                    if (th.StartsWith(prefix))
+                    {
+                        if (th.Contains("_"))
+                            sk.Push(th);
+                        newrow.ItemArray = dr.ItemArray;
+                        newtable.Rows.Add(newrow);
+                        name.Add(null);
+                    }
+                    else
+                    {
+                        while (true)
+                        {
+
+                            popstack(newtable, sk, name);
+                            if (!sk.Peek().Contains("_"))
+                            {
+                                sk.Pop();
+                                if (th.Contains("_"))
+                                    sk.Push(th);
+                                newrow.ItemArray = dr.ItemArray;
+                                newtable.Rows.Add(newrow);
+                                name.Add(null);
+                                break;
+                            }
+                            else if (th.StartsWith(omit_tail(sk.Peek())))
+                            {
+                                if (th.Contains("_"))
+                                    sk.Push(th);
+                                newrow.ItemArray = dr.ItemArray;
+                                newtable.Rows.Add(newrow);
+                                name.Add(null);
+                                break;
+                            }
+                            else
+                                continue;
+
+                        }
+                    }
+                }
+
+            }
+            while (sk.Count > 0)
+            {
+
+                popstack(newtable, sk, name);
+                if (!sk.Peek().Contains("_"))
+                    sk.Pop();
+
+            }
+            return newtable;
+        }
+        public void popstack(DataTable dt, Stack<string> sk, List<List<string>> name)
+        {
+            List<string> record = new List<string>();
+            string temp_th;
+            DataRow dr = dt.NewRow();
+            double mark = 0;
+            while (true)
+            {
+                temp_th = sk.Pop();
+                record.Add(temp_th);
+                mark += Convert.ToDouble(dt.Rows.Find(temp_th)["fs"]);
+                if (sk.Count != 0 && sk.Peek().StartsWith(omit_tail(temp_th)))
+                    continue;
+                else
+                    break;
+            }
+            sk.Push(omit_tail(temp_th));
+            if (record.Count > 1)
+            {
+                dr["th"] = omit_tail(temp_th);
+                dr["fs"] = Convert.ToInt32(mark).ToString();
+                dr["da"] = "";
+                dt.Rows.Add(dr);
+                name.Add(record);
+            }
+        }
+        public string omit_tail(string serial)
+        {
+            Regex num_regex = new Regex(@"(\d+_)+\d+$");
+            if (!num_regex.IsMatch(serial))
+                throw new ArgumentException("标准答案 " + serial + " 题号格式不正确！");
+            MatchCollection match = Regex.Matches(serial, @"\w+(?=_\d+$)");
+            if (match.Count > 1)
+                throw new ArgumentException("标准答案 " + serial + " 题号格式不正确！");
+            return match[0].ToString();
+        }
     }
+
 }

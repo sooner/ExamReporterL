@@ -6,6 +6,8 @@ using System.Data;
 using System.Data.OleDb;
 using System.Configuration;
 using System.Threading;
+using MySql.Data;
+using MySql.Data.MySqlClient;
 
 namespace ExamReport
 {
@@ -465,7 +467,84 @@ namespace ExamReport
             }
             return true;
         }
-
+        
+        public static string language_trans(string name)
+        {
+            switch (name)
+            {
+                case "语文":
+                    return "yw";
+                case "数学":
+                    return "sx";
+                case "英语":
+                    return "yy";
+                case "理综-化学":
+                case "化学":
+                    return "hx";
+                case "理综-物理":
+                case "物理":
+                    return "wl";
+                case "理综-生物":
+                case "生物":
+                    return "sw";
+                case "文综-政治":
+                case "政治":
+                    return "zz";
+                case "文综-地理":
+                case "地理":
+                    return "dl";
+                case "文综-历史":
+                case "历史":
+                    return "ls";
+                case "中考":
+                    return "zk";
+                case "高考":
+                    return "gk";
+                case "会考":
+                    return "hk";
+                case "yw":
+                    return "语文";
+                case "sx":
+                    return "数学";
+                case "yy":
+                    return "英语";
+                case "hx":
+                    return "理综-化学";
+                case "wl":
+                    return "理综-物理";
+                case "sw":
+                    return "理综-生物";
+                case "zz":
+                    return "文综-政治";
+                case "dl":
+                    return "文综-地理";
+                case "ls":
+                    return "文综-历史";
+                
+                default:
+                    return "";
+            }
+        }
+        public static string get_tablename(string year, string exam, string sub)
+        {
+            return year + "_" + exam + "_" + sub;
+        }
+        public static string get_basic_tablename(string year, string exam, string sub)
+        {
+            return year + "_" + exam + "_" + sub + "_basic";
+        }
+        public static string get_group_tablename(string year, string exam, string sub)
+        {
+            return year + "_" + exam + "_" + sub + "_group";
+        }
+        public static string get_ans_tablename(string year, string exam, string sub)
+        {
+            return get_tablename(year, exam, sub) + "_ans";
+        }
+        public static string get_fz_tablename(string year, string exam, string sub)
+        {
+            return get_tablename(year, exam, sub) + "_fz";
+        }
         public static void create_groups_table(DataTable groups_data, string filename)
         {
             string conn = @"Provider=vfpoledb;Data Source=" + save_address + ";Collating Sequence=machine;";

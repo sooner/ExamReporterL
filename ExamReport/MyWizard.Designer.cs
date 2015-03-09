@@ -32,7 +32,11 @@
             this.radWizard1 = new Telerik.WinControls.UI.RadWizard();
             this.wizardCompletionPage1 = new Telerik.WinControls.UI.WizardCompletionPage();
             this.panel3 = new System.Windows.Forms.Panel();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.group_gridView = new System.Windows.Forms.DataGridView();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.basic_gridView = new System.Windows.Forms.DataGridView();
             this.panel1 = new System.Windows.Forms.Panel();
             this.is_batch_import = new System.Windows.Forms.CheckBox();
             this.exam_date = new System.Windows.Forms.ComboBox();
@@ -40,6 +44,27 @@
             this.exam = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.panel5 = new System.Windows.Forms.Panel();
+            this.zf_panel = new System.Windows.Forms.Panel();
+            this.fullmark = new System.Windows.Forms.NumericUpDown();
+            this.label7 = new System.Windows.Forms.Label();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label19 = new System.Windows.Forms.Label();
+            this.remark_num = new System.Windows.Forms.NumericUpDown();
+            this.label18 = new System.Windows.Forms.Label();
+            this.label17 = new System.Windows.Forms.Label();
+            this.popu_num = new System.Windows.Forms.NumericUpDown();
+            this.label16 = new System.Windows.Forms.Label();
+            this.Mark_choice = new System.Windows.Forms.RadioButton();
+            this.Popu_choice = new System.Windows.Forms.RadioButton();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label44 = new System.Windows.Forms.Label();
+            this.PartialRight = new System.Windows.Forms.NumericUpDown();
+            this.label33 = new System.Windows.Forms.Label();
+            this.fullmark_iszero = new System.Windows.Forms.CheckBox();
+            this.sub_iszero = new System.Windows.Forms.CheckBox();
+            this.zh_panel = new System.Windows.Forms.Panel();
+            this.single_fullmark = new System.Windows.Forms.NumericUpDown();
+            this.sw_zz = new System.Windows.Forms.Label();
             this.progressBar = new System.Windows.Forms.ProgressBar();
             this.button3 = new System.Windows.Forms.Button();
             this.group_addr = new System.Windows.Forms.TextBox();
@@ -54,48 +79,28 @@
             this.label3 = new System.Windows.Forms.Label();
             this.wizardWelcomePage1 = new Telerik.WinControls.UI.WizardWelcomePage();
             this.wizardPage3 = new Telerik.WinControls.UI.WizardPage();
-            this.label7 = new System.Windows.Forms.Label();
-            this.fullmark = new System.Windows.Forms.NumericUpDown();
-            this.zf_panel = new System.Windows.Forms.Panel();
-            this.zh_panel = new System.Windows.Forms.Panel();
-            this.huaxue_dili = new System.Windows.Forms.NumericUpDown();
-            this.label43 = new System.Windows.Forms.Label();
-            this.wuli_lishi = new System.Windows.Forms.NumericUpDown();
-            this.label42 = new System.Windows.Forms.Label();
-            this.shengwu_zhengzhi = new System.Windows.Forms.NumericUpDown();
-            this.label41 = new System.Windows.Forms.Label();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.label44 = new System.Windows.Forms.Label();
-            this.PartialRight = new System.Windows.Forms.NumericUpDown();
-            this.label33 = new System.Windows.Forms.Label();
-            this.fullmark_iszero = new System.Windows.Forms.CheckBox();
-            this.sub_iszero = new System.Windows.Forms.CheckBox();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.label19 = new System.Windows.Forms.Label();
-            this.remark_num = new System.Windows.Forms.NumericUpDown();
-            this.label18 = new System.Windows.Forms.Label();
-            this.label17 = new System.Windows.Forms.Label();
-            this.popu_num = new System.Windows.Forms.NumericUpDown();
-            this.label16 = new System.Windows.Forms.Label();
-            this.Mark_choice = new System.Windows.Forms.RadioButton();
-            this.Popu_choice = new System.Windows.Forms.RadioButton();
+            this.button4 = new System.Windows.Forms.Button();
+            this.zh_addr = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.zh_panel2 = new Telerik.WinControls.UI.RadPanel();
             ((System.ComponentModel.ISupportInitialize)(this.radWizard1)).BeginInit();
             this.radWizard1.SuspendLayout();
             this.panel3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.group_gridView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.basic_gridView)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel5.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.fullmark)).BeginInit();
             this.zf_panel.SuspendLayout();
-            this.zh_panel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.huaxue_dili)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.wuli_lishi)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.shengwu_zhengzhi)).BeginInit();
-            this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.PartialRight)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.fullmark)).BeginInit();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.remark_num)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.popu_num)).BeginInit();
+            this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.PartialRight)).BeginInit();
+            this.zh_panel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.single_fullmark)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.zh_panel2)).BeginInit();
+            this.zh_panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // radWizard1
@@ -127,20 +132,63 @@
             // panel3
             // 
             this.panel3.BackColor = System.Drawing.Color.White;
-            this.panel3.Controls.Add(this.dataGridView1);
+            this.panel3.Controls.Add(this.group_gridView);
+            this.panel3.Controls.Add(this.label10);
+            this.panel3.Controls.Add(this.label9);
+            this.panel3.Controls.Add(this.label8);
+            this.panel3.Controls.Add(this.basic_gridView);
             this.panel3.Location = new System.Drawing.Point(150, 56);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(471, 418);
+            this.panel3.Size = new System.Drawing.Size(492, 420);
             this.panel3.TabIndex = 2;
             // 
-            // dataGridView1
+            // group_gridView
             // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(2, 3);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.RowTemplate.Height = 23;
-            this.dataGridView1.Size = new System.Drawing.Size(468, 412);
-            this.dataGridView1.TabIndex = 0;
+            this.group_gridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.group_gridView.Location = new System.Drawing.Point(7, 262);
+            this.group_gridView.Name = "group_gridView";
+            this.group_gridView.RowTemplate.Height = 23;
+            this.group_gridView.Size = new System.Drawing.Size(473, 150);
+            this.group_gridView.TabIndex = 4;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("NSimSun", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label10.Location = new System.Drawing.Point(4, 233);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(88, 16);
+            this.label10.TabIndex = 3;
+            this.label10.Text = "数据需求：";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("NSimSun", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label9.Location = new System.Drawing.Point(4, 53);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(88, 16);
+            this.label9.TabIndex = 2;
+            this.label9.Text = "基本数据：";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("NSimSun", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label8.Location = new System.Drawing.Point(4, 13);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(120, 16);
+            this.label8.TabIndex = 1;
+            this.label8.Text = "数据导入成功！";
+            // 
+            // basic_gridView
+            // 
+            this.basic_gridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.basic_gridView.Location = new System.Drawing.Point(7, 72);
+            this.basic_gridView.Name = "basic_gridView";
+            this.basic_gridView.RowTemplate.Height = 23;
+            this.basic_gridView.Size = new System.Drawing.Size(473, 149);
+            this.basic_gridView.TabIndex = 0;
             // 
             // panel1
             // 
@@ -207,6 +255,7 @@
             // panel5
             // 
             this.panel5.BackColor = System.Drawing.Color.White;
+            this.panel5.Controls.Add(this.zh_panel2);
             this.panel5.Controls.Add(this.zf_panel);
             this.panel5.Controls.Add(this.groupBox2);
             this.panel5.Controls.Add(this.groupBox1);
@@ -228,132 +277,14 @@
             this.panel5.Size = new System.Drawing.Size(642, 412);
             this.panel5.TabIndex = 4;
             // 
-            // progressBar
+            // zf_panel
             // 
-            this.progressBar.Location = new System.Drawing.Point(26, 380);
-            this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(580, 17);
-            this.progressBar.TabIndex = 11;
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(534, 139);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
-            this.button3.TabIndex = 10;
-            this.button3.Text = "打开";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
-            // 
-            // group_addr
-            // 
-            this.group_addr.Location = new System.Drawing.Point(90, 141);
-            this.group_addr.Name = "group_addr";
-            this.group_addr.Size = new System.Drawing.Size(423, 21);
-            this.group_addr.TabIndex = 9;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(29, 144);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(65, 12);
-            this.label6.TabIndex = 8;
-            this.label6.Text = "数据需求：";
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(534, 105);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 7;
-            this.button2.Text = "打开";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
-            // ans_addr
-            // 
-            this.ans_addr.Location = new System.Drawing.Point(90, 105);
-            this.ans_addr.Name = "ans_addr";
-            this.ans_addr.Size = new System.Drawing.Size(423, 21);
-            this.ans_addr.TabIndex = 6;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(29, 108);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(65, 12);
-            this.label5.TabIndex = 5;
-            this.label5.Text = "标准答案：";
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(534, 68);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 4;
-            this.button1.Text = "打开";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // database_addr
-            // 
-            this.database_addr.Location = new System.Drawing.Point(90, 68);
-            this.database_addr.Name = "database_addr";
-            this.database_addr.Size = new System.Drawing.Size(423, 21);
-            this.database_addr.TabIndex = 3;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(29, 71);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(65, 12);
-            this.label4.TabIndex = 2;
-            this.label4.Text = "数据文件：";
-            // 
-            // subject
-            // 
-            this.subject.FormattingEnabled = true;
-            this.subject.Location = new System.Drawing.Point(90, 26);
-            this.subject.Name = "subject";
-            this.subject.Size = new System.Drawing.Size(121, 20);
-            this.subject.TabIndex = 1;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(28, 30);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(65, 12);
-            this.label3.TabIndex = 0;
-            this.label3.Text = "考试科目：";
-            // 
-            // wizardWelcomePage1
-            // 
-            this.wizardWelcomePage1.ContentArea = this.panel1;
-            this.wizardWelcomePage1.Header = "";
-            this.wizardWelcomePage1.Name = "wizardWelcomePage1";
-            this.wizardWelcomePage1.Title = "考试类型";
-            this.wizardWelcomePage1.Visibility = Telerik.WinControls.ElementVisibility.Visible;
-            // 
-            // wizardPage3
-            // 
-            this.wizardPage3.ContentArea = this.panel5;
-            this.wizardPage3.Header = "";
-            this.wizardPage3.Name = "wizardPage3";
-            this.wizardPage3.Title = "科目信息";
-            this.wizardPage3.Visibility = Telerik.WinControls.ElementVisibility.Visible;
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(3, 10);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(65, 12);
-            this.label7.TabIndex = 12;
-            this.label7.Text = "科目总分：";
+            this.zf_panel.Controls.Add(this.fullmark);
+            this.zf_panel.Controls.Add(this.label7);
+            this.zf_panel.Location = new System.Drawing.Point(31, 328);
+            this.zf_panel.Name = "zf_panel";
+            this.zf_panel.Size = new System.Drawing.Size(245, 39);
+            this.zf_panel.TabIndex = 14;
             // 
             // fullmark
             // 
@@ -367,148 +298,14 @@
             this.fullmark.Size = new System.Drawing.Size(120, 21);
             this.fullmark.TabIndex = 13;
             // 
-            // zf_panel
+            // label7
             // 
-            this.zf_panel.Controls.Add(this.fullmark);
-            this.zf_panel.Controls.Add(this.label7);
-            this.zf_panel.Location = new System.Drawing.Point(31, 314);
-            this.zf_panel.Name = "zf_panel";
-            this.zf_panel.Size = new System.Drawing.Size(245, 39);
-            this.zf_panel.TabIndex = 14;
-            // 
-            // zh_panel
-            // 
-            this.zh_panel.Controls.Add(this.huaxue_dili);
-            this.zh_panel.Controls.Add(this.label43);
-            this.zh_panel.Controls.Add(this.wuli_lishi);
-            this.zh_panel.Controls.Add(this.label42);
-            this.zh_panel.Controls.Add(this.shengwu_zhengzhi);
-            this.zh_panel.Controls.Add(this.label41);
-            this.zh_panel.Location = new System.Drawing.Point(297, 314);
-            this.zh_panel.Name = "zh_panel";
-            this.zh_panel.Size = new System.Drawing.Size(312, 39);
-            this.zh_panel.TabIndex = 15;
-            // 
-            // huaxue_dili
-            // 
-            this.huaxue_dili.Location = new System.Drawing.Point(254, 9);
-            this.huaxue_dili.Maximum = new decimal(new int[] {
-            500,
-            0,
-            0,
-            0});
-            this.huaxue_dili.Name = "huaxue_dili";
-            this.huaxue_dili.Size = new System.Drawing.Size(52, 21);
-            this.huaxue_dili.TabIndex = 11;
-            // 
-            // label43
-            // 
-            this.label43.AutoSize = true;
-            this.label43.Location = new System.Drawing.Point(214, 13);
-            this.label43.Name = "label43";
-            this.label43.Size = new System.Drawing.Size(41, 12);
-            this.label43.TabIndex = 10;
-            this.label43.Text = "化学：";
-            // 
-            // wuli_lishi
-            // 
-            this.wuli_lishi.Location = new System.Drawing.Point(152, 9);
-            this.wuli_lishi.Maximum = new decimal(new int[] {
-            500,
-            0,
-            0,
-            0});
-            this.wuli_lishi.Name = "wuli_lishi";
-            this.wuli_lishi.Size = new System.Drawing.Size(54, 21);
-            this.wuli_lishi.TabIndex = 9;
-            // 
-            // label42
-            // 
-            this.label42.AutoSize = true;
-            this.label42.Location = new System.Drawing.Point(115, 13);
-            this.label42.Name = "label42";
-            this.label42.Size = new System.Drawing.Size(41, 12);
-            this.label42.TabIndex = 8;
-            this.label42.Text = "物理：";
-            // 
-            // shengwu_zhengzhi
-            // 
-            this.shengwu_zhengzhi.Location = new System.Drawing.Point(51, 9);
-            this.shengwu_zhengzhi.Maximum = new decimal(new int[] {
-            500,
-            0,
-            0,
-            0});
-            this.shengwu_zhengzhi.Name = "shengwu_zhengzhi";
-            this.shengwu_zhengzhi.Size = new System.Drawing.Size(55, 21);
-            this.shengwu_zhengzhi.TabIndex = 7;
-            // 
-            // label41
-            // 
-            this.label41.AutoSize = true;
-            this.label41.Location = new System.Drawing.Point(13, 13);
-            this.label41.Name = "label41";
-            this.label41.Size = new System.Drawing.Size(41, 12);
-            this.label41.TabIndex = 6;
-            this.label41.Text = "生物：";
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.label44);
-            this.groupBox1.Controls.Add(this.PartialRight);
-            this.groupBox1.Controls.Add(this.label33);
-            this.groupBox1.Controls.Add(this.fullmark_iszero);
-            this.groupBox1.Controls.Add(this.sub_iszero);
-            this.groupBox1.Location = new System.Drawing.Point(31, 192);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(245, 96);
-            this.groupBox1.TabIndex = 72;
-            this.groupBox1.TabStop = false;
-            // 
-            // label44
-            // 
-            this.label44.AutoSize = true;
-            this.label44.Location = new System.Drawing.Point(181, 64);
-            this.label44.Name = "label44";
-            this.label44.Size = new System.Drawing.Size(17, 12);
-            this.label44.TabIndex = 74;
-            this.label44.Text = "分";
-            // 
-            // PartialRight
-            // 
-            this.PartialRight.Location = new System.Drawing.Point(136, 59);
-            this.PartialRight.Name = "PartialRight";
-            this.PartialRight.Size = new System.Drawing.Size(37, 21);
-            this.PartialRight.TabIndex = 73;
-            // 
-            // label33
-            // 
-            this.label33.AutoSize = true;
-            this.label33.Location = new System.Drawing.Point(55, 64);
-            this.label33.Name = "label33";
-            this.label33.Size = new System.Drawing.Size(77, 12);
-            this.label33.TabIndex = 72;
-            this.label33.Text = "多选题少选得";
-            // 
-            // fullmark_iszero
-            // 
-            this.fullmark_iszero.AutoSize = true;
-            this.fullmark_iszero.Location = new System.Drawing.Point(16, 26);
-            this.fullmark_iszero.Name = "fullmark_iszero";
-            this.fullmark_iszero.Size = new System.Drawing.Size(96, 16);
-            this.fullmark_iszero.TabIndex = 69;
-            this.fullmark_iszero.Text = "删除总分为零";
-            this.fullmark_iszero.UseVisualStyleBackColor = true;
-            // 
-            // sub_iszero
-            // 
-            this.sub_iszero.AutoSize = true;
-            this.sub_iszero.Location = new System.Drawing.Point(122, 25);
-            this.sub_iszero.Name = "sub_iszero";
-            this.sub_iszero.Size = new System.Drawing.Size(108, 16);
-            this.sub_iszero.TabIndex = 68;
-            this.sub_iszero.Text = "删除主观题为零";
-            this.sub_iszero.UseVisualStyleBackColor = true;
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(3, 10);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(65, 12);
+            this.label7.TabIndex = 12;
+            this.label7.Text = "科目总分：";
             // 
             // groupBox2
             // 
@@ -520,7 +317,7 @@
             this.groupBox2.Controls.Add(this.label16);
             this.groupBox2.Controls.Add(this.Mark_choice);
             this.groupBox2.Controls.Add(this.Popu_choice);
-            this.groupBox2.Location = new System.Drawing.Point(297, 192);
+            this.groupBox2.Location = new System.Drawing.Point(297, 206);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(309, 96);
             this.groupBox2.TabIndex = 75;
@@ -599,6 +396,249 @@
             this.Popu_choice.Text = "按人数分：";
             this.Popu_choice.UseVisualStyleBackColor = true;
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.label44);
+            this.groupBox1.Controls.Add(this.PartialRight);
+            this.groupBox1.Controls.Add(this.label33);
+            this.groupBox1.Controls.Add(this.fullmark_iszero);
+            this.groupBox1.Controls.Add(this.sub_iszero);
+            this.groupBox1.Location = new System.Drawing.Point(31, 206);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(245, 96);
+            this.groupBox1.TabIndex = 72;
+            this.groupBox1.TabStop = false;
+            // 
+            // label44
+            // 
+            this.label44.AutoSize = true;
+            this.label44.Location = new System.Drawing.Point(181, 64);
+            this.label44.Name = "label44";
+            this.label44.Size = new System.Drawing.Size(17, 12);
+            this.label44.TabIndex = 74;
+            this.label44.Text = "分";
+            // 
+            // PartialRight
+            // 
+            this.PartialRight.Location = new System.Drawing.Point(136, 59);
+            this.PartialRight.Name = "PartialRight";
+            this.PartialRight.Size = new System.Drawing.Size(37, 21);
+            this.PartialRight.TabIndex = 73;
+            // 
+            // label33
+            // 
+            this.label33.AutoSize = true;
+            this.label33.Location = new System.Drawing.Point(55, 64);
+            this.label33.Name = "label33";
+            this.label33.Size = new System.Drawing.Size(77, 12);
+            this.label33.TabIndex = 72;
+            this.label33.Text = "多选题少选得";
+            // 
+            // fullmark_iszero
+            // 
+            this.fullmark_iszero.AutoSize = true;
+            this.fullmark_iszero.Location = new System.Drawing.Point(16, 26);
+            this.fullmark_iszero.Name = "fullmark_iszero";
+            this.fullmark_iszero.Size = new System.Drawing.Size(96, 16);
+            this.fullmark_iszero.TabIndex = 69;
+            this.fullmark_iszero.Text = "删除总分为零";
+            this.fullmark_iszero.UseVisualStyleBackColor = true;
+            // 
+            // sub_iszero
+            // 
+            this.sub_iszero.AutoSize = true;
+            this.sub_iszero.Location = new System.Drawing.Point(122, 25);
+            this.sub_iszero.Name = "sub_iszero";
+            this.sub_iszero.Size = new System.Drawing.Size(108, 16);
+            this.sub_iszero.TabIndex = 68;
+            this.sub_iszero.Text = "删除主观题为零";
+            this.sub_iszero.UseVisualStyleBackColor = true;
+            // 
+            // zh_panel
+            // 
+            this.zh_panel.Controls.Add(this.single_fullmark);
+            this.zh_panel.Controls.Add(this.sw_zz);
+            this.zh_panel.Location = new System.Drawing.Point(297, 328);
+            this.zh_panel.Name = "zh_panel";
+            this.zh_panel.Size = new System.Drawing.Size(312, 39);
+            this.zh_panel.TabIndex = 15;
+            // 
+            // single_fullmark
+            // 
+            this.single_fullmark.Location = new System.Drawing.Point(86, 9);
+            this.single_fullmark.Maximum = new decimal(new int[] {
+            500,
+            0,
+            0,
+            0});
+            this.single_fullmark.Name = "single_fullmark";
+            this.single_fullmark.Size = new System.Drawing.Size(104, 21);
+            this.single_fullmark.TabIndex = 7;
+            // 
+            // sw_zz
+            // 
+            this.sw_zz.AutoSize = true;
+            this.sw_zz.Location = new System.Drawing.Point(22, 13);
+            this.sw_zz.Name = "sw_zz";
+            this.sw_zz.Size = new System.Drawing.Size(65, 12);
+            this.sw_zz.TabIndex = 6;
+            this.sw_zz.Text = "单科总分：";
+            // 
+            // progressBar
+            // 
+            this.progressBar.Location = new System.Drawing.Point(26, 380);
+            this.progressBar.Name = "progressBar";
+            this.progressBar.Size = new System.Drawing.Size(580, 17);
+            this.progressBar.TabIndex = 11;
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(534, 133);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(75, 23);
+            this.button3.TabIndex = 10;
+            this.button3.Text = "打开";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
+            // group_addr
+            // 
+            this.group_addr.Location = new System.Drawing.Point(90, 135);
+            this.group_addr.Name = "group_addr";
+            this.group_addr.Size = new System.Drawing.Size(423, 21);
+            this.group_addr.TabIndex = 9;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(29, 138);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(65, 12);
+            this.label6.TabIndex = 8;
+            this.label6.Text = "数据需求：";
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(534, 99);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 7;
+            this.button2.Text = "打开";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // ans_addr
+            // 
+            this.ans_addr.Location = new System.Drawing.Point(90, 99);
+            this.ans_addr.Name = "ans_addr";
+            this.ans_addr.Size = new System.Drawing.Size(423, 21);
+            this.ans_addr.TabIndex = 6;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(29, 102);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(65, 12);
+            this.label5.TabIndex = 5;
+            this.label5.Text = "标准答案：";
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(534, 63);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 4;
+            this.button1.Text = "打开";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // database_addr
+            // 
+            this.database_addr.Location = new System.Drawing.Point(90, 63);
+            this.database_addr.Name = "database_addr";
+            this.database_addr.Size = new System.Drawing.Size(423, 21);
+            this.database_addr.TabIndex = 3;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(29, 66);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(65, 12);
+            this.label4.TabIndex = 2;
+            this.label4.Text = "数据文件：";
+            // 
+            // subject
+            // 
+            this.subject.FormattingEnabled = true;
+            this.subject.Location = new System.Drawing.Point(90, 26);
+            this.subject.Name = "subject";
+            this.subject.Size = new System.Drawing.Size(121, 20);
+            this.subject.TabIndex = 1;
+            this.subject.SelectedIndexChanged += new System.EventHandler(this.subject_SelectedIndexChanged);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(28, 30);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(65, 12);
+            this.label3.TabIndex = 0;
+            this.label3.Text = "考试科目：";
+            // 
+            // wizardWelcomePage1
+            // 
+            this.wizardWelcomePage1.ContentArea = this.panel1;
+            this.wizardWelcomePage1.Header = "";
+            this.wizardWelcomePage1.Name = "wizardWelcomePage1";
+            this.wizardWelcomePage1.Title = "考试类型";
+            this.wizardWelcomePage1.Visibility = Telerik.WinControls.ElementVisibility.Visible;
+            // 
+            // wizardPage3
+            // 
+            this.wizardPage3.ContentArea = this.panel5;
+            this.wizardPage3.Header = "";
+            this.wizardPage3.Name = "wizardPage3";
+            this.wizardPage3.Title = "科目信息";
+            this.wizardPage3.Visibility = Telerik.WinControls.ElementVisibility.Visible;
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(507, 6);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(75, 23);
+            this.button4.TabIndex = 78;
+            this.button4.Text = "打开";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
+            // zh_addr
+            // 
+            this.zh_addr.Location = new System.Drawing.Point(62, 8);
+            this.zh_addr.Name = "zh_addr";
+            this.zh_addr.Size = new System.Drawing.Size(423, 21);
+            this.zh_addr.TabIndex = 77;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(0, 11);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(67, 13);
+            this.label11.TabIndex = 76;
+            this.label11.Text = "综合分类：";
+            // 
+            // zh_panel2
+            // 
+            this.zh_panel2.Controls.Add(this.label11);
+            this.zh_panel2.Controls.Add(this.zh_addr);
+            this.zh_panel2.Controls.Add(this.button4);
+            this.zh_panel2.Location = new System.Drawing.Point(26, 161);
+            this.zh_panel2.Name = "zh_panel2";
+            this.zh_panel2.Size = new System.Drawing.Size(590, 33);
+            this.zh_panel2.TabIndex = 79;
+            // 
             // MyWizard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -611,26 +651,29 @@
             ((System.ComponentModel.ISupportInitialize)(this.radWizard1)).EndInit();
             this.radWizard1.ResumeLayout(false);
             this.panel3.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            this.panel3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.group_gridView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.basic_gridView)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel5.ResumeLayout(false);
             this.panel5.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.fullmark)).EndInit();
             this.zf_panel.ResumeLayout(false);
             this.zf_panel.PerformLayout();
-            this.zh_panel.ResumeLayout(false);
-            this.zh_panel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.huaxue_dili)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.wuli_lishi)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.shengwu_zhengzhi)).EndInit();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.PartialRight)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.fullmark)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.remark_num)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.popu_num)).EndInit();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.PartialRight)).EndInit();
+            this.zh_panel.ResumeLayout(false);
+            this.zh_panel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.single_fullmark)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.zh_panel2)).EndInit();
+            this.zh_panel2.ResumeLayout(false);
+            this.zh_panel2.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -650,7 +693,7 @@
         private System.Windows.Forms.Panel panel5;
         private System.Windows.Forms.Label label3;
         private Telerik.WinControls.UI.WizardPage wizardPage3;
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridView basic_gridView;
         private System.Windows.Forms.ProgressBar progressBar;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.TextBox group_addr;
@@ -666,12 +709,8 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Panel zf_panel;
         private System.Windows.Forms.Panel zh_panel;
-        private System.Windows.Forms.NumericUpDown huaxue_dili;
-        private System.Windows.Forms.Label label43;
-        private System.Windows.Forms.NumericUpDown wuli_lishi;
-        private System.Windows.Forms.Label label42;
-        private System.Windows.Forms.NumericUpDown shengwu_zhengzhi;
-        private System.Windows.Forms.Label label41;
+        private System.Windows.Forms.NumericUpDown single_fullmark;
+        private System.Windows.Forms.Label sw_zz;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label44;
         private System.Windows.Forms.NumericUpDown PartialRight;
@@ -687,5 +726,13 @@
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.RadioButton Mark_choice;
         private System.Windows.Forms.RadioButton Popu_choice;
+        private System.Windows.Forms.DataGridView group_gridView;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.TextBox zh_addr;
+        private System.Windows.Forms.Label label11;
+        private Telerik.WinControls.UI.RadPanel zh_panel2;
     }
 }
