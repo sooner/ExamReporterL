@@ -33,12 +33,14 @@ namespace ExamReport
         Object oTrue = true;
         Object oFalse = false;
 
+        private Configuration _config;
         DataTable _groups;
         object oClassType = "Excel.Chart.8";
 
         string _exam;
         string _subject;
         string _report_type;
+
 
         ArrayList _totaldata;
         string _addr;
@@ -53,24 +55,30 @@ namespace ExamReport
             _totaldata = totaldata;
             _sdata = sdata;
             _groups = groups;
-            _exam = Utils.exam;
-            _subject = Utils.subject;
-            _report_type = Utils.report_style;
+            
 
             _groups_group = groups_group;
         }
+
+        public void SetConfig(Configuration config)
+        {
+            _config = config;
+            _exam = _config.exam;
+            _subject = _config.subject;
+            _report_type = _config.report_style;
+        }
         public void creating_ZH_QX_word(ArrayList ZH_totaldata, ArrayList ZH_sdata, DataTable ZH_group, Dictionary<string, List<string>> wenli_group)
         {
-            string subject = Utils.subject;
-            object filepath = @Utils.CurrentDirectory + @"\template2.dotx";
+            string subject = _config.subject;
+            object filepath = @_config.CurrentDirectory + @"\template2.dotx";
             //Start Word and create a new document.
-            _addr = Utils.save_address + @"\" + subject + ".docx";
+            _addr = _config.save_address + @"\" + subject + ".docx";
             oWord = new Word.Application();
 
-            oWord.Visible = Utils.isVisible;
+            oWord.Visible = _config.isVisible;
             oDoc = oWord.Documents.Add(ref filepath, ref oMissing,
             ref oMissing, ref oMissing);
-            Utils.WriteFrontPage(oDoc);
+            Utils.WriteFrontPage(_config, oDoc);
 
             insertText(ExamTitle0, "  整体统计分析");
             insertText(ExamTitle1, "总体分析");
@@ -118,20 +126,20 @@ namespace ExamReport
             //    insertChart(getGroupName(ZH_sdata, ZH_sdata.Count - 1, i) + "分数分布图", tempdata.target, "分数", "频率(%)", Excel.XlChartType.xlLineMarkers);
             //    insertSingleGrouptuple(ZH_group.Rows[i]["tz"].ToString().Trim() + "分组分析表", i, ZH_sdata);
             //}
-            insertText(ExamTitle0, " " + Utils.subject.Substring(3) + "统计分析");
+            insertText(ExamTitle0, " " + _config.subject.Substring(3) + "统计分析");
             creating_word_part2();
         }
         public void creating_ZH_word(ArrayList ZH_sdata, DataTable ZH_group, Dictionary<string, List<string>> wenli_group)
         {
-            object filepath = @Utils.CurrentDirectory + @"\template2.dotx";
+            object filepath = @_config.CurrentDirectory + @"\template2.dotx";
             //Start Word and create a new document.
 
             oWord = new Word.Application();
 
-            oWord.Visible = Utils.isVisible;
+            oWord.Visible = _config.isVisible;
             oDoc = oWord.Documents.Add(ref filepath, ref oMissing,
             ref oMissing, ref oMissing);
-            Utils.WriteFrontPage(oDoc);
+            Utils.WriteFrontPage(_config, oDoc);
 
             insertText(ExamTitle0, " 整体统计分析");
             insertText(ExamTitle1, "总体分析");
@@ -179,23 +187,23 @@ namespace ExamReport
             //    insertChart(getGroupName(ZH_sdata, ZH_sdata.Count - 1, i) + "分数分布图", tempdata.target, "分数", "频率(%)", Excel.XlChartType.xlLineMarkers);
             //    insertSingleGrouptuple(ZH_group.Rows[i]["tz"].ToString().Trim() + "分组分析表", i, ZH_sdata);
             //}
-            insertText(ExamTitle0, " " + Utils.subject.Substring(3) + "统计分析");
+            insertText(ExamTitle0, " " + _config.subject.Substring(3) + "统计分析");
             creating_word_part2();
         }
         public void creating_word()
         {
-            object filepath = @Utils.CurrentDirectory + @"\template.dotx";
+            object filepath = @_config.CurrentDirectory + @"\template.dotx";
             //Start Word and create a new document.
 
             oWord = new Word.Application();
 
-            oWord.Visible = Utils.isVisible;
+            oWord.Visible = _config.isVisible;
             oDoc = oWord.Documents.Add(ref filepath, ref oMissing,
             ref oMissing, ref oMissing);
             
 
             object oPageBreak = Microsoft.Office.Interop.Word.WdBreakType.wdPageBreak;
-            if (Utils.WSLG)
+            if (_config.WSLG)
                 creating_word_part3();
             else
                 creating_word_part2();
@@ -205,7 +213,7 @@ namespace ExamReport
         }
         public void creating_word_part3()
         {
-            Utils.WSLG_WriteFrontPage(oDoc);
+            Utils.WSLG_WriteFrontPage(_config, oDoc);
             insertText(ExamTitle1, "总体分析");
             insertTotalTable("    总分分析表", _sdata);
 
@@ -270,11 +278,11 @@ namespace ExamReport
 
             foreach (Word.TableOfContents table in oDoc.TablesOfContents)
                 table.Update();
-            Utils.WSLG_Save(oDoc, oWord);
+            Utils.WSLG_Save(_config, oDoc, oWord);
         }
         public void creating_word_part2()
         {
-            Utils.WriteFrontPage(oDoc);
+            Utils.WriteFrontPage(_config, oDoc);
             insertText(ExamTitle1, "总体分析");
             if (_report_type.Equals("区县"))
                 insertTotalTable("    总分分析表", _totaldata);
@@ -347,7 +355,7 @@ namespace ExamReport
 
             foreach (Word.TableOfContents table in oDoc.TablesOfContents)
                 table.Update();
-            Utils.Save(oDoc, oWord);
+            Utils.Save(_config, oDoc, oWord);
 
         }
 
@@ -602,7 +610,7 @@ namespace ExamReport
             Word.Table table;
             Word.Range range = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
             int col;
-            if (Utils.WSLG)
+            if (_config.WSLG)
                 col = 10;
             else
                 col = 9;
@@ -625,7 +633,7 @@ namespace ExamReport
             table.Cell(1, 7).Range.Text = "标准差";
             table.Cell(1, 8).Range.Text = "差异系数";
             table.Cell(1, 9).Range.Text = "得分率";
-            if(Utils.WSLG)
+            if(_config.WSLG)
                 table.Cell(1, 10).Range.Text = "鉴别指数";
 
             for (int i = 0; i < sdata.Count; i++)
@@ -645,7 +653,7 @@ namespace ExamReport
                 table.Cell(i + 2, 7).Range.Text = string.Format("{0:F2}", data.Rows[total]["stDev"]);
                 table.Cell(i + 2, 8).Range.Text = string.Format("{0:F2}", data.Rows[total]["dfactor"]);
                 table.Cell(i + 2, 9).Range.Text = string.Format("{0:F2}", data.Rows[total]["difficulty"]);
-                if (Utils.WSLG)
+                if (_config.WSLG)
                 {
                     if(isGroup)
                         table.Cell(i + 2, 10).Range.Text = string.Format("{0:F2}", ((WSLG_partitiondata)partition).group_discriminant[total]);
@@ -745,7 +753,7 @@ namespace ExamReport
             Word.Table table;
             Word.Range range = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
             int col;
-            if (Utils.WSLG)
+            if (_config.WSLG)
                 col = 11;
             else
                 col = 10;
@@ -769,7 +777,7 @@ namespace ExamReport
             table.Cell(1, 8).Range.Text = "标准差";
             table.Cell(1, 9).Range.Text = "差异系数";
             table.Cell(1, 10).Range.Text = "得分率";
-            if(Utils.WSLG)
+            if(_config.WSLG)
                 table.Cell(1, 11).Range.Text = "鉴别指数";
 
             for (int i = 0; i < count; i++)
@@ -788,7 +796,7 @@ namespace ExamReport
                     table.Cell(tablerow, 9).Range.Text = string.Format("{0:F2}", data.groups_analysis.Rows[i]["dfactor"]);
                     table.Cell(tablerow, 10).Range.Text = string.Format("{0:F2}", data.groups_analysis.Rows[i]["difficulty"]);
                     
-                    if(Utils.WSLG)
+                    if(_config.WSLG)
                         table.Cell(tablerow, 11).Range.Text = string.Format("{0:F2}", ((WSLG_partitiondata)data).group_discriminant[i]);
                     tablerow++;
                 }
@@ -808,7 +816,7 @@ namespace ExamReport
             Word.Table table;
             Word.Range range = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
             int col;
-            if (Utils.WSLG)
+            if (_config.WSLG)
                 col = 11;
             else
                 col = 10;
@@ -832,7 +840,7 @@ namespace ExamReport
             table.Cell(1, 8).Range.Text = "标准差";
             table.Cell(1, 9).Range.Text = "差异系数";
             table.Cell(1, 10).Range.Text = "得分率";
-            if(Utils.WSLG)
+            if(_config.WSLG)
                 table.Cell(1, 11).Range.Text = "鉴别指数";
 
             for (int i = 0; i < count; i++)
@@ -850,7 +858,7 @@ namespace ExamReport
                     table.Cell(tablerow, 8).Range.Text = string.Format("{0:F2}", data.total_analysis.Rows[i]["stDev"]);
                     table.Cell(tablerow, 9).Range.Text = string.Format("{0:F2}", data.total_analysis.Rows[i]["dfactor"]);
                     table.Cell(tablerow, 10).Range.Text = string.Format("{0:F2}", data.total_analysis.Rows[i]["difficulty"]);
-                    if(Utils.WSLG)
+                    if(_config.WSLG)
                         table.Cell(tablerow, 11).Range.Text = string.Format("{0:F2}", ((WSLG_partitiondata)data).total_discriminant[i]);
                     tablerow++;
                 }
@@ -932,7 +940,7 @@ namespace ExamReport
         }
         public void insertChart(string title, DataTable dt, string x_axis, string y_axis, object type, decimal fullmark)
         {
-            if (dt.Columns.Count > 2 || Utils.OnlyQZT)
+            if (dt.Columns.Count > 2 || _config.OnlyQZT)
             {
                 ZedGraph.createMultipleCuve(dt, "分数", y_axis, Convert.ToDouble(dt.Compute("Min([" + dt.Columns[0].ColumnName + "])", "")), Convert.ToDouble(dt.Compute("Max([" + dt.Columns[0].ColumnName + "])", "")), fullmark);
             }
@@ -947,7 +955,7 @@ namespace ExamReport
 
                 }
 
-                ZedGraph.createDiffCuve(data, Convert.ToDouble(dt.Compute("Min([" + dt.Columns[0].ColumnName + "])", "")), Convert.ToDouble(dt.Compute("Max([" + dt.Columns[0].ColumnName + "])", "")));
+                ZedGraph.createDiffCuve(_config, data, Convert.ToDouble(dt.Compute("Min([" + dt.Columns[0].ColumnName + "])", "")), Convert.ToDouble(dt.Compute("Max([" + dt.Columns[0].ColumnName + "])", "")));
             }
             
             Word.Range dist_rng = oDoc.Bookmarks.get_Item(oEndOfDoc).Range;
@@ -1024,7 +1032,7 @@ namespace ExamReport
             Word.Table table;
             Word.Range range = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
             int count;
-            if (Utils.WSLG)
+            if (_config.WSLG)
                 count = 10;
             else
                 count = 9;
@@ -1047,7 +1055,7 @@ namespace ExamReport
             table.Cell(1, 7).Range.Text = "标准差";
             table.Cell(1, 8).Range.Text = "差异系数";
             table.Cell(1, 9).Range.Text = "得分率";
-            if(Utils.WSLG)
+            if(_config.WSLG)
                 table.Cell(1, 10).Range.Text = "鉴别指数";
 
             for (int i = 0; i < totaldata.Count; i++)
@@ -1061,7 +1069,7 @@ namespace ExamReport
                 table.Cell(i + 2, 7).Range.Text = string.Format("{0:F2}", ((PartitionData)totaldata[i]).stDev);
                 table.Cell(i + 2, 8).Range.Text = string.Format("{0:F2}", ((PartitionData)totaldata[i]).Dfactor);
                 table.Cell(i + 2, 9).Range.Text = string.Format("{0:F2}", ((PartitionData)totaldata[i]).difficulty);
-                if(Utils.WSLG)
+                if(_config.WSLG)
                     table.Cell(i + 2, 10).Range.Text = string.Format("{0:F2}", ((WSLG_partitiondata)totaldata[i]).discriminant);
             }
 

@@ -1,15 +1,10 @@
-System.InvalidCastException: 无法将类型为“System.Int32”的对象强制转换为类型“System.String”。
-   在 System.Data.DataRowExtensions.UnboxT`1.ReferenceField(Object value)
-   在 System.Data.DataRowExtensions.Field[T](DataRow row, String columnName)
-   在 ExamReport.mainform.<Grid_load>b__1(DataRow c) 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\MainRadForm.cs:行号 79
-   在 System.Linq.Enumerable.WhereSelectEnumerableIterator`2.MoveNext()
-   在 ExamReport.IEnumerableExtension.ToDataTable[T](IEnumerable`1 items) 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\IEnumerableExtension.cs:行号 23
-   在 ExamReport.mainform.Grid_load() 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\MainRadForm.cs:行号 79
-   在 ExamReport.mainform..ctor() 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\MainRadForm.cs:行号 34
-   在 ExamReport.Program.Main() 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\Program.cs:行号 21
-   在 System.AppDomain._nExecuteAssembly(RuntimeAssembly assembly, String[] args)
-   在 System.AppDomain.ExecuteAssembly(String assemblyFile, Evidence assemblySecurity, String[] args)
-   在 Microsoft.VisualStudio.HostingProcess.HostProc.RunUsersAssembly()
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ExamReport.ZedGraph.createCuveAndBar(Double[] cuveData, Double[][] barData, Double maxSource) 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\ZedGraph.cs:行号 501
+   在 ExamReport.WordCreator.insertTotalChart(String title, WordData sdata) 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\WordCreator.cs:行号 2012
+   在 ExamReport.WordCreator.creating_word() 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\WordCreator.cs:行号 1122
+   在 ExamReport.Analysis.gk_zt_process(MetaData mdata) 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\Analysis.cs:行号 59
+   在 ExamReport.Analysis.start() 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\Analysis.cs:行号 121
+   在 ExamReport.Analysis.gk_zt_start() 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\Analysis.cs:行号 32
    在 System.Threading.ThreadHelper.ThreadStart_Context(Object state)
    在 System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
    在 System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)

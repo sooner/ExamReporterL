@@ -28,7 +28,7 @@ namespace ExamReport
         private object ExamBodyText = "ExamBodyText";
         private object TableContent = "TableContent";
         private object TableContent2 = "TableContent2";
-
+        private Configuration _config;
         object oMissing = System.Reflection.Missing.Value;
         object oEndOfDoc = "\\endofdoc"; /* \endofdoc is a predefined bookmark */
         Word._Application oWord;
@@ -44,28 +44,30 @@ namespace ExamReport
         object oClassType = "Excel.Chart.8";
         string _addr;
             
-        public WordCreator(WordData sdata)
+        public WordCreator(WordData sdata, Configuration config)
         {
             _sdata = sdata;
+            _config = config;
         }
-        public WordCreator(WordData sdata, WordData ZH_data)
+        public WordCreator(WordData sdata, WordData ZH_data, Configuration config)
         {
             _sdata = sdata;
             _ZH_data = ZH_data;
+            _config = config;
             isZonghe = true;
 
         }
         public void creating_HK_word()
         {
-            string subject = Utils.subject;
+            string subject = _config.subject;
             HK_worddata data = (HK_worddata)_sdata;
-            object filepath = @Utils.CurrentDirectory + @"\template.dotx";
-            _addr = Utils.save_address + @"\" + Utils.subject + ".docx";
+            object filepath = @_config.CurrentDirectory + @"\template.dotx";
+            _addr = _config.save_address + @"\" + _config.subject + ".docx";
             oWord = new Word.Application();
-            oWord.Visible = Utils.isVisible;
+            oWord.Visible = _config.isVisible;
             oDoc = oWord.Documents.Add(ref filepath, ref oMissing,
             ref oMissing, ref oMissing);
-            Utils.WriteFrontPage(oDoc);
+            Utils.WriteFrontPage(_config, oDoc);
 
             object oPageBreak = Microsoft.Office.Interop.Word.WdBreakType.wdPageBreak;
             insertText(ExamTitle1, "总体分析");
@@ -138,7 +140,7 @@ namespace ExamReport
             oDoc.Characters.Last.InsertBreak(oPagebreak);
             foreach (Word.TableOfContents table in oDoc.TablesOfContents)
                 table.Update();
-            Utils.Save(oDoc, oWord);
+            Utils.Save(_config, oDoc, oWord);
             
         }
       
@@ -286,7 +288,7 @@ namespace ExamReport
 
             }
 
-            ZedGraph.createDiffCuve(data, Convert.ToDouble(dt.Compute("Min([" + dt.Columns[0].ColumnName + "])", "")), Convert.ToDouble(dt.Compute("Max([" + dt.Columns[0].ColumnName + "])", "")));
+            ZedGraph.createDiffCuve(_config, data, Convert.ToDouble(dt.Compute("Min([" + dt.Columns[0].ColumnName + "])", "")), Convert.ToDouble(dt.Compute("Max([" + dt.Columns[0].ColumnName + "])", "")));
             Word.Range dist_rng = oDoc.Bookmarks.get_Item(oEndOfDoc).Range;
             dist_rng.Paste();
             Utils.mutex_clipboard.ReleaseMutex();
@@ -368,7 +370,7 @@ namespace ExamReport
             double[] cuvedata = new double[2];
             cuvedata[0] = Convert.ToDouble(_sdata.group_analysis.Rows[group_num]["avg"]);
             cuvedata[1] = Convert.ToDouble(_sdata.group_analysis.Rows[group_num]["standardErr"]);
-            ZedGraph.createCuveAndBar(cuvedata, data, Convert.ToDouble(_sdata.group_analysis.Rows[group_num]["max"]));
+            ZedGraph.createCuveAndBar(_config, cuvedata, data, Convert.ToDouble(_sdata.group_analysis.Rows[group_num]["max"]));
             Word.Range dist_rng = oDoc.Bookmarks.get_Item(oEndOfDoc).Range;
             dist_rng.Paste();
             Utils.mutex_clipboard.ReleaseMutex();
@@ -1033,20 +1035,20 @@ namespace ExamReport
         }
         public void creating_word()
         {
-            string subject = Utils.subject;
+            string subject = _config.subject;
             object filepath;
             if(isZonghe)
-                filepath = @Utils.CurrentDirectory + @"\template2.dotx";
+                filepath = @_config.CurrentDirectory + @"\template2.dotx";
             else
-                filepath = @Utils.CurrentDirectory + @"\template.dotx";
+                filepath = @_config.CurrentDirectory + @"\template.dotx";
             //Start Word and create a new document.
-            _addr = Utils.save_address + @"\" + Utils.subject + ".docx";
+            _addr = _config.save_address + @"\" + _config.subject + ".docx";
             oWord = new Word.Application();
 
-            oWord.Visible = Utils.isVisible;
+            oWord.Visible = _config.isVisible;
             oDoc = oWord.Documents.Add(ref filepath, ref oMissing,
             ref oMissing, ref oMissing);
-            Utils.WriteFrontPage(oDoc);
+            Utils.WriteFrontPage(_config, oDoc);
             
             object oPageBreak = Microsoft.Office.Interop.Word.WdBreakType.wdPageBreak;
             
@@ -1094,7 +1096,7 @@ namespace ExamReport
                 //    insertGroupDiffChart(group_dr["number"].ToString().Trim() + "难度曲线图", group_dt.group_difficulty);
                 //    insertGroupSingleAnalysis(group_dr["number"].ToString().Trim() + "分组分析表", group_dt.group_detail);
                 //}
-                insertText(ExamTitle0, Utils.subject.Substring(3) + "统计分析");
+                insertText(ExamTitle0, _config.subject.Substring(3) + "统计分析");
             }
             
             Word.Range first = oDoc.Paragraphs.Add(ref oMissing).Range;
@@ -1284,7 +1286,7 @@ namespace ExamReport
             #endregion
             foreach(Word.TableOfContents table in oDoc.TablesOfContents)
                 table.Update();
-            Utils.Save(oDoc, oWord);
+            Utils.Save(_config, oDoc, oWord);
             
 
         }
@@ -1350,7 +1352,7 @@ namespace ExamReport
 
             }
 
-            ZedGraph.createDiffCuve(data, Convert.ToDouble(dt.Compute("Min([" + dt.Columns[0].ColumnName + "])", "")), Convert.ToDouble(dt.Compute("Max([" + dt.Columns[0].ColumnName + "])", "")));
+            ZedGraph.createDiffCuve(_config, data, Convert.ToDouble(dt.Compute("Min([" + dt.Columns[0].ColumnName + "])", "")), Convert.ToDouble(dt.Compute("Max([" + dt.Columns[0].ColumnName + "])", "")));
             Word.Range dist_rng = oDoc.Bookmarks.get_Item(oEndOfDoc).Range;
             dist_rng.Paste();
             Utils.mutex_clipboard.ReleaseMutex();
@@ -1661,7 +1663,7 @@ namespace ExamReport
 
             }
 
-            ZedGraph.createDiffCuve(data, Convert.ToDouble(dt.Compute("Min([" + dt.Columns[0].ColumnName + "])", "")), Convert.ToDouble(dt.Compute("Max([" + dt.Columns[0].ColumnName + "])", "")));
+            ZedGraph.createDiffCuve(_config, data, Convert.ToDouble(dt.Compute("Min([" + dt.Columns[0].ColumnName + "])", "")), Convert.ToDouble(dt.Compute("Max([" + dt.Columns[0].ColumnName + "])", "")));
             Word.Range dist_rng = oDoc.Bookmarks.get_Item(oEndOfDoc).Range;
             dist_rng.Paste();
             Utils.mutex_clipboard.ReleaseMutex();
@@ -1734,7 +1736,7 @@ namespace ExamReport
         }
         public void insertMultipleChart(string title, DataTable dt, string x_axis, string y_axis, object type)
         {
-            ZedGraph.createMultipleChoiceCuve(dt, x_axis, y_axis);
+            ZedGraph.createMultipleChoiceCuve(_config, dt, x_axis, y_axis);
             Word.Range dist_rng = oDoc.Bookmarks.get_Item(oEndOfDoc).Range;
             dist_rng.Paste();
             Utils.mutex_clipboard.ReleaseMutex();
@@ -1984,7 +1986,7 @@ namespace ExamReport
             dr6["c"] = 0.9m;
             dr6["c1"] = 0.8m;
             dt.Rows.Add(dr6);
-            ZedGraph.createMultipleChoiceCuve(dt, "分数", "难度(%)人民");
+            ZedGraph.createMultipleChoiceCuve(_config, dt, "分数", "难度(%)人民");
             Word.Range dist_rng = doc.Bookmarks.get_Item(oEndOfDoc).Range;
             dist_rng.Paste();
             doc.Characters.Last.InsertBreak(Microsoft.Office.Interop.Word.WdBreakType.wdPageBreak);
@@ -2007,7 +2009,7 @@ namespace ExamReport
             double[] cuvedata = new double[2];
             cuvedata[0] = Convert.ToDouble(sdata.avg);
             cuvedata[1] = Convert.ToDouble(sdata.stDev);
-            ZedGraph.createCuveAndBar(cuvedata, data, Convert.ToDouble(sdata.max));
+            ZedGraph.createCuveAndBar(_config, cuvedata, data, Convert.ToDouble(sdata.max));
             Word.Range dist_rng = oDoc.Bookmarks.get_Item(oEndOfDoc).Range;
             dist_rng.Paste();
             Utils.mutex_clipboard.ReleaseMutex();

@@ -86,6 +86,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Analysis.cs" />
+    <Compile Include="Configuration.cs" />
     <Compile Include="Config\SchoolCodeConfig.cs" />
     <Compile Include="DataTableExtension.cs" />
     <Compile Include="DBHelper.cs" />

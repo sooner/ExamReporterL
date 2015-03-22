@@ -16,6 +16,7 @@ namespace ExamReport
         DataTable _groups_table;
         DataTable _standard_ans;
         DataTable _groups_ans;
+        public Configuration _config;
         public WordData result;
         decimal _fullmark;
         decimal PHN;
@@ -428,15 +429,15 @@ namespace ExamReport
 
                 if (groups_row["number"].ToString().Equals("生物") || groups_row["number"].ToString().Equals("政治"))
                 {
-                    groups_row["fullmark"] = Utils.shengwu_zhengzhi;
+                    groups_row["fullmark"] = _config.shengwu_zhengzhi;
                 }
                 else if (groups_row["number"].ToString().Equals("物理") || groups_row["number"].ToString().Equals("历史"))
                 {
-                    groups_row["fullmark"] = Utils.wuli_lishi;
+                    groups_row["fullmark"] = _config.wuli_lishi;
                 }
                 else if (groups_row["number"].ToString().Equals("化学") || groups_row["number"].ToString().Equals("地理"))
                 {
-                    groups_row["fullmark"] = Utils.huaxue_dili;
+                    groups_row["fullmark"] = _config.huaxue_dili;
                 }
                 else
                 {
@@ -1074,11 +1075,11 @@ namespace ExamReport
 
                 
             }
-            if(!(isZonghe || Utils.report_style.Equals("学校")) )
+            if(!(isZonghe || _config.report_style.Equals("学校")) )
                 group_correlation();
             if(isZonghe)
                 group_mark(_basic_data);
-            else if(!(Utils.subject.Contains("理综") || Utils.subject.Contains("文综")))
+            else if(!(_config.subject.Contains("理综") || _config.subject.Contains("文综")))
                 group_mark(_basic_data);
             return true;
         }
@@ -1142,7 +1143,7 @@ namespace ExamReport
 
         public void xz_group_analysis(DataTable dt, int count, List<DataTable> xz_total, List<List<WordData.single_data>> xz_single)
         {
-            //dt.SeperateGroups(Utils.group_type, _groupnum);
+            //dt.SeperateGroups(_config.group_type, _groupnum);
             DataTable xz_total_analysis = result.total_analysis.Clone();
             Regex number = new Regex("^[Tt]\\d");
             #region total analysis table process
@@ -2190,10 +2191,10 @@ namespace ExamReport
                            name = grp.Key,
                            max = grp.Max(row => row.Field<decimal>("totalmark"))
                        };
-            Utils.GroupMark.Clear();
+            _config.GroupMark.Clear();
             foreach (var temp in mark)
             {
-                Utils.GroupMark.Add(temp.max);
+                _config.GroupMark.Add(temp.max);
             }
         }
     }

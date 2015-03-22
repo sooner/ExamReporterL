@@ -51,6 +51,12 @@ namespace ExamReport
                             case "wz":
                                 dr[dc] = "文综";
                                 break;
+                            case "sxl":
+                                dr[dc] = "数学理";
+                                break;
+                            case "sxw":
+                                dr[dc] = "数学文";
+                                break;
                             default:
                                 break;
                         }

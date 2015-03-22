@@ -21,6 +21,8 @@ namespace ExamReport
         private object TableContent = "TableContent";
         private object TableContent2 = "TableContent2";
 
+        private Configuration _config;
+
         object oMissing = System.Reflection.Missing.Value;
         object oEndOfDoc = "\\endofdoc"; /* \endofdoc is a predefined bookmark */
         Word._Application oWord;
@@ -53,7 +55,7 @@ namespace ExamReport
             oWord.Visible = Utils.isVisible;
             oDoc = oWord.Documents.Add(ref filepath, ref oMissing,
             ref oMissing, ref oMissing);
-            Utils.WriteFrontPage(oDoc, _schoolname);
+            Utils.WriteFrontPage(_config, oDoc, _schoolname);
 
             
             
@@ -87,7 +89,7 @@ namespace ExamReport
 
             foreach (Word.TableOfContents table in oDoc.TablesOfContents)
                 table.Update();
-            Utils.Save(oDoc, oWord, _schoolname);
+            Utils.Save(_config, oDoc, oWord, _schoolname);
         }
 
         public void insertTotalFreqTable(string title, DataTable data)
@@ -145,7 +147,7 @@ namespace ExamReport
             oWord.Visible = Utils.isVisible;
             oDoc = oWord.Documents.Add(ref filepath, ref oMissing,
             ref oMissing, ref oMissing);
-            Utils.WriteFrontPage(oDoc);
+            Utils.WriteFrontPage(_config, oDoc);
 
             insertText(ExamTitle1, "试卷整体分析");
             insertTotalTable_final("    试卷总分分析表", data);
@@ -173,7 +175,7 @@ namespace ExamReport
 
             foreach (Word.TableOfContents table in oDoc.TablesOfContents)
                 table.Update();
-            Utils.Save(oDoc, oWord);
+            Utils.Save(_config, oDoc, oWord);
         }
         void insertFreqTable_final(string title, ZF_statistic temp)
         {
@@ -287,7 +289,7 @@ namespace ExamReport
             oWord.Visible = Utils.isVisible;
             oDoc = oWord.Documents.Add(ref filepath, ref oMissing,
             ref oMissing, ref oMissing);
-            Utils.WriteFrontPage(oDoc);
+            Utils.WriteFrontPage(_config, oDoc);
 
             List<ZF_statistic> temp;
             if (data.Count > 2)
@@ -355,7 +357,7 @@ namespace ExamReport
 
             foreach (Word.TableOfContents table in oDoc.TablesOfContents)
                 table.Update();
-            Utils.Save(oDoc, oWord);
+            Utils.Save(_config, oDoc, oWord);
         }
         public void insertFreqTable(string title, List<ZF_statistic> data, bool isWenke)
         {
@@ -656,7 +658,7 @@ namespace ExamReport
 
                 }
 
-                ZedGraph.createDiffCuve(data, Convert.ToDouble(dt.Compute("Min([" + dt.Columns[0].ColumnName + "])", "")), Convert.ToDouble(dt.Compute("Max([" + dt.Columns[0].ColumnName + "])", "")));
+                ZedGraph.createDiffCuve(_config, data, Convert.ToDouble(dt.Compute("Min([" + dt.Columns[0].ColumnName + "])", "")), Convert.ToDouble(dt.Compute("Max([" + dt.Columns[0].ColumnName + "])", "")));
             }
             Word.Range dist_rng = oDoc.Bookmarks.get_Item(oEndOfDoc).Range;
             dist_rng.Paste();

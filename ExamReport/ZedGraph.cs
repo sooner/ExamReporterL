@@ -18,15 +18,15 @@ namespace ExamReport
         public static List<SymbolType> mySymbol = new List<SymbolType> { SymbolType.Circle, SymbolType.Square, SymbolType.Diamond, SymbolType.Star, SymbolType.Plus, SymbolType.Triangle, SymbolType.HDash };
         public static List<myStyle> myDashStyle = new List<System.Drawing.Drawing2D.DashStyle> { myStyle.Solid, myStyle.Dash, myStyle.DashDot, myStyle.DashDotDot, myStyle.Custom, myStyle.Dot, myStyle.Custom, myStyle.Dash, myStyle.DashDot };
         public static List<float> myWidth = new List<float> { 2, 5, 2, 5, 2, 5, 5, 2, 5, 2, 5, 2};
-        public static void createDiffCuve(double[][] cuveData, double minX, double maxX)
+        public static void createDiffCuve(Configuration config, double[][] cuveData, double minX, double maxX)
         {
-            createCuve("分数", "难度", cuveData, minX, Convert.ToDouble(Utils.fullmark), 1.0);
+            createCuve(config, "分数", "难度", cuveData, minX, Convert.ToDouble(config.fullmark), 1.0);
         }
-        public static void createMultipleChoiceCuve(DataTable dt, string xStr, string yStr)
+        public static void createMultipleChoiceCuve(Configuration config, DataTable dt, string xStr, string yStr)
         {
             ZedGraphControl zgc = new ZedGraphControl();
             GraphPane myPane = zgc.GraphPane;
-            if (Utils.exam.Equals("会考"))
+            if (config.exam.Equals("会考"))
             {
                 zgc.Width = 518;
                 zgc.Height = 290;
@@ -207,12 +207,12 @@ namespace ExamReport
             Clipboard.Clear();
             Clipboard.SetImage(sourceBitmap);
         }
-        public static void createCuve(string xStr, string yStr, double[][] init_cuveData, double minX, double maxX, double maxY)
+        public static void createCuve(Configuration config, string xStr, string yStr, double[][] init_cuveData, double minX, double maxX, double maxY)
         {
 
             ZedGraphControl zgc = new ZedGraphControl();
             GraphPane myPane = zgc.GraphPane;
-            if (Utils.exam.Equals("会考"))
+            if (config.exam.Equals("会考"))
             {
                 zgc.Width = 523;
                 zgc.Height = 267;
@@ -223,10 +223,10 @@ namespace ExamReport
                 zgc.Height = 271;
             }
             double[][] cuveData;
-            if(Utils.smooth_degree <= 0)
+            if(config.smooth_degree <= 0)
                 cuveData = init_cuveData;
             else
-                cuveData = SmoothData(init_cuveData, Utils.smooth_degree);
+                cuveData = SmoothData(init_cuveData, config.smooth_degree);
 
             // Set the title and axis labels
             myPane.Title.Text = " ";
@@ -315,9 +315,9 @@ namespace ExamReport
             myPane.GraphObjList.Add(line);
             
 
-            if (yStr.Equals("难度") && Utils.GroupMark.Count > 0)
+            if (yStr.Equals("难度") && config.GroupMark.Count > 0)
             {
-                foreach (decimal temp in Utils.GroupMark)
+                foreach (decimal temp in config.GroupMark)
                 {
                     LineObj line1 = new LineObj(Convert.ToDouble(temp), 0.0, Convert.ToDouble(temp), maxY);
                     line1.Line.Style = System.Drawing.Drawing2D.DashStyle.Custom;
@@ -494,11 +494,11 @@ namespace ExamReport
         /// 折线图+柱状图的生成
         /// </summary>
         /// <param name="cuveBmpPath">图片的路径 不包括后缀 需要拼接</param>
-        public static void createCuveAndBar(double[] cuveData, double[][] barData, double maxSource)
+        public static void createCuveAndBar(Configuration config, double[] cuveData, double[][] barData, double maxSource)
         {
             ZedGraphControl zgc = new ZedGraphControl();
             //图大小设置
-            if (Utils.exam.Equals("会考"))
+            if (config.exam.Equals("会考"))
             {
                 zgc.Width = 523;
                 zgc.Height = 267;

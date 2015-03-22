@@ -71,8 +71,8 @@ namespace test_statistic
         public void testcaseTest()
         {
             WordData sdata = null; // TODO: Initialize to an appropriate value
-            WordCreator target = new WordCreator(sdata); // TODO: Initialize to an appropriate value
-            target.testcase();
+            //WordCreator target = new WordCreator(sdata); // TODO: Initialize to an appropriate value
+            //target.testcase();
             Assert.Inconclusive("A method that does not return a value cannot be verified.");
         }
 
@@ -83,8 +83,8 @@ namespace test_statistic
         public void insertTestTest()
         {
             WordData sdata = null; // TODO: Initialize to an appropriate value
-            WordCreator target = new WordCreator(sdata); // TODO: Initialize to an appropriate value
-            target.insertTest();
+            //WordCreator target = new WordCreator(sdata); // TODO: Initialize to an appropriate value
+            //target.insertTest();
             Assert.Inconclusive("A method that does not return a value cannot be verified.");
         }
     }

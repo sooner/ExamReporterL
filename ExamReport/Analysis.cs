@@ -18,9 +18,45 @@ namespace ExamReport
         public string qx_code;
         public mainform _form;
         public string _exam;
+        public string save_address;
+        public string CurrentDirectory;
+        public bool isVisible;
         public Analysis(mainform form)
         {
             _form = form;
+        }
+        public void gk_zt_start()
+        {
+            exam_type = "gk_zt";
+            _exam = "gk";
+            start();
+        }
+        public Configuration initConfig(string sub, string report, string exam)
+        {
+            Configuration config = new Configuration();
+            config.subject = sub;
+            config.report_style = report;
+            config.exam = exam;
+            config.isVisible = isVisible;
+            config.save_address = save_address;
+            config.CurrentDirectory = CurrentDirectory;
+            return config;
+        }
+        public void gk_zt_process(MetaData mdata)
+        {
+            Configuration config = initConfig(mdata._sub, "总体", "高考");
+            
+            WordData data = new WordData(mdata.groups_group);
+            _form.ShowPro("gk_zt", 1, mdata.log_name + "数据分析中...");
+            
+            Total_statistic stat = new Total_statistic(data, mdata.basic, mdata._fullmark, mdata.ans, mdata.group, mdata.grp, mdata._group_num);
+            stat._config = config;
+            stat.statistic_process(false);
+            if (mdata.basic.Columns.Contains("XZ"))
+                stat.xz_postprocess(mdata.xz);
+            _form.ShowPro("gk_zt", 1, mdata.log_name + "文档生成中...");
+            WordCreator create = new WordCreator(data, config);
+            create.creating_word();
         }
         public void zk_zt_start()
         {
@@ -30,14 +66,16 @@ namespace ExamReport
         }
         public void zk_zt_process(MetaData mdata)
         {
+            Configuration config = initConfig(mdata._sub, "总体", "中考");
             WordData result = new WordData(mdata.groups_group);
             _form.ShowPro("zk_zt", 1, mdata.log_name + "数据分析中...");
             Total_statistic stat = new Total_statistic(result, mdata.basic, mdata._fullmark, mdata.ans, mdata.group, mdata.grp, mdata._group_num);
+            stat._config = config;
             stat.statistic_process(false);
             if (mdata.basic.Columns.Contains("XZ"))
                 stat.xz_postprocess(mdata.xz);
             _form.ShowPro("zk_zt", 1, mdata.log_name + "文档生成中...");
-            WordCreator creator = new WordCreator(result);
+            WordCreator creator = new WordCreator(result, config);
             creator.creating_word();
         }
         public void start()
@@ -78,6 +116,9 @@ namespace ExamReport
                             mdata.get_CJ_data(cj_addr);
                             mdata.get_QX_data(qx_addr);
                             zk_qx_process(mdata);
+                            break;
+                        case "gk_zt":
+                            gk_zt_process(mdata);
                             break;
                         default:
                             break;

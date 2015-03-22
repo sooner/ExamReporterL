@@ -224,8 +224,8 @@ namespace ExamReport
                 if (db._basic_data.Columns.Contains("XZ"))
                     stat.xz_postprocess(ans.xz_th);
                 form.ShowPro(70, 4);
-                WordCreator creator = new WordCreator(result);
-                creator.creating_word();
+                //WordCreator creator = new WordCreator(result);
+                //creator.creating_word();
             }
             else if (report_style.Equals("区县"))
             {
@@ -290,8 +290,8 @@ namespace ExamReport
             stat.statistic_process(false);
             stat.HK_postprocess(hk_hierarchy);
             form.ShowPro(70, 4);
-            WordCreator create = new WordCreator(result);
-            create.creating_HK_word();
+            //WordCreator create = new WordCreator(result);
+            //create.creating_HK_word();
 
 
         }
@@ -482,8 +482,8 @@ namespace ExamReport
                     Total_statistic single_stat = new Total_statistic(single, db.zh_single_data, sub_fullmark, wenli_standard, db._group_data, groups.dt, db._group_num);
                     single_stat.statistic_process(false);
                     form.ShowPro(70, 4);
-                    WordCreator create = new WordCreator(single, total);
-                    create.creating_word();
+                    //WordCreator create = new WordCreator(single, total);
+                    //create.creating_word();
                 }
                 else if (report_style.Equals("两类示范校"))
                 {
@@ -712,8 +712,8 @@ namespace ExamReport
                     if (db._basic_data.Columns.Contains("XZ"))
                         stat.xz_postprocess(ans.xz_th);
                     form.ShowPro(70, 4);
-                    WordCreator create = new WordCreator(data);
-                    create.creating_word();
+                    //WordCreator create = new WordCreator(data);
+                    //create.creating_word();
                     if (subject.Equals("语文") || subject.Equals("英语"))
                     {
                         form.ShowPro(80, 6);

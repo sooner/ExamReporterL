@@ -99,7 +99,7 @@ namespace test_statistic
             Total_statistic stat = new Total_statistic(result, target._basic_data, 100.0m, ans.dt, target._group_data, groups.dt, 7);
             stat.statistic_process(false);
             stat.HK_postprocess(hierarchy);
-            WordCreator create = new WordCreator(result);
+            //WordCreator create = new WordCreator(result);
             //create.creating_HK_word("语文", "");
             Assert.AreEqual(expected, actual);
             Assert.Inconclusive("Verify the correctness of this test method.");
