@@ -43,6 +43,9 @@ namespace ExamReport
         public static decimal wuli_lishi;
         public static decimal huaxue_dili;
 
+        public static string[] ywyy_combo = new string[] { "文理报告", "类型报告", "两者均有"};
+        public static string[] zh_combo = new string[] { "总体总分相关", "科目总分相关" };
+
         public static Mutex mutex_clipboard = new Mutex();
 
         public static string ZK_title_1 = "北京市高级中等学校招生考试";
@@ -532,6 +535,26 @@ namespace ExamReport
                     return "";
             }
         }
+        public static bool is_gk_zh(string exam, string sub)
+        {
+            if (exam.Equals("高考") || exam.Equals("gk"))
+            {
+                switch (sub)
+                {
+                    case "化学":
+                    case "物理":
+                    case "生物":
+                    case "政治":
+                    case "地理":
+                    case "历史":
+                        return true;
+                        
+                    default:
+                        return false;
+                }
+            }
+            return false;
+        }
         public static string get_tablename(string year, string exam, string sub)
         {
             return year + "_" + exam + "_" + sub;
@@ -615,6 +638,5 @@ namespace ExamReport
             dbfConnection.Close();
         }
 
-        
     }
 }

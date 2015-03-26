@@ -22,13 +22,20 @@ namespace ExamReport
         public int _group_num;
 
         public List<ArrayList> CJ_list;
-        public List<ArrayList> QX_list;
+        public List<ArrayList> QXSF_list;
+        public List<ArrayList> SF_list;
 
         public DataTable ans;
         public DataTable grp;
 
         public DataTable basic;
         public DataTable group;
+
+        public DataTable zh_basic;
+        public DataTable zh_group;
+
+        public DataTable zh_ans;
+        public DataTable zh_grp;
 
         public List<string> xz;
         public Dictionary<string, List<string>> groups_group;
@@ -117,14 +124,17 @@ namespace ExamReport
                     return ZK_database.GroupType.population;
             }
         }
-
+        public void get_SF_data(string addr)
+        {
+            SF_list = get_excel_data(addr);
+        }
         public void get_CJ_data(string addr)
         {
             CJ_list = get_excel_data(addr);
         }
-        public void get_QX_data(string addr)
+        public void get_QXSF_data(string addr)
         {
-            QX_list = get_excel_data(addr);
+            QXSF_list = get_excel_data(addr);
         }
         public List<ArrayList> get_excel_data(string addr)
         {
@@ -150,6 +160,19 @@ namespace ExamReport
         public void get_group_data()
         {
             group = get_mysql_table(Utils.get_group_tablename(_year, _exam, _sub));
+        }
+
+        public void get_zh_basic_data()
+        {
+            zh_basic = get_mysql_table("zh_" + Utils.get_basic_tablename(_year, _exam, _sub));
+        }
+        public void get_zh_group_data()
+        {
+            zh_group = get_mysql_table("zh_" + Utils.get_group_tablename(_year, _exam, _sub));
+        }
+        public void get_zh_ans()
+        {
+
         }
         public DataTable get_mysql_table(string name)
         {

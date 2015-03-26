@@ -36,3 +36,17 @@ D:\project\ExamReporterL\ExamReporterL\test_statistic\bin\Debug\ExamReport_Acces
 D:\project\ExamReporterL\ExamReporterL\test_statistic\obj\Debug\test_statistic.dll
 D:\project\ExamReporterL\ExamReporterL\test_statistic\obj\Debug\test_statistic.pdb
 D:\project\ExamReporterL\ExamReporterL\test_statistic\obj\Debug\test_statistic.csprojResolveAssemblyReference.cache
+C:\Users\wangsa\Documents\new\ExamReporterL\test_statistic\bin\Debug\test_statistic.dll
+C:\Users\wangsa\Documents\new\ExamReporterL\test_statistic\bin\Debug\test_statistic.pdb
+C:\Users\wangsa\Documents\new\ExamReporterL\test_statistic\bin\Debug\ExamReport.exe
+C:\Users\wangsa\Documents\new\ExamReporterL\test_statistic\bin\Debug\Microsoft.Practices.EnterpriseLibrary.Common.dll
+C:\Users\wangsa\Documents\new\ExamReporterL\test_statistic\bin\Debug\Microsoft.Practices.ObjectBuilder.dll
+C:\Users\wangsa\Documents\new\ExamReporterL\test_statistic\bin\Debug\CheckBoxComboBox.dll
+C:\Users\wangsa\Documents\new\ExamReporterL\test_statistic\bin\Debug\Microsoft.Vbe.Interop.dll
+C:\Users\wangsa\Documents\new\ExamReporterL\test_statistic\bin\Debug\Microsoft.Office.Interop.SmartTag.dll
+C:\Users\wangsa\Documents\new\ExamReporterL\test_statistic\bin\Debug\ExamReport.pdb
+C:\Users\wangsa\Documents\new\ExamReporterL\test_statistic\bin\Debug\ExamReport_Accessor.exe
+C:\Users\wangsa\Documents\new\ExamReporterL\test_statistic\bin\Debug\ExamReport_Accessor.pdb
+C:\Users\wangsa\Documents\new\ExamReporterL\test_statistic\obj\Debug\test_statistic.csprojResolveAssemblyReference.cache
+C:\Users\wangsa\Documents\new\ExamReporterL\test_statistic\obj\Debug\test_statistic.dll
+C:\Users\wangsa\Documents\new\ExamReporterL\test_statistic\obj\Debug\test_statistic.pdb

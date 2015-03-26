@@ -45,18 +45,28 @@ namespace ExamReport
             progress_label.Add("zk_zt", zk_zt_progress);
             progress_label.Add("zk_qx", zk_qx_ProgressLabel);
             progress_label.Add("gk_zt", gk_zt_progresslabel);
+           
 
             run_button.Add("zk_zt", zk_zt_start);
             run_button.Add("zk_qx", zk_qx_start);
             run_button.Add("gk_zt", gk_zt_start);
+            run_button.Add("gk_cj", gk_cj_start);
+            run_button.Add("gk_sf", gk_sf_start);
+            run_button.Add("gk_qx", gk_qx_start);
 
             cancel_button.Add("zk_zt", zk_zt_cancel);
             cancel_button.Add("zk_qx", zk_qx_cancel);
             cancel_button.Add("gk_zt", gk_zt_cancel);
+            cancel_button.Add("gk_cj", gk_cj_cancel);
+            cancel_button.Add("gk_sf", gk_sf_cancel);
+            cancel_button.Add("gk_qx", gk_qx_cancel);
 
             waiting_bar.Add("zk_zt", zk_zt_waitingbar);
             waiting_bar.Add("zk_qx", zk_qx_WaitingBar);
             waiting_bar.Add("gk_zt", gk_zt_waitingbar);
+            waiting_bar.Add("gk_cj", gk_cj_waitingbar);
+            waiting_bar.Add("gk_sf", gk_sf_waitingbar);
+            waiting_bar.Add("gk_qx", gk_qx_waitingbar);
 
             
         }
@@ -112,6 +122,14 @@ namespace ExamReport
                 gnum = c.Field<int>("gnum")
             }).ToDataTable();
             gk_gridview.DataSource = gk_data.LanguageTrans();
+            foreach (GridViewRowInfo row in gk_gridview.Rows)
+            {
+                if (row.Cells["sub"].Value.ToString().Trim().Equals("语文")
+                    || row.Cells["sub"].Value.ToString().Trim().Equals("英语"))
+                {
+                    ((GridViewComboBoxColumn)(row.Cells["SpecChoice"]))
+                }
+            }
             gk_gridview.TableElement.EndUpdate();
         }
         
@@ -150,6 +168,7 @@ namespace ExamReport
             GKTreeView.Nodes.Add(new RadTreeNode("示范校"));
             GKTreeView.Nodes.Add(new RadTreeNode("城郊"));
             GKTreeView.Nodes.Add(new RadTreeNode("区县"));
+            GKTreeView.Nodes.Add(new RadTreeNode("学校"));
 
 
             string conn = @"Provider=vfpoledb;Data Source=" + currentdic + ";Collating Sequence=machine;";
@@ -183,9 +202,10 @@ namespace ExamReport
                 //RadTreeNode node = new RadTreeNode(dr["qxmc"].ToString().Trim());
                 ZKTreeView.Nodes[2].Nodes.Add(new RadTreeNode(dr["qxmc"].ToString().Trim()));
                 GKTreeView.Nodes[4].Nodes.Add(new RadTreeNode(dr["qxmc"].ToString().Trim()));
+                GKTreeView.Nodes[5].Nodes.Add(new RadTreeNode(dr["qxmc"].ToString().Trim()));
                 List<string> names = get_school_name(schoolcode_table, dr["code"].ToString().Trim());
                 foreach (string name in names)
-                    GKTreeView.Nodes[4].Nodes[count].Nodes.Add(new RadTreeNode(name));
+                    GKTreeView.Nodes[5].Nodes[count].Nodes.Add(new RadTreeNode(name));
                 count++;
                 
             }
@@ -608,5 +628,113 @@ namespace ExamReport
             if (openFolder.ShowDialog() == DialogResult.OK)
                 save_address.Text = openFolder.SelectedPath;
         }
+
+        private void gk_cj_start_Click(object sender, EventArgs e)
+        {
+            if (CheckGridView(gk_gridview))
+                return;
+
+            Analysis analysis = new Analysis(this);
+            analysis._gridview = gk_gridview;
+            analysis.save_address = gk_save_address.Text;
+            analysis.isVisible = gk_isVisible.Checked;
+            analysis.CurrentDirectory = currentdic;
+            analysis.cj_addr = gk_cj_addr.Text.ToString().Trim();
+            Thread thread = new Thread(new ThreadStart(analysis.gk_cj_start));
+            thread.IsBackground = true;
+            thread.SetApartmentState(ApartmentState.STA);
+            thread_store.Add("gk_cj", thread);
+            thread.Start();
+        }
+
+        private void gk_sf_start_Click(object sender, EventArgs e)
+        {
+            if (CheckGridView(gk_gridview))
+                return;
+
+            Analysis analysis = new Analysis(this);
+            analysis._gridview = gk_gridview;
+            analysis.save_address = gk_save_address.Text;
+            analysis.isVisible = gk_isVisible.Checked;
+            analysis.CurrentDirectory = currentdic;
+            analysis.sf_addr = gk_sf_addr.Text.ToString().Trim();
+            Thread thread = new Thread(new ThreadStart(analysis.gk_sf_start));
+            thread.IsBackground = true;
+            thread.SetApartmentState(ApartmentState.STA);
+            thread_store.Add("gk_sf", thread);
+            thread.Start();
+        }
+
+        private void gk_sf_cancel_Click(object sender, EventArgs e)
+        {
+            if (thread_store.ContainsKey("gk_sf"))
+            {
+                Thread thread = thread_store["gk_sf"];
+                if (thread.IsAlive)
+                {
+                    thread.Abort();
+                    thread_store.Remove("gk_sf");
+                    ShowPro("gk_sf", 2, "");
+                }
+            }
+        }
+
+        private void gk_qx_start_Click(object sender, EventArgs e)
+        {
+            if (CheckGridView(gk_gridview))
+                return;
+
+            Analysis analysis = new Analysis(this);
+            analysis._gridview = gk_gridview;
+            analysis.save_address = gk_save_address.Text;
+            analysis.isVisible = gk_isVisible.Checked;
+            analysis.CurrentDirectory = currentdic;
+            analysis.qx_addr = gk_qx_xx_addr.Text.Trim();
+            analysis.cj_addr = gk_qx_cj_addr.Text.Trim();
+            analysis.sf_addr = gk_qx_sf_addr.Text.Trim();
+            string QX_code = schoolcode_table.AsEnumerable().GroupBy(c => c.Field<string>("qxmc")).Select(c => new
+            {
+                school = c.Key.ToString().Trim(),
+                code = string.Join(",", c.GroupBy(p => p.Field<string>("qxdm")).Select(p => p.Key.ToString().Trim()).ToArray())
+            })
+                .Where(c => c.school.Equals(GKTreeView.SelectedNode.Text.Trim())).Select(c => c.code).First();
+
+            analysis.qx_code = QX_code;
+            Thread thread = new Thread(new ThreadStart(analysis.gk_qx_start));
+            thread.IsBackground = true;
+            thread.SetApartmentState(ApartmentState.STA);
+            thread_store.Add("gk_qx", thread);
+            thread.Start();
+        }
+
+        private void gk_qx_cancel_Click(object sender, EventArgs e)
+        {
+            if (thread_store.ContainsKey("gk_qx"))
+            {
+                Thread thread = thread_store["gk_qx"];
+                if (thread.IsAlive)
+                {
+                    thread.Abort();
+                    thread_store.Remove("gk_qx");
+                    ShowPro("gk_qx", 2, "");
+                }
+            }
+        }
+
+        private void gk_cj_cancel_Click(object sender, EventArgs e)
+        {
+            if (thread_store.ContainsKey("gk_cj"))
+            {
+                Thread thread = thread_store["gk_cj"];
+                if (thread.IsAlive)
+                {
+                    thread.Abort();
+                    thread_store.Remove("gk_cj");
+                    ShowPro("gk_cj", 2, "");
+                }
+            }
+        }
+
+       
     }
 }
