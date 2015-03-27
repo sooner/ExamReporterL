@@ -56,10 +56,9 @@ namespace ExamReport
                 Utils.language_trans(sub));
             if (sub.Contains("理综") || sub.Contains("文综"))
             {
-                md._fullmark = sub_fullmark;
+                md._sub_fullmark = sub_fullmark;
             }
-            else
-                md._fullmark = fullmark;
+            md._fullmark = fullmark;
             md._grouptype = grouptype;
             md._group_num = Convert.ToInt32(divider);
 

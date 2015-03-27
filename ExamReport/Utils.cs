@@ -45,6 +45,7 @@ namespace ExamReport
 
         public static string[] ywyy_combo = new string[] { "文理报告", "类型报告", "两者均有"};
         public static string[] zh_combo = new string[] { "总体总分相关", "科目总分相关" };
+        public static string[] null_combo = new string[] { };
 
         public static Mutex mutex_clipboard = new Mutex();
 

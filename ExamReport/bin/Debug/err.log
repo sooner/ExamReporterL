@@ -1,12 +1,13 @@
-System.NullReferenceException: 未将对象引用设置到对象的实例。
-   在 ExamReport.ZedGraph.createCuveAndBar(Double[] cuveData, Double[][] barData, Double maxSource) 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\ZedGraph.cs:行号 501
-   在 ExamReport.WordCreator.insertTotalChart(String title, WordData sdata) 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\WordCreator.cs:行号 2012
-   在 ExamReport.WordCreator.creating_word() 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\WordCreator.cs:行号 1122
-   在 ExamReport.Analysis.gk_zt_process(MetaData mdata) 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\Analysis.cs:行号 59
-   在 ExamReport.Analysis.start() 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\Analysis.cs:行号 121
-   在 ExamReport.Analysis.gk_zt_start() 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\Analysis.cs:行号 32
-   在 System.Threading.ThreadHelper.ThreadStart_Context(Object state)
-   在 System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
-   在 System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
-   在 System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
-   在 System.Threading.ThreadHelper.ThreadStart()
+MySql.Data.MySqlClient.MySqlException (0x80004005): Unable to connect to any of the specified MySQL hosts. ---> System.Exception: Exception of type 'System.Exception' was thrown.
+   at MySql.Data.MySqlClient.NativeDriver.Open()
+   at ExamReport.MySqlHelper.GetDataSet(String connectionString, CommandType cmdType, String cmdText, MySqlParameter[] commandParameters) in D:\project\ExamReporterL\ExamReporterL\ExamReport\MySqlHelper.cs:line 164
+   at ExamReport.mainform.Grid_load() in D:\project\ExamReporterL\ExamReporterL\ExamReport\MainRadForm.cs:line 95
+   at ExamReport.mainform..ctor() in D:\project\ExamReporterL\ExamReporterL\ExamReport\MainRadForm.cs:line 35
+   at ExamReport.Program.Main() in D:\project\ExamReporterL\ExamReporterL\ExamReport\Program.cs:line 21
+   at System.AppDomain._nExecuteAssembly(RuntimeAssembly assembly, String[] args)
+   at System.AppDomain.ExecuteAssembly(String assemblyFile, Evidence assemblySecurity, String[] args)
+   at Microsoft.VisualStudio.HostingProcess.HostProc.RunUsersAssembly()
+   at System.Threading.ThreadHelper.ThreadStart_Context(Object state)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean ignoreSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.ThreadHelper.ThreadStart()

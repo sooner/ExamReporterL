@@ -18,6 +18,7 @@ namespace ExamReport
         public string log_name;
 
         public decimal _fullmark;
+        public decimal _sub_fullmark;
         public ZK_database.GroupType _grouptype;
         public int _group_num;
 
@@ -36,6 +37,8 @@ namespace ExamReport
 
         public DataTable zh_ans;
         public DataTable zh_grp;
+
+        public Dictionary<string, List<string>> zh_groups_group;
 
         public List<string> xz;
         public Dictionary<string, List<string>> groups_group;
@@ -61,8 +64,8 @@ namespace ExamReport
                 + _year + "', '"
             + _exam + "','"
             + _sub + "','1','1',"
-            + Convert.ToInt32(_fullmark).ToString() + ",'"
-            + check(_sub) + "','" 
+            + Convert.ToInt32(_fullmark).ToString() + ","
+            + Convert.ToInt32(_sub_fullmark).ToString() + ",'" 
             + gtype_to_string(_grouptype) + "'," 
             + Convert.ToInt32(_group_num).ToString() + ")", null);
             if (val <= 0)
@@ -71,7 +74,7 @@ namespace ExamReport
             return true;
         }
 
-        private string check(string sub)
+        private bool check(string sub)
         {
             switch (sub)
             {
@@ -81,9 +84,9 @@ namespace ExamReport
                 case "zz":
                 case "dl":
                 case "ls":
-                    return "1";
+                    return true;
                 default:
-                    return "0";
+                    return false;
             }
         }
 
@@ -98,6 +101,9 @@ namespace ExamReport
             _fullmark = Convert.ToDecimal(reader["fullmark"]);
             _grouptype = string_to_gtype(reader["gtype"].ToString().Trim());
             _group_num = Convert.ToInt32(reader["gnum"]);
+
+            if(_exam.Equals("gk") && check(_sub))
+                _sub_fullmark = Convert.ToDecimal(reader["zh"]);
         }
         private string gtype_to_string(ZK_database.GroupType type)
         {
@@ -172,7 +178,12 @@ namespace ExamReport
         }
         public void get_zh_ans()
         {
-
+            zh_ans = DBHelper.get_only_ans("zh_" + Utils.get_ans_tablename(_year, _exam, _sub));
+        }
+        public void get_zh_fz()
+        {
+            zh_groups_group = new Dictionary<string, List<string>>();
+            zh_grp = DBHelper.get_fz("zh_" + Utils.get_fz_tablename(_year, _exam, _sub), ref zh_groups_group);
         }
         public DataTable get_mysql_table(string name)
         {

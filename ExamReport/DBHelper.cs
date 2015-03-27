@@ -63,14 +63,18 @@ namespace ExamReport
 
         public static DataTable get_ans(string name, ref List<string> xz)
         {
-            DataTable data = MySqlHelper.GetDataSet(MySqlHelper.Conn, CommandType.Text, "select * from "
-                + name, null).Tables[0];
+            DataTable data = get_only_ans(name);
 
             xz = data.AsEnumerable().Where(c => c.Field<string>("xz").Equals("1")).Select(c => c.Field<string>("th")).ToList();
             
             data.Columns.Remove(data.Columns["xz"]);
             return data;
 
+        }
+        public static DataTable get_only_ans(string name)
+        {
+            return MySqlHelper.GetDataSet(MySqlHelper.Conn, CommandType.Text, "select * from "
+                + name, null).Tables[0];
         }
         public static bool delete_row(string year, string exam, string sub)
         {

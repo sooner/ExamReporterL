@@ -49,6 +49,91 @@ namespace ExamReport
             _exam = "gk";
             start();
         }
+        public void gk_zh_qx_process(MetaData mdata)
+        {
+            ArrayList total = new ArrayList();
+            ArrayList QX = new ArrayList();
+            ArrayList ZH_total = new ArrayList();
+            ArrayList ZH_QX = new ArrayList();
+
+            CalculatePartition(ZH_total, "市整体", mdata.zh_basic, mdata.zh_group, mdata._fullmark, mdata.zh_grp, mdata._group_num, true, mdata.zh_ans);
+            //decimal ZH_fullmark = (decimal)((PartitionData)ZH_total[0]).groups_analysis.Rows.Find(sub)["fullmark"];
+            CalculatePartition(total, "市整体", mdata.basic, mdata.group, mdata._sub_fullmark, mdata.grp, mdata._group_num, false, mdata.ans);
+            for (int i = 0; i < mdata.SF_list.Count; i++)
+            {
+                string[] SF_code = new string[mdata.SF_list[i].Count - 1];
+                for (int j = 1; j < mdata.SF_list[i].Count; j++)
+                    SF_code[j - 1] = mdata.SF_list[i][j].ToString().Trim();
+                DataTable temp = mdata.zh_basic.filteredtable("schoolcode", SF_code);
+                DataTable temp_group = mdata.zh_group.filteredtable("schoolcode", SF_code);
+
+                DataTable single = mdata.basic.filteredtable("schoolcode", SF_code);
+                DataTable single_table = mdata.group.filteredtable("schoolcode", SF_code);
+                CalculatePartition(ZH_total, mdata.SF_list[i][0].ToString(), temp, temp_group, mdata._fullmark, mdata.zh_grp, mdata._group_num, true, mdata.zh_ans);
+                CalculatePartition(total, mdata.SF_list[i][0].ToString(), single, single_table, mdata._sub_fullmark, mdata.grp, mdata._group_num, false, mdata.ans);
+            }
+            for (int i = 0; i < mdata.CJ_list.Count; i++)
+            {
+                string[] SF_code = new string[mdata.CJ_list[i].Count - 1];
+                for (int j = 1; j < mdata.CJ_list[i].Count; j++)
+                    SF_code[j - 1] = mdata.CJ_list[i][j].ToString().Trim();
+                DataTable temp = mdata.zh_basic.filteredtable("QX", SF_code);
+                DataTable temp_group = mdata.zh_group.filteredtable("QX", SF_code);
+
+                DataTable single = mdata.basic.filteredtable("QX", SF_code);
+                DataTable single_table = mdata.group.filteredtable("QX", SF_code);
+                CalculatePartition(ZH_total, mdata.CJ_list[i][0].ToString(), temp, temp_group, mdata._fullmark, mdata.zh_grp, mdata._group_num, true, mdata.zh_ans);
+                CalculatePartition(total, mdata.CJ_list[i][0].ToString(), single, single_table, mdata._sub_fullmark, mdata.grp, mdata._group_num, false, mdata.ans);
+            }
+            DataTable QX_ZH_data = mdata.zh_basic.filteredtable("QX", QXTransfer(qx_code));
+            DataTable QX_ZH_group = mdata.zh_group.filteredtable("QX", QXTransfer(qx_code));
+
+            DataTable QX_data = mdata.basic.filteredtable("QX", QXTransfer(qx_code));
+            DataTable QX_group = mdata.group.filteredtable("QX", QXTransfer(qx_code));
+
+            CalculatePartition(ZH_total, "区整体", QX_ZH_data, QX_ZH_group, mdata._fullmark, mdata.zh_grp, mdata._group_num, true, mdata.zh_ans);
+            CalculatePartition(total, "区整体", QX_data, QX_group, mdata._sub_fullmark, mdata.grp, mdata._group_num, false, mdata.ans);
+
+            string[] qxsf_code = CalculateTotal(QXSF_list);
+            DataTable qxsf_zh_data = QX_ZH_data.filteredtable("schoolcode", qxsf_code);
+            DataTable qxsf_zh_group = QX_ZH_group.filteredtable("schoolcode", qxsf_code);
+            DataTable qxsf_data = QX_data.filteredtable("schoolcode", qxsf_code);
+            DataTable qxsf_group = QX_group.filteredtable("schoolcode", qxsf_code);
+
+            qxsf_zh_data.SeperateGroups(grouptype, divider, "groups");
+            qxsf_zh_group.SeperateGroups(grouptype, divider, "groups");
+            qxsf_data.SeperateGroups(grouptype, divider, "groups");
+            qxsf_group.SeperateGroups(grouptype, divider, "groups");
+
+            CalculatePartition(ZH_total, "分类整体", qxsf_zh_data, qxsf_zh_group, fullmark, wenli.dt, db._group_num, true, ans.dt);
+            CalculatePartition(total, "分类整体", qxsf_data, qxsf_group, sub_fullmark, groups.dt, db._group_num, false, wenli_standard);
+            for (int i = 0; i < QXSF_list.Count; i++)
+            {
+                string[] SF_code = new string[QXSF_list[i].Count - 1];
+                for (int j = 1; j < QXSF_list[i].Count; j++)
+                    SF_code[j - 1] = QXSF_list[i][j].ToString().Trim();
+                DataTable temp = qxsf_zh_data.filteredtable("schoolcode", SF_code);
+                DataTable temp_group = qxsf_zh_group.filteredtable("schoolcode", SF_code);
+
+                DataTable single = qxsf_data.filteredtable("schoolcode", SF_code);
+                DataTable single_table = qxsf_group.filteredtable("schoolcode", SF_code);
+                CalculatePartition(ZH_total, QXSF_list[i][0].ToString(), temp, temp_group, fullmark, wenli.dt, db._group_num, true, ans.dt);
+                CalculatePartition(total, QXSF_list[i][0].ToString(), single, single_table, sub_fullmark, groups.dt, db._group_num, false, wenli_standard);
+                CalculatePartition(ZH_QX, QXSF_list[i][0].ToString(), temp, temp_group, fullmark, wenli.dt, db._group_num, true, ans.dt);
+                CalculatePartition(QX, QXSF_list[i][0].ToString(), single, single_table, sub_fullmark, groups.dt, db._group_num, false, wenli_standard);
+            }
+            CalculatePartition(ZH_QX, "分类整体", qxsf_zh_data, qxsf_zh_group, fullmark, wenli.dt, db._group_num, true, ans.dt);
+            CalculatePartition(QX, "分类整体", qxsf_data, qxsf_group, sub_fullmark, groups.dt, db._group_num, false, wenli_standard);
+            form.ShowPro(70, 4);
+            Partition_wordcreator create = new Partition_wordcreator(total, QX, groups.dt, groups.groups_group);
+            create.creating_ZH_QX_word(ZH_total, ZH_QX, wenli.dt, wenli.groups_group);
+        }
+        void CalculatePartition(ArrayList list, String title, DataTable total, DataTable group, decimal fullmark, DataTable group_ans, int groupnum, bool isZonghe, DataTable ans)
+        {
+            Partition_statistic stat = new Partition_statistic(title, total, fullmark, ans, group, group_ans, groupnum);
+            stat.statistic_process(isZonghe);
+            list.Add(stat.result);
+        }
         public void gk_qx_process(MetaData mdata)
         {
             ArrayList QX = new ArrayList();
@@ -58,21 +143,21 @@ namespace ExamReport
             Partition_wordcreator create = new Partition_wordcreator(total, QX, mdata.grp, mdata.groups_group);
             create.creating_word();
 
-            if (subject.Equals("语文") || subject.Equals("英语"))
-            {
-                form.ShowPro(80, 6);
-                Utils.WSLG = true;
-                ArrayList WSLG = new ArrayList();
-                DataTable QX_data = db._basic_data.filteredtable("QX", QXTransfer(Quxian_list));
-                DataTable QX_group = db._group_data.filteredtable("QX", QXTransfer(Quxian_list));
+            //if (subject.Equals("语文") || subject.Equals("英语"))
+            //{
+            //    form.ShowPro(80, 6);
+            //    Utils.WSLG = true;
+            //    ArrayList WSLG = new ArrayList();
+            //    DataTable QX_data = db._basic_data.filteredtable("QX", QXTransfer(Quxian_list));
+            //    DataTable QX_group = db._group_data.filteredtable("QX", QXTransfer(Quxian_list));
 
-                WSLGCal(QX_data, QX_group, WSLG);
+            //    WSLGCal(QX_data, QX_group, WSLG);
 
-                Partition_wordcreator create2 = new Partition_wordcreator(WSLG, groups.dt, groups.groups_group);
-                create2.creating_word();
-                Utils.WSLG = false;
+            //    Partition_wordcreator create2 = new Partition_wordcreator(WSLG, groups.dt, groups.groups_group);
+            //    create2.creating_word();
+            //    Utils.WSLG = false;
 
-            }
+            //}
 
         }
         void PartitionQXDataProcess(MetaData mdata, ArrayList result, ArrayList sresult, DataTable data, DataTable group, int groupnum)
@@ -147,6 +232,51 @@ namespace ExamReport
             Partition_wordcreator create = new Partition_wordcreator(list, mdata.grp, mdata.groups_group);
             create.creating_word();
         }
+        public void gk_zh_sf_process(MetaData mdata)
+        {
+            ArrayList sdata = new ArrayList();
+            ArrayList ZH_data = new ArrayList();
+
+            string[] total_code = CalculateTotal(mdata.SF_list);
+            DataTable total = mdata.zh_basic.filteredtable("schoolcode", total_code);
+            DataTable total_group = mdata.zh_group.filteredtable("schoolcode", total_code);
+
+            int groupnum = total.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
+            total_group.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
+
+            DataTable single_total = mdata.basic.filteredtable("schoolcode", total_code);
+            DataTable single_total_group = mdata.group.filteredtable("schoolcode", total_code);
+
+            single_total.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
+            single_total_group.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
+            for (int i = 0; i < mdata.SF_list.Count; i++)
+            {
+                string[] SF_code = new string[mdata.SF_list[i].Count - 1];
+                for (int j = 1; j < mdata.SF_list[i].Count; j++)
+                    SF_code[j - 1] = mdata.SF_list[i][j].ToString().Trim();
+                DataTable temp = total.filteredtable("schoolcode", SF_code);
+                DataTable temp_group = total_group.filteredtable("schoolcode", SF_code);
+                Partition_statistic stat = new Partition_statistic(mdata.SF_list[i][0].ToString().Trim(), temp, mdata._fullmark, mdata.zh_ans, temp_group, mdata.zh_grp, groupnum);
+                stat.statistic_process(true);
+                ZH_data.Add(stat.result);
+
+                DataTable single = single_total.filteredtable("schoolcode", SF_code);
+                DataTable single_group = single_total_group.filteredtable("schoolcode", SF_code);
+                Partition_statistic single_stat = new Partition_statistic(mdata.SF_list[i][0].ToString().Trim(), single, mdata._sub_fullmark, mdata.ans, single_group, mdata.grp, groupnum);
+                single_stat.statistic_process(false);
+                sdata.Add(single_stat.result);
+            }
+
+            Partition_statistic total_stat = new Partition_statistic("分类整体", total, mdata._fullmark, mdata.zh_ans, total_group, mdata.zh_grp, groupnum);
+            total_stat.statistic_process(true);
+            ZH_data.Add(total_stat.result);
+            Partition_statistic single_total_stat = new Partition_statistic("分类整体", single_total, mdata._sub_fullmark, mdata.ans, single_total_group, mdata.grp, groupnum);
+            single_total_stat.statistic_process(false);
+            sdata.Add(single_total_stat.result);
+            form.ShowPro(70, 4);
+            Partition_wordcreator create = new Partition_wordcreator(sdata, mdata.grp, mdata.groups_group);
+            create.creating_ZH_word(ZH_data, mdata.zh_grp, mdata.zh_groups_group);
+        }
         public void gk_cj_start()
         {
             exam_type = "gk_cj";
@@ -163,6 +293,51 @@ namespace ExamReport
             _form.ShowPro("gk_cj", 1, mdata.log_name + "文档生成中...");
             Partition_wordcreator create = new Partition_wordcreator(list, mdata.grp, mdata.groups_group);
             create.creating_word();
+        }
+        public void gk_zh_cj_process(MetaData mdata)
+        {
+            ArrayList sdata = new ArrayList();
+            ArrayList ZH_data = new ArrayList();
+            string[] total_code = CalculateTotal(mdata.CJ_list);
+
+            DataTable total = mdata.zh_basic.filteredtable("QX", total_code);
+            DataTable total_group = mdata.zh_group.filteredtable("QX", total_code);
+
+            int groupnum = total.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
+            total_group.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
+
+            DataTable single_total = mdata.basic.filteredtable("QX", total_code);
+            DataTable single_total_group = mdata.group.filteredtable("QX", total_code);
+
+            single_total.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
+            single_total_group.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
+            for (int i = 0; i < mdata.CJ_list.Count; i++)
+            {
+                string[] SF_code = new string[mdata.CJ_list[i].Count - 1];
+                for (int j = 1; j < mdata.CJ_list[i].Count; j++)
+                    SF_code[j - 1] = mdata.CJ_list[i][j].ToString().Trim();
+                DataTable temp = total.filteredtable("QX", SF_code);
+                DataTable temp_group = total_group.filteredtable("QX", SF_code);
+                Partition_statistic stat = new Partition_statistic(mdata.CJ_list[i][0].ToString().Trim(), temp, mdata._fullmark, mdata.zh_ans, temp_group, mdata.zh_grp, groupnum);
+                stat.statistic_process(true);
+                ZH_data.Add(stat.result);
+
+                DataTable single = single_total.filteredtable("QX", SF_code);
+                DataTable single_group = single_total_group.filteredtable("QX", SF_code);
+                Partition_statistic single_stat = new Partition_statistic(mdata.CJ_list[i][0].ToString().Trim(), single, mdata._sub_fullmark, mdata.ans, single_group, mdata.grp, groupnum);
+                single_stat.statistic_process(false);
+                sdata.Add(single_stat.result);
+            }
+
+            Partition_statistic total_stat = new Partition_statistic("分类整体", total, mdata._fullmark, mdata.zh_ans, total_group, mdata.zh_grp, groupnum);
+            total_stat.statistic_process(true);
+            ZH_data.Add(total_stat.result);
+            Partition_statistic single_total_stat = new Partition_statistic("分类整体", single_total, mdata._sub_fullmark, mdata.ans, single_total_group, mdata.grp, groupnum);
+            single_total_stat.statistic_process(false);
+            sdata.Add(single_total_stat.result);
+            form.ShowPro(70, 4);
+            Partition_wordcreator create = new Partition_wordcreator(sdata, mdata.grp, mdata.groups_group);
+            create.creating_ZH_word(ZH_data, mdata.zh_grp, mdata.zh_groups_group);
         }
         void PartitionDataProcess(MetaData mdata, ArrayList result, List<ArrayList> list, String filter, DataTable data, DataTable group, int groupnum, bool isQXSF)
         {
@@ -209,6 +384,24 @@ namespace ExamReport
             if (!isQXSF)
                 result.Add(total.result);
         }
+        string[] CalculateTotal(List<ArrayList> data)
+        {
+            int totalnum = 0;
+            for (int i = 0; i < data.Count; i++)
+                totalnum += (data[i].Count - 1);
+            string[] SF_code = new string[totalnum];
+            totalnum = 0;
+            for (int i = 0; i < data.Count; i++)
+            {
+                for (int j = 1; j < data[i].Count; j++)
+                {
+                    SF_code[totalnum] = data[i][j].ToString().Trim();
+                    totalnum++;
+                }
+            }
+            return SF_code;
+
+        }
         public void gk_zt_process(MetaData mdata)
         {
             Configuration config = initConfig(mdata._sub, "总体", "高考");
@@ -223,6 +416,23 @@ namespace ExamReport
                 stat.xz_postprocess(mdata.xz);
             _form.ShowPro("gk_zt", 1, mdata.log_name + "文档生成中...");
             WordCreator create = new WordCreator(data, config);
+            create.creating_word();
+        }
+        public void gk_zh_zt_process(MetaData mdata)
+        {
+            Configuration config = initConfig(mdata._sub, "总体", "高考");
+            WordData total = new WordData(mdata.zh_groups_group);
+            Total_statistic total_stat = new Total_statistic(total, mdata.zh_basic, mdata._fullmark, mdata.zh_ans, mdata.zh_group, mdata.zh_grp, mdata._group_num);
+            total_stat._config = config;
+            total_stat.statistic_process(true);
+
+            WordData single = new WordData(mdata.groups_group);
+
+            Total_statistic single_stat = new Total_statistic(single, mdata.basic, mdata._sub_fullmark, mdata.ans, mdata.group, mdata.grp, mdata._group_num);
+            single_stat._config = config;
+            single_stat.statistic_process(false);
+
+            WordCreator create = new WordCreator(single, total, config);
             create.creating_word();
         }
         public void zk_zt_start()
@@ -245,6 +455,7 @@ namespace ExamReport
             WordCreator creator = new WordCreator(result, config);
             creator.creating_word();
         }
+        
         public void start()
         {
             _form.ShowPro(exam_type, 0, "开始处理...");
@@ -277,7 +488,31 @@ namespace ExamReport
 
                     if (Utils.is_gk_zh(exam, chi_sub))
                     {
+                        mdata.get_zh_basic_data();
+                        mdata.get_zh_group_data();
+                        mdata.get_zh_ans();
+                        mdata.get_zh_fz();
 
+                        switch (exam_type)
+                        {
+                            case "gk_zt":
+                                gk_zh_zt_process(mdata);
+                                break;
+                            case "gk_cj":
+                                mdata.get_CJ_data(cj_addr);
+                                gk_zh_cj_process(mdata);
+                                break;
+                            case "gk_sf":
+                                mdata.get_SF_data(sf_addr);
+                                gk_zh_sf_process(mdata);
+                                break;
+                            case "gk_qx":
+                                mdata.get_QXSF_data(qx_addr);
+                                mdata.get_CJ_data(cj_addr);
+                                mdata.get_SF_data(sf_addr);
+
+                                break;
+                        }
                     }
                     else
                     {

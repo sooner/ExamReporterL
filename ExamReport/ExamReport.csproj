@@ -55,7 +55,7 @@
       <HintPath>D:\项目\王卅-zedGraph画图\所需dll\Microsoft.Practices.ObjectBuilder.dll</HintPath>
     </Reference>
     <Reference Include="MySql.Data">
-      <HintPath>..\..\..\ExamReporter\ExamReporterL\ExamReport\bin\Debug\MySql.Data.dll</HintPath>
+      <HintPath>..\..\MySql.Data.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />

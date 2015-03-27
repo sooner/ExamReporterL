@@ -36,6 +36,8 @@ namespace ExamReport
             TreeLoadData();
             ZKTreeView.SelectedNodeChanged += ZKTreeNode_Selected;
             GKTreeView.SelectedNodeChanged += GKTreeNode_Selected;
+
+            gk_gridview.EditorRequired += radGridView1_EditorRequired;
             init_dictionary();
             save_address.Text = currentdic;
             gk_save_address.Text = currentdic;
@@ -122,17 +124,37 @@ namespace ExamReport
                 gnum = c.Field<int>("gnum")
             }).ToDataTable();
             gk_gridview.DataSource = gk_data.LanguageTrans();
-            foreach (GridViewRowInfo row in gk_gridview.Rows)
-            {
-                if (row.Cells["sub"].Value.ToString().Trim().Equals("语文")
-                    || row.Cells["sub"].Value.ToString().Trim().Equals("英语"))
-                {
-                    ((GridViewComboBoxColumn)(row.Cells["SpecChoice"]))
-                }
-            }
+            
+            
             gk_gridview.TableElement.EndUpdate();
         }
-        
+        void radGridView1_EditorRequired(object sender, EditorRequiredEventArgs e)
+        {
+            if (gk_gridview.CurrentColumn is GridViewComboBoxColumn)
+            {
+                if (gk_gridview.CurrentRow.Cells["sub"].Value.ToString().Trim().Equals("语文")
+                    || gk_gridview.CurrentRow.Cells["sub"].Value.ToString().Trim().Equals("英语"))
+                {
+                    GridViewComboBoxColumn col = (GridViewComboBoxColumn)gk_gridview.CurrentColumn;
+                    col.DataSource = Utils.ywyy_combo;
+                }
+                else if (gk_gridview.CurrentRow.Cells["sub"].Value.ToString().Trim().Equals("理综")
+                    || gk_gridview.CurrentRow.Cells["sub"].Value.ToString().Trim().Equals("化学")
+                    || gk_gridview.CurrentRow.Cells["sub"].Value.ToString().Trim().Equals("生物")
+                    || gk_gridview.CurrentRow.Cells["sub"].Value.ToString().Trim().Equals("政治")
+                    || gk_gridview.CurrentRow.Cells["sub"].Value.ToString().Trim().Equals("地理")
+                    || gk_gridview.CurrentRow.Cells["sub"].Value.ToString().Trim().Equals("历史"))
+                {
+                    GridViewComboBoxColumn col = (GridViewComboBoxColumn)gk_gridview.CurrentColumn;
+                    col.DataSource = Utils.zh_combo;
+                }
+                else
+                {
+                    GridViewComboBoxColumn col = (GridViewComboBoxColumn)gk_gridview.CurrentColumn;
+                    col.DataSource = Utils.null_combo;
+                }
+            }
+        }
 
         private void button2_Click(object sender, EventArgs e)
         {
