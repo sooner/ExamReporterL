@@ -1,12 +1,11 @@
-MySql.Data.MySqlClient.MySqlException (0x80004005): Unable to connect to any of the specified MySQL hosts. ---> System.Exception: Exception of type 'System.Exception' was thrown.
-   at MySql.Data.MySqlClient.NativeDriver.Open()
-   at ExamReport.MySqlHelper.GetDataSet(String connectionString, CommandType cmdType, String cmdText, MySqlParameter[] commandParameters) in D:\project\ExamReporterL\ExamReporterL\ExamReport\MySqlHelper.cs:line 164
-   at ExamReport.mainform.Grid_load() in D:\project\ExamReporterL\ExamReporterL\ExamReport\MainRadForm.cs:line 95
-   at ExamReport.mainform..ctor() in D:\project\ExamReporterL\ExamReporterL\ExamReport\MainRadForm.cs:line 35
-   at ExamReport.Program.Main() in D:\project\ExamReporterL\ExamReporterL\ExamReport\Program.cs:line 21
-   at System.AppDomain._nExecuteAssembly(RuntimeAssembly assembly, String[] args)
-   at System.AppDomain.ExecuteAssembly(String assemblyFile, Evidence assemblySecurity, String[] args)
-   at Microsoft.VisualStudio.HostingProcess.HostProc.RunUsersAssembly()
+System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+   at System.Collections.ArrayList.get_Item(Int32 index)
+   at ExamReport.Partition_statistic.statistic_process(Boolean isZonghe) in D:\project\ExamReporterL\ExamReporterL\ExamReport\Partition_statistic.cs:line 183
+   at ExamReport.Analysis.CalculatePartition(Configuration config, ArrayList list, String title, DataTable total, DataTable group, Decimal fullmark, DataTable group_ans, Int32 groupnum, Boolean isZonghe, DataTable ans) in D:\project\ExamReporterL\ExamReporterL\ExamReport\Analysis.cs:line 670
+   at ExamReport.Analysis.gk_zh_qx_process(MetaData mdata) in D:\project\ExamReporterL\ExamReporterL\ExamReport\Analysis.cs:line 595
+   at ExamReport.Analysis.start() in D:\project\ExamReporterL\ExamReporterL\ExamReport\Analysis.cs:line 131
+   at ExamReport.Analysis.gk_qx_start() in D:\project\ExamReporterL\ExamReporterL\ExamReport\Analysis.cs:line 582
    at System.Threading.ThreadHelper.ThreadStart_Context(Object state)
    at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean ignoreSyncCtx)
    at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)

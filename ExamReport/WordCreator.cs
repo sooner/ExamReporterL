@@ -1226,7 +1226,10 @@ namespace ExamReport
                     
                     insertGroupTotalTable(group_dr, group);
                     insertGroupDistChart("    " + group + "分数分布图", ((WordData.group_data)_sdata.single_group_analysis[group_num]).group_dist);
-                    insertGroupDiffChart("    " + group + "难度曲线图", ((WordData.group_data)_sdata.single_group_analysis[group_num]).group_difficulty);
+                    if(isZonghe)
+                        insertZHGroupDiffChart("    " + group + "难度曲线图", ((WordData.group_data)_sdata.single_group_analysis[group_num]).group_difficulty);
+                    else
+                        insertGroupDiffChart("    " + group + "难度曲线图", ((WordData.group_data)_sdata.single_group_analysis[group_num]).group_difficulty);
                     oDoc.Characters.Last.InsertBreak(oPageBreak);
                     insertGroupSingleAnalysis("    " + group + "分组分析表", ((WordData.group_data)_sdata.single_group_analysis[group_num]).group_detail);
                     group_num++;
@@ -1266,7 +1269,10 @@ namespace ExamReport
             {
                 insertText(ExamTitle3, "第" + dr["number"].ToString().Trim().Substring(1) + "题");
                 insertTotalTable("    " + "第" + dr["number"].ToString().Trim().Substring(1) + "题分析表", dr);
-                insertChart("    " + "第" + dr["number"].ToString().Trim().Substring(1) + "题难度曲线图", ((WordData.single_data)_sdata.single_topic_analysis[topic_num]).single_difficulty, "分数", "难度", Excel.XlChartType.xlXYScatterSmooth);
+                if(isZonghe)
+                    insertZHChart("    " + "第" + dr["number"].ToString().Trim().Substring(1) + "题难度曲线图", ((WordData.single_data)_sdata.single_topic_analysis[topic_num]).single_difficulty, "分数", "难度", Excel.XlChartType.xlXYScatterSmooth);
+                else
+                    insertChart("    " + "第" + dr["number"].ToString().Trim().Substring(1) + "题难度曲线图", ((WordData.single_data)_sdata.single_topic_analysis[topic_num]).single_difficulty, "分数", "难度", Excel.XlChartType.xlXYScatterSmooth);
                 insertMultipleChart("    " + "第" + dr["number"].ToString().Trim().Substring(1) + "题分组难度曲线图", ((WordData.single_data)_sdata.single_topic_analysis[topic_num]).single_dist, "分组", "难度", Excel.XlChartType.xlLineMarkers);
                 oDoc.Characters.Last.InsertBreak(oPageBreak);
                 insertGroupTable("    " + "第" + dr["number"].ToString().Trim().Substring(1) + "题分组分析表", ((WordData.single_data)_sdata.single_topic_analysis[topic_num]).single_detail, ((WordData.single_data)_sdata.single_topic_analysis[topic_num]).stype);
@@ -1340,6 +1346,33 @@ namespace ExamReport
             range.InsertParagraphAfter();
 
         }
+        public void insertZHGroupDiffChart(string title, DataTable difficulty_data)
+        {
+            DataTable dt = difficulty_data;
+            double[][] data = new double[dt.Rows.Count][];
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                data[i] = new double[2];
+                data[i][0] = Convert.ToDouble((decimal)dt.Rows[i][0]);
+                data[i][1] = Convert.ToDouble((decimal)dt.Rows[i][1]);
+
+            }
+            Configuration temp_config = _config;
+            temp_config.change();
+            ZedGraph.createDiffCuve(temp_config, data, Convert.ToDouble(dt.Compute("Min([" + dt.Columns[0].ColumnName + "])", "")), Convert.ToDouble(dt.Compute("Max([" + dt.Columns[0].ColumnName + "])", "")));
+            Word.Range dist_rng = oDoc.Bookmarks.get_Item(oEndOfDoc).Range;
+            dist_rng.Paste();
+            Utils.mutex_clipboard.ReleaseMutex();
+            dist_rng.InsertCaption(oWord.CaptionLabels["图"], title, oMissing, Word.WdCaptionPosition.wdCaptionPositionAbove, oMissing);
+            dist_rng.MoveEnd(Word.WdUnits.wdParagraph, 1);
+            dist_rng.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+            dist_rng = oDoc.Bookmarks.get_Item(oEndOfDoc).Range;
+            dist_rng.MoveStart(Word.WdUnits.wdParagraph, 1);
+            dist_rng.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+            dist_rng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+            dist_rng.InsertParagraphAfter();
+
+        }
         public void insertGroupDiffChart(string title, DataTable difficulty_data)
         {
             DataTable dt = difficulty_data;
@@ -1364,64 +1397,7 @@ namespace ExamReport
             dist_rng.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
             dist_rng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
             dist_rng.InsertParagraphAfter();
-        //    Excel.Application eapp = new Excel.Application();
-        //    eapp.Visible = false;
-        //    Excel.Workbooks wk = eapp.Workbooks;
-        //    Excel._Workbook _wk = wk.Add(oMissing);
-        //    Excel.Sheets shs = _wk.Sheets;
-
-        //    Word.InlineShape difficulty_shape;
-        //    Word.Range difficulty_rng = oDoc.Bookmarks.get_Item(oEndOfDoc).Range;
-
-            
-        //    //Excel.Workbook difficulty_book = (Excel.Workbook)difficulty_shape.OLEFormat.Object;
-        //    Excel.Worksheet difficulty_Sheet = shs.get_Item(1);
-
-        //    difficulty_Sheet.Cells.Clear();
-
-        //    //DataTable difficulty_data = ((WordData.group_data)_sdata.single_group_analysis[group_num]).group_difficulty;
-        //    object[,] mid_data = new object[difficulty_data.Rows.Count + 1, difficulty_data.Columns.Count + 1];
-        //    int in_row = 0;
-        //    foreach (DataRow dr1 in difficulty_data.Rows)
-        //    {
-        //        int col = 0;
-        //        foreach (var item in dr1.ItemArray)
-        //        {
-        //            mid_data[in_row, col] = item;
-        //            col++;
-        //        }
-        //        in_row++;
-        //    }
-
-        //    difficulty_Sheet.get_Range("A1", "B" + difficulty_data.Rows.Count).Value2 = mid_data;
-        //    Excel.Chart chart_difficulty = _wk.Charts.Add(oMissing, difficulty_Sheet, oMissing, oMissing);
-
-        //    Excel.Range difficulty_chart_rng = (Excel.Range)difficulty_Sheet.Cells[1, 1];
-
-        //    chart_difficulty.ChartWizard(difficulty_chart_rng.CurrentRegion, Excel.XlChartType.xlLine, Type.Missing, Excel.XlRowCol.xlColumns, 1, 0, false, "", "分数", "难度", "");
-        //    FormatExcel(_wk, "分数", "难度");
-
-        //    difficulty_shape = difficulty_rng.InlineShapes.AddOLEObject(ref oClassType, _wk.Name,
-        //ref oMissing, ref oMissing, ref oMissing,
-        //ref oMissing, ref oMissing, ref oMissing);
-            
-        //    difficulty_shape.Range.InsertCaption(oWord.CaptionLabels["图"], title, oMissing, Word.WdCaptionPosition.wdCaptionPositionAbove, oMissing);
-        //    difficulty_rng.MoveEnd(Word.WdUnits.wdParagraph, 1);
-        //    difficulty_rng.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
-            
-
-        //    //difficulty_Sheet.UsedRange.CopyPicture();
-        //    //difficulty_rng.PasteExcelTable(true, true, false);
-        //    //difficulty_shape.ConvertToShape();
-        //    difficulty_shape.Width = 375;
-        //    difficulty_shape.Height = 220;
-        //    difficulty_rng = oDoc.Bookmarks.get_Item(oEndOfDoc).Range;
-        //    difficulty_rng.MoveStart(Word.WdUnits.wdParagraph, 1);
-        //    difficulty_rng.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
-        //    difficulty_rng = oDoc.Bookmarks.get_Item(oEndOfDoc).Range;
-        //    difficulty_rng.InsertParagraphAfter();
-        //    ReleaseExcel(_wk, eapp);
-        //    //oDoc.Characters.Last.InsertBreak(oParagrahbreak);
+        
         }
         public void insertGroupDistChart(string title, DataTable dist_data)
         {
@@ -1651,7 +1627,33 @@ namespace ExamReport
             single_table_range.InsertParagraphAfter();
             //oDoc.Characters.Last.InsertBreak(oParagrahbreak);
         }
+        public void insertZHChart(string title, DataTable dt, string x_axis, string y_axis, object type)
+        {
+            double[][] data = new double[dt.Rows.Count][];
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                data[i] = new double[2];
+                data[i][0] = Convert.ToDouble((decimal)dt.Rows[i][0]);
+                data[i][1] = Convert.ToDouble((decimal)dt.Rows[i][1]);
 
+            }
+            Configuration temp_config = _config;
+            temp_config.change();
+            ZedGraph.createDiffCuve(temp_config, data, Convert.ToDouble(dt.Compute("Min([" + dt.Columns[0].ColumnName + "])", "")), Convert.ToDouble(dt.Compute("Max([" + dt.Columns[0].ColumnName + "])", "")));
+            Word.Range dist_rng = oDoc.Bookmarks.get_Item(oEndOfDoc).Range;
+            dist_rng.Paste();
+            Utils.mutex_clipboard.ReleaseMutex();
+            dist_rng.InsertCaption(oWord.CaptionLabels["图"], title, oMissing, Word.WdCaptionPosition.wdCaptionPositionAbove, oMissing);
+            dist_rng.MoveEnd(Word.WdUnits.wdParagraph, 1);
+            dist_rng.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+            dist_rng = oDoc.Bookmarks.get_Item(oEndOfDoc).Range;
+            dist_rng.MoveStart(Word.WdUnits.wdParagraph, 1);
+            dist_rng.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+            dist_rng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+            dist_rng.InsertParagraphAfter();
+
+
+        }
         public void insertChart(string title, DataTable dt, string x_axis, string y_axis, object type)
         {
             double[][] data = new double[dt.Rows.Count][];
@@ -1675,63 +1677,7 @@ namespace ExamReport
             dist_rng.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
             dist_rng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
             dist_rng.InsertParagraphAfter();
-           // Excel.Application eapp = new Excel.Application();
-           // eapp.Visible = false;
-           // Excel.Workbooks wk = eapp.Workbooks;
-           // Excel._Workbook _wk = wk.Add(oMissing);
-           // Excel.Sheets shs = _wk.Sheets;
-
-           // Word.InlineShape dist_shape;
-           // Word.Range dist_rng = oDoc.Bookmarks.get_Item(oEndOfDoc).Range;
            
-
-         
-           // //Excel.Workbook dist_book = (Excel.Workbook)dist_shape.OLEFormat.Object;
-           // Excel.Worksheet dist_Sheet = shs.get_Item(1);
-
-           // dist_Sheet.Cells.Clear();
-
-            
-           // object[,] data = new object[dt.Rows.Count + 1, dt.Columns.Count + 1];
-           // int in_row = 0;
-           // foreach (DataRow dr1 in dt.Rows)
-           // {
-           //     int col = 0;
-           //     foreach (var item in dr1.ItemArray)
-           //     {
-           //         data[in_row, col] = item;
-           //         col++;
-           //     }
-           //     in_row++;
-           // }
-           // Excel.Range rng = dist_Sheet.Range[dist_Sheet.Cells[1][1], dist_Sheet.Cells[dt.Columns.Count][dt.Rows.Count]];
-           // rng.Value2 = data;
-           // Excel.Chart chart_dist = _wk.Charts.Add(oMissing, dist_Sheet, oMissing, oMissing);
-
-           // Excel.Range dist_chart_rng = (Excel.Range)dist_Sheet.Cells[1, 1];
-
-           // chart_dist.ChartWizard(dist_chart_rng.CurrentRegion, type, Type.Missing, Excel.XlRowCol.xlColumns, 1, 0, false, "", x_axis, y_axis, "");
-           // FormatExcel(_wk, x_axis, y_axis);
-           // dist_shape = dist_rng.InlineShapes.AddOLEObject(ref oClassType, _wk.Name,
-           //ref oMissing, ref oMissing, ref oMissing,
-           //ref oMissing, ref oMissing, ref oMissing);
-
-           // dist_shape.Range.InsertCaption(oWord.CaptionLabels["图"], title, oMissing, Word.WdCaptionPosition.wdCaptionPositionAbove, oMissing);
-           // dist_rng.MoveEnd(Word.WdUnits.wdParagraph, 1);
-           // dist_rng.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
-
-           // //dist_Sheet.UsedRange.CopyPicture();
-           // dist_shape.Width = 375;
-           // dist_shape.Height = 220;
-           // //dist_rng.PasteExcelTable(true, true, false);
-           // //dist_shape.ConvertToShape();
-           // dist_rng = oDoc.Bookmarks.get_Item(oEndOfDoc).Range;
-           // dist_rng.MoveStart(Word.WdUnits.wdParagraph, 1);
-           // dist_rng.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
-           // dist_rng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-           // dist_rng.InsertParagraphAfter();
-           // ReleaseExcel(_wk, eapp);
-           // Thread.Sleep(2000);
             
         }
         public void insertMultipleChart(string title, DataTable dt, string x_axis, string y_axis, object type)

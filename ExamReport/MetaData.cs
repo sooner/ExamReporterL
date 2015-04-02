@@ -15,12 +15,19 @@ namespace ExamReport
         public string _exam;
         public string _sub;
 
+        public string ywyy_choice;
+        public string zh_choice;
+
         public string log_name;
 
         public decimal _fullmark;
         public decimal _sub_fullmark;
         public ZK_database.GroupType _grouptype;
-        public int _group_num;
+        public int _group_num = 0;
+
+        public bool fullmark_iszero = true;
+        public bool sub_iszero = true;
+        public decimal PartialRight = 0;
 
         public List<ArrayList> CJ_list;
         public List<ArrayList> QXSF_list;
@@ -46,7 +53,7 @@ namespace ExamReport
         {
             _year = year;
             _exam = exam;
-            _sub = sub;
+            _sub = Utils.language_trans(sub);
         }
 
         public bool insert_data()
@@ -55,7 +62,7 @@ namespace ExamReport
             MySqlDataReader reader = MySqlHelper.ExecuteReader(MySqlHelper.Conn, CommandType.Text, "select * from exam_meta_data where year='"
                 + _year + "' and exam='"
                 + _exam + "' and sub='"
-                + _sub + "'", null);
+                + Utils.language_trans(_sub) + "'", null);
             if (reader.Read())
                 throw new DuplicateNameException();
 
@@ -63,7 +70,7 @@ namespace ExamReport
             int val = MySqlHelper.ExecuteNonQuery(MySqlHelper.Conn, CommandType.Text, "insert into exam_meta_data (year,exam,sub,ans,grp,fullmark,zh,gtype,gnum) values ('"
                 + _year + "', '"
             + _exam + "','"
-            + _sub + "','1','1',"
+            + Utils.language_trans(_sub) + "','1','1',"
             + Convert.ToInt32(_fullmark).ToString() + ","
             + Convert.ToInt32(_sub_fullmark).ToString() + ",'" 
             + gtype_to_string(_grouptype) + "'," 
@@ -73,8 +80,24 @@ namespace ExamReport
 
             return true;
         }
+        public void rollback()
+        {
+            MySqlDataReader reader = MySqlHelper.ExecuteReader(MySqlHelper.Conn, CommandType.Text, "select * from exam_meta_data where year='"
+                + _year + "' and exam='"
+                + _exam + "' and sub='"
+                + Utils.language_trans(_sub) + "'", null);
+            if (reader.Read())
+            {
+                MySqlHelper.ExecuteNonQuery(MySqlHelper.Conn, CommandType.Text, "delete from exam_meta_data where year='"
+                + _year + "' and exam='"
+                + _exam + "' and sub='"
+                + Utils.language_trans(_sub) + "'", null);
+            }
 
-        private bool check(string sub)
+
+
+        }
+        public bool check(string sub)
         {
             switch (sub)
             {
@@ -95,15 +118,16 @@ namespace ExamReport
             MySqlDataReader reader = MySqlHelper.ExecuteReader(MySqlHelper.Conn, CommandType.Text, "select * from exam_meta_data where year='"
                 + _year + "' and exam='"
                 + _exam + "' and sub='"
-                + _sub + "'", null);
+                + Utils.language_trans(_sub) + "'", null);
             if (!reader.Read())
                 throw new Exception("数据库异常，不存在该数据");
             _fullmark = Convert.ToDecimal(reader["fullmark"]);
             _grouptype = string_to_gtype(reader["gtype"].ToString().Trim());
             _group_num = Convert.ToInt32(reader["gnum"]);
 
-            if(_exam.Equals("gk") && check(_sub))
+            if(_exam.Equals("gk") && check(Utils.language_trans(_sub)))
                 _sub_fullmark = Convert.ToDecimal(reader["zh"]);
+                
         }
         private string gtype_to_string(ZK_database.GroupType type)
         {
@@ -114,7 +138,7 @@ namespace ExamReport
                 case ZK_database.GroupType.totalmark:
                     return "m";
                 default:
-                    return "p";
+                    return "n";
             }
         }
 
@@ -150,40 +174,44 @@ namespace ExamReport
         public void get_ans()
         {
             xz = new List<string>();
-            ans = DBHelper.get_ans(Utils.get_ans_tablename(_year, _exam, _sub), ref xz);
+            ans = DBHelper.get_ans(Utils.get_ans_tablename(_year, _exam, Utils.language_trans(_sub)), ref xz);
         }
 
         public void get_fz()
         {
             groups_group = new Dictionary<string, List<string>>();
-            grp = DBHelper.get_fz(Utils.get_fz_tablename(_year, _exam, _sub), ref groups_group);
+            grp = DBHelper.get_fz(Utils.get_fz_tablename(_year, _exam, Utils.language_trans(_sub)), ref groups_group);
+        }
+        public void get_zf_data()
+        {
+            basic = get_mysql_table(Utils.get_zt_tablename(_year));
         }
         public void get_basic_data()
         {
-            basic = get_mysql_table(Utils.get_basic_tablename(_year, _exam, _sub));
+            basic = get_mysql_table(Utils.get_basic_tablename(_year, _exam, Utils.language_trans(_sub)));
         }
 
         public void get_group_data()
         {
-            group = get_mysql_table(Utils.get_group_tablename(_year, _exam, _sub));
+            group = get_mysql_table(Utils.get_group_tablename(_year, _exam, Utils.language_trans(_sub)));
         }
 
         public void get_zh_basic_data()
         {
-            zh_basic = get_mysql_table("zh_" + Utils.get_basic_tablename(_year, _exam, _sub));
+            zh_basic = get_mysql_table("zh_" + Utils.get_basic_tablename(_year, _exam, Utils.language_trans(_sub)));
         }
         public void get_zh_group_data()
         {
-            zh_group = get_mysql_table("zh_" + Utils.get_group_tablename(_year, _exam, _sub));
+            zh_group = get_mysql_table("zh_" + Utils.get_group_tablename(_year, _exam, Utils.language_trans(_sub)));
         }
         public void get_zh_ans()
         {
-            zh_ans = DBHelper.get_only_ans("zh_" + Utils.get_ans_tablename(_year, _exam, _sub));
+            zh_ans = DBHelper.get_only_ans("zh_" + Utils.get_ans_tablename(_year, _exam, Utils.language_trans(_sub)));
         }
         public void get_zh_fz()
         {
             zh_groups_group = new Dictionary<string, List<string>>();
-            zh_grp = DBHelper.get_fz("zh_" + Utils.get_fz_tablename(_year, _exam, _sub), ref zh_groups_group);
+            zh_grp = DBHelper.get_fz("zh_" + Utils.get_fz_tablename(_year, _exam, Utils.language_trans(_sub)), ref zh_groups_group);
         }
         public DataTable get_mysql_table(string name)
         {

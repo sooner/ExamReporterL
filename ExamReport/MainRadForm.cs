@@ -27,6 +27,8 @@ namespace ExamReport
         Dictionary<string, RadButton> cancel_button = new Dictionary<string, RadButton>();
         Dictionary<string, RadWaitingBar> waiting_bar = new Dictionary<string, RadWaitingBar>();
 
+        Dictionary<string, string> schoolcode_kv = new Dictionary<string, string>();
+        Dictionary<string, string> school_qx = new Dictionary<string, string>();
         string currentdic = System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath);
         //Thread thread;
         public mainform()
@@ -36,18 +38,34 @@ namespace ExamReport
             TreeLoadData();
             ZKTreeView.SelectedNodeChanged += ZKTreeNode_Selected;
             GKTreeView.SelectedNodeChanged += GKTreeNode_Selected;
+            HKTreeView.SelectedNodeChanged += HKTreeNode_Selected;
 
             gk_gridview.EditorRequired += radGridView1_EditorRequired;
+            
             init_dictionary();
             save_address.Text = currentdic;
             gk_save_address.Text = currentdic;
+            hk_save_addr.Text = currentdic;
+
+            excellent_high.Value = 100m;
+            excellent_low.Value = 85m;
+            well_high.Value = 85m;
+            well_low.Value = 70m;
+            pass_high.Value = 70m;
+            pass_low.Value = 60m;
+            fail_high.Value = 60m;
+            fail_low.Value = 0m;
         }
         void init_dictionary()
         {
             progress_label.Add("zk_zt", zk_zt_progress);
             progress_label.Add("zk_qx", zk_qx_ProgressLabel);
             progress_label.Add("gk_zt", gk_zt_progresslabel);
-           
+            progress_label.Add("gk_cj", gk_cj_progresslabel);
+            progress_label.Add("gk_sf", gk_sf_progresslabel);
+            progress_label.Add("gk_qx", gk_qx_progresslabel);
+            progress_label.Add("gk_xx", gk_xx_progresslabel);
+            progress_label.Add("hk_zt", hk_zt_progresslabel);
 
             run_button.Add("zk_zt", zk_zt_start);
             run_button.Add("zk_qx", zk_qx_start);
@@ -55,6 +73,8 @@ namespace ExamReport
             run_button.Add("gk_cj", gk_cj_start);
             run_button.Add("gk_sf", gk_sf_start);
             run_button.Add("gk_qx", gk_qx_start);
+            run_button.Add("gk_xx", gk_xx_start);
+            run_button.Add("hk_zt", hk_start);
 
             cancel_button.Add("zk_zt", zk_zt_cancel);
             cancel_button.Add("zk_qx", zk_qx_cancel);
@@ -62,6 +82,8 @@ namespace ExamReport
             cancel_button.Add("gk_cj", gk_cj_cancel);
             cancel_button.Add("gk_sf", gk_sf_cancel);
             cancel_button.Add("gk_qx", gk_qx_cancel);
+            cancel_button.Add("gk_xx", gk_xx_cancel);
+            cancel_button.Add("hk_zt", hk_cancel);
 
             waiting_bar.Add("zk_zt", zk_zt_waitingbar);
             waiting_bar.Add("zk_qx", zk_qx_WaitingBar);
@@ -69,6 +91,8 @@ namespace ExamReport
             waiting_bar.Add("gk_cj", gk_cj_waitingbar);
             waiting_bar.Add("gk_sf", gk_sf_waitingbar);
             waiting_bar.Add("gk_qx", gk_qx_waitingbar);
+            waiting_bar.Add("gk_xx", gk_xx_waitingbar);
+            waiting_bar.Add("hk_zt", hk_waitingbar);
 
             
         }
@@ -124,29 +148,66 @@ namespace ExamReport
                 gnum = c.Field<int>("gnum")
             }).ToDataTable();
             gk_gridview.DataSource = gk_data.LanguageTrans();
-            
-            
+
+            foreach (GridViewRowInfo row in gk_gridview.Rows)
+            {
+                if (row.Cells["sub"].Value.ToString().Trim().Equals("语文")
+                    || row.Cells["sub"].Value.ToString().Trim().Equals("英语"))
+                {
+                    GridViewComboBoxColumn col = (GridViewComboBoxColumn)gk_gridview.Columns["SpecChoice"] ;
+                    col.DataSource = Utils.ywyy_combo;
+                    row.Cells["SpecChoice"].Value = Utils.ywyy_combo[1];
+                }
+                else if (row.Cells["sub"].Value.ToString().Contains("理综")
+                    || row.Cells["sub"].Value.ToString().Contains("文综"))
+                {
+                    GridViewComboBoxColumn col = (GridViewComboBoxColumn)gk_gridview.Columns["SpecChoice"];
+                    col.DataSource = Utils.zh_combo;
+                    row.Cells["SpecChoice"].Value = Utils.zh_combo[0];
+                }
+                else
+                {
+                    GridViewComboBoxColumn col = (GridViewComboBoxColumn)gk_gridview.Columns["SpecChoice"];
+                    col.DataSource = Utils.null_combo;
+                }
+            }
             gk_gridview.TableElement.EndUpdate();
+
+            HKGridView.MasterTemplate.AllowAddNewRow = false;
+            HKGridView.TableElement.BeginUpdate();
+            DataTable hk_data = data.AsEnumerable().AsEnumerable().Where(c => c.Field<string>("exam").Equals("hk")).Select(c => new
+            {
+                year = c.Field<string>("year"),
+                sub = c.Field<string>("sub"),
+                ans = c.Field<string>("ans"),
+                grp = c.Field<string>("grp"),
+                fullmark = c.Field<int>("fullmark"),
+                gtype = c.Field<string>("gtype"),
+                gnum = c.Field<int>("gnum")
+            }).ToDataTable();
+            HKGridView.DataSource = hk_data.LanguageTrans();
+
+            HKGridView.TableElement.EndUpdate();
+
         }
         void radGridView1_EditorRequired(object sender, EditorRequiredEventArgs e)
         {
             if (gk_gridview.CurrentColumn is GridViewComboBoxColumn)
+            //if (gk_gridview.CurrentColumn is GridViewCheckBoxColumn)
             {
                 if (gk_gridview.CurrentRow.Cells["sub"].Value.ToString().Trim().Equals("语文")
                     || gk_gridview.CurrentRow.Cells["sub"].Value.ToString().Trim().Equals("英语"))
                 {
                     GridViewComboBoxColumn col = (GridViewComboBoxColumn)gk_gridview.CurrentColumn;
                     col.DataSource = Utils.ywyy_combo;
+                    gk_gridview.CurrentRow.Cells["SpecChoice"].Value = Utils.ywyy_combo[1];
                 }
-                else if (gk_gridview.CurrentRow.Cells["sub"].Value.ToString().Trim().Equals("理综")
-                    || gk_gridview.CurrentRow.Cells["sub"].Value.ToString().Trim().Equals("化学")
-                    || gk_gridview.CurrentRow.Cells["sub"].Value.ToString().Trim().Equals("生物")
-                    || gk_gridview.CurrentRow.Cells["sub"].Value.ToString().Trim().Equals("政治")
-                    || gk_gridview.CurrentRow.Cells["sub"].Value.ToString().Trim().Equals("地理")
-                    || gk_gridview.CurrentRow.Cells["sub"].Value.ToString().Trim().Equals("历史"))
+                else if (gk_gridview.CurrentRow.Cells["sub"].Value.ToString().Contains("理综")
+                    || gk_gridview.CurrentRow.Cells["sub"].Value.ToString().Contains("文综"))
                 {
                     GridViewComboBoxColumn col = (GridViewComboBoxColumn)gk_gridview.CurrentColumn;
                     col.DataSource = Utils.zh_combo;
+                    gk_gridview.CurrentRow.Cells["SpecChoice"].Value = Utils.zh_combo[0];
                 }
                 else
                 {
@@ -192,7 +253,8 @@ namespace ExamReport
             GKTreeView.Nodes.Add(new RadTreeNode("区县"));
             GKTreeView.Nodes.Add(new RadTreeNode("学校"));
 
-
+            HKTreeView.Nodes.Add(new RadTreeNode("数据录入"));
+            HKTreeView.Nodes.Add(new RadTreeNode("总体"));
             string conn = @"Provider=vfpoledb;Data Source=" + currentdic + ";Collating Sequence=machine;";
 
             OleDbConnection dbfConnection = new OleDbConnection(conn);
@@ -219,31 +281,96 @@ namespace ExamReport
                 code = string.Join(",", c.GroupBy(p => p.Field<string>("qxdm")).Select(p => p.Key.ToString().Trim()).ToArray())
             }).ToDataTable();
             int count = 0;
+            GKTreeView.Nodes[5].CheckType = CheckType.CheckBox;
             foreach (DataRow dr in qxdm.Rows)
             {
                 //RadTreeNode node = new RadTreeNode(dr["qxmc"].ToString().Trim());
                 ZKTreeView.Nodes[2].Nodes.Add(new RadTreeNode(dr["qxmc"].ToString().Trim()));
                 GKTreeView.Nodes[4].Nodes.Add(new RadTreeNode(dr["qxmc"].ToString().Trim()));
                 GKTreeView.Nodes[5].Nodes.Add(new RadTreeNode(dr["qxmc"].ToString().Trim()));
+                GKTreeView.Nodes[5].Nodes[count].CheckType = CheckType.CheckBox;
+                
                 List<string> names = get_school_name(schoolcode_table, dr["code"].ToString().Trim());
+                int children_count = 0;
                 foreach (string name in names)
+                {
                     GKTreeView.Nodes[5].Nodes[count].Nodes.Add(new RadTreeNode(name));
+                    GKTreeView.Nodes[5].Nodes[count].Nodes[children_count].CheckType = CheckType.CheckBox;
+                    children_count++;
+                }
                 count++;
                 
             }
+            schoolcode_kv = schoolcode_table.AsEnumerable().Select(c => new 
+            {
+                key = c.Field<string>("zxmc").ToString().Trim(),
+                value = c.Field<string>("zxdm")
+            }).ToDictionary(c => c.key, c => c.value);
+
+            school_qx = schoolcode_table.AsEnumerable().Select(c => new
+            {
+                school = c.Field<string>("zxdm"),
+                qx = c.Field<string>("qxmc").Trim()
+            }).Join(qxdm.AsEnumerable(), s => s.qx, c => c.Field<string>("qxmc"), (s, c) => new
+            {
+                school = s.school,
+                qx = c.Field<string>("code")
+
+            }).ToDictionary(c => c.school, c => c.qx);
+            GKTreeView.NodeCheckedChanged += new RadTreeView.TreeViewEventHandler(GKTreeView_NodeCheckedChanged);
             ZKTreeView.ExpandAll();
         }
+        private void GKTreeView_NodeCheckedChanged(object sender, RadTreeViewEventArgs e)
+        {
+            CheckAllChildNodes(e.Node, e.Node.Checked);
+            //bool bol = true;
+            //if (e.Node.Parent != null)
+            //{
+            //    for (int i = 0; i < e.Node.Parent.Nodes.Count; i++)
+            //    {
+            //        if (!e.Node.Parent.Nodes[i].Checked)
+            //            bol = false;
+            //    }
+            //    e.Node.Parent.Checked = bol;
+            //}
 
+        }
+        public void CheckAllChildNodes(RadTreeNode treenode, bool nodechecked)
+        {
+            foreach (RadTreeNode node in treenode.Nodes)
+            {
+                node.Checked = nodechecked;
+                if(node.Nodes.Count > 0)
+                    this.CheckAllChildNodes(node, nodechecked);
+            }
+        }
+        
         public List<string> get_school_name(DataTable dt, string code)
         {
             string[] singles = code.Split(',');
             List<string> result = new List<string>();
             foreach (string name in singles)
             {
-                List<string> some = dt.AsEnumerable().Where(c => c.Field<string>("qxdm").Equals(name)).Select(c => c.Field<string>("zxmc")).ToList<string>();
+                List<string> some = dt.AsEnumerable().Where(c => c.Field<string>("qxdm").Equals(name)).Select(c => c.Field<string>("zxmc").ToString().Trim()).ToList<string>();
                 result.AddRange(some);
             }
             return result;
+        }
+        private void HKTreeNode_Selected(object sender, RadTreeViewEventArgs e)
+        {
+            RadTreeViewElement element = sender as RadTreeViewElement;
+            if (element.SelectedNode.Text.Trim().Equals("数据录入"))
+            {
+                hk_pre_panel.Show();
+                hk_zt_panel.Hide();
+                hk_config_panel.Hide();
+            }
+            else if (element.SelectedNode.Text.Trim().Equals("总体"))
+            {
+                hk_pre_panel.Hide();
+                hk_zt_panel.Show();
+                hk_config_panel.Show();
+            }
         }
         private void GKTreeNode_Selected(object sender, RadTreeViewEventArgs e)
         {
@@ -256,6 +383,7 @@ namespace ExamReport
                 gk_qx_panel.Hide();
                 gk_data_pre_panel.Hide();
                 gk_docGroupBox.Show();
+                gk_xx_panel.Hide();
             }
             else if (element.SelectedNode.Text.Trim().Equals("区县") || (element.SelectedNode.Parent != null && element.SelectedNode.Parent.Text.Trim().Equals("区县")))
             {
@@ -265,6 +393,7 @@ namespace ExamReport
                 gk_qx_panel.Show();
                 gk_data_pre_panel.Hide();
                 gk_docGroupBox.Show();
+                gk_xx_panel.Hide();
             }
             else if (element.SelectedNode.Text.Trim().Equals("数据录入"))
             {
@@ -274,6 +403,7 @@ namespace ExamReport
                 gk_qx_panel.Hide();
                 gk_data_pre_panel.Show();
                 gk_docGroupBox.Hide();
+                gk_xx_panel.Hide();
             }
             else if (element.SelectedNode.Text.Trim().Equals("示范校"))
             {
@@ -283,6 +413,7 @@ namespace ExamReport
                 gk_qx_panel.Hide();
                 gk_data_pre_panel.Hide();
                 gk_docGroupBox.Show();
+                gk_xx_panel.Hide();
             }
             else if (element.SelectedNode.Text.Trim().Equals("城郊"))
             {
@@ -292,6 +423,19 @@ namespace ExamReport
                 gk_qx_panel.Hide();
                 gk_data_pre_panel.Hide();
                 gk_docGroupBox.Show();
+                gk_xx_panel.Hide();
+            }
+            else if (element.SelectedNode.Text.Trim().Equals("学校") 
+                || (element.SelectedNode.Parent != null && element.SelectedNode.Parent.Text.Trim().Equals("学校"))
+                || (element.SelectedNode.Parent.Parent != null && element.SelectedNode.Parent.Parent.Text.Trim().Equals("学校")))
+            {
+                gk_zt_panel.Hide();
+                gk_sf_panel.Hide();
+                gk_cj_panel.Hide();
+                gk_qx_panel.Hide();
+                gk_data_pre_panel.Hide();
+                gk_docGroupBox.Show();
+                gk_xx_panel.Show();
             }
         }
         private void ZKTreeNode_Selected(object sender, RadTreeViewEventArgs e)
@@ -475,6 +619,8 @@ namespace ExamReport
                         this.run_button[key].Enabled = true;
                         this.cancel_button[key].Enabled = false;
                         this.waiting_bar[key].StopWaiting();
+                        if (thread_store.ContainsKey(key))
+                            thread_store.Remove(key);
                         break;
                     default:
                         break;
@@ -486,12 +632,15 @@ namespace ExamReport
 
         private void zk_qx_cancel_Click(object sender, EventArgs e)
         {
-            Thread thread = thread_store["zk_qx"];
-            if (thread.IsAlive)
+            if (thread_store.ContainsKey("zk_qx"))
             {
-                thread.Abort();
-                thread_store.Remove("zk_qx");
-                ShowPro("zk_qx", 2, "");
+                Thread thread = thread_store["zk_qx"];
+                if (thread.IsAlive)
+                {
+                    thread.Abort();
+                    thread_store.Remove("zk_qx");
+                    ShowPro("zk_qx", 2, "");
+                }
             }
         }
 
@@ -513,12 +662,15 @@ namespace ExamReport
 
         private void zk_zt_cancel_Click(object sender, EventArgs e)
         {
-            Thread thread = thread_store["zk_zt"];
-            if (thread.IsAlive)
+            if (thread_store.ContainsKey("zk_zt"))
             {
-                thread.Abort();
-                thread_store.Remove("zk_zt");
-                ShowPro("zk_zt", 2, "");
+                Thread thread = thread_store["zk_zt"];
+                if (thread.IsAlive)
+                {
+                    thread.Abort();
+                    thread_store.Remove("zk_zt");
+                    ShowPro("zk_zt", 2, "");
+                }
             }
         }
 
@@ -624,12 +776,15 @@ namespace ExamReport
 
         private void gk_zt_cancel_Click(object sender, EventArgs e)
         {
-            Thread thread = thread_store["gk_zt"];
-            if (thread.IsAlive)
+            if (thread_store.ContainsKey("gk_zt"))
             {
-                thread.Abort();
-                thread_store.Remove("gk_zt");
-                ShowPro("gk_zt", 2, "");
+                Thread thread = thread_store["gk_zt"];
+                if (thread.IsAlive)
+                {
+                    thread.Abort();
+                    thread_store.Remove("gk_zt");
+                    ShowPro("gk_zt", 2, "");
+                }
             }
         }
 
@@ -653,6 +808,12 @@ namespace ExamReport
 
         private void gk_cj_start_Click(object sender, EventArgs e)
         {
+            if (string.IsNullOrEmpty(gk_cj_addr.Text.Trim()))
+            {
+                Error("请输入城郊分类文件地址！");
+                return;
+            }
+            
             if (CheckGridView(gk_gridview))
                 return;
 
@@ -671,6 +832,12 @@ namespace ExamReport
 
         private void gk_sf_start_Click(object sender, EventArgs e)
         {
+            if (string.IsNullOrEmpty(gk_sf_addr.Text.Trim()))
+            {
+                Error("请输入示范学校分类文件地址！");
+                return;
+            }
+            
             if (CheckGridView(gk_gridview))
                 return;
 
@@ -703,9 +870,28 @@ namespace ExamReport
 
         private void gk_qx_start_Click(object sender, EventArgs e)
         {
+            if (string.IsNullOrEmpty(gk_qx_xx_addr.Text.Trim()))
+            {
+                Error("请输入区县学校分类文件地址！");
+                return;
+            }
+            if (string.IsNullOrEmpty(gk_qx_cj_addr.Text.Trim()))
+            {
+                Error("请输入城郊分类文件地址！");
+                return;
+            }
+            if (string.IsNullOrEmpty(gk_qx_sf_addr.Text.Trim()))
+            {
+                Error("请输入示范学校分类文件地址！");
+                return;
+            }
             if (CheckGridView(gk_gridview))
                 return;
-
+            if (GKTreeView.SelectedNode.Text.Trim().Equals("区县"))
+            {
+                Error("请选择区县！");
+                return;
+            }
             Analysis analysis = new Analysis(this);
             analysis._gridview = gk_gridview;
             analysis.save_address = gk_save_address.Text;
@@ -722,6 +908,7 @@ namespace ExamReport
                 .Where(c => c.school.Equals(GKTreeView.SelectedNode.Text.Trim())).Select(c => c.code).First();
 
             analysis.qx_code = QX_code;
+            analysis.QX = GKTreeView.SelectedNode.Text.Trim();
             Thread thread = new Thread(new ThreadStart(analysis.gk_qx_start));
             thread.IsBackground = true;
             thread.SetApartmentState(ApartmentState.STA);
@@ -757,6 +944,193 @@ namespace ExamReport
             }
         }
 
+        private void radButton11_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+            openFileDialog1.InitialDirectory = "C://";
+            openFileDialog1.Filter = "Excel files (*.xls,*.xlsx)|*.xls;*.xlsx|All files (*.*)|*.*";
+            openFileDialog1.FilterIndex = 1;
+            openFileDialog1.RestoreDirectory = true;
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+                gk_xx_sf_addr.Text = openFileDialog1.FileName;
+        }
+
+        private void radButton8_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+            openFileDialog1.InitialDirectory = "C://";
+            openFileDialog1.Filter = "Excel files (*.xls,*.xlsx)|*.xls;*.xlsx|All files (*.*)|*.*";
+            openFileDialog1.FilterIndex = 1;
+            openFileDialog1.RestoreDirectory = true;
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+                gk_xx_cj_addr.Text = openFileDialog1.FileName;
+        }
+
+        private void gk_xx_start_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(gk_xx_sf_addr.Text.Trim()))
+            {
+                Error("请输入区县学校分类文件地址！");
+                return;
+            }
+            if (string.IsNullOrEmpty(gk_xx_cj_addr.Text.Trim()))
+            {
+                Error("请输入城郊分类文件地址！");
+                return;
+            }
+            if (CheckGridView(gk_gridview))
+                return;
+            Dictionary<string, string> school = TreeViewCheck(GKTreeView.Nodes[5]);
+
+            if (school.Count == 0)
+            {
+                Error("请勾选报告学校！");
+                return;
+            }
+            Analysis analysis = new Analysis(this);
+            analysis._gridview = gk_gridview;
+            analysis.save_address = gk_save_address.Text;
+            analysis.isVisible = gk_isVisible.Checked;
+            analysis.CurrentDirectory = currentdic;
+            analysis.cj_addr = gk_xx_cj_addr.Text.Trim();
+            analysis.sf_addr = gk_xx_sf_addr.Text.Trim();
+            analysis.school = school;
+            analysis.school_qx = school_qx;
+            Thread thread = new Thread(new ThreadStart(analysis.gk_xx_start));
+            thread.IsBackground = true;
+            thread.SetApartmentState(ApartmentState.STA);
+            thread_store.Add("gk_xx", thread);
+            thread.Start();
+        }
+
+        private Dictionary<string, string> TreeViewCheck(RadTreeNode treenode)
+        {
+            Dictionary<string, string> result = new Dictionary<string,string>();
+            if (treenode.Checked)
+                return schoolcode_kv;
+
+            foreach (RadTreeNode node in treenode.Nodes)
+            {
+                if (node.Nodes.Count != 0)
+                    foreach (RadTreeNode child in node.Nodes)
+                        if (child.Checked)
+                            result.Add(child.Name, schoolcode_kv[child.Name]);
+            }
+            return result;
+
+        }
+
+        private void gk_xx_cancel_Click(object sender, EventArgs e)
+        {
+            if (thread_store.ContainsKey("gk_xx"))
+            {
+                Thread thread = thread_store["gk_xx"];
+                if (thread.IsAlive)
+                {
+                    thread.Abort();
+                    thread_store.Remove("gk_xx");
+                    ShowPro("gk_xx", 2, "");
+                }
+            }
+        }
+
+        private void radButton12_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog openFolder = new FolderBrowserDialog();
+            openFolder.ShowNewFolderButton = true;
+            openFolder.Description = "保存至";
+            if (openFolder.ShowDialog() == DialogResult.OK)
+                hk_save_addr.Text = openFolder.SelectedPath;
+        }
+
+        private void hk_start_Click(object sender, EventArgs e)
+        {
+            if (CheckGridView(HKGridView))
+                return;
+            if (!hk_check())
+                return;
+            Analysis analysis = new Analysis(this);
+            analysis._gridview = HKGridView;
+            analysis.save_address = hk_save_addr.Text;
+            analysis.isVisible = hk_isVisible.Checked;
+            analysis.CurrentDirectory = currentdic;
+            analysis.hk_hierarchy = new Analysis.HK_hierarchy();
+            analysis.hk_hierarchy.excellent_low = excellent_low.Value;
+            analysis.hk_hierarchy.excellent_high = excellent_high.Value;
+            analysis.hk_hierarchy.well_low = well_low.Value;
+            analysis.hk_hierarchy.well_high = well_high.Value;
+            analysis.hk_hierarchy.pass_low = pass_low.Value;
+            analysis.hk_hierarchy.pass_high = pass_high.Value;
+            analysis.hk_hierarchy.fail_low = fail_low.Value;
+            analysis.hk_hierarchy.fail_high = fail_high.Value;
+            Thread thread = new Thread(new ThreadStart(analysis.hk_zt_start));
+            thread.IsBackground = true;
+            thread.SetApartmentState(ApartmentState.STA);
+            thread_store.Add("hk_zt", thread);
+            thread.Start();
+
+        }
+
+        private bool hk_check()
+        {
+            if (Math.Abs(excellent_low.Value) != excellent_low.Value ||
+                Math.Abs(excellent_high.Value) != excellent_high.Value ||
+                Math.Abs(well_low.Value) != well_low.Value ||
+                Math.Abs(well_high.Value) != well_high.Value ||
+                Math.Abs(pass_low.Value) != pass_low.Value ||
+                Math.Abs(pass_high.Value) != pass_high.Value ||
+                Math.Abs(fail_low.Value) != fail_low.Value ||
+                Math.Abs(fail_high.Value) != fail_high.Value)
+                return Error("会考成绩区域不能为负！");
+            if (!(fail_low.Value < fail_high.Value &&
+                pass_low.Value < pass_high.Value &&
+                well_low.Value < well_high.Value &&
+                excellent_low.Value < excellent_high.Value))
+                return Error("会考成绩设置错误！");
+            return true;
+        }
+
+        private void hk_cancel_Click(object sender, EventArgs e)
+        {
+            if (thread_store.ContainsKey("hk_zt"))
+            {
+                Thread thread = thread_store["hk_zt"];
+                if (thread.IsAlive)
+                {
+                    thread.Abort();
+                    thread_store.Remove("hk_zt");
+                    ShowPro("hk_zt", 2, "");
+                }
+            }
+        }
+
+        private void hk_import_Click(object sender, EventArgs e)
+        {
+            MyWizard wizard = new MyWizard("会考", this);
+            wizard.Show();
+        }
+
+        private void hk_delete_Click(object sender, EventArgs e)
+        {
+            foreach (GridViewRowInfo row in HKGridView.Rows)
+            {
+                if (row.Cells["checkbox"].Value != null)
+                {
+                    try
+                    {
+                        DBHelper.delete_row(
+                            row.Cells["year"].Value.ToString().Trim(),
+                            "会考",
+                            row.Cells["sub"].Value.ToString().Trim());
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, "提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+            Grid_load();
+        }
        
     }
 }

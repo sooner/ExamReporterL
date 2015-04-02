@@ -22,7 +22,7 @@ namespace ExamReport
 
         public DataTable newStandard;
 
-
+        public MetaData _mdata;
         string filePath;
         string file;
         string path;
@@ -32,7 +32,7 @@ namespace ExamReport
         List<List<string>> name_list;
         OleDbConnection dbfConnection;
 
-        public HK_database(DataTable standard_ans, DataTable groups, ZK_database.GroupType gtype, decimal divider)
+        public HK_database(MetaData mdata, DataTable standard_ans, DataTable groups, ZK_database.GroupType gtype, decimal divider)
         {
             _groups = groups;
             _gtype = gtype;
@@ -41,6 +41,7 @@ namespace ExamReport
             _standard_ans.PrimaryKey = new DataColumn[] { _standard_ans.Columns["th"] };
             _basic_data = new DataTable();
             _group_data = new DataTable();
+            _mdata = mdata;
 
             name_list = new List<List<string>>();
 
@@ -137,8 +138,8 @@ namespace ExamReport
                 }
 
                 DataRow newRow = basic_data.NewRow();
-                newRow["studentid"] = dr["bmh"].ToString().Trim();
-                newRow["schoolcode"] = dr["kch"].ToString().Trim();
+                newRow["studentid"] = dr["exam_no"].ToString().Trim();
+                newRow["schoolcode"] = dr["school_cod"].ToString().Trim();
                 newRow["totalmark"] = 0m;
                 decimal obj_mark = 0;
                 decimal sub_mark = 0;
@@ -198,11 +199,11 @@ namespace ExamReport
                 //    newRow["T" + _standard_ans.Rows[i]["th"].ToString().Trim()] = val;
                     
                 //}
-                if ((decimal)newRow["totalmark"] > Utils.fullmark)
+                if ((decimal)newRow["totalmark"] > _mdata._fullmark)
                     throw new ArgumentException("科目总分设置错误，存在学生满分大于总分的情况");
-                if (Utils.fullmark_iszero && (decimal)newRow["totalmark"] == 0)
+                if (_mdata.fullmark_iszero && (decimal)newRow["totalmark"] == 0)
                     continue;
-                if (Utils.sub_iszero && sub_mark == 0)
+                if (_mdata.sub_iszero && sub_mark == 0)
                     continue;
                 
 
@@ -264,12 +265,12 @@ namespace ExamReport
             }
 
             create_groups();
-            if (Utils.saveMidData)
-            {
-                Utils.create_groups_table(_basic_data, Utils.year + "会考" + Utils.subject + "基础数据");
-                Utils.create_groups_table(_group_data, Utils.year + "会考" + Utils.subject + "题组数据");
+            //if (Utils.saveMidData)
+            //{
+            //    Utils.create_groups_table(_basic_data, Utils.year + "会考" + Utils.subject + "基础数据");
+            //    Utils.create_groups_table(_group_data, Utils.year + "会考" + Utils.subject + "题组数据");
 
-            }
+            //}
 
             return "";
         }

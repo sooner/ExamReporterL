@@ -9,19 +9,21 @@ namespace ExamReport
     class ZF_statistic
     {
         DataTable _data;
+        public Configuration _config;
         public ZF_worddata w_result;
         public ZF_worddata l_result;
 
         public List<DataTable> sub;
         decimal _fullmark;
         public string _name;
-        public ZF_statistic(DataTable data, decimal fullmark, string name)
+        public ZF_statistic(Configuration config, DataTable data, decimal fullmark, string name)
         {
             _data = data;
             w_result = new ZF_worddata();
             l_result = new ZF_worddata();
             _fullmark = fullmark;
             _name = name;
+            _config = config;
         }
 
         public void partition_process()
@@ -32,7 +34,7 @@ namespace ExamReport
             single_process(w_data, w_result);
             single_process(l_data, l_result);
 
-            if (Utils.report_style.Equals("总体"))
+            if (_config.report_style.Equals("总体"))
             {
                 sub = new List<DataTable>();
                 insertSub(sub, _data, "yw", 150m);

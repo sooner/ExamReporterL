@@ -111,55 +111,59 @@ namespace ExamReport
             ld.exam = exam.SelectedItem.ToString();
             ld.sub = subject.SelectedItem.ToString();
             ld.database_str = database_addr.Text;
-            ld.ans_str = ans_addr.Text;
-            ld.group_str = group_addr.Text;
-
-            if (ld.sub.Contains("理综") || ld.sub.Contains("文综"))
+            if (!ld.sub.Equals("总分"))
             {
-                
+                ld.ans_str = ans_addr.Text;
+                ld.group_str = group_addr.Text;
 
-                if (string.IsNullOrEmpty(zh_addr.Text.Trim()))
-                {
-                    Error("请输入综合分类文件地址！");
-                    return;
-                }
-                if (Math.Abs(single_fullmark.Value) != single_fullmark.Value)
-                {
-                    Error("单科总分不能为负！");
-                    return;
-                }
-                if (single_fullmark.Value > fullmark.Value)
-                {
-                    Error("单科成绩不能大于总成绩！");
-                    return;
-                }
-                ld.wenli_str = zh_addr.Text;
 
-                ld.sub_fullmark = single_fullmark.Value;
-                
-            }
-            if (Popu_choice.Checked)
-            {
-                ld.grouptype = ZK_database.GroupType.population;
-                ld.divider = popu_num.Value;
-            }
-            if (Mark_choice.Checked)
-            {
-                
-                ld.grouptype = ZK_database.GroupType.totalmark;
-                ld.divider = remark_num.Value;
+                if (ld.sub.Contains("理综") || ld.sub.Contains("文综"))
+                {
 
+
+                    if (string.IsNullOrEmpty(zh_addr.Text.Trim()))
+                    {
+                        Error("请输入综合分类文件地址！");
+                        return;
+                    }
+                    if (Math.Abs(single_fullmark.Value) != single_fullmark.Value)
+                    {
+                        Error("单科总分不能为负！");
+                        return;
+                    }
+                    if (single_fullmark.Value > fullmark.Value)
+                    {
+                        Error("单科成绩不能大于总成绩！");
+                        return;
+                    }
+                    ld.wenli_str = zh_addr.Text;
+
+                    ld.sub_fullmark = single_fullmark.Value;
+
+                }
+                if (Popu_choice.Checked)
+                {
+                    ld.grouptype = ZK_database.GroupType.population;
+                    ld.divider = popu_num.Value;
+                }
+                if (Mark_choice.Checked)
+                {
+
+                    ld.grouptype = ZK_database.GroupType.totalmark;
+                    ld.divider = remark_num.Value;
+
+                }
             }
             ld.fullmark = fullmark.Value;
-            Utils.PartialRight = PartialRight.Value;
+            ld.PartialRight = PartialRight.Value;
             if (sub_iszero.Checked)
-                Utils.sub_iszero = true;
+                ld.sub_iszero = true;
             else
-                Utils.sub_iszero = false;
+                ld.sub_iszero = false;
             if (fullmark_iszero.Checked)
-                Utils.fullmark_iszero = true;
+                ld.fullmark_iszero = true;
             else
-                Utils.fullmark_iszero = false;
+                ld.fullmark_iszero = false;
 
             thread = new Thread(new ThreadStart(ld.start_process));
             thread.IsBackground = true;
@@ -294,12 +298,41 @@ namespace ExamReport
             {
                 zh_panel2.Show();
                 zh_panel.Show();
+                zongfen_enable();
+            }
+            else if (subject.SelectedItem.ToString().Equals("总分"))
+            {
+                zongfen_disable();
+                zh_panel.Hide();
+                zh_panel2.Hide();
             }
             else
             {
                 zh_panel.Hide();
                 zh_panel2.Hide();
+                zongfen_enable();
             }
+        }
+
+        private void zongfen_disable()
+        {
+            ans_addr.Enabled = false;
+            group_addr.Enabled = false;
+            button2.Enabled = false;
+            button3.Enabled = false;
+            popu_num.Enabled = false;
+            remark_num.Enabled = false;
+
+        }
+        private void zongfen_enable()
+        {
+            ans_addr.Enabled = true;
+            group_addr.Enabled = true;
+            button2.Enabled = true;
+            button3.Enabled = true;
+            popu_num.Enabled = true;
+            remark_num.Enabled = true;
+
         }
     
     }

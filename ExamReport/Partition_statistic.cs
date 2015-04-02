@@ -14,6 +14,8 @@ namespace ExamReport
         public DataTable _basic_data;
         public DataTable _groups_data;
 
+        public Configuration _config;
+
         public decimal _fullmark;
         
         public int _groupnum;
@@ -22,6 +24,7 @@ namespace ExamReport
         public DataTable _groups_ans;
         decimal ZH_avg;
         string totalmark_str;
+        string _title;
 
         public Partition_statistic(string title, DataTable dt, decimal fullmark, DataTable standard_ans, DataTable groups_table, DataTable groups_ans, int groupnum)
         {
@@ -33,26 +36,28 @@ namespace ExamReport
             _groups_ans = groups_ans;
             
             _standard_ans.PrimaryKey = new DataColumn[] { _standard_ans.Columns["th"] };
-            if (Utils.WSLG)
-            {
-                result = new WSLG_partitiondata(title);
-                
-            }
-            else
-            {
-                result = new PartitionData(title);
-            }
-
-            result._standard_ans = _standard_ans;
-            result._group_ans = _groups_ans;
+            _title = title;
+            
 
         }
 
         public void statistic_process(bool isZonghe)
         {
+            if (_config.WSLG)
+            {
+                result = new WSLG_partitiondata(_title);
+
+            }
+            else
+            {
+                result = new PartitionData(_title);
+            }
+
+            result._standard_ans = _standard_ans;
+            result._group_ans = _groups_ans;
             ArrayList stdevlist = new ArrayList();
             result.total_num = _basic_data.Rows.Count;
-            if (Utils.WSLG)
+            if (_config.WSLG)
             {
                 ((WSLG_partitiondata)result).PLN = Convert.ToInt32(Math.Ceiling(_basic_data.Rows.Count * 0.27));
                 ((WSLG_partitiondata)result).PHN = _basic_data.Rows.Count - ((WSLG_partitiondata)result).PLN + 1;
@@ -72,7 +77,7 @@ namespace ExamReport
 
             result.difficulty = result.avg / result.fullmark;
             Regex number = new Regex("^[Tt]\\d+");
-            if (Utils.WSLG)
+            if (_config.WSLG)
                 ((WSLG_partitiondata)result).total.Add(new WSLG_partitiondata.Disc(result.total_num, result.fullmark));
             foreach (DataColumn dc in _basic_data.Columns)
             {
@@ -89,7 +94,7 @@ namespace ExamReport
                     stdev single_stdev = new stdev(result.total_num, (decimal)dr["avg"]);
                     stdevlist.Add(single_stdev);
                     dr["difficulty"] = (decimal)dr["avg"] / (decimal)dr["fullmark"];
-                    if (Utils.WSLG)
+                    if (_config.WSLG)
                     {
                         ((WSLG_partitiondata)result).total.Add(new WSLG_partitiondata.Disc(result.total_num, (decimal)dr["fullmark"]));
                     }
@@ -101,7 +106,7 @@ namespace ExamReport
             foreach (DataRow dr in _basic_data.Rows)
             {
                 ((stdev)stdevlist[0]).add((decimal)dr[totalmark_str]);
-                if (Utils.WSLG)
+                if (_config.WSLG)
                 {
                     if (row <= ((WSLG_partitiondata)result).PLN)
                         ((WSLG_partitiondata)result).total[0].AddData((decimal)dr[totalmark_str], true);
@@ -114,7 +119,7 @@ namespace ExamReport
                     if (number.IsMatch(dc.ColumnName))
                     {
                         ((stdev)stdevlist[CoCount]).add((decimal)dr[dc]);
-                        if (Utils.WSLG)
+                        if (_config.WSLG)
                         {
                             if (row <= ((WSLG_partitiondata)result).PLN)
                                 ((WSLG_partitiondata)result).total[CoCount].AddData((decimal)dr[dc], true);
@@ -129,7 +134,7 @@ namespace ExamReport
 
             result.stDev = ((stdev)stdevlist[0]).get_value();
             result.Dfactor = result.stDev / result.avg;
-            if (Utils.WSLG)
+            if (_config.WSLG)
                 ((WSLG_partitiondata)result).discriminant = ((WSLG_partitiondata)result).total[0].GetAns();
             int count = 1;
             foreach (DataRow dr in result.total_analysis.Rows)
@@ -139,7 +144,7 @@ namespace ExamReport
                     dr["dfactor"] = 0m;
                 else
                     dr["dfactor"] = (decimal)dr["stDev"] / (decimal)dr["avg"];
-                if (Utils.WSLG)
+                if (_config.WSLG)
                     ((WSLG_partitiondata)result).total_discriminant.Add(((WSLG_partitiondata)result).total[count].GetAns());
                 count++;
             }
@@ -150,21 +155,24 @@ namespace ExamReport
 
             for (int i = 3; i < _groups_data.Columns.Count - 2; i++)
             {
-                DataRow dr = result.groups_analysis.NewRow();
-                dr["number"] = _groups_data.Columns[i].ColumnName;
-                dr["fullmark"] = group_fullmark(dr["number"].ToString(), i - 3);
-                dr["max"] = _groups_data.Compute("Max([" + _groups_data.Columns[i].ColumnName + "])", "");
-                dr["min"] = _groups_data.Compute("Min([" + _groups_data.Columns[i].ColumnName + "])", "");
-                dr["avg"] = _groups_data.Compute("Avg([" + _groups_data.Columns[i].ColumnName + "])", "");
-                stdev temp = new stdev(result.total_num, (decimal)dr["avg"]);
-                groupStdev.Add(temp);
-                dr["difficulty"] = (decimal)dr["avg"] / (decimal)dr["fullmark"];
-
-                if (Utils.WSLG)
+                if (_groups_data.Columns[i].ColumnName.StartsWith("FZ"))
                 {
-                    ((WSLG_partitiondata)result).group.Add(new WSLG_partitiondata.Disc(result.total_num, (decimal)dr["fullmark"]));
+                    DataRow dr = result.groups_analysis.NewRow();
+                    dr["number"] = _groups_data.Columns[i].ColumnName;
+                    dr["fullmark"] = group_fullmark(dr["number"].ToString(), i - 3);
+                    dr["max"] = _groups_data.Compute("Max([" + _groups_data.Columns[i].ColumnName + "])", "");
+                    dr["min"] = _groups_data.Compute("Min([" + _groups_data.Columns[i].ColumnName + "])", "");
+                    dr["avg"] = _groups_data.Compute("Avg([" + _groups_data.Columns[i].ColumnName + "])", "");
+                    stdev temp = new stdev(result.total_num, (decimal)dr["avg"]);
+                    groupStdev.Add(temp);
+                    dr["difficulty"] = (decimal)dr["avg"] / (decimal)dr["fullmark"];
+
+                    if (_config.WSLG)
+                    {
+                        ((WSLG_partitiondata)result).group.Add(new WSLG_partitiondata.Disc(result.total_num, (decimal)dr["fullmark"]));
+                    }
+                    result.groups_analysis.Rows.Add(dr);
                 }
-                result.groups_analysis.Rows.Add(dr);
             }
             //修改上限
             row = 1;
@@ -172,13 +180,16 @@ namespace ExamReport
             {
                 for (int i = 3; i < _groups_data.Columns.Count - 2; i++)
                 {
-                    ((stdev)groupStdev[i - 3]).add((decimal)dr[_groups_data.Columns[i]]);
-                    if (Utils.WSLG)
+                    if (_groups_data.Columns[i].ColumnName.StartsWith("FZ"))
                     {
-                        if (row <= ((WSLG_partitiondata)result).PLN)
-                            ((WSLG_partitiondata)result).group[i-3].AddData((decimal)dr[i], true);
-                        else if (row >= ((WSLG_partitiondata)result).PHN)
-                            ((WSLG_partitiondata)result).group[i-3].AddData((decimal)dr[i], false);
+                        ((stdev)groupStdev[i - 3]).add((decimal)dr[_groups_data.Columns[i]]);
+                        if (_config.WSLG)
+                        {
+                            if (row <= ((WSLG_partitiondata)result).PLN)
+                                ((WSLG_partitiondata)result).group[i - 3].AddData((decimal)dr[i], true);
+                            else if (row >= ((WSLG_partitiondata)result).PHN)
+                                ((WSLG_partitiondata)result).group[i - 3].AddData((decimal)dr[i], false);
+                        }
                     }
 
                 }
@@ -192,7 +203,7 @@ namespace ExamReport
                     dr["dfactor"] = 0m;
                 else
                     dr["dfactor"] = (decimal)dr["stDev"] / (decimal)dr["avg"];
-                if (Utils.WSLG)
+                if (_config.WSLG)
                     ((WSLG_partitiondata)result).group_discriminant.Add(((WSLG_partitiondata)result).group[count].GetAns());
                 count++;
             }
@@ -597,7 +608,7 @@ namespace ExamReport
                     dr["number"] = (string)dr["number"] + "选" + xz_name[j];
                     result.total_analysis.ImportRow(dr);
                     result.single_topic_analysis.Add(xz_single[j][i]);
-                    if (Utils.WSLG)
+                    if (_config.WSLG)
                     {
                         ((WSLG_partitiondata)result).total_discriminant.Add(xz_total_disc[j][i]);
                     }
@@ -630,7 +641,7 @@ namespace ExamReport
                     stdev single_stdev = new stdev(xz_count, (decimal)dr["avg"]);
                     stdevlist.Add(single_stdev);
                     dr["difficulty"] = (decimal)dr["avg"] / (decimal)dr["fullmark"];
-                    if (Utils.WSLG)
+                    if (_config.WSLG)
                     {
                         xz_disc.Add(new WSLG_partitiondata.Disc(xz_count, (decimal)dr["fullmark"]));
                     }
@@ -647,7 +658,7 @@ namespace ExamReport
                     if (number.IsMatch(dc.ColumnName))
                     {
                         stdevlist[CoCount].add((decimal)dr[dc]);
-                        if (Utils.WSLG)
+                        if (_config.WSLG)
                         {
                             if (row_num < PLN)
                                 xz_disc[CoCount].AddData((decimal)dr[dc], true);
@@ -668,12 +679,12 @@ namespace ExamReport
                     dr["dfactor"] = 0m;
                 else
                     dr["dfactor"] = (decimal)dr["stDev"] / (decimal)dr["avg"];
-                if (Utils.WSLG)
+                if (_config.WSLG)
                     total_discriminant.Add(xz_disc[count].GetAns());
                 count++;
             }
             xz_total.Add(xz_total_analysis);
-            if (Utils.WSLG)
+            if (_config.WSLG)
                 xz_total_disc.Add(total_discriminant);
             List<PartitionData.single_data> xz_single_data = new List<PartitionData.single_data>();
             int i = 0;
@@ -1319,15 +1330,15 @@ namespace ExamReport
             decimal fullmark = 0.0m;
             if (name.Equals("生物") || name.Equals("政治"))
             {
-                fullmark = Utils.shengwu_zhengzhi;
+                fullmark = _config.shengwu_zhengzhi;
             }
             else if (name.Equals("物理") || name.Equals("历史"))
             {
-                fullmark = Utils.wuli_lishi;
+                fullmark = _config.wuli_lishi;
             }
             else if (name.Equals("化学") || name.Equals("地理"))
             {
-                fullmark = Utils.huaxue_dili;
+                fullmark = _config.huaxue_dili;
             }
             else
             {
@@ -1447,7 +1458,7 @@ namespace ExamReport
                        };
             foreach (var temp in mark)
             {
-                Utils.GroupMark.Add(temp.max);
+                _config.GroupMark.Add(temp.max);
             }
         }
     }

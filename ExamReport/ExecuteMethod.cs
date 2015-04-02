@@ -195,8 +195,8 @@ namespace ExamReport
                 }
                 if (style.Equals("中考"))
                     ZK_process();
-                if (style.Equals("高考"))
-                    GK_process();
+                //if (style.Equals("高考"))
+                    //GK_process();
             //}
             //catch (System.Threading.ThreadAbortException e)
             //{
@@ -211,641 +211,641 @@ namespace ExamReport
         {
             if(report_style.Equals("总体"))
             {
-                ZK_database db = new ZK_database(ans.dt, groups.dt, grouptype, divider);
-                //db.DBF_data_process(database_address, form);
-                WordData result = new WordData(groups.groups_group);
-                if (db._basic_data.Columns.Contains("XZ"))
-                {
-                    XZ_group_separate(db._basic_data);
-                }
-                form.ShowPro(40, 3);
-                Total_statistic stat = new Total_statistic(result, db._basic_data, fullmark, ans.dt, db._group_data, groups.dt, db._group_num);
-                stat.statistic_process(false);
-                if (db._basic_data.Columns.Contains("XZ"))
-                    stat.xz_postprocess(ans.xz_th);
-                form.ShowPro(70, 4);
+                //ZK_database db = new ZK_database(ans.dt, groups.dt, grouptype, divider);
+                ////db.DBF_data_process(database_address, form);
+                //WordData result = new WordData(groups.groups_group);
+                //if (db._basic_data.Columns.Contains("XZ"))
+                //{
+                //    XZ_group_separate(db._basic_data);
+                //}
+                //form.ShowPro(40, 3);
+                //Total_statistic stat = new Total_statistic(result, db._basic_data, fullmark, ans.dt, db._group_data, groups.dt, db._group_num);
+                //stat.statistic_process(false);
+                //if (db._basic_data.Columns.Contains("XZ"))
+                //    stat.xz_postprocess(ans.xz_th);
+                //form.ShowPro(70, 4);
                 //WordCreator creator = new WordCreator(result);
                 //creator.creating_word();
             }
             else if (report_style.Equals("区县"))
             {
-                ArrayList sdata = new ArrayList();
-                ArrayList totaldata = new ArrayList();
+                //ArrayList sdata = new ArrayList();
+                //ArrayList totaldata = new ArrayList();
 
-                ZK_database db = new ZK_database(ans.dt, groups.dt, grouptype, divider);
+                //ZK_database db = new ZK_database(ans.dt, groups.dt, grouptype, divider);
                 
-                //db.DBF_data_process(database_address, form);
-                form.ShowPro(40, 3);
-                if (db._basic_data.Columns.Contains("XZ"))
-                {
-                    XZ_group_separate(db._basic_data);
-                }
-                Partition_statistic total = new Partition_statistic("市整体", db._basic_data, fullmark, ans.dt, db._group_data, groups.dt, db._group_num);
-                total.statistic_process(false);
-                if (db._basic_data.Columns.Contains("XZ"))
-                    total.xz_postprocess(ans.xz_th);
-                totaldata.Add(total.result);
+                ////db.DBF_data_process(database_address, form);
+                //form.ShowPro(40, 3);
+                //if (db._basic_data.Columns.Contains("XZ"))
+                //{
+                //    XZ_group_separate(db._basic_data);
+                //}
+                //Partition_statistic total = new Partition_statistic("市整体", db._basic_data, fullmark, ans.dt, db._group_data, groups.dt, db._group_num);
+                //total.statistic_process(false);
+                //if (db._basic_data.Columns.Contains("XZ"))
+                //    total.xz_postprocess(ans.xz_th);
+                //totaldata.Add(total.result);
 
-                for (int mark = 0; mark < CJ_list.Count; mark++)
-                {
-                    string[] CQ_code = new string[CJ_list[mark].Count - 1];
+                //for (int mark = 0; mark < CJ_list.Count; mark++)
+                //{
+                //    string[] CQ_code = new string[CJ_list[mark].Count - 1];
 
-                    for (int i = 1; i < CJ_list[mark].Count; i++)
-                    {
-                        CQ_code[i - 1] = CJ_list[mark][i].ToString().Trim();
-                    }
-                    DataTable CQ_data = db._basic_data.filteredtable("QX", CQ_code);
-                    DataTable CQ_groups_data = db._group_data.filteredtable("QX", CQ_code);
+                //    for (int i = 1; i < CJ_list[mark].Count; i++)
+                //    {
+                //        CQ_code[i - 1] = CJ_list[mark][i].ToString().Trim();
+                //    }
+                //    DataTable CQ_data = db._basic_data.filteredtable("QX", CQ_code);
+                //    DataTable CQ_groups_data = db._group_data.filteredtable("QX", CQ_code);
 
-                    Partition_statistic CQ = new Partition_statistic(CJ_list[mark][0].ToString().Trim(), CQ_data, fullmark, ans.dt, CQ_groups_data, groups.dt, db._group_num);
-                    CQ.statistic_process(false);
-                    if (db._basic_data.Columns.Contains("XZ"))
-                        CQ.xz_postprocess(ans.xz_th);
-                    totaldata.Add(CQ.result);
-                }
+                //    Partition_statistic CQ = new Partition_statistic(CJ_list[mark][0].ToString().Trim(), CQ_data, fullmark, ans.dt, CQ_groups_data, groups.dt, db._group_num);
+                //    CQ.statistic_process(false);
+                //    if (db._basic_data.Columns.Contains("XZ"))
+                //        CQ.xz_postprocess(ans.xz_th);
+                //    totaldata.Add(CQ.result);
+                //}
 
-                DataTable QX_total_data = db._basic_data.filteredtable("QX", QXTransfer(Quxian_list));
-                DataTable QX_groups_data = db._group_data.filteredtable("QX", QXTransfer(Quxian_list));
+                //DataTable QX_total_data = db._basic_data.filteredtable("QX", QXTransfer(Quxian_list));
+                //DataTable QX_groups_data = db._group_data.filteredtable("QX", QXTransfer(Quxian_list));
 
-                Partition_statistic QX_total = new Partition_statistic("区整体", QX_total_data, fullmark, ans.dt, QX_groups_data, groups.dt, db._group_num);
-                QX_total.statistic_process(false);
-                if (db._basic_data.Columns.Contains("XZ"))
-                    QX_total.xz_postprocess(ans.xz_th);
-                totaldata.Add(QX_total.result);
+                //Partition_statistic QX_total = new Partition_statistic("区整体", QX_total_data, fullmark, ans.dt, QX_groups_data, groups.dt, db._group_num);
+                //QX_total.statistic_process(false);
+                //if (db._basic_data.Columns.Contains("XZ"))
+                //    QX_total.xz_postprocess(ans.xz_th);
+                //totaldata.Add(QX_total.result);
 
-                CalculateClassTotal(QX_total_data, QX_groups_data, totaldata, sdata);
-                form.ShowPro(70, 4);
-                Partition_wordcreator create = new Partition_wordcreator(totaldata, sdata, groups.dt, groups.groups_group);
-                create.creating_word();
+                //CalculateClassTotal(QX_total_data, QX_groups_data, totaldata, sdata);
+                //form.ShowPro(70, 4);
+                //Partition_wordcreator create = new Partition_wordcreator(totaldata, sdata, groups.dt, groups.groups_group);
+                //create.creating_word();
             }
         }
         public void HK_process()
         {
-            HK_database hk = new HK_database(ans.dt, groups.dt, grouptype, divider);
-            hk.DBF_data_process(database_address);
-            ans.dt = hk.newStandard;
-            form.ShowPro(40, 3);
-            HK_worddata result = new HK_worddata(groups.groups_group);
-            Total_statistic stat = new Total_statistic(result, hk._basic_data, fullmark, ans.dt, hk._group_data, groups.dt, hk._group_num);
-            stat.statistic_process(false);
-            stat.HK_postprocess(hk_hierarchy);
-            form.ShowPro(70, 4);
+            //HK_database hk = new HK_database(ans.dt, groups.dt, grouptype, divider);
+            //hk.DBF_data_process(database_address);
+            //ans.dt = hk.newStandard;
+            //form.ShowPro(40, 3);
+            //HK_worddata result = new HK_worddata(groups.groups_group);
+            //Total_statistic stat = new Total_statistic(result, hk._basic_data, fullmark, ans.dt, hk._group_data, groups.dt, hk._group_num);
+            //stat.statistic_process(false);
+            //stat.HK_postprocess(hk_hierarchy);
+            //form.ShowPro(70, 4);
             //WordCreator create = new WordCreator(result);
             //create.creating_HK_word();
 
 
         }
-        public void GK_process()
-        {
+        //public void GK_process()
+        //{
 
-            if (subject.Equals("总分"))
-            {
-                if (report_style.Equals("两类示范校"))
-                {
-                    List<ZF_statistic> result = new List<ZF_statistic>();
-                    GK_database db = new GK_database();
-                    db.ZF_data_process(database_address);
-                    form.ShowPro(40, 3);
-                    for (int i = 0; i < SF_list.Count; i++)
-                    {
-                        string[] SF_code = new string[SF_list[i].Count - 1];
-                        for (int j = 1; j < SF_list[i].Count; j++)
-                            SF_code[j - 1] = SF_list[i][j].ToString().Trim();
-                        DataTable temp = db._basic_data.filteredtable("schoolcode", SF_code);
-                        ZF_statistic stat = new ZF_statistic(temp, fullmark, SF_list[i][0].ToString().Trim());
-                        stat.partition_process();
-                        result.Add(stat);
-                    }
-                    form.ShowPro(70, 4);
-                    ZF_wordcreator create = new ZF_wordcreator();
-                    create.partition_wordcreate(result, "两类示范校");
+        //    if (subject.Equals("总分"))
+        //    {
+        //        if (report_style.Equals("两类示范校"))
+        //        {
+        //            List<ZF_statistic> result = new List<ZF_statistic>();
+        //            GK_database db = new GK_database();
+        //            db.ZF_data_process(database_address);
+        //            form.ShowPro(40, 3);
+        //            for (int i = 0; i < SF_list.Count; i++)
+        //            {
+        //                string[] SF_code = new string[SF_list[i].Count - 1];
+        //                for (int j = 1; j < SF_list[i].Count; j++)
+        //                    SF_code[j - 1] = SF_list[i][j].ToString().Trim();
+        //                DataTable temp = db._basic_data.filteredtable("schoolcode", SF_code);
+        //                ZF_statistic stat = new ZF_statistic(temp, fullmark, SF_list[i][0].ToString().Trim());
+        //                stat.partition_process();
+        //                result.Add(stat);
+        //            }
+        //            form.ShowPro(70, 4);
+        //            ZF_wordcreator create = new ZF_wordcreator();
+        //            create.partition_wordcreate(result, "两类示范校");
                     
                     
-                }
-                if (report_style.Equals("城郊"))
-                {
-                    List<ZF_statistic> result = new List<ZF_statistic>();
-                    GK_database db = new GK_database();
-                    db.ZF_data_process(database_address);
-                    form.ShowPro(40, 3);
-                    for (int i = 0; i < CJ_list.Count; i++)
-                    {
-                        string[] cj_code = new string[CJ_list[i].Count - 1];
-                        for (int j = 1; j < CJ_list[i].Count; j++)
-                            cj_code[j - 1] = CJ_list[i][j].ToString().Trim();
-                        DataTable temp = db._basic_data.filteredtable("qxdm", cj_code);
-                        ZF_statistic stat = new ZF_statistic(temp, fullmark, CJ_list[i][0].ToString().Trim());
-                        stat.partition_process();
-                        result.Add(stat);
-                    }
-                    form.ShowPro(70, 4);
-                    ZF_wordcreator create = new ZF_wordcreator();
-                    create.partition_wordcreate(result, "城郊");
-                }
-                if (report_style.Equals("区县"))
-                {
-                    List<ZF_statistic> result = new List<ZF_statistic>();
-                    GK_database db = new GK_database();
-                    db.ZF_data_process(database_address);
-                    form.ShowPro(40, 3);
-                    ZF_statistic total = new ZF_statistic(db._basic_data, fullmark, "市整体");
-                    total.partition_process();
-                    result.Add(total);
-                    for (int i = 0; i < SF_list.Count; i++)
-                    {
-                        string[] SF_code = new string[SF_list[i].Count - 1];
-                        for (int j = 1; j < SF_list[i].Count; j++)
-                            SF_code[j - 1] = SF_list[i][j].ToString().Trim();
-                        DataTable temp = db._basic_data.filteredtable("xxdm", SF_code);
-                        ZF_statistic stat = new ZF_statistic(temp, fullmark, SF_list[i][0].ToString().Trim());
-                        stat.partition_process();
-                        result.Add(stat);
-                    }
-                    for (int i = 0; i < CJ_list.Count; i++)
-                    {
-                        string[] cj_code = new string[CJ_list[i].Count - 1];
-                        for (int j = 1; j < CJ_list[i].Count; j++)
-                            cj_code[j - 1] = CJ_list[i][j].ToString().Trim();
-                        DataTable temp = db._basic_data.filteredtable("qxdm", cj_code);
-                        ZF_statistic stat = new ZF_statistic(temp, fullmark, CJ_list[i][0].ToString().Trim());
-                        stat.partition_process();
-                        result.Add(stat);
-                    }
-                    DataTable bq_data = db._basic_data.filteredtable("qxdm", QXTransfer(Quxian_list));
-                    ZF_statistic bq = new ZF_statistic(bq_data, fullmark, "本区");
-                    bq.partition_process();
-                    result.Add(bq);
-                    CalculateGKZF(bq_data, result);
-                    form.ShowPro(70, 4);
-                    ZF_wordcreator create = new ZF_wordcreator();
-                    create.partition_wordcreate(result, "区县");
+        //        }
+        //        if (report_style.Equals("城郊"))
+        //        {
+        //            List<ZF_statistic> result = new List<ZF_statistic>();
+        //            GK_database db = new GK_database();
+        //            db.ZF_data_process(database_address);
+        //            form.ShowPro(40, 3);
+        //            for (int i = 0; i < CJ_list.Count; i++)
+        //            {
+        //                string[] cj_code = new string[CJ_list[i].Count - 1];
+        //                for (int j = 1; j < CJ_list[i].Count; j++)
+        //                    cj_code[j - 1] = CJ_list[i][j].ToString().Trim();
+        //                DataTable temp = db._basic_data.filteredtable("qxdm", cj_code);
+        //                ZF_statistic stat = new ZF_statistic(temp, fullmark, CJ_list[i][0].ToString().Trim());
+        //                stat.partition_process();
+        //                result.Add(stat);
+        //            }
+        //            form.ShowPro(70, 4);
+        //            ZF_wordcreator create = new ZF_wordcreator();
+        //            create.partition_wordcreate(result, "城郊");
+        //        }
+        //        if (report_style.Equals("区县"))
+        //        {
+        //            List<ZF_statistic> result = new List<ZF_statistic>();
+        //            GK_database db = new GK_database();
+        //            db.ZF_data_process(database_address);
+        //            form.ShowPro(40, 3);
+        //            ZF_statistic total = new ZF_statistic(db._basic_data, fullmark, "市整体");
+        //            total.partition_process();
+        //            result.Add(total);
+        //            for (int i = 0; i < SF_list.Count; i++)
+        //            {
+        //                string[] SF_code = new string[SF_list[i].Count - 1];
+        //                for (int j = 1; j < SF_list[i].Count; j++)
+        //                    SF_code[j - 1] = SF_list[i][j].ToString().Trim();
+        //                DataTable temp = db._basic_data.filteredtable("xxdm", SF_code);
+        //                ZF_statistic stat = new ZF_statistic(temp, fullmark, SF_list[i][0].ToString().Trim());
+        //                stat.partition_process();
+        //                result.Add(stat);
+        //            }
+        //            for (int i = 0; i < CJ_list.Count; i++)
+        //            {
+        //                string[] cj_code = new string[CJ_list[i].Count - 1];
+        //                for (int j = 1; j < CJ_list[i].Count; j++)
+        //                    cj_code[j - 1] = CJ_list[i][j].ToString().Trim();
+        //                DataTable temp = db._basic_data.filteredtable("qxdm", cj_code);
+        //                ZF_statistic stat = new ZF_statistic(temp, fullmark, CJ_list[i][0].ToString().Trim());
+        //                stat.partition_process();
+        //                result.Add(stat);
+        //            }
+        //            DataTable bq_data = db._basic_data.filteredtable("qxdm", QXTransfer(Quxian_list));
+        //            ZF_statistic bq = new ZF_statistic(bq_data, fullmark, "本区");
+        //            bq.partition_process();
+        //            result.Add(bq);
+        //            CalculateGKZF(bq_data, result);
+        //            form.ShowPro(70, 4);
+        //            ZF_wordcreator create = new ZF_wordcreator();
+        //            create.partition_wordcreate(result, "区县");
 
-                }
-                if (report_style.Equals("总体"))
-                {
-                    GK_database db = new GK_database();
-                    db.ZF_data_process(database_address);
-                    form.ShowPro(40, 3);
-                    ZF_statistic stat = new ZF_statistic(db._basic_data, fullmark, "总体");
-                    stat.partition_process();
-                    form.ShowPro(70, 4);
-                    ZF_wordcreator create = new ZF_wordcreator();
-                    create.total_create(stat);
-                }
-                if (report_style.Equals("学校"))
-                {
-                    List<ZF_statistic> result = new List<ZF_statistic>();
-                    GK_database db = new GK_database();
-                    db.ZF_data_process(database_address);
-                    form.ShowPro(40, 3);
-                    ZF_statistic total = new ZF_statistic(db._basic_data, fullmark, "市整体");
-                    total.partition_process();
-                    result.Add(total);
-                    for (int i = 0; i < SF_list.Count; i++)
-                    {
-                        string[] SF_code = new string[SF_list[i].Count - 1];
-                        for (int j = 1; j < SF_list[i].Count; j++)
-                            SF_code[j - 1] = SF_list[i][j].ToString().Trim();
-                        DataTable temp = db._basic_data.filteredtable("xxdm", SF_code);
-                        ZF_statistic stat = new ZF_statistic(temp, fullmark, SF_list[i][0].ToString().Trim());
-                        stat.partition_process();
-                        result.Add(stat);
-                    }
-                    for (int i = 0; i < CJ_list.Count; i++)
-                    {
-                        string[] cj_code = new string[CJ_list[i].Count - 1];
-                        for (int j = 1; j < CJ_list[i].Count; j++)
-                            cj_code[j - 1] = CJ_list[i][j].ToString().Trim();
-                        DataTable temp = db._basic_data.filteredtable("qxdm", cj_code);
-                        ZF_statistic stat = new ZF_statistic(temp, fullmark, CJ_list[i][0].ToString().Trim());
-                        stat.partition_process();
-                        result.Add(stat);
-                    }
-                    DataTable bq_data = db._basic_data.filteredtable("qxdm", QXTransfer(Quxian_list));
-                    ZF_statistic bq = new ZF_statistic(bq_data, fullmark, "本区");
-                    bq.partition_process();
-                    result.Add(bq);
+        //        }
+        //        if (report_style.Equals("总体"))
+        //        {
+        //            GK_database db = new GK_database();
+        //            db.ZF_data_process(database_address);
+        //            form.ShowPro(40, 3);
+        //            ZF_statistic stat = new ZF_statistic(db._basic_data, fullmark, "总体");
+        //            stat.partition_process();
+        //            form.ShowPro(70, 4);
+        //            ZF_wordcreator create = new ZF_wordcreator();
+        //            create.total_create(stat);
+        //        }
+        //        if (report_style.Equals("学校"))
+        //        {
+        //            List<ZF_statistic> result = new List<ZF_statistic>();
+        //            GK_database db = new GK_database();
+        //            db.ZF_data_process(database_address);
+        //            form.ShowPro(40, 3);
+        //            ZF_statistic total = new ZF_statistic(db._basic_data, fullmark, "市整体");
+        //            total.partition_process();
+        //            result.Add(total);
+        //            for (int i = 0; i < SF_list.Count; i++)
+        //            {
+        //                string[] SF_code = new string[SF_list[i].Count - 1];
+        //                for (int j = 1; j < SF_list[i].Count; j++)
+        //                    SF_code[j - 1] = SF_list[i][j].ToString().Trim();
+        //                DataTable temp = db._basic_data.filteredtable("xxdm", SF_code);
+        //                ZF_statistic stat = new ZF_statistic(temp, fullmark, SF_list[i][0].ToString().Trim());
+        //                stat.partition_process();
+        //                result.Add(stat);
+        //            }
+        //            for (int i = 0; i < CJ_list.Count; i++)
+        //            {
+        //                string[] cj_code = new string[CJ_list[i].Count - 1];
+        //                for (int j = 1; j < CJ_list[i].Count; j++)
+        //                    cj_code[j - 1] = CJ_list[i][j].ToString().Trim();
+        //                DataTable temp = db._basic_data.filteredtable("qxdm", cj_code);
+        //                ZF_statistic stat = new ZF_statistic(temp, fullmark, CJ_list[i][0].ToString().Trim());
+        //                stat.partition_process();
+        //                result.Add(stat);
+        //            }
+        //            DataTable bq_data = db._basic_data.filteredtable("qxdm", QXTransfer(Quxian_list));
+        //            ZF_statistic bq = new ZF_statistic(bq_data, fullmark, "本区");
+        //            bq.partition_process();
+        //            result.Add(bq);
                     
-                    foreach (KeyValuePair<string, string> kv in School_code)
-                    {
-                        DataTable bx_data = db._basic_data.filteredtable("xxdm", new string[] { kv.Key });
-                        ZF_statistic bx = new ZF_statistic(bx_data, fullmark, "本校");
-                        bx.partition_process();
-                        List<ZF_statistic> temp_result = new List<ZF_statistic>();
-                        temp_result.AddRange(result);
-                        temp_result.Add(bx);
+        //            foreach (KeyValuePair<string, string> kv in School_code)
+        //            {
+        //                DataTable bx_data = db._basic_data.filteredtable("xxdm", new string[] { kv.Key });
+        //                ZF_statistic bx = new ZF_statistic(bx_data, fullmark, "本校");
+        //                bx.partition_process();
+        //                List<ZF_statistic> temp_result = new List<ZF_statistic>();
+        //                temp_result.AddRange(result);
+        //                temp_result.Add(bx);
 
-                        ZF_wordcreator create = new ZF_wordcreator(temp_result, kv.Value);
-                        Thread thread = new Thread(new ThreadStart(create.XX_create));
-                        thread.IsBackground = true;
-                        thread.SetApartmentState(ApartmentState.STA);
-                        thread.Start();
+        //                ZF_wordcreator create = new ZF_wordcreator(temp_result, kv.Value);
+        //                Thread thread = new Thread(new ThreadStart(create.XX_create));
+        //                thread.IsBackground = true;
+        //                thread.SetApartmentState(ApartmentState.STA);
+        //                thread.Start();
 
-                        form.ThreadControl(thread);
-                    }
-                    foreach (Thread t in form.thread_table)
-                    {
-                        t.Join();
-                    }
+        //                form.ThreadControl(thread);
+        //            }
+        //            foreach (Thread t in form.thread_table)
+        //            {
+        //                t.Join();
+        //            }
                     
-                }
-            }
-            else if (subject.Contains("理综") ||
-                    subject.Contains("文综"))
-            {
-                string sub = subject.Substring(3);
-                int ch_num = 0;
-                GK_database db = new GK_database(ans.dt, groups.dt, grouptype, divider);
-                db.DBF_data_process(database_address);
-                ans.dt = db.newStandard;
-                ch_num = db.ZH_postprocess(wenli.dt, subject.Substring(3));
-                DataTable wenli_standard = db.ZH_standard_ans;
-                form.ShowPro(40, 3);
-                if (ch_num == -1)
-                    return;
-                decimal sub_fullmark = 0;
-                if (sub.Equals("生物") || sub.Equals("政治"))
-                    sub_fullmark = Utils.shengwu_zhengzhi;
-                else if (sub.Equals("物理") || sub.Equals("历史"))
-                    sub_fullmark = Utils.wuli_lishi;
-                else if (sub.Equals("化学") || sub.Equals("地理"))
-                    sub_fullmark = Utils.huaxue_dili;
-                if (report_style.Equals("总体"))
-                {
+        //        }
+        //    }
+        //    else if (subject.Contains("理综") ||
+        //            subject.Contains("文综"))
+        //    {
+        //        string sub = subject.Substring(3);
+        //        int ch_num = 0;
+        //        GK_database db = new GK_database(ans.dt, groups.dt, grouptype, divider);
+        //        db.DBF_data_process(database_address);
+        //        ans.dt = db.newStandard;
+        //        ch_num = db.ZH_postprocess(wenli.dt, subject.Substring(3));
+        //        DataTable wenli_standard = db.ZH_standard_ans;
+        //        form.ShowPro(40, 3);
+        //        if (ch_num == -1)
+        //            return;
+        //        decimal sub_fullmark = 0;
+        //        if (sub.Equals("生物") || sub.Equals("政治"))
+        //            sub_fullmark = Utils.shengwu_zhengzhi;
+        //        else if (sub.Equals("物理") || sub.Equals("历史"))
+        //            sub_fullmark = Utils.wuli_lishi;
+        //        else if (sub.Equals("化学") || sub.Equals("地理"))
+        //            sub_fullmark = Utils.huaxue_dili;
+        //        if (report_style.Equals("总体"))
+        //        {
 
-                    WordData total = new WordData(wenli.groups_group);
-                    Total_statistic total_stat = new Total_statistic(total, db._basic_data, fullmark, ans.dt, db.zh_group_data, wenli.dt, db._group_num);
-                    total_stat.statistic_process(true);
+        //            WordData total = new WordData(wenli.groups_group);
+        //            Total_statistic total_stat = new Total_statistic(total, db._basic_data, fullmark, ans.dt, db.zh_group_data, wenli.dt, db._group_num);
+        //            total_stat.statistic_process(true);
 
-                    WordData single = new WordData(groups.groups_group);
+        //            WordData single = new WordData(groups.groups_group);
 
-                    Total_statistic single_stat = new Total_statistic(single, db.zh_single_data, sub_fullmark, wenli_standard, db._group_data, groups.dt, db._group_num);
-                    single_stat.statistic_process(false);
-                    form.ShowPro(70, 4);
-                    //WordCreator create = new WordCreator(single, total);
-                    //create.creating_word();
-                }
-                else if (report_style.Equals("两类示范校"))
-                {
-                    ArrayList sdata = new ArrayList();
-                    ArrayList ZH_data = new ArrayList();
+        //            Total_statistic single_stat = new Total_statistic(single, db.zh_single_data, sub_fullmark, wenli_standard, db._group_data, groups.dt, db._group_num);
+        //            single_stat.statistic_process(false);
+        //            form.ShowPro(70, 4);
+        //            //WordCreator create = new WordCreator(single, total);
+        //            //create.creating_word();
+        //        }
+        //        else if (report_style.Equals("两类示范校"))
+        //        {
+        //            ArrayList sdata = new ArrayList();
+        //            ArrayList ZH_data = new ArrayList();
 
-                    string[] total_code = CalculateTotal(SF_list);
-                    DataTable total = db._basic_data.filteredtable("schoolcode", total_code);
-                    DataTable total_group = db.zh_group_data.filteredtable("schoolcode", total_code);
+        //            string[] total_code = CalculateTotal(SF_list);
+        //            DataTable total = db._basic_data.filteredtable("schoolcode", total_code);
+        //            DataTable total_group = db.zh_group_data.filteredtable("schoolcode", total_code);
 
-                    int groupnum = total.SeperateGroups(grouptype, divider, "groups");
-                    total_group.SeperateGroups(grouptype, divider, "groups");
+        //            int groupnum = total.SeperateGroups(grouptype, divider, "groups");
+        //            total_group.SeperateGroups(grouptype, divider, "groups");
 
-                    DataTable single_total = db.zh_single_data.filteredtable("schoolcode", total_code);
-                    DataTable single_total_group = db._group_data.filteredtable("schoolcode", total_code);
+        //            DataTable single_total = db.zh_single_data.filteredtable("schoolcode", total_code);
+        //            DataTable single_total_group = db._group_data.filteredtable("schoolcode", total_code);
 
-                    single_total.SeperateGroups(grouptype, divider, "groups");
-                    single_total_group.SeperateGroups(grouptype, divider, "groups");
-                    for (int i = 0; i < SF_list.Count; i++)
-                    {
-                        string[] SF_code = new string[SF_list[i].Count - 1];
-                        for (int j = 1; j < SF_list[i].Count; j++)
-                            SF_code[j - 1] = SF_list[i][j].ToString().Trim();
-                        DataTable temp = total.filteredtable("schoolcode", SF_code);
-                        DataTable temp_group = total_group.filteredtable("schoolcode", SF_code);
-                        Partition_statistic stat = new Partition_statistic(SF_list[i][0].ToString().Trim(), temp, fullmark, ans.dt, temp_group, wenli.dt, groupnum);
-                        stat.statistic_process(true);
-                        ZH_data.Add(stat.result);
+        //            single_total.SeperateGroups(grouptype, divider, "groups");
+        //            single_total_group.SeperateGroups(grouptype, divider, "groups");
+        //            for (int i = 0; i < SF_list.Count; i++)
+        //            {
+        //                string[] SF_code = new string[SF_list[i].Count - 1];
+        //                for (int j = 1; j < SF_list[i].Count; j++)
+        //                    SF_code[j - 1] = SF_list[i][j].ToString().Trim();
+        //                DataTable temp = total.filteredtable("schoolcode", SF_code);
+        //                DataTable temp_group = total_group.filteredtable("schoolcode", SF_code);
+        //                Partition_statistic stat = new Partition_statistic(SF_list[i][0].ToString().Trim(), temp, fullmark, ans.dt, temp_group, wenli.dt, groupnum);
+        //                stat.statistic_process(true);
+        //                ZH_data.Add(stat.result);
 
-                        DataTable single = single_total.filteredtable("schoolcode", SF_code);
-                        DataTable single_group = single_total_group.filteredtable("schoolcode", SF_code);
-                        Partition_statistic single_stat = new Partition_statistic(SF_list[i][0].ToString().Trim(), single, sub_fullmark, wenli_standard, single_group, groups.dt, groupnum);
-                        single_stat.statistic_process(false);
-                        sdata.Add(single_stat.result);
-                    }
+        //                DataTable single = single_total.filteredtable("schoolcode", SF_code);
+        //                DataTable single_group = single_total_group.filteredtable("schoolcode", SF_code);
+        //                Partition_statistic single_stat = new Partition_statistic(SF_list[i][0].ToString().Trim(), single, sub_fullmark, wenli_standard, single_group, groups.dt, groupnum);
+        //                single_stat.statistic_process(false);
+        //                sdata.Add(single_stat.result);
+        //            }
 
-                    Partition_statistic total_stat = new Partition_statistic("分类整体", total, fullmark, ans.dt, total_group, wenli.dt, groupnum);
-                    total_stat.statistic_process(true);
-                    ZH_data.Add(total_stat.result);
-                    Partition_statistic single_total_stat = new Partition_statistic("分类整体", single_total, sub_fullmark, wenli_standard, single_total_group, groups.dt, groupnum);
-                    single_total_stat.statistic_process(false);
-                    sdata.Add(single_total_stat.result);
-                    form.ShowPro(70, 4);
-                    Partition_wordcreator create = new Partition_wordcreator(sdata, groups.dt, groups.groups_group);
-                    create.creating_ZH_word(ZH_data, wenli.dt, wenli.groups_group);
-                }
-                else if (report_style.Equals("城郊"))
-                {
-                    ArrayList sdata = new ArrayList();
-                    ArrayList ZH_data = new ArrayList();
-                    string[] total_code = CalculateTotal(CJ_list);
+        //            Partition_statistic total_stat = new Partition_statistic("分类整体", total, fullmark, ans.dt, total_group, wenli.dt, groupnum);
+        //            total_stat.statistic_process(true);
+        //            ZH_data.Add(total_stat.result);
+        //            Partition_statistic single_total_stat = new Partition_statistic("分类整体", single_total, sub_fullmark, wenli_standard, single_total_group, groups.dt, groupnum);
+        //            single_total_stat.statistic_process(false);
+        //            sdata.Add(single_total_stat.result);
+        //            form.ShowPro(70, 4);
+        //            Partition_wordcreator create = new Partition_wordcreator(sdata, groups.dt, groups.groups_group);
+        //            create.creating_ZH_word(ZH_data, wenli.dt, wenli.groups_group);
+        //        }
+        //        else if (report_style.Equals("城郊"))
+        //        {
+        //            ArrayList sdata = new ArrayList();
+        //            ArrayList ZH_data = new ArrayList();
+        //            string[] total_code = CalculateTotal(CJ_list);
 
-                    DataTable total = db._basic_data.filteredtable("QX", total_code);
-                    DataTable total_group = db.zh_group_data.filteredtable("QX", total_code);
+        //            DataTable total = db._basic_data.filteredtable("QX", total_code);
+        //            DataTable total_group = db.zh_group_data.filteredtable("QX", total_code);
 
-                    int groupnum = total.SeperateGroups(grouptype, divider, "groups");
-                    total_group.SeperateGroups(grouptype, divider, "groups");
+        //            int groupnum = total.SeperateGroups(grouptype, divider, "groups");
+        //            total_group.SeperateGroups(grouptype, divider, "groups");
 
-                    DataTable single_total = db.zh_single_data.filteredtable("QX", total_code);
-                    DataTable single_total_group = db._group_data.filteredtable("QX", total_code);
+        //            DataTable single_total = db.zh_single_data.filteredtable("QX", total_code);
+        //            DataTable single_total_group = db._group_data.filteredtable("QX", total_code);
 
-                    single_total.SeperateGroups(grouptype, divider, "groups");
-                    single_total_group.SeperateGroups(grouptype, divider, "groups");
-                    for (int i = 0; i < CJ_list.Count; i++)
-                    {
-                        string[] SF_code = new string[CJ_list[i].Count - 1];
-                        for (int j = 1; j < CJ_list[i].Count; j++)
-                            SF_code[j - 1] = CJ_list[i][j].ToString().Trim();
-                        DataTable temp = total.filteredtable("QX", SF_code);
-                        DataTable temp_group = total_group.filteredtable("QX", SF_code);
-                        Partition_statistic stat = new Partition_statistic(CJ_list[i][0].ToString().Trim(), temp, fullmark, ans.dt, temp_group, wenli.dt, groupnum);
-                        stat.statistic_process(true);
-                        ZH_data.Add(stat.result);
+        //            single_total.SeperateGroups(grouptype, divider, "groups");
+        //            single_total_group.SeperateGroups(grouptype, divider, "groups");
+        //            for (int i = 0; i < CJ_list.Count; i++)
+        //            {
+        //                string[] SF_code = new string[CJ_list[i].Count - 1];
+        //                for (int j = 1; j < CJ_list[i].Count; j++)
+        //                    SF_code[j - 1] = CJ_list[i][j].ToString().Trim();
+        //                DataTable temp = total.filteredtable("QX", SF_code);
+        //                DataTable temp_group = total_group.filteredtable("QX", SF_code);
+        //                Partition_statistic stat = new Partition_statistic(CJ_list[i][0].ToString().Trim(), temp, fullmark, ans.dt, temp_group, wenli.dt, groupnum);
+        //                stat.statistic_process(true);
+        //                ZH_data.Add(stat.result);
 
-                        DataTable single = single_total.filteredtable("QX", SF_code);
-                        DataTable single_group = single_total_group.filteredtable("QX", SF_code);
-                        Partition_statistic single_stat = new Partition_statistic(CJ_list[i][0].ToString().Trim(), single, sub_fullmark, wenli_standard, single_group, groups.dt, groupnum);
-                        single_stat.statistic_process(false);
-                        sdata.Add(single_stat.result);
-                    }
+        //                DataTable single = single_total.filteredtable("QX", SF_code);
+        //                DataTable single_group = single_total_group.filteredtable("QX", SF_code);
+        //                Partition_statistic single_stat = new Partition_statistic(CJ_list[i][0].ToString().Trim(), single, sub_fullmark, wenli_standard, single_group, groups.dt, groupnum);
+        //                single_stat.statistic_process(false);
+        //                sdata.Add(single_stat.result);
+        //            }
 
-                    Partition_statistic total_stat = new Partition_statistic("分类整体", total, fullmark, ans.dt, total_group, wenli.dt, groupnum);
-                    total_stat.statistic_process(true);
-                    ZH_data.Add(total_stat.result);
-                    Partition_statistic single_total_stat = new Partition_statistic("分类整体", single_total, sub_fullmark, wenli_standard, single_total_group, groups.dt, groupnum);
-                    single_total_stat.statistic_process(false);
-                    sdata.Add(single_total_stat.result);
-                    form.ShowPro(70, 4);
-                    Partition_wordcreator create = new Partition_wordcreator(sdata, groups.dt, groups.groups_group);
-                    create.creating_ZH_word(ZH_data, wenli.dt, wenli.groups_group);
+        //            Partition_statistic total_stat = new Partition_statistic("分类整体", total, fullmark, ans.dt, total_group, wenli.dt, groupnum);
+        //            total_stat.statistic_process(true);
+        //            ZH_data.Add(total_stat.result);
+        //            Partition_statistic single_total_stat = new Partition_statistic("分类整体", single_total, sub_fullmark, wenli_standard, single_total_group, groups.dt, groupnum);
+        //            single_total_stat.statistic_process(false);
+        //            sdata.Add(single_total_stat.result);
+        //            form.ShowPro(70, 4);
+        //            Partition_wordcreator create = new Partition_wordcreator(sdata, groups.dt, groups.groups_group);
+        //            create.creating_ZH_word(ZH_data, wenli.dt, wenli.groups_group);
 
-                }
-                else if (report_style.Equals("区县"))
-                {
-                    ArrayList total = new ArrayList();
-                    ArrayList QX = new ArrayList();
-                    ArrayList ZH_total = new ArrayList();
-                    ArrayList ZH_QX = new ArrayList();
+        //        }
+        //        else if (report_style.Equals("区县"))
+        //        {
+        //            ArrayList total = new ArrayList();
+        //            ArrayList QX = new ArrayList();
+        //            ArrayList ZH_total = new ArrayList();
+        //            ArrayList ZH_QX = new ArrayList();
 
-                    CalculatePartition(ZH_total, "市整体", db._basic_data, db.zh_group_data, fullmark, wenli.dt, db._group_num, true, ans.dt);
-                    //decimal ZH_fullmark = (decimal)((PartitionData)ZH_total[0]).groups_analysis.Rows.Find(sub)["fullmark"];
-                    CalculatePartition(total, "市整体", db.zh_single_data, db._group_data, sub_fullmark, groups.dt, db._group_num, false, wenli_standard);
-                    for (int i = 0; i < SF_list.Count; i++)
-                    {
-                        string[] SF_code = new string[SF_list[i].Count - 1];
-                        for (int j = 1; j < SF_list[i].Count; j++)
-                            SF_code[j - 1] = SF_list[i][j].ToString().Trim();
-                        DataTable temp = db._basic_data.filteredtable("schoolcode", SF_code);
-                        DataTable temp_group = db.zh_group_data.filteredtable("schoolcode", SF_code);
+        //            CalculatePartition(ZH_total, "市整体", db._basic_data, db.zh_group_data, fullmark, wenli.dt, db._group_num, true, ans.dt);
+        //            //decimal ZH_fullmark = (decimal)((PartitionData)ZH_total[0]).groups_analysis.Rows.Find(sub)["fullmark"];
+        //            CalculatePartition(total, "市整体", db.zh_single_data, db._group_data, sub_fullmark, groups.dt, db._group_num, false, wenli_standard);
+        //            for (int i = 0; i < SF_list.Count; i++)
+        //            {
+        //                string[] SF_code = new string[SF_list[i].Count - 1];
+        //                for (int j = 1; j < SF_list[i].Count; j++)
+        //                    SF_code[j - 1] = SF_list[i][j].ToString().Trim();
+        //                DataTable temp = db._basic_data.filteredtable("schoolcode", SF_code);
+        //                DataTable temp_group = db.zh_group_data.filteredtable("schoolcode", SF_code);
 
-                        DataTable single = db.zh_single_data.filteredtable("schoolcode", SF_code);
-                        DataTable single_table = db._group_data.filteredtable("schoolcode", SF_code);
-                        CalculatePartition(ZH_total, SF_list[i][0].ToString(), temp, temp_group, fullmark, wenli.dt, db._group_num, true, ans.dt);
-                        CalculatePartition(total, SF_list[i][0].ToString(), single, single_table, sub_fullmark, groups.dt, db._group_num, false, wenli_standard);
-                    }
-                    for (int i = 0; i < CJ_list.Count; i++)
-                    {
-                        string[] SF_code = new string[CJ_list[i].Count - 1];
-                        for (int j = 1; j < CJ_list[i].Count; j++)
-                            SF_code[j - 1] = CJ_list[i][j].ToString().Trim();
-                        DataTable temp = db._basic_data.filteredtable("QX", SF_code);
-                        DataTable temp_group = db.zh_group_data.filteredtable("QX", SF_code);
+        //                DataTable single = db.zh_single_data.filteredtable("schoolcode", SF_code);
+        //                DataTable single_table = db._group_data.filteredtable("schoolcode", SF_code);
+        //                CalculatePartition(ZH_total, SF_list[i][0].ToString(), temp, temp_group, fullmark, wenli.dt, db._group_num, true, ans.dt);
+        //                CalculatePartition(total, SF_list[i][0].ToString(), single, single_table, sub_fullmark, groups.dt, db._group_num, false, wenli_standard);
+        //            }
+        //            for (int i = 0; i < CJ_list.Count; i++)
+        //            {
+        //                string[] SF_code = new string[CJ_list[i].Count - 1];
+        //                for (int j = 1; j < CJ_list[i].Count; j++)
+        //                    SF_code[j - 1] = CJ_list[i][j].ToString().Trim();
+        //                DataTable temp = db._basic_data.filteredtable("QX", SF_code);
+        //                DataTable temp_group = db.zh_group_data.filteredtable("QX", SF_code);
 
-                        DataTable single = db.zh_single_data.filteredtable("QX", SF_code);
-                        DataTable single_table = db._group_data.filteredtable("QX", SF_code);
-                        CalculatePartition(ZH_total, CJ_list[i][0].ToString(), temp, temp_group, fullmark, wenli.dt, db._group_num, true, ans.dt);
-                        CalculatePartition(total, CJ_list[i][0].ToString(), single, single_table, sub_fullmark, groups.dt, db._group_num, false, wenli_standard);
-                    }
-                    DataTable QX_ZH_data = db._basic_data.filteredtable("QX", QXTransfer(Quxian_list));
-                    DataTable QX_ZH_group = db.zh_group_data.filteredtable("QX", QXTransfer(Quxian_list));
+        //                DataTable single = db.zh_single_data.filteredtable("QX", SF_code);
+        //                DataTable single_table = db._group_data.filteredtable("QX", SF_code);
+        //                CalculatePartition(ZH_total, CJ_list[i][0].ToString(), temp, temp_group, fullmark, wenli.dt, db._group_num, true, ans.dt);
+        //                CalculatePartition(total, CJ_list[i][0].ToString(), single, single_table, sub_fullmark, groups.dt, db._group_num, false, wenli_standard);
+        //            }
+        //            DataTable QX_ZH_data = db._basic_data.filteredtable("QX", QXTransfer(Quxian_list));
+        //            DataTable QX_ZH_group = db.zh_group_data.filteredtable("QX", QXTransfer(Quxian_list));
 
-                    DataTable QX_data = db.zh_single_data.filteredtable("QX", QXTransfer(Quxian_list));
-                    DataTable QX_group = db._group_data.filteredtable("QX", QXTransfer(Quxian_list));
+        //            DataTable QX_data = db.zh_single_data.filteredtable("QX", QXTransfer(Quxian_list));
+        //            DataTable QX_group = db._group_data.filteredtable("QX", QXTransfer(Quxian_list));
 
-                    CalculatePartition(ZH_total, "区整体", QX_ZH_data, QX_ZH_group, fullmark, wenli.dt, db._group_num, true, ans.dt);
-                    CalculatePartition(total, "区整体", QX_data, QX_group, sub_fullmark, groups.dt, db._group_num, false, wenli_standard);
+        //            CalculatePartition(ZH_total, "区整体", QX_ZH_data, QX_ZH_group, fullmark, wenli.dt, db._group_num, true, ans.dt);
+        //            CalculatePartition(total, "区整体", QX_data, QX_group, sub_fullmark, groups.dt, db._group_num, false, wenli_standard);
 
-                    string[] qxsf_code = CalculateTotal(QXSF_list);
-                    DataTable qxsf_zh_data = QX_ZH_data.filteredtable("schoolcode", qxsf_code);
-                    DataTable qxsf_zh_group = QX_ZH_group.filteredtable("schoolcode", qxsf_code);
-                    DataTable qxsf_data = QX_data.filteredtable("schoolcode", qxsf_code);
-                    DataTable qxsf_group = QX_group.filteredtable("schoolcode", qxsf_code);
+        //            string[] qxsf_code = CalculateTotal(QXSF_list);
+        //            DataTable qxsf_zh_data = QX_ZH_data.filteredtable("schoolcode", qxsf_code);
+        //            DataTable qxsf_zh_group = QX_ZH_group.filteredtable("schoolcode", qxsf_code);
+        //            DataTable qxsf_data = QX_data.filteredtable("schoolcode", qxsf_code);
+        //            DataTable qxsf_group = QX_group.filteredtable("schoolcode", qxsf_code);
 
-                    qxsf_zh_data.SeperateGroups(grouptype, divider, "groups");
-                    qxsf_zh_group.SeperateGroups(grouptype, divider, "groups");
-                    qxsf_data.SeperateGroups(grouptype, divider, "groups");
-                    qxsf_group.SeperateGroups(grouptype, divider, "groups");
+        //            qxsf_zh_data.SeperateGroups(grouptype, divider, "groups");
+        //            qxsf_zh_group.SeperateGroups(grouptype, divider, "groups");
+        //            qxsf_data.SeperateGroups(grouptype, divider, "groups");
+        //            qxsf_group.SeperateGroups(grouptype, divider, "groups");
 
-                    CalculatePartition(ZH_total, "分类整体", qxsf_zh_data, qxsf_zh_group, fullmark, wenli.dt, db._group_num, true, ans.dt);
-                    CalculatePartition(total, "分类整体", qxsf_data, qxsf_group, sub_fullmark, groups.dt, db._group_num, false, wenli_standard);
-                    for (int i = 0; i < QXSF_list.Count; i++)
-                    {
-                        string[] SF_code = new string[QXSF_list[i].Count - 1];
-                        for (int j = 1; j < QXSF_list[i].Count; j++)
-                            SF_code[j - 1] = QXSF_list[i][j].ToString().Trim();
-                        DataTable temp = qxsf_zh_data.filteredtable("schoolcode", SF_code);
-                        DataTable temp_group = qxsf_zh_group.filteredtable("schoolcode", SF_code);
+        //            CalculatePartition(ZH_total, "分类整体", qxsf_zh_data, qxsf_zh_group, fullmark, wenli.dt, db._group_num, true, ans.dt);
+        //            CalculatePartition(total, "分类整体", qxsf_data, qxsf_group, sub_fullmark, groups.dt, db._group_num, false, wenli_standard);
+        //            for (int i = 0; i < QXSF_list.Count; i++)
+        //            {
+        //                string[] SF_code = new string[QXSF_list[i].Count - 1];
+        //                for (int j = 1; j < QXSF_list[i].Count; j++)
+        //                    SF_code[j - 1] = QXSF_list[i][j].ToString().Trim();
+        //                DataTable temp = qxsf_zh_data.filteredtable("schoolcode", SF_code);
+        //                DataTable temp_group = qxsf_zh_group.filteredtable("schoolcode", SF_code);
 
-                        DataTable single = qxsf_data.filteredtable("schoolcode", SF_code);
-                        DataTable single_table = qxsf_group.filteredtable("schoolcode", SF_code);
-                        CalculatePartition(ZH_total, QXSF_list[i][0].ToString(), temp, temp_group, fullmark, wenli.dt, db._group_num, true, ans.dt);
-                        CalculatePartition(total, QXSF_list[i][0].ToString(), single, single_table, sub_fullmark, groups.dt, db._group_num, false, wenli_standard);
-                        CalculatePartition(ZH_QX, QXSF_list[i][0].ToString(), temp, temp_group, fullmark, wenli.dt, db._group_num, true, ans.dt);
-                        CalculatePartition(QX, QXSF_list[i][0].ToString(), single, single_table, sub_fullmark, groups.dt, db._group_num, false, wenli_standard);
-                    }
-                    CalculatePartition(ZH_QX, "分类整体", qxsf_zh_data, qxsf_zh_group, fullmark, wenli.dt, db._group_num, true, ans.dt);
-                    CalculatePartition(QX, "分类整体", qxsf_data, qxsf_group, sub_fullmark, groups.dt, db._group_num, false, wenli_standard);
-                    form.ShowPro(70, 4);
-                    Partition_wordcreator create = new Partition_wordcreator(total, QX, groups.dt, groups.groups_group);
-                    create.creating_ZH_QX_word(ZH_total, ZH_QX, wenli.dt, wenli.groups_group);
-                }
-                else if (report_style.Equals("学校"))
-                {
-                    List<WSLG_partitiondata> total = new List<WSLG_partitiondata>();
-                    List<WSLG_partitiondata> single = new List<WSLG_partitiondata>();
+        //                DataTable single = qxsf_data.filteredtable("schoolcode", SF_code);
+        //                DataTable single_table = qxsf_group.filteredtable("schoolcode", SF_code);
+        //                CalculatePartition(ZH_total, QXSF_list[i][0].ToString(), temp, temp_group, fullmark, wenli.dt, db._group_num, true, ans.dt);
+        //                CalculatePartition(total, QXSF_list[i][0].ToString(), single, single_table, sub_fullmark, groups.dt, db._group_num, false, wenli_standard);
+        //                CalculatePartition(ZH_QX, QXSF_list[i][0].ToString(), temp, temp_group, fullmark, wenli.dt, db._group_num, true, ans.dt);
+        //                CalculatePartition(QX, QXSF_list[i][0].ToString(), single, single_table, sub_fullmark, groups.dt, db._group_num, false, wenli_standard);
+        //            }
+        //            CalculatePartition(ZH_QX, "分类整体", qxsf_zh_data, qxsf_zh_group, fullmark, wenli.dt, db._group_num, true, ans.dt);
+        //            CalculatePartition(QX, "分类整体", qxsf_data, qxsf_group, sub_fullmark, groups.dt, db._group_num, false, wenli_standard);
+        //            form.ShowPro(70, 4);
+        //            Partition_wordcreator create = new Partition_wordcreator(total, QX, groups.dt, groups.groups_group);
+        //            create.creating_ZH_QX_word(ZH_total, ZH_QX, wenli.dt, wenli.groups_group);
+        //        }
+        //        else if (report_style.Equals("学校"))
+        //        {
+        //            List<WSLG_partitiondata> total = new List<WSLG_partitiondata>();
+        //            List<WSLG_partitiondata> single = new List<WSLG_partitiondata>();
 
-                    Utils.WSLG = true;
-                    PartitionXXDataProcess(total, db._basic_data, db.zh_group_data, db._group_num, ans.dt, wenli.dt, fullmark);
-                    PartitionXXDataProcess(single, db.zh_single_data, db._group_data, db._group_num, wenli_standard, groups.dt, sub_fullmark);
-                    foreach (KeyValuePair<string, string> kv in School_code)
-                    {
-                        List<WSLG_partitiondata> t_total = new List<WSLG_partitiondata>();
-                        List<WSLG_partitiondata> t_single = new List<WSLG_partitiondata>();
+        //            Utils.WSLG = true;
+        //            PartitionXXDataProcess(total, db._basic_data, db.zh_group_data, db._group_num, ans.dt, wenli.dt, fullmark);
+        //            PartitionXXDataProcess(single, db.zh_single_data, db._group_data, db._group_num, wenli_standard, groups.dt, sub_fullmark);
+        //            foreach (KeyValuePair<string, string> kv in School_code)
+        //            {
+        //                List<WSLG_partitiondata> t_total = new List<WSLG_partitiondata>();
+        //                List<WSLG_partitiondata> t_single = new List<WSLG_partitiondata>();
 
-                        PartitionXX(t_total, db._basic_data, db.zh_group_data, db._group_num, kv.Key, ans.dt, wenli.dt, fullmark);
-                        PartitionXX(t_single, db.zh_single_data, db._group_data, db._group_num, kv.Key, wenli_standard, groups.dt, sub_fullmark);
-                        t_total.AddRange(total);
-                        t_single.AddRange(single);
-                        WordData temp_total = TotalSchoolCal(db._basic_data, db.zh_group_data, db._group_num, kv.Key, ans.dt, wenli.dt, true, fullmark);
-                        WordData temp_single = TotalSchoolCal(db.zh_single_data, db._group_data, db._group_num, kv.Key, wenli_standard, groups.dt, false, sub_fullmark);
-                        form.ShowPro(70, 4);
-                        SchoolWordCreator swc = new SchoolWordCreator(temp_single, t_single, groups.dt, kv.Value, groups.groups_group);
-                        swc.SetUpZHparam(temp_total, t_total, wenli.dt, wenli.groups_group);
-                        Thread thread = new Thread(new ThreadStart(swc.creating_ZH_word));
-                        thread.IsBackground = true;
-                        thread.SetApartmentState(ApartmentState.STA);
-                        thread.Start();
+        //                PartitionXX(t_total, db._basic_data, db.zh_group_data, db._group_num, kv.Key, ans.dt, wenli.dt, fullmark);
+        //                PartitionXX(t_single, db.zh_single_data, db._group_data, db._group_num, kv.Key, wenli_standard, groups.dt, sub_fullmark);
+        //                t_total.AddRange(total);
+        //                t_single.AddRange(single);
+        //                WordData temp_total = TotalSchoolCal(db._basic_data, db.zh_group_data, db._group_num, kv.Key, ans.dt, wenli.dt, true, fullmark);
+        //                WordData temp_single = TotalSchoolCal(db.zh_single_data, db._group_data, db._group_num, kv.Key, wenli_standard, groups.dt, false, sub_fullmark);
+        //                form.ShowPro(70, 4);
+        //                SchoolWordCreator swc = new SchoolWordCreator(temp_single, t_single, groups.dt, kv.Value, groups.groups_group);
+        //                swc.SetUpZHparam(temp_total, t_total, wenli.dt, wenli.groups_group);
+        //                Thread thread = new Thread(new ThreadStart(swc.creating_ZH_word));
+        //                thread.IsBackground = true;
+        //                thread.SetApartmentState(ApartmentState.STA);
+        //                thread.Start();
 
-                        form.ThreadControl(thread);
-                    }
-                    foreach (Thread t in form.thread_table)
-                    {
-                        t.Join();
-                    }
-                    Utils.WSLG = false;
+        //                form.ThreadControl(thread);
+        //            }
+        //            foreach (Thread t in form.thread_table)
+        //            {
+        //                t.Join();
+        //            }
+        //            Utils.WSLG = false;
 
-                }
-            }
-            else
-            {
+        //        }
+        //    }
+        //    else
+        //    {
 
-                GK_database db = new GK_database(ans.dt, groups.dt, grouptype, divider);
-                db.DBF_data_process(database_address);
+        //        GK_database db = new GK_database(ans.dt, groups.dt, grouptype, divider);
+        //        db.DBF_data_process(database_address);
 
-                if (db._basic_data.Columns.Contains("XZ"))
-                {
-                    XZ_group_separate(db._basic_data);
-                }
-                ans.dt = db.newStandard;
-                form.ShowPro(40, 3);
-                if (report_style.Equals("总体"))
-                {
-                    WordData data = new WordData(groups.groups_group);
-                    Total_statistic stat = new Total_statistic(data, db._basic_data, fullmark, ans.dt, db._group_data, groups.dt, db._group_num);
-                    stat.statistic_process(false);
-                    if (db._basic_data.Columns.Contains("XZ"))
-                        stat.xz_postprocess(ans.xz_th);
-                    form.ShowPro(70, 4);
-                    //WordCreator create = new WordCreator(data);
-                    //create.creating_word();
-                    if (subject.Equals("语文") || subject.Equals("英语"))
-                    {
-                        form.ShowPro(80, 6);
-                        Utils.WSLG = true;
-                        ArrayList WSLG = new ArrayList();
+        //        if (db._basic_data.Columns.Contains("XZ"))
+        //        {
+        //            XZ_group_separate(db._basic_data);
+        //        }
+        //        ans.dt = db.newStandard;
+        //        form.ShowPro(40, 3);
+        //        if (report_style.Equals("总体"))
+        //        {
+        //            WordData data = new WordData(groups.groups_group);
+        //            Total_statistic stat = new Total_statistic(data, db._basic_data, fullmark, ans.dt, db._group_data, groups.dt, db._group_num);
+        //            stat.statistic_process(false);
+        //            if (db._basic_data.Columns.Contains("XZ"))
+        //                stat.xz_postprocess(ans.xz_th);
+        //            form.ShowPro(70, 4);
+        //            //WordCreator create = new WordCreator(data);
+        //            //create.creating_word();
+        //            if (subject.Equals("语文") || subject.Equals("英语"))
+        //            {
+        //                form.ShowPro(80, 6);
+        //                Utils.WSLG = true;
+        //                ArrayList WSLG = new ArrayList();
 
 
-                        DataTable W_data = db._basic_data.Likefilter("studentid", "'1*'");
-                        DataTable W_group = db._group_data.Likefilter("studentid", "'1*'");
+        //                DataTable W_data = db._basic_data.Likefilter("studentid", "'1*'");
+        //                DataTable W_group = db._group_data.Likefilter("studentid", "'1*'");
 
-                        Partition_statistic w_stat = new Partition_statistic("文科", W_data, fullmark, ans.dt, W_group, groups.dt, db._group_num);
-                        w_stat.statistic_process(false);
-                        if (db._basic_data.Columns.Contains("XZ"))
-                            w_stat.xz_postprocess(ans.xz_th);
-                        WSLG.Add(w_stat.result);
+        //                Partition_statistic w_stat = new Partition_statistic("文科", W_data, fullmark, ans.dt, W_group, groups.dt, db._group_num);
+        //                w_stat.statistic_process(false);
+        //                if (db._basic_data.Columns.Contains("XZ"))
+        //                    w_stat.xz_postprocess(ans.xz_th);
+        //                WSLG.Add(w_stat.result);
 
-                        DataTable l_data = db._basic_data.Likefilter("studentid", "'5*'");
-                        DataTable l_group = db._group_data.Likefilter("studentid", "'5*'");
+        //                DataTable l_data = db._basic_data.Likefilter("studentid", "'5*'");
+        //                DataTable l_group = db._group_data.Likefilter("studentid", "'5*'");
 
-                        Partition_statistic l_stat = new Partition_statistic("理科", l_data, fullmark, ans.dt, l_group, groups.dt, db._group_num);
-                        l_stat.statistic_process(false);
-                        if (db._basic_data.Columns.Contains("XZ"))
-                            l_stat.xz_postprocess(ans.xz_th);
-                        WSLG.Add(l_stat.result);
+        //                Partition_statistic l_stat = new Partition_statistic("理科", l_data, fullmark, ans.dt, l_group, groups.dt, db._group_num);
+        //                l_stat.statistic_process(false);
+        //                if (db._basic_data.Columns.Contains("XZ"))
+        //                    l_stat.xz_postprocess(ans.xz_th);
+        //                WSLG.Add(l_stat.result);
 
-                        Partition_statistic total_stat = new Partition_statistic("分类整体", db._basic_data, fullmark, ans.dt, db._group_data, groups.dt, db._group_num);
-                        total_stat.statistic_process(false);
-                        if (db._basic_data.Columns.Contains("XZ"))
-                            total_stat.xz_postprocess(ans.xz_th);
-                        WSLG.Add(total_stat.result);
+        //                Partition_statistic total_stat = new Partition_statistic("分类整体", db._basic_data, fullmark, ans.dt, db._group_data, groups.dt, db._group_num);
+        //                total_stat.statistic_process(false);
+        //                if (db._basic_data.Columns.Contains("XZ"))
+        //                    total_stat.xz_postprocess(ans.xz_th);
+        //                WSLG.Add(total_stat.result);
 
-                        Partition_wordcreator create2 = new Partition_wordcreator(WSLG, groups.dt, groups.groups_group);
-                        create2.creating_word();
-                        Utils.WSLG = false;
-                    }
-                }
-                else if (report_style.Equals("两类示范校"))
-                {
-                    ArrayList list = new ArrayList();
-                    PartitionDataProcess(list, SF_list, "schoolcode", db._basic_data, db._group_data, db._group_num, false);
-                    form.ShowPro(70, 4);
-                    Partition_wordcreator create = new Partition_wordcreator(list, groups.dt, groups.groups_group);
-                    create.creating_word();
-                }
-                else if (report_style.Equals("城郊"))
-                {
-                    ArrayList list = new ArrayList();
-                    PartitionDataProcess(list, CJ_list, "QX", db._basic_data, db._group_data, db._group_num, false);
-                    form.ShowPro(70, 4);
-                    Partition_wordcreator create = new Partition_wordcreator(list, groups.dt, groups.groups_group);
-                    create.creating_word();
-                }
-                else if (report_style.Equals("区县"))
-                {
-                    ArrayList QX = new ArrayList();
-                    ArrayList total = new ArrayList();
-                    PartitionQXDataProcess(total, QX, db._basic_data, db._group_data, db._group_num);
-                    form.ShowPro(70, 4);
-                    Partition_wordcreator create = new Partition_wordcreator(total, QX, groups.dt, groups.groups_group);
-                    create.creating_word();
+        //                Partition_wordcreator create2 = new Partition_wordcreator(WSLG, groups.dt, groups.groups_group);
+        //                create2.creating_word();
+        //                Utils.WSLG = false;
+        //            }
+        //        }
+        //        else if (report_style.Equals("两类示范校"))
+        //        {
+        //            ArrayList list = new ArrayList();
+        //            PartitionDataProcess(list, SF_list, "schoolcode", db._basic_data, db._group_data, db._group_num, false);
+        //            form.ShowPro(70, 4);
+        //            Partition_wordcreator create = new Partition_wordcreator(list, groups.dt, groups.groups_group);
+        //            create.creating_word();
+        //        }
+        //        else if (report_style.Equals("城郊"))
+        //        {
+        //            ArrayList list = new ArrayList();
+        //            PartitionDataProcess(list, CJ_list, "QX", db._basic_data, db._group_data, db._group_num, false);
+        //            form.ShowPro(70, 4);
+        //            Partition_wordcreator create = new Partition_wordcreator(list, groups.dt, groups.groups_group);
+        //            create.creating_word();
+        //        }
+        //        else if (report_style.Equals("区县"))
+        //        {
+        //            ArrayList QX = new ArrayList();
+        //            ArrayList total = new ArrayList();
+        //            PartitionQXDataProcess(total, QX, db._basic_data, db._group_data, db._group_num);
+        //            form.ShowPro(70, 4);
+        //            Partition_wordcreator create = new Partition_wordcreator(total, QX, groups.dt, groups.groups_group);
+        //            create.creating_word();
 
-                    if (subject.Equals("语文") || subject.Equals("英语"))
-                    {
-                        form.ShowPro(80, 6);
-                        Utils.WSLG = true;
-                        ArrayList WSLG = new ArrayList();
-                        DataTable QX_data = db._basic_data.filteredtable("QX", QXTransfer(Quxian_list));
-                        DataTable QX_group = db._group_data.filteredtable("QX", QXTransfer(Quxian_list));
+        //            if (subject.Equals("语文") || subject.Equals("英语"))
+        //            {
+        //                form.ShowPro(80, 6);
+        //                Utils.WSLG = true;
+        //                ArrayList WSLG = new ArrayList();
+        //                DataTable QX_data = db._basic_data.filteredtable("QX", QXTransfer(Quxian_list));
+        //                DataTable QX_group = db._group_data.filteredtable("QX", QXTransfer(Quxian_list));
 
-                        WSLGCal(QX_data, QX_group, WSLG);
+        //                WSLGCal(QX_data, QX_group, WSLG);
 
-                        Partition_wordcreator create2 = new Partition_wordcreator(WSLG, groups.dt, groups.groups_group);
-                        create2.creating_word();
-                        Utils.WSLG = false;
+        //                Partition_wordcreator create2 = new Partition_wordcreator(WSLG, groups.dt, groups.groups_group);
+        //                create2.creating_word();
+        //                Utils.WSLG = false;
                         
-                    }
+        //            }
 
-                }
-                else if (report_style.Equals("学校"))
-                {
-                    List<WSLG_partitiondata> total = new List<WSLG_partitiondata>();
-                    Utils.WSLG = true;
-                    PartitionXXDataProcess(total, db._basic_data, db._group_data, db._group_num, ans.dt, groups.dt, fullmark);
-                    form.ShowPro(70, 4);
-                    foreach (KeyValuePair<string, string> kv in School_code)
-                    {
-                        List<WSLG_partitiondata> temp_list = new List<WSLG_partitiondata>();
-                        PartitionXX(temp_list, db._basic_data, db._group_data, db._group_num, kv.Key, ans.dt, groups.dt, fullmark);
-                        temp_list.AddRange(total);
-                        WordData temp = TotalSchoolCal(db._basic_data, db._group_data, db._group_num, kv.Key, ans.dt, groups.dt, false, fullmark);
-                        SchoolWordCreator swc = new SchoolWordCreator(temp, temp_list, groups.dt, kv.Value, groups.groups_group);
+        //        }
+        //        else if (report_style.Equals("学校"))
+        //        {
+        //            List<WSLG_partitiondata> total = new List<WSLG_partitiondata>();
+        //            Utils.WSLG = true;
+        //            PartitionXXDataProcess(total, db._basic_data, db._group_data, db._group_num, ans.dt, groups.dt, fullmark);
+        //            form.ShowPro(70, 4);
+        //            foreach (KeyValuePair<string, string> kv in School_code)
+        //            {
+        //                List<WSLG_partitiondata> temp_list = new List<WSLG_partitiondata>();
+        //                PartitionXX(temp_list, db._basic_data, db._group_data, db._group_num, kv.Key, ans.dt, groups.dt, fullmark);
+        //                temp_list.AddRange(total);
+        //                WordData temp = TotalSchoolCal(db._basic_data, db._group_data, db._group_num, kv.Key, ans.dt, groups.dt, false, fullmark);
+        //                SchoolWordCreator swc = new SchoolWordCreator(temp, temp_list, groups.dt, kv.Value, groups.groups_group);
 
-                        Thread thread = new Thread(new ThreadStart(swc.creating_word));
-                        thread.IsBackground = true;
-                        thread.SetApartmentState(ApartmentState.STA);
-                        thread.Start();
+        //                Thread thread = new Thread(new ThreadStart(swc.creating_word));
+        //                thread.IsBackground = true;
+        //                thread.SetApartmentState(ApartmentState.STA);
+        //                thread.Start();
 
-                        form.ThreadControl(thread);
-                        //swc.creating_word();
-                    }
+        //                form.ThreadControl(thread);
+        //                //swc.creating_word();
+        //            }
                     
                     
 
-                    if (subject.Equals("语文") || subject.Equals("英语"))
-                    {
-                        form.ShowPro(80, 6);
-                        foreach (KeyValuePair<string, string> kv in School_code)
-                        {
-                            ArrayList WSLG = new ArrayList();
-                            DataTable XX_data = db._basic_data.filteredtable("schoolcode", new string[] { kv.Key });
-                            DataTable XX_group = db._group_data.filteredtable("schoolcode", new string[] { kv.Key });
+        //            if (subject.Equals("语文") || subject.Equals("英语"))
+        //            {
+        //                form.ShowPro(80, 6);
+        //                foreach (KeyValuePair<string, string> kv in School_code)
+        //                {
+        //                    ArrayList WSLG = new ArrayList();
+        //                    DataTable XX_data = db._basic_data.filteredtable("schoolcode", new string[] { kv.Key });
+        //                    DataTable XX_group = db._group_data.filteredtable("schoolcode", new string[] { kv.Key });
 
-                            WSLGCal(XX_data, XX_group, WSLG);
-                            Partition_wordcreator create2 = new Partition_wordcreator(WSLG, groups.dt, groups.groups_group);
-                            Thread thread = new Thread(new ThreadStart(create2.creating_word));
-                            thread.IsBackground = true;
-                            thread.SetApartmentState(ApartmentState.STA);
-                            thread.Start();
+        //                    WSLGCal(XX_data, XX_group, WSLG);
+        //                    Partition_wordcreator create2 = new Partition_wordcreator(WSLG, groups.dt, groups.groups_group);
+        //                    Thread thread = new Thread(new ThreadStart(create2.creating_word));
+        //                    thread.IsBackground = true;
+        //                    thread.SetApartmentState(ApartmentState.STA);
+        //                    thread.Start();
 
-                            form.ThreadControl(thread);
-                        }
-                    }
+        //                    form.ThreadControl(thread);
+        //                }
+        //            }
 
-                    foreach (Thread t in form.thread_table)
-                    {
-                        t.Join();
-                    }
-                    Utils.WSLG = false;
+        //            foreach (Thread t in form.thread_table)
+        //            {
+        //                t.Join();
+        //            }
+        //            Utils.WSLG = false;
 
-                }
-            }
-        }
+        //        }
+        //    }
+        //}
         void WSLGCal(DataTable QX_data, DataTable QX_group, ArrayList WSLG)
         {
             
@@ -1125,41 +1125,41 @@ namespace ExamReport
             return SF_code;
 
         }
-        void CalculateGKZF(DataTable total, List<ZF_statistic> result)
-        {
-            int totalnum = 0;
-            for (int i = 0; i < QXSF_list.Count; i++)
-                totalnum += (QXSF_list[i].Count - 1);
-            string[] SF_code = new string[totalnum];
-            totalnum = 0;
-            for (int i = 0; i < QXSF_list.Count; i++)
-            {
-                for (int j = 1; j < QXSF_list[i].Count; j++)
-                {
-                    SF_code[totalnum] = QXSF_list[i][j].ToString().Trim();
-                    totalnum++;
-                }
-            }
+        //void CalculateGKZF(DataTable total, List<ZF_statistic> result)
+        //{
+        //    int totalnum = 0;
+        //    for (int i = 0; i < QXSF_list.Count; i++)
+        //        totalnum += (QXSF_list[i].Count - 1);
+        //    string[] SF_code = new string[totalnum];
+        //    totalnum = 0;
+        //    for (int i = 0; i < QXSF_list.Count; i++)
+        //    {
+        //        for (int j = 1; j < QXSF_list[i].Count; j++)
+        //        {
+        //            SF_code[totalnum] = QXSF_list[i][j].ToString().Trim();
+        //            totalnum++;
+        //        }
+        //    }
 
-            DataTable flztdata = total.filteredtable("xxdm", SF_code);
-            ZF_statistic flzt = new ZF_statistic(flztdata, fullmark, "分类整体");
-            flzt.partition_process();
-            result.Add(flzt);
+        //    DataTable flztdata = total.filteredtable("xxdm", SF_code);
+        //    ZF_statistic flzt = new ZF_statistic(flztdata, fullmark, "分类整体");
+        //    flzt.partition_process();
+        //    result.Add(flzt);
 
-            for (int i = 0; i < QXSF_list.Count; i++)
-            {
-                ArrayList temp = QXSF_list[i];
-                string[] xx_code = new string[temp.Count - 1];
-                for (int j = 1; j < temp.Count; j++)
-                    xx_code[j - 1] = temp[j].ToString().Trim();
-                DataTable data = flztdata.filteredtable("xxdm", xx_code);
-                ZF_statistic stat = new ZF_statistic(data, fullmark, temp[0].ToString().Trim());
-                stat.partition_process();
-                result.Add(stat);
+        //    for (int i = 0; i < QXSF_list.Count; i++)
+        //    {
+        //        ArrayList temp = QXSF_list[i];
+        //        string[] xx_code = new string[temp.Count - 1];
+        //        for (int j = 1; j < temp.Count; j++)
+        //            xx_code[j - 1] = temp[j].ToString().Trim();
+        //        DataTable data = flztdata.filteredtable("xxdm", xx_code);
+        //        ZF_statistic stat = new ZF_statistic(data, fullmark, temp[0].ToString().Trim());
+        //        stat.partition_process();
+        //        result.Add(stat);
 
-            }
+        //    }
 
-        }
+        //}
         void CalculateClassTotal(DataTable total, DataTable groups_data, ArrayList totaldata, ArrayList sdata)
         {
             int totalnum = 0;

@@ -85,27 +85,27 @@ namespace ExamReport
             {
                 WriteIntoDocument(oDoc, "title_1", config.year + GK_ZF_title_1);
                 WriteIntoDocument(oDoc, "title_2", GK_ZF_title_2);
-                WriteIntoDocument(oDoc, "subject", config.school);
+                WriteIntoDocument(oDoc, "subject", school);
             }
 
             else
             {
                 WriteIntoDocument(oDoc, "title_2", XX_title);
-                if (subject.Contains("理综"))
+                if (config.subject.Contains("理综"))
                 {
-                    WriteIntoDocument(oDoc, "QX", config.school);
+                    WriteIntoDocument(oDoc, "QX", school);
                     WriteIntoDocument(oDoc, "ZH", "理科综合");
                     WriteIntoDocument(oDoc, "QX_ZH_subject", config.subject.Substring(3));
                 }
-                else if (subject.Contains("文综"))
+                else if (config.subject.Contains("文综"))
                 {
-                    WriteIntoDocument(oDoc, "QX", config.school);
+                    WriteIntoDocument(oDoc, "QX", school);
                     WriteIntoDocument(oDoc, "ZH", "文科综合");
                     WriteIntoDocument(oDoc, "QX_ZH_subject", config.subject.Substring(3));
                 }
                 else
                 {
-                    WriteIntoDocument(oDoc, "QX", config.school);
+                    WriteIntoDocument(oDoc, "QX", school);
                     WriteIntoDocument(oDoc, "QX_subject", config.subject);
                 }
             }
@@ -127,7 +127,7 @@ namespace ExamReport
                     else if (config.report_style.Equals("区县"))
                     {
                         WriteIntoDocument(oDoc, "title_2", ZK_QX_title_2);
-                        WriteIntoDocument(oDoc, "QX", QX);
+                        WriteIntoDocument(oDoc, "QX", config.QX);
                         WriteIntoDocument(oDoc, "QX_subject", config.subject);
                     }
                 }
@@ -140,14 +140,14 @@ namespace ExamReport
                 {
                     if (config.subject.Equals("总分"))
                     {
-                        WriteIntoDocument(oDoc, "title_1", year + GK_ZF_title_1);
+                        WriteIntoDocument(oDoc, "title_1", config.year + GK_ZF_title_1);
                         WriteIntoDocument(oDoc, "title_2", GK_ZF_title_2);
                         if (config.report_style.Equals("城郊"))
                             WriteIntoDocument(oDoc, "subject", "城区与郊区");
                         else if (config.report_style.Equals("两类示范校"))
                             WriteIntoDocument(oDoc, "subject", "两类示范校");
                         else if (config.report_style.Equals("区县"))
-                            WriteIntoDocument(oDoc, "subject", QX);
+                            WriteIntoDocument(oDoc, "subject", config.QX);
                         else if (config.report_style.Equals("总体"))
                             WriteIntoDocument(oDoc, "subject", "全市");
                         
@@ -198,19 +198,19 @@ namespace ExamReport
                             WriteIntoDocument(oDoc, "title_2", GK_QX_title_2);
                             if (config.subject.Contains("理综"))
                             {
-                                WriteIntoDocument(oDoc, "QX", QX);
+                                WriteIntoDocument(oDoc, "QX", config.QX);
                                 WriteIntoDocument(oDoc, "ZH", "理科综合");
                                 WriteIntoDocument(oDoc, "QX_ZH_subject", config.subject.Substring(3));
                             }
                             else if (config.subject.Contains("文综"))
                             {
-                                WriteIntoDocument(oDoc, "QX", QX);
+                                WriteIntoDocument(oDoc, "QX", config.QX);
                                 WriteIntoDocument(oDoc, "ZH", "文科综合");
                                 WriteIntoDocument(oDoc, "QX_ZH_subject", config.subject.Substring(3));
                             }
                             else
                             {
-                                WriteIntoDocument(oDoc, "QX", QX);
+                                WriteIntoDocument(oDoc, "QX", config.QX);
                                 WriteIntoDocument(oDoc, "QX_subject", config.subject);
                             }
                         }
@@ -267,14 +267,14 @@ namespace ExamReport
 
             if (config.subject.Equals("总分"))
             {
-                final = config.year + "年总分统计分析报告(" + config.school + ").docx";
+                final = config.year + "年总分统计分析报告(" + school + ").docx";
             }
             else
             {
                 if (config.subject.Contains("理综") || config.subject.Contains("文综"))
-                    final = config.year + "年北京市" + config.school + config.subject.Substring(3) + "学校数据统计分析报告.docx";
+                    final = config.year + "年北京市" + school + config.subject.Substring(3) + "学校数据统计分析报告.docx";
                 else
-                    final = config.year + "年北京市" + config.school + config.subject + "学校数据统计分析报告.docx";
+                    final = config.year + "年北京市" + school + config.subject + "学校数据统计分析报告.docx";
             }
 
             final = addr + final;
@@ -510,6 +510,8 @@ namespace ExamReport
                     return "sxl";
                 case "数学文":
                     return "sxw";
+                case "总分":
+                    return "zf";
                 case "yw":
                     return "语文";
                 case "sx":
@@ -532,6 +534,8 @@ namespace ExamReport
                     return "数学理";
                 case "sxw":
                     return "数学文";
+                case "zf":
+                    return "总分";
                 default:
                     return "";
             }
@@ -540,21 +544,16 @@ namespace ExamReport
         {
             if (exam.Equals("高考") || exam.Equals("gk"))
             {
-                switch (sub)
-                {
-                    case "化学":
-                    case "物理":
-                    case "生物":
-                    case "政治":
-                    case "地理":
-                    case "历史":
-                        return true;
-                        
-                    default:
-                        return false;
-                }
+                if (sub.Contains("理综") || sub.Contains("文综"))
+                    return true;
+                else
+                    return false;
             }
             return false;
+        }
+        public static string get_zt_tablename(string year)
+        {
+            return year + "_zf";
         }
         public static string get_tablename(string year, string exam, string sub)
         {

@@ -36,23 +36,25 @@ namespace ExamReport
         private List<ZF_statistic> _xx_data;
         private string _schoolname;
 
-        public ZF_wordcreator()
+        public ZF_wordcreator(Configuration config)
         {
+            _config = config;
         }
-        public ZF_wordcreator(List<ZF_statistic> data, string schoolname)
+        public ZF_wordcreator(Configuration config, List<ZF_statistic> data, string schoolname)
         {
             _xx_data = data;
             _schoolname = schoolname;
+            _config = config;
         }
         public void XX_create()
         {
-            object filepath = @Utils.CurrentDirectory + @"\template2.dotx";
+            object filepath = @_config.CurrentDirectory + @"\template2.dotx";
             //object filepath = @"D:\项目\给王卅的编程资料\中考\c.dotx";
             //Start Word and create a new document.
 
             oWord = new Word.Application();
 
-            oWord.Visible = Utils.isVisible;
+            oWord.Visible = _config.isVisible;
             oDoc = oWord.Documents.Add(ref filepath, ref oMissing,
             ref oMissing, ref oMissing);
             Utils.WriteFrontPage(_config, oDoc, _schoolname);
@@ -138,13 +140,13 @@ namespace ExamReport
         }
         public void total_create(ZF_statistic data)
         {
-            object filepath = @Utils.CurrentDirectory + @"\template.dotx";
+            object filepath = @_config.CurrentDirectory + @"\template.dotx";
             //object filepath = @"D:\项目\给王卅的编程资料\中考\c.dotx";
             //Start Word and create a new document.
 
             oWord = new Word.Application();
 
-            oWord.Visible = Utils.isVisible;
+            oWord.Visible = _config.isVisible;
             oDoc = oWord.Documents.Add(ref filepath, ref oMissing,
             ref oMissing, ref oMissing);
             Utils.WriteFrontPage(_config, oDoc);
@@ -280,13 +282,13 @@ namespace ExamReport
         }
         public void partition_wordcreate(List<ZF_statistic> data, string _subject)
         {
-            object filepath = @Utils.CurrentDirectory + @"\template2.dotx";
+            object filepath = @_config.CurrentDirectory + @"\template2.dotx";
             //object filepath = @"D:\项目\给王卅的编程资料\中考\c.dotx";
             //Start Word and create a new document.
 
             oWord = new Word.Application();
 
-            oWord.Visible = Utils.isVisible;
+            oWord.Visible = _config.isVisible;
             oDoc = oWord.Documents.Add(ref filepath, ref oMissing,
             ref oMissing, ref oMissing);
             Utils.WriteFrontPage(_config, oDoc);

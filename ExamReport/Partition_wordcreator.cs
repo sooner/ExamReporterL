@@ -204,16 +204,22 @@ namespace ExamReport
 
             object oPageBreak = Microsoft.Office.Interop.Word.WdBreakType.wdPageBreak;
             if (_config.WSLG)
+            {
+                Utils.WSLG_WriteFrontPage(_config, oDoc);
                 creating_word_part3();
+            }
             else
+            {
+                Utils.WriteFrontPage(_config, oDoc);
                 creating_word_part2();
+            }
             
 
             
         }
         public void creating_word_part3()
         {
-            Utils.WSLG_WriteFrontPage(_config, oDoc);
+            
             insertText(ExamTitle1, "总体分析");
             insertTotalTable("    总分分析表", _sdata);
 
@@ -282,7 +288,7 @@ namespace ExamReport
         }
         public void creating_word_part2()
         {
-            Utils.WriteFrontPage(_config, oDoc);
+            
             insertText(ExamTitle1, "总体分析");
             if (_report_type.Equals("区县"))
                 insertTotalTable("    总分分析表", _totaldata);

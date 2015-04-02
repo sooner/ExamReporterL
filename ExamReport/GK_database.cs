@@ -31,10 +31,11 @@ namespace ExamReport
         string filename;
         string filext;
         List<List<string>> name_list;
+        MetaData _mdata;
 
         OleDbConnection dbfConnection;
 
-        public GK_database(DataTable standard_ans, DataTable groups, ZK_database.GroupType gtype, decimal divider)
+        public GK_database(MetaData mdata, DataTable standard_ans, DataTable groups, ZK_database.GroupType gtype, decimal divider)
         {
             _groups = groups;
             _gtype = gtype;
@@ -44,6 +45,7 @@ namespace ExamReport
             _basic_data = new DataTable();
             _group_data = new DataTable();
             name_list = new List<List<string>>();
+            _mdata = mdata;
         }
 
         public GK_database()
@@ -109,7 +111,8 @@ namespace ExamReport
             if (_basic_data.Columns.Contains("XZ"))
                 zh_single_data.Columns.Add("XZ", typeof(string));
             zh_single_data.Columns.Add("ZH_totalmark", typeof(decimal));
-
+            _group_data.Columns.Add("ZH_totalmark", typeof(decimal));
+            int row = 0;
             foreach (DataRow dr in _basic_data.Rows)
             {
                 DataRow newrow = zh_single_data.NewRow();
@@ -140,8 +143,27 @@ namespace ExamReport
                     newrow[i] = dr[zh_single_data.Columns[i].ColumnName];
 
                 newrow["ZH_totalmark"] = totalmark;
+                if (!_group_data.Rows[row]["studentid"].ToString().Trim().Equals(newrow["studentid"].ToString().Trim()))
+                    throw new Exception();
+                _group_data.Rows[row]["ZH_totalmark"] = totalmark;
                 zh_single_data.Rows.Add(newrow);
+                row++;
             }
+            //var zh_result = _group_data.AsEnumerable().Join(zh_single_data.AsEnumerable().Select(c => new
+            //{
+            //    studentid = c.Field<string>("studentid"),
+            //    ZH_totalmark = c.Field<decimal>("ZH_totalmark")
+            //}), c => c.Field<string>("studentid"), p => p.studentid, (c, p) => new
+            //{
+            //    c = c,
+            //    p = p
+            //});
+            //DataTable zh_temp = _group_data.Clone();
+
+            //foreach (var item in zh_result)
+            //{
+
+            //}
             List<List<string>> group_th = new List<List<string>>();
             zh_group_data = new DataTable();
             zh_group_data.Columns.Add("studentid", typeof(string));
@@ -185,6 +207,7 @@ namespace ExamReport
                 }
                 zh_group_data.Rows.Add(newrow);
             }
+            
             if (Utils.saveMidData)
             {
                 //create_groups_table(zh_group_data, true);
@@ -374,7 +397,7 @@ namespace ExamReport
                 newRow["studentid"] = dr["Mh"].ToString().Trim();
                 newRow["schoolcode"] = dr["Schoolcode"].ToString().Trim();
                 newRow["totalmark"] = (decimal)dr["Zf"];
-                if (Utils.sub_iszero && (decimal)dr["Zf"] == 0)
+                if (_mdata.sub_iszero && (decimal)dr["Zf"] == 0)
                     continue;
                 decimal obj_mark = 0;
                 int obj_count = 0, sub_count = 0, total_count = 0;
@@ -435,12 +458,12 @@ namespace ExamReport
                                     newRow["totalmark"] = (decimal)newRow["totalmark"] + val;
 
                                 }
-                                else if (Utils.PartialRight != 0 && Utils.isContain(temp, ans[obj_count].ToString()))
+                                else if (_mdata.PartialRight != 0 && Utils.isContain(temp, ans[obj_count].ToString()))
                                 {
-                                    if (Utils.PartialRight > Convert.ToDecimal(ans_dr["fs"]))
+                                    if (_mdata.PartialRight > Convert.ToDecimal(ans_dr["fs"]))
                                         throw new ArgumentException("选择题半分分数大于满分分数！");
                                     
-                                        decimal val = Utils.PartialRight;
+                                        decimal val = _mdata.PartialRight;
                                         newRow[th] = val;
                                         obj_mark += val;
                                         newRow["totalmark"] = (decimal)newRow["totalmark"] + val;
@@ -494,7 +517,7 @@ namespace ExamReport
                     throw new ArgumentException("标准答案主观题数量小于数据库中主观题数量");
                 //if (Utils.obj_iszero && obj_mark == 0)
                 //    continue;
-                if (Utils.fullmark_iszero && (decimal)newRow["totalmark"] == 0)
+                if (_mdata.fullmark_iszero && (decimal)newRow["totalmark"] == 0)
                     continue;
                 
                 if (sub_count + obj_count != _standard_ans.Rows.Count)
@@ -562,12 +585,12 @@ namespace ExamReport
 
             }
             create_groups();
-            if (Utils.saveMidData)
-            {
-                Utils.create_groups_table(_basic_data, Utils.year + "高考" + Utils.subject + "基础数据");
-                Utils.create_groups_table(_group_data, Utils.year + "高考" + Utils.subject + "题组数据");
+            //if (Utils.saveMidData)
+            //{
+            //    Utils.create_groups_table(_basic_data, Utils.year + "高考" + Utils.subject + "基础数据");
+            //    Utils.create_groups_table(_group_data, Utils.year + "高考" + Utils.subject + "题组数据");
 
-            }
+            //}
             return "";
         }
         public char[] TransferCharArray(string[] ans_group)

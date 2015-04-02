@@ -19,7 +19,7 @@ namespace ExamReport
         private object TableContent = "TableContent";
         private object TableContent2 = "TableContent2";
 
-        private Configuration _config;
+        public Configuration _config;
         object oMissing = System.Reflection.Missing.Value;
         object oEndOfDoc = "\\endofdoc"; /* \endofdoc is a predefined bookmark */
         Word._Application oWord;
@@ -40,6 +40,7 @@ namespace ExamReport
         List<WSLG_partitiondata> zh_pdata;
         DataTable groups;
         Dictionary<string, List<string>> groups_group;
+
 
         public SchoolWordCreator(WordData sdata, List<WSLG_partitiondata> pdata, DataTable groups, string schoolname, Dictionary<string, List<string>> groups_group)
         {

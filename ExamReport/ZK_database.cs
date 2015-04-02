@@ -21,12 +21,12 @@ namespace ExamReport
         public DataTable _groups;
         public DataTable _group_data;
         public int _group_num;
-
+        MetaData _mdata;
 
         List<List<string>> name_list;
         public DataTable newStandard;
 
-        public ZK_database(DataTable standard_ans, DataTable groups, GroupType gtype, decimal divider)
+        public ZK_database(MetaData mdata, DataTable standard_ans, DataTable groups, GroupType gtype, decimal divider)
         {
             _groups = groups;
             _gtype = gtype;
@@ -34,6 +34,7 @@ namespace ExamReport
             _standard_ans = standard_ans;
             _basic_data = new DataTable();
             _group_data = new DataTable();
+            _mdata = mdata;
 
             name_list = new List<List<string>>();
         }
@@ -148,13 +149,13 @@ namespace ExamReport
                                     newRow[th] = Convert.ToDecimal(ans_dr["fs"]);
                                     obj_mark += Convert.ToDecimal(ans_dr["fs"]);
                                 }
-                                else if (Utils.PartialRight != 0 && Utils.isContain(temp, ans[obj_count].ToString()))
+                                else if (_mdata.PartialRight != 0 && Utils.isContain(temp, ans[obj_count].ToString()))
                                 {
-                                    if (Utils.PartialRight > Convert.ToDecimal(ans_dr["fs"]))
+                                    if (_mdata.PartialRight > Convert.ToDecimal(ans_dr["fs"]))
                                         throw new ArgumentException("选择题半分分数大于满分分数！");
 
-                                    newRow[th] = Utils.PartialRight;
-                                    obj_mark += Utils.PartialRight;
+                                    newRow[th] = _mdata.PartialRight;
+                                    obj_mark += _mdata.PartialRight;
 
                                 }
                                 else
@@ -171,9 +172,9 @@ namespace ExamReport
                         total_count++;
                     }
                     
-                    if (Utils.sub_iszero && sub_mark == 0)
+                    if (_mdata.sub_iszero && sub_mark == 0)
                         continue;
-                    if (Utils.fullmark_iszero && (decimal)newRow["totalmark"] == 0)
+                    if (_mdata.fullmark_iszero && (decimal)newRow["totalmark"] == 0)
                         continue;
                     newRow["Groups"] = "";
                     if (dt.Columns.Contains("qxdm"))

@@ -30,6 +30,16 @@ namespace ExamReport
         public List<decimal> GroupMark = new List<decimal>();
         public decimal fullmark;
 
+        public List<decimal> sub_groupMark = new List<decimal>();
+        public decimal sub_fullmark;
+
         public int smooth_degree = 10;
+        public bool is_sub_cor = false;
+
+        public void change()
+        {
+            fullmark = sub_fullmark;
+            GroupMark = sub_groupMark;
+        }
     } 
 }

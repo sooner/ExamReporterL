@@ -16,50 +16,51 @@ namespace ExamReport
                 {
                     if (dc.ColumnName.Trim().Equals("sub"))
                     {
-                        switch (dr[dc].ToString())
-                        {
-                            case "sx":
-                                dr[dc] = "数学";
-                                break;
-                            case "yw":
-                                dr[dc] = "语文";
-                                break;
-                            case "yy":
-                                dr[dc] = "英语";
-                                break;
-                            case "wl":
-                                dr[dc] = "物理";
-                                break;
-                            case "hx":
-                                dr[dc] = "化学";
-                                break;
-                            case "sw":
-                                dr[dc] = "生物";
-                                break;
-                            case "zz":
-                                dr[dc] = "政治";
-                                break;
-                            case "ls":
-                                dr[dc] = "历史";
-                                break;
-                            case "dl":
-                                dr[dc] = "地理";
-                                break;
-                            case "lz":
-                                dr[dc] = "理综";
-                                break;
-                            case "wz":
-                                dr[dc] = "文综";
-                                break;
-                            case "sxl":
-                                dr[dc] = "数学理";
-                                break;
-                            case "sxw":
-                                dr[dc] = "数学文";
-                                break;
-                            default:
-                                break;
-                        }
+                        dr[dc] = Utils.language_trans(dr[dc].ToString());
+                        //switch (dr[dc].ToString())
+                        //{
+                        //    case "sx":
+                        //        dr[dc] = "数学";
+                        //        break;
+                        //    case "yw":
+                        //        dr[dc] = "语文";
+                        //        break;
+                        //    case "yy":
+                        //        dr[dc] = "英语";
+                        //        break;
+                        //    case "wl":
+                        //        dr[dc] = "物理";
+                        //        break;
+                        //    case "hx":
+                        //        dr[dc] = "化学";
+                        //        break;
+                        //    case "sw":
+                        //        dr[dc] = "生物";
+                        //        break;
+                        //    case "zz":
+                        //        dr[dc] = "政治";
+                        //        break;
+                        //    case "ls":
+                        //        dr[dc] = "历史";
+                        //        break;
+                        //    case "dl":
+                        //        dr[dc] = "地理";
+                        //        break;
+                        //    case "lz":
+                        //        dr[dc] = "理综";
+                        //        break;
+                        //    case "wz":
+                        //        dr[dc] = "文综";
+                        //        break;
+                        //    case "sxl":
+                        //        dr[dc] = "数学理";
+                        //        break;
+                        //    case "sxw":
+                        //        dr[dc] = "数学文";
+                        //        break;
+                        //    default:
+                        //        break;
+                        //}
                     }
                     else if(dc.ColumnName.Trim().Equals("exam"))
                     {

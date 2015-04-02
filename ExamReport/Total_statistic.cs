@@ -24,6 +24,8 @@ namespace ExamReport
         
         int _groupnum;
 
+        string cor_col = "totalmark";
+
         public Total_statistic(WordData _result, DataTable dt, decimal fullmark, DataTable standard_ans, DataTable groups_table, DataTable groups_ans, int groupnum)
         {
             _basic_data = dt;
@@ -51,10 +53,13 @@ namespace ExamReport
                 totalmark_str = "ZH_totalmark";
             else
                 totalmark_str = "totalmark";
+
+            if (!isZonghe && _config.is_sub_cor)
+                cor_col = "ZH_totalmark";
             result.max = (decimal) _basic_data.Compute("Max(" + totalmark_str + ")", "");
             result.min = (decimal) _basic_data.Compute("Min(" + totalmark_str + ")", "");
             result.avg = (decimal) _basic_data.Compute("Avg(" + totalmark_str + ")", "");
-            decimal ZH_avg = (decimal)_basic_data.Compute("Avg(totalmark)", "");
+            decimal ZH_avg = (decimal)_basic_data.Compute("Avg(" + cor_col + ")", "");
             //result.stDev = Convert.ToDecimal(Math.Sqrt(Convert.ToDouble(_basic_data.AsEnumerable().Select(c => (c.Field<decimal>(totalmark_str) - result.avg) * (c.Field<decimal>(totalmark_str) - result.avg)).Average())));
             Regex number = new Regex("^[Tt]\\d");
             #region total analysis table process
@@ -147,10 +152,10 @@ namespace ExamReport
                 count++;
                 Var += ((decimal)dr[totalmark_str] - result.avg) * ((decimal)dr[totalmark_str] - result.avg);
                 if (!isZonghe)
-                    ZH_var += ((decimal)dr["totalmark"] - ZH_avg) * ((decimal)dr["totalmark"] - ZH_avg);
+                    ZH_var += ((decimal)dr[cor_col] - ZH_avg) * ((decimal)dr[cor_col] - ZH_avg);
                 ThreeMulti += Convert.ToDecimal(Math.Pow(Convert.ToDouble((decimal)dr[totalmark_str] - result.avg), 3.0));
                 FourMulti += Convert.ToDecimal(Math.Pow(Convert.ToDouble((decimal)dr[totalmark_str] - result.avg), 4.0));
-                SquareSumY += (decimal)dr["totalmark"] * (decimal)dr["totalmark"];
+                SquareSumY += (decimal)dr[cor_col] * (decimal)dr[cor_col];
                 foreach (DataColumn dc in _basic_data.Columns)
                 {
                     if (result.total_analysis.Rows.Contains(dc.ColumnName))
@@ -168,21 +173,21 @@ namespace ExamReport
                         {
                             if (Convert.ToDouble(dr[dc]) > 0)
                             {
-                                decimal temp_mark = (decimal)total_row["CorrectMark"] + Convert.ToDecimal(dr["totalmark"]);
+                                decimal temp_mark = (decimal)total_row["CorrectMark"] + Convert.ToDecimal(dr[cor_col]);
 
                                 total_row["CorrectMark"] = temp_mark;
                                 total_row["CorrectNum"] = Convert.ToDecimal(total_row["CorrectNum"]) + 1;
                             }
                             else
                             {
-                                decimal temp_mark = (decimal)total_row["WrongMark"] + Convert.ToDecimal(dr["totalmark"]);
+                                decimal temp_mark = (decimal)total_row["WrongMark"] + Convert.ToDecimal(dr[cor_col]);
                                 total_row["WrongMark"] = temp_mark;
                                 total_row["WrongNum"] = Convert.ToDecimal(total_row["WrongNum"]) + 1;
                             }
                         }
                         else
                         {
-                            decimal temp_mark = (decimal)total_row["MultipleSum"] + Convert.ToDecimal(dr["totalmark"]) * Convert.ToDecimal(dr[dc]);
+                            decimal temp_mark = (decimal)total_row["MultipleSum"] + Convert.ToDecimal(dr[cor_col]) * Convert.ToDecimal(dr[dc]);
                             total_row["MultipleSum"] = temp_mark;
                             temp_mark = (decimal)total_row["SquareSumX"] + Convert.ToDecimal(dr[dc]) * Convert.ToDecimal(dr[dc]);
                             total_row["SquareSumX"] = temp_mark;
@@ -411,64 +416,67 @@ namespace ExamReport
             //边界问题
             for (group_dc = 3; group_dc < _groups_table.Columns.Count - 2; group_dc++)
             {
-                DataRow groups_row = result.group_analysis.NewRow();
-                groups_row["number"] = _groups_table.Columns[group_dc].ColumnName;
-                groups_row["max"] = _groups_table.Compute("Max([" + _groups_table.Columns[group_dc].ColumnName + "])", "");
-                groups_row["min"] = _groups_table.Compute("Min([" + _groups_table.Columns[group_dc].ColumnName + "])", "");
-                groups_row["avg"] = _groups_table.Compute("Avg([" + _groups_table.Columns[group_dc].ColumnName + "])", "");
-                groups_row["standardErr"] = 0.0;
-                groups_row["dfactor"] = 0.0;
-                groups_row["difficulty"] = 0.0;
-                groups_row["correlation"] = 0.0;
-                groups_row["discriminant"] = 0.0;
-                groups_row["PHN"] = 0.0;
-                groups_row["PLN"] = 0.0;
-                groups_row["MultipleSum"] = 0.0;
-                groups_row["SquareSumX"] = 0.0;
-                groups_row["fullmark"] = 0.0;
+                if (_groups_table.Columns[group_dc].ColumnName.StartsWith("FZ"))
+                {
+                    DataRow groups_row = result.group_analysis.NewRow();
+                    groups_row["number"] = _groups_table.Columns[group_dc].ColumnName;
+                    groups_row["max"] = _groups_table.Compute("Max([" + _groups_table.Columns[group_dc].ColumnName + "])", "");
+                    groups_row["min"] = _groups_table.Compute("Min([" + _groups_table.Columns[group_dc].ColumnName + "])", "");
+                    groups_row["avg"] = _groups_table.Compute("Avg([" + _groups_table.Columns[group_dc].ColumnName + "])", "");
+                    groups_row["standardErr"] = 0.0;
+                    groups_row["dfactor"] = 0.0;
+                    groups_row["difficulty"] = 0.0;
+                    groups_row["correlation"] = 0.0;
+                    groups_row["discriminant"] = 0.0;
+                    groups_row["PHN"] = 0.0;
+                    groups_row["PLN"] = 0.0;
+                    groups_row["MultipleSum"] = 0.0;
+                    groups_row["SquareSumX"] = 0.0;
+                    groups_row["fullmark"] = 0.0;
 
-                if (groups_row["number"].ToString().Equals("生物") || groups_row["number"].ToString().Equals("政治"))
-                {
-                    groups_row["fullmark"] = _config.shengwu_zhengzhi;
-                }
-                else if (groups_row["number"].ToString().Equals("物理") || groups_row["number"].ToString().Equals("历史"))
-                {
-                    groups_row["fullmark"] = _config.wuli_lishi;
-                }
-                else if (groups_row["number"].ToString().Equals("化学") || groups_row["number"].ToString().Equals("地理"))
-                {
-                    groups_row["fullmark"] = _config.huaxue_dili;
-                }
-                else
-                {
-                    string org = _groups_ans.Rows[group_dc - 3][1].ToString().Trim();
-                    string[] org_char = org.Split(new char[2] { ',', '，' });
-                    foreach (string th in org_char)
+                    if (groups_row["number"].ToString().Equals("生物") || groups_row["number"].ToString().Equals("政治"))
                     {
-
-                        if (System.Text.RegularExpressions.Regex.IsMatch(th, spattern))
-                        //if(th.Contains('~'))
+                        groups_row["fullmark"] = _config.shengwu_zhengzhi;
+                    }
+                    else if (groups_row["number"].ToString().Equals("物理") || groups_row["number"].ToString().Equals("历史"))
+                    {
+                        groups_row["fullmark"] = _config.wuli_lishi;
+                    }
+                    else if (groups_row["number"].ToString().Equals("化学") || groups_row["number"].ToString().Equals("地理"))
+                    {
+                        groups_row["fullmark"] = _config.huaxue_dili;
+                    }
+                    else
+                    {
+                        string org = _groups_ans.Rows[group_dc - 3][1].ToString().Trim();
+                        string[] org_char = org.Split(new char[2] { ',', '，' });
+                        foreach (string th in org_char)
                         {
-                            string[] num = th.Split('~');
-                            int j;
-                            int size = Convert.ToInt32(num[0]) < Convert.ToInt32(num[1]) ? Convert.ToInt32(num[1]) : Convert.ToInt32(num[0]);
-                            int start = Convert.ToInt32(num[0]) > Convert.ToInt32(num[1]) ? Convert.ToInt32(num[1]) : Convert.ToInt32(num[0]);
-                            //此处需判断size和start的边界问题
-                            for (j = start; j < size + 1; j++)
+
+                            if (System.Text.RegularExpressions.Regex.IsMatch(th, spattern))
+                            //if(th.Contains('~'))
                             {
-                                DataRow dr = result.total_analysis.Rows.Find("t" + j.ToString());
+                                string[] num = th.Split('~');
+                                int j;
+                                int size = Convert.ToInt32(num[0]) < Convert.ToInt32(num[1]) ? Convert.ToInt32(num[1]) : Convert.ToInt32(num[0]);
+                                int start = Convert.ToInt32(num[0]) > Convert.ToInt32(num[1]) ? Convert.ToInt32(num[1]) : Convert.ToInt32(num[0]);
+                                //此处需判断size和start的边界问题
+                                for (j = start; j < size + 1; j++)
+                                {
+                                    DataRow dr = result.total_analysis.Rows.Find("t" + j.ToString());
+                                    groups_row["fullmark"] = (decimal)groups_row["fullmark"] + (decimal)dr["fullmark"];
+                                }
+
+                            }
+                            else
+                            {
+                                DataRow dr = result.total_analysis.Rows.Find("t" + th.Trim());
                                 groups_row["fullmark"] = (decimal)groups_row["fullmark"] + (decimal)dr["fullmark"];
                             }
-
-                        }
-                        else
-                        {
-                            DataRow dr = result.total_analysis.Rows.Find("t" + th.Trim());
-                            groups_row["fullmark"] = (decimal)groups_row["fullmark"] + (decimal)dr["fullmark"];
                         }
                     }
+                    result.group_analysis.Rows.Add(groups_row);
                 }
-                result.group_analysis.Rows.Add(groups_row);
             }
             count = 0;
             foreach (DataRow dr in _groups_table.Rows)
@@ -486,7 +494,7 @@ namespace ExamReport
                         else if (count >= PHN)
                             groups_dr["PHN"] = (decimal)groups_dr["PHN"] + Convert.ToDecimal(dr[dc]);
 
-                        decimal temp_mark = (decimal)groups_dr["MultipleSum"] + Convert.ToDecimal(_basic_data.Rows[count - 1]["totalmark"]) * Convert.ToDecimal(dr[dc]);
+                        decimal temp_mark = (decimal)groups_dr["MultipleSum"] + Convert.ToDecimal(_basic_data.Rows[count - 1][cor_col]) * Convert.ToDecimal(dr[dc]);
                         groups_dr["MultipleSum"] = temp_mark;
                         temp_mark = (decimal)groups_dr["SquareSumX"] + Convert.ToDecimal(dr[dc]) * Convert.ToDecimal(dr[dc]);
                         groups_dr["SquareSumX"] = temp_mark;
@@ -564,7 +572,7 @@ namespace ExamReport
                                    {
                                        totalmark = grp.Key,
                                        count = grp.Count(),
-                                       average = grp.Average(row => row.Field<decimal>("totalmark")),
+                                       average = grp.Average(row => row.Field<decimal>(cor_col)),
                                        
                                    };
                 
@@ -632,7 +640,7 @@ namespace ExamReport
                 }
 
                 var difficulty = from row in _groups_table.AsEnumerable()
-                                 group row by row.Field<decimal>("totalmark") into grp
+                                 group row by row.Field<decimal>(cor_col) into grp
                                  orderby grp.Key ascending
                                  select new
                                  {
@@ -701,7 +709,7 @@ namespace ExamReport
                     temp.single_difficulty.Columns.Add("difficulty", typeof(decimal));
 
                     var diff = from row in _basic_data.AsEnumerable()
-                               group row by row.Field<decimal>("totalmark") into grp
+                               group row by row.Field<decimal>(cor_col) into grp
                                orderby grp.Key ascending
                                select new
                                {
@@ -736,7 +744,7 @@ namespace ExamReport
                                          {
                                              choice = grp.Key,
                                              count = grp.Count(),
-                                             avg = grp.Average(row => row.Field<decimal>("totalmark")),
+                                             avg = grp.Average(row => row.Field<decimal>(cor_col)),
                                              //var = grp.Average(row => row.Field<decimal>("totalmark") * row.Field<decimal>("totalmark"))
                                          };
                         foreach (var item in single_avg)
@@ -972,7 +980,7 @@ namespace ExamReport
                                          {
                                              mark = grp.Key,
                                              count = grp.Count(),
-                                             avg = grp.Average(row => row.Field<decimal>("totalmark"))
+                                             avg = grp.Average(row => row.Field<decimal>(cor_col))
                                          };
                         foreach (var item in single_avg)
                         {
@@ -1077,10 +1085,12 @@ namespace ExamReport
             }
             if(!(isZonghe || _config.report_style.Equals("学校")) )
                 group_correlation();
-            if(isZonghe)
+            if (isZonghe)
                 group_mark(_basic_data);
-            else if(!(_config.subject.Contains("理综") || _config.subject.Contains("文综")))
+            else if (!(_config.subject.Contains("理综") || _config.subject.Contains("文综")))
                 group_mark(_basic_data);
+            else
+                zh_group_mark(_basic_data);
             return true;
         }
 
@@ -1676,12 +1686,12 @@ namespace ExamReport
                     {
                         string corA,corB;
                         if (((string)cor_table.Rows[i]["name"]).Equals("totalmark"))
-                            corA = "totalmark";
+                            corA = cor_col;
                         else
                             corA = "FZ" + (i + 1 + group_count).ToString();
 
                         if (cor_table.Columns[j].ColumnName.Equals("totalmark"))
-                            corB = "totalmark";
+                            corB = cor_col;
                         else
                             corB = "FZ" + (j + group_count).ToString();
                         decimal cor = _groups_table.CalCor(corA, corB);
@@ -1796,7 +1806,7 @@ namespace ExamReport
 
         }
 
-        public void HK_postprocess(ExecuteMethod.HK_hierarchy HK_hierarchy)
+        public void HK_postprocess(Analysis.HK_hierarchy HK_hierarchy)
         {
             Regex number = new Regex("^[Tt]\\d");
             HK_worddata data = (HK_worddata)result;
@@ -2142,7 +2152,7 @@ namespace ExamReport
                     return null;
             }
         }
-        public string RankConverter(string number, ExecuteMethod.HK_hierarchy HK_hierarchy)
+        public string RankConverter(string number, Analysis.HK_hierarchy HK_hierarchy)
         {
             switch (number)
             {
@@ -2195,6 +2205,22 @@ namespace ExamReport
             foreach (var temp in mark)
             {
                 _config.GroupMark.Add(temp.max);
+            }
+        }
+
+        public void zh_group_mark(DataTable dt)
+        {
+            var mark = from row in dt.AsEnumerable()
+                       group row by row.Field<string>("Groups") into grp
+                       select new
+                       {
+                           name = grp.Key,
+                           max = grp.Max(row => row.Field<decimal>(cor_col))
+                       };
+            _config.sub_groupMark.Clear();
+            foreach (var temp in mark)
+            {
+                _config.sub_groupMark.Add(temp.max);
             }
         }
     }
