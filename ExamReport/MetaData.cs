@@ -129,6 +129,26 @@ namespace ExamReport
                 _sub_fullmark = Convert.ToDecimal(reader["zh"]);
                 
         }
+
+        public List<string> get_column_name()
+        {
+            MySqlDataReader reader = MySqlHelper.ExecuteReader(MySqlHelper.Conn, CommandType.Text, "select * from exam_meta_data where year='"
+                + _year + "' and exam='"
+                + _exam + "' and sub='"
+                + Utils.language_trans(_sub) + "'", null);
+            if (!reader.Read())
+                throw new Exception("数据库异常，不存在该数据");
+
+            reader = MySqlHelper.ExecuteReader(MySqlHelper.Conn, CommandType.Text, "select COLUMN_NAME from information_schema.COLUMNS where table_name = '" + Utils.get_basic_tablename(_year, _exam, Utils.language_trans(_sub)) + "'", null);
+
+            List<string> name = new List<string>();
+            while (reader.Read())
+            {
+                name.Add(reader["COLUMN_NAME"].ToString());
+            }
+            return name;
+
+        }
         private string gtype_to_string(ZK_database.GroupType type)
         {
             switch (type)

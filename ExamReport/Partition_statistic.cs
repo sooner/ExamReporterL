@@ -26,6 +26,8 @@ namespace ExamReport
         string totalmark_str;
         string _title;
 
+        string cor_col = "totalmark";
+
         public Partition_statistic(string title, DataTable dt, decimal fullmark, DataTable standard_ans, DataTable groups_table, DataTable groups_ans, int groupnum)
         {
             _basic_data = dt;
@@ -67,11 +69,15 @@ namespace ExamReport
                 totalmark_str = "ZH_totalmark";
             else
                 totalmark_str = "totalmark";
+
+            if (!isZonghe && _config.is_sub_cor)
+                cor_col = "ZH_totalmark";
+
             result.fullmark = _fullmark;
             result.max = (decimal)_basic_data.Compute("Max(" + totalmark_str + ")", "");
             result.min = (decimal)_basic_data.Compute("Min(" + totalmark_str + ")", "");
             result.avg = (decimal)_basic_data.Compute("Avg(" + totalmark_str + ")", "");
-            ZH_avg = (decimal)_basic_data.Compute("Avg(totalmark)", "");
+            ZH_avg = (decimal)_basic_data.Compute("Avg(" + cor_col + ")", "");
             stdev total_stdev = new stdev(result.total_num, result.avg);
             stdevlist.Add(total_stdev);
 
@@ -243,7 +249,7 @@ namespace ExamReport
                                      {
                                          choice = grp.Key,
                                          count = grp.Count(),
-                                         avg = grp.Average(row => row.Field<decimal>("totalmark"))
+                                         avg = grp.Average(row => row.Field<decimal>(cor_col))
                                      };
                     foreach (var item in single_avg)
                     {
@@ -455,7 +461,7 @@ namespace ExamReport
                                      {
                                          mark = grp.Key,
                                          count = grp.Count(),
-                                         avg = grp.Average(row => row.Field<decimal>("totalmark"))
+                                         avg = grp.Average(row => row.Field<decimal>(cor_col))
                                      };
                     foreach (var item in single_avg)
                     {
@@ -1063,7 +1069,7 @@ namespace ExamReport
                        {
                            count = grp.Count(),
                            mark = grp.Key,
-                           avg = grp.Average(row => row.Field<decimal>("totalmark"))
+                           avg = grp.Average(row => row.Field<decimal>(cor_col))
                        };
                 data.group_detail.Columns.Add("mark", typeof(string));
                 for (int i = 1; i <= _groupnum; i++)

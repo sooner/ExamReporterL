@@ -29,6 +29,8 @@ namespace ExamReport
 
         Dictionary<string, string> schoolcode_kv = new Dictionary<string, string>();
         Dictionary<string, string> school_qx = new Dictionary<string, string>();
+
+        List<string> custom_str = new List<string>();
         string currentdic = System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath);
         //Thread thread;
         public mainform()
@@ -1130,6 +1132,41 @@ namespace ExamReport
                 }
             }
             Grid_load();
+        }
+
+        private void custom_col_Click(object sender, EventArgs e)
+        {
+            List<string> names = new List<string>();
+            int count = 0;
+            foreach (GridViewRowInfo row in gk_gridview.Rows)
+            {
+                if (row.Cells["checkbox"].Value != null)
+                {
+                    string year = row.Cells["year"].Value.ToString().Trim();
+                    string exam = "gk";
+                    string chi_sub = row.Cells["sub"].Value.ToString().Trim();
+                    string sub = Utils.language_trans(chi_sub);
+
+                    
+                    MetaData mdata = new MetaData(year, exam, sub);
+
+                    names.AddRange(mdata.get_column_name());
+                    count++;
+                }
+            }
+
+            List<string> name = names.GroupBy(c => c).Select(c => new
+            {
+                count = c.Count(),
+                name = c.Key.Trim()
+            }).Where(c => c.count == count).Select(c => c.name).ToList();
+
+            custom_col.DataSource = name;
+        }
+
+        private void custom_insert_Click(object sender, EventArgs e)
+        {
+
         }
        
     }
