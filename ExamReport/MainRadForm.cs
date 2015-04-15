@@ -1141,7 +1141,7 @@ namespace ExamReport
             int count = 0;
             foreach (GridViewRowInfo row in gk_gridview.Rows)
             {
-                if (row.Cells["checkbox"].Value != null)
+                if (row.Cells["checkbox"].Value != null && (bool)row.Cells["checkbox"].Value == true)
                 {
                     string year = row.Cells["year"].Value.ToString().Trim();
                     string exam = "gk";
@@ -1155,7 +1155,7 @@ namespace ExamReport
                     count++;
                 }
             }
-
+            
             List<string> name = names.GroupBy(c => c).Select(c => new
             {
                 count = c.Count(),
@@ -1167,14 +1167,26 @@ namespace ExamReport
 
         private void custom_insert_Click(object sender, EventArgs e)
         {
-            if(string.IsNullOrEmpty(custom_name.Text.Trim()))
+            if (string.IsNullOrEmpty(custom_name.Text.Trim()))
+            {
                 Error("标记名不能为空");
-            if(string.IsNullOrEmpty(custom_col.SelectedItem.Text.Trim()))
+                return;
+            }
+            if (custom_col.SelectedItem == null)
+            {
                 Error("列名不能为空");
-            if (string.IsNullOrEmpty(custom_comp.SelectedItem.Text.Trim()))
+                return;
+            }
+            if (custom_comp.SelectedItem == null)
+            {
                 Error("条件不能为空");
+                return;
+            }
             if (string.IsNullOrEmpty(custom_value.Text.Trim()))
+            {
                 Error("值不能为空");
+                return;
+            }
 
             if (string.IsNullOrEmpty(custom_result.Text.Trim()))
             {
@@ -1183,16 +1195,57 @@ namespace ExamReport
             }
             else
             {
-                if(string.IsNullOrEmpty(custom_relation.SelectedItem.Text.Trim()))
+                if (custom_relation.SelectedItem == null)
+                {
                     Error("关系名不能为空");
-                custom_result.Text = custom_result.Text + " " + custom_relation.SelectedItem.Text.Trim();
+                    return;
+                }
+                custom_result.Text = custom_result.Text + " " + Utils.OperatorTrans(custom_relation.SelectedItem.Text.Trim());
                 temp_cust.insert(Utils.OperatorTrans(custom_relation.SelectedItem.Text.Trim()));
             }
 
             StringBuilder sb = new StringBuilder();
             sb.Append(custom_col.SelectedItem.Text.Trim());
             sb.Append(Utils.OperatorTrans(custom_comp.SelectedItem.Text.Trim()));
+            string type = "varchar";
+            foreach (GridViewRowInfo row in gk_gridview.Rows)
+            {
+                if (row.Cells["checkbox"].Value != null && (bool)row.Cells["checkbox"].Value == true)
+                {
+                    string year = row.Cells["year"].Value.ToString().Trim();
+                    string exam = "gk";
+                    string chi_sub = row.Cells["sub"].Value.ToString().Trim();
+                    string sub = Utils.language_trans(chi_sub);
 
+
+                    MetaData mdata = new MetaData(year, exam, sub);
+
+                    type = mdata.get_column_type(custom_col.SelectedItem.Text.Trim());
+                    break;
+                }
+            }
+            if (type.Contains("char"))
+            {
+                sb.Append("'");
+                sb.Append(custom_value.Text.Trim());
+                sb.Append("'");
+            }
+            else
+                sb.Append(custom_value.Text.Trim());
+
+            custom_result.Text += " " + sb.ToString();
+            temp_cust.insert(sb.ToString());
+        }
+
+        private void radButton13_Click(object sender, EventArgs e)
+        {
+            custom_col.ResetText();
+            custom_comp.ResetText();
+            custom_value.Text = "";
+            custom_relation.ResetText();
+            custom_result.Text = "";
+
+            temp_cust.reset();
         }
        
     }

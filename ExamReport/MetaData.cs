@@ -149,6 +149,22 @@ namespace ExamReport
             return name;
 
         }
+
+        public string get_column_type(string column_name)
+        {
+            MySqlDataReader reader = MySqlHelper.ExecuteReader(MySqlHelper.Conn, CommandType.Text, "select * from exam_meta_data where year='"
+                + _year + "' and exam='"
+                + _exam + "' and sub='"
+                + Utils.language_trans(_sub) + "'", null);
+            if (!reader.Read())
+                throw new Exception("数据库异常，不存在该数据");
+
+            reader = MySqlHelper.ExecuteReader(MySqlHelper.Conn, CommandType.Text, "describe " + Utils.get_basic_tablename(_year, _exam, Utils.language_trans(_sub)) + " " + column_name, null);
+
+            if(!reader.Read())
+                throw new Exception("数据库异常，不存在该列");
+            return reader["type"].ToString();
+        }
         private string gtype_to_string(ZK_database.GroupType type)
         {
             switch (type)

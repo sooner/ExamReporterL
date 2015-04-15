@@ -9,7 +9,7 @@ namespace ExamReport
     {
         public string _tag;
 
-        public Stack<string> _relation;
+        public Stack<string> _relation = new Stack<string>();
 
         public string Column_type;
 
@@ -21,7 +21,10 @@ namespace ExamReport
         {
             _relation.Push(temp);
         }
-
+        public void reset()
+        {
+            _relation.Clear();
+        }
         public bool check(string temp_tag)
         {
             return _tag.Equals(temp_tag);

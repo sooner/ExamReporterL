@@ -56,7 +56,7 @@ namespace ExamReport
             _form.ShowPro(exam_type, 0, "开始处理...");
             foreach (GridViewRowInfo row in _gridview.Rows)
             {
-                if (row.Cells["checkbox"].Value != null)
+                if (row.Cells["checkbox"].Value != null && (bool)row.Cells["checkbox"].Value == true)
                 {
 
                     string year = row.Cells["year"].Value.ToString().Trim();
