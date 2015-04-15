@@ -30,7 +30,8 @@ namespace ExamReport
         Dictionary<string, string> schoolcode_kv = new Dictionary<string, string>();
         Dictionary<string, string> school_qx = new Dictionary<string, string>();
 
-        List<string> custom_str = new List<string>();
+        List<CustomRelation> custom = new List<CustomRelation>();
+        CustomRelation temp_cust = new CustomRelation();
         string currentdic = System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath);
         //Thread thread;
         public mainform()
@@ -1166,6 +1167,31 @@ namespace ExamReport
 
         private void custom_insert_Click(object sender, EventArgs e)
         {
+            if(string.IsNullOrEmpty(custom_name.Text.Trim()))
+                Error("标记名不能为空");
+            if(string.IsNullOrEmpty(custom_col.SelectedItem.Text.Trim()))
+                Error("列名不能为空");
+            if (string.IsNullOrEmpty(custom_comp.SelectedItem.Text.Trim()))
+                Error("条件不能为空");
+            if (string.IsNullOrEmpty(custom_value.Text.Trim()))
+                Error("值不能为空");
+
+            if (string.IsNullOrEmpty(custom_result.Text.Trim()))
+            {
+                temp_cust.set_tag(custom_name.Text.Trim());
+                custom_result.Text = custom_name.Text.Trim() + ":   ";
+            }
+            else
+            {
+                if(string.IsNullOrEmpty(custom_relation.SelectedItem.Text.Trim()))
+                    Error("关系名不能为空");
+                custom_result.Text = custom_result.Text + " " + custom_relation.SelectedItem.Text.Trim();
+                temp_cust.insert(Utils.OperatorTrans(custom_relation.SelectedItem.Text.Trim()));
+            }
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append(custom_col.SelectedItem.Text.Trim());
+            sb.Append(Utils.OperatorTrans(custom_comp.SelectedItem.Text.Trim()));
 
         }
        

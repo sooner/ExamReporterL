@@ -638,5 +638,30 @@ namespace ExamReport
             dbfConnection.Close();
         }
 
+        public static string OperatorTrans(string oper)
+        {
+            switch (oper)
+            {
+                case "大于":
+                    return ">";
+                case "小于":
+                    return "<";
+                case "等于":
+                    return "=";
+                case "大于等于":
+                    return ">=";
+                case "小于等于":
+                    return "<=";
+                case "不等于":
+                    return "<>";
+                case "并且":
+                    return "AND";
+                case "或者":
+                    return "OR";
+                default:
+                    return "";
+            }
+        }
+
     }
 }

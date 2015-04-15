@@ -131,6 +131,8 @@
             this.label20 = new System.Windows.Forms.Label();
             this.GKPageView = new Telerik.WinControls.UI.RadPageViewPage();
             this.gk_data_pre_panel = new Telerik.WinControls.UI.RadPanel();
+            this.gk_data_delete = new System.Windows.Forms.Button();
+            this.gk_data_import = new System.Windows.Forms.Button();
             this.radPanel1 = new Telerik.WinControls.UI.RadPanel();
             this.cus_result_revoke = new Telerik.WinControls.UI.RadButton();
             this.custom_listview = new Telerik.WinControls.UI.RadListView();
@@ -148,8 +150,6 @@
             this.radLabel14 = new Telerik.WinControls.UI.RadLabel();
             this.custom_name = new Telerik.WinControls.UI.RadTextBox();
             this.radLabel13 = new Telerik.WinControls.UI.RadLabel();
-            this.gk_data_delete = new System.Windows.Forms.Button();
-            this.gk_data_import = new System.Windows.Forms.Button();
             this.gk_xx_panel = new Telerik.WinControls.UI.RadPanel();
             this.gk_xx_progresslabel = new Telerik.WinControls.UI.RadLabel();
             this.radButton8 = new Telerik.WinControls.UI.RadButton();
@@ -1111,8 +1111,8 @@
             // 
             // GKPageView
             // 
-            this.GKPageView.Controls.Add(this.gk_data_pre_panel);
             this.GKPageView.Controls.Add(this.radPanel1);
+            this.GKPageView.Controls.Add(this.gk_data_pre_panel);
             this.GKPageView.Controls.Add(this.gk_xx_panel);
             this.GKPageView.Controls.Add(this.gk_qx_panel);
             this.GKPageView.Controls.Add(this.gk_cj_panel);
@@ -1136,6 +1136,26 @@
             this.gk_data_pre_panel.TabIndex = 7;
             this.gk_data_pre_panel.Text = "数据导入";
             this.gk_data_pre_panel.TextAlignment = System.Drawing.ContentAlignment.TopLeft;
+            // 
+            // gk_data_delete
+            // 
+            this.gk_data_delete.BackgroundImage = global::ExamReport.Properties.Resources.delete_item;
+            this.gk_data_delete.Location = new System.Drawing.Point(59, 35);
+            this.gk_data_delete.Name = "gk_data_delete";
+            this.gk_data_delete.Size = new System.Drawing.Size(32, 33);
+            this.gk_data_delete.TabIndex = 9;
+            this.gk_data_delete.UseVisualStyleBackColor = true;
+            this.gk_data_delete.Click += new System.EventHandler(this.gk_data_delete_Click);
+            // 
+            // gk_data_import
+            // 
+            this.gk_data_import.BackgroundImage = global::ExamReport.Properties.Resources.add_item;
+            this.gk_data_import.Location = new System.Drawing.Point(22, 35);
+            this.gk_data_import.Name = "gk_data_import";
+            this.gk_data_import.Size = new System.Drawing.Size(33, 33);
+            this.gk_data_import.TabIndex = 8;
+            this.gk_data_import.UseVisualStyleBackColor = true;
+            this.gk_data_import.Click += new System.EventHandler(this.gk_data_import_Click);
             // 
             // radPanel1
             // 
@@ -1321,26 +1341,6 @@
             this.radLabel13.Size = new System.Drawing.Size(40, 18);
             this.radLabel13.TabIndex = 0;
             this.radLabel13.Text = "标记：";
-            // 
-            // gk_data_delete
-            // 
-            this.gk_data_delete.BackgroundImage = global::ExamReport.Properties.Resources.delete_item;
-            this.gk_data_delete.Location = new System.Drawing.Point(59, 35);
-            this.gk_data_delete.Name = "gk_data_delete";
-            this.gk_data_delete.Size = new System.Drawing.Size(32, 33);
-            this.gk_data_delete.TabIndex = 9;
-            this.gk_data_delete.UseVisualStyleBackColor = true;
-            this.gk_data_delete.Click += new System.EventHandler(this.gk_data_delete_Click);
-            // 
-            // gk_data_import
-            // 
-            this.gk_data_import.BackgroundImage = global::ExamReport.Properties.Resources.add_item;
-            this.gk_data_import.Location = new System.Drawing.Point(22, 35);
-            this.gk_data_import.Name = "gk_data_import";
-            this.gk_data_import.Size = new System.Drawing.Size(33, 33);
-            this.gk_data_import.TabIndex = 8;
-            this.gk_data_import.UseVisualStyleBackColor = true;
-            this.gk_data_import.Click += new System.EventHandler(this.gk_data_import_Click);
             // 
             // gk_xx_panel
             // 

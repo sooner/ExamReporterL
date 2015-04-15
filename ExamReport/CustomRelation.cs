@@ -7,44 +7,46 @@ namespace ExamReport
 {
     class CustomRelation
     {
-        public string _Column_name;
-        public string _relation;
-        public string _value;
+        public string _tag;
+
+        public Stack<string> _relation;
 
         public string Column_type;
 
-        public CustomRelation(string name, string relation, string value)
+        public void set_tag(string tag)
         {
-            _Column_name = name;
-            _relation = relation;
-            _value = value;
+            _tag = tag;
+        }
+        public void insert(string temp)
+        {
+            _relation.Push(temp);
         }
 
-        public string get_string()
+        public bool check(string temp_tag)
         {
-            return " " + _Column_name + " " + translate(_relation) + " " + _value + " ";
+            return _tag.Equals(temp_tag);
         }
 
-        public string translate(string relation)
+        public void revoke()
         {
-            switch (relation)
+            _relation.Pop();
+        }
+
+        public bool isEmpty()
+        {
+            return _relation.Count == 0;
+        }
+
+        public string get_relation()
+        {
+            StringBuilder sb = new StringBuilder();
+            while (_relation.Count != 0)
             {
-                case "等于":
-                    return "=";
-                case "大于":
-                    return ">";
-                case "小于":
-                    return "<";
-                case "大于等于":
-                    return ">=";
-                case "小于等于":
-                    return "<=";
-                case "不等于":
-                    return "<>";
-                default:
-                    return "";
-
+                sb.Insert(0, _relation.Pop());
+                if(_relation.Count != 0)
+                    sb.Insert(0, " ");
             }
+            return sb.ToString();
         }
     }
 }
