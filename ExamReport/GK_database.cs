@@ -52,7 +52,7 @@ namespace ExamReport
 
         public int ZH_postprocess(DataTable zh_groups, string name)
         {
-            Regex number = new Regex("^[Tt]\\d+$");
+            Regex number = new Regex("^[Tt]\\d+");
             //zh_groups.PrimaryKey = new DataColumn[] { zh_groups.Columns[0] };
             //DataRow target = zh_groups.Rows.Find(name);
             DataRow target = null;
@@ -258,7 +258,7 @@ namespace ExamReport
             filext = System.IO.Path.GetExtension(filePath);
 
             string conn = @"Provider=vfpoledb;Data Source=" + path + ";Collating Sequence=machine;";
-            Regex topic = new Regex("^[Ss]\\d+$");
+            Regex topic = new Regex("^[TtSs]\\d+");
             dbfConnection = new OleDbConnection(conn);
 
             OleDbDataAdapter adpt = new OleDbDataAdapter("select * from " + file, dbfConnection);
@@ -290,7 +290,15 @@ namespace ExamReport
                 basic_data.Columns.Add("T" + ((string)newStandard.Rows[i]["th"]).Trim(), System.Type.GetType("System.Decimal"));
             bool first = true;
 
-            string omrstr = dt.Columns.Contains("Omrstr") ? "Omrstr" : "Info";
+            string omrstr = "";
+            if (dt.Columns.Contains("Omrstr"))
+            {
+                omrstr = "Omrstr";
+            }
+            else if (dt.Columns.Contains("Info"))
+            {
+                omrstr = "Info";
+            }
             bool has_xz = false;
             if (dt.Columns.Contains("xz"))
                 has_xz = true;
@@ -341,16 +349,26 @@ namespace ExamReport
 
                 }
             }
+            int frontpitch = 0;
+            foreach(DataColumn dc in dt.Columns)
+            {
+                if(topic.IsMatch(dc.ColumnName.Trim()))
+                    break;
+                frontpitch++;
+            }
             foreach (DataRow dr in dt.Rows)
             {
-                string an = ((string)dr[omrstr]).Trim();
-                char[] ans;
-                if (an.Contains(','))
-                    //ans = TransferNewString(an.Split(new char[] { ',' }));
-                    ans = TransferCharArray(an.Split(new char[] { ',' }));
-                else
-                    ans = an.Trim().ToCharArray();
-
+                char[] ans = { };
+                if (!omrstr.Equals(""))
+                {
+                    string an = ((string)dr[omrstr]).Trim();
+                    
+                    if (an.Contains(','))
+                        //ans = TransferNewString(an.Split(new char[] { ',' }));
+                        ans = TransferCharArray(an.Split(new char[] { ',' }));
+                    else
+                        ans = an.Trim().ToCharArray();
+                }
                 if (first)
                 {
                     try
@@ -371,28 +389,28 @@ namespace ExamReport
                 }
 
                 DataRow newRow = basic_data.NewRow();
-                newRow["studentid"] = dr["Mh"].ToString().Trim();
-                newRow["schoolcode"] = dr["Schoolcode"].ToString().Trim();
+                newRow["studentid"] = dt.Columns.Contains("Mh") ? dr["Mh"].ToString().Trim() : dr["Ksh"].ToString().Trim();
+                newRow["schoolcode"] = dr["Xx"].ToString().Trim();
                 newRow["totalmark"] = (decimal)dr["Zf"];
                 if (Utils.sub_iszero && (decimal)dr["Zf"] == 0)
                     continue;
                 decimal obj_mark = 0;
                 int obj_count = 0, sub_count = 0, total_count = 0;
-
+                
                 foreach (DataRow ans_dr in newStandard.Rows)
                 {
                     if (ans_dr["da"].ToString().Trim().Equals(""))
                     {
                         if (name_list[total_count] == null)
                         {
-                            if (!topic.IsMatch(dt.Columns[sub_count].ColumnName.ToString().Trim()))
+                            if (!topic.IsMatch(dt.Columns[sub_count + frontpitch].ColumnName.ToString().Trim()))
                             {
                                 throw new ArgumentException("标准答案与数据库文件题数不相符");
                                 //error!!
                             }
-                            if ((decimal)dr[sub_count] > Convert.ToDecimal(ans_dr["fs"]))
+                            if ((decimal)dr[sub_count + frontpitch] > Convert.ToDecimal(ans_dr["fs"]))
                                 throw new ArgumentException("第" + (string)ans_dr["th"] + "题满分值小于实际分值！");
-                            newRow["T" + (string)ans_dr["th"]] = (decimal)dr[sub_count];
+                            newRow["T" + (string)ans_dr["th"]] = (decimal)dr[sub_count + frontpitch];
                             sub_count++;
                         }
                         else
@@ -490,8 +508,8 @@ namespace ExamReport
                 //}
                 if (obj_count != ans.Length)
                     throw new ArgumentException("标准答案选择题数量小于数据库中选择题数量");
-                if(topic.IsMatch(dt.Columns[sub_count].ColumnName))
-                    throw new ArgumentException("标准答案主观题数量小于数据库中主观题数量");
+                //if(topic.IsMatch(dt.Columns[sub_count].ColumnName))
+                //    throw new ArgumentException("标准答案主观题数量小于数据库中主观题数量");
                 //if (Utils.obj_iszero && obj_mark == 0)
                 //    continue;
                 if (Utils.fullmark_iszero && (decimal)newRow["totalmark"] == 0)
@@ -500,7 +518,7 @@ namespace ExamReport
                 if (sub_count + obj_count != _standard_ans.Rows.Count)
                     throw new ArgumentException("标准答案与数据库文件题数不一致！");
                 newRow["Groups"] = "";
-                newRow["QX"] = dr["Qx"].ToString().Trim();
+                newRow["QX"] = "";
                 if (has_xz)
                     newRow["XZ"] = dr["xz"].ToString().Trim();
                 basic_data.Rows.Add(newRow);

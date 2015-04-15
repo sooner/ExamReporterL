@@ -1,9 +1,8 @@
-System.IndexOutOfRangeException: Index was outside the bounds of the array.
-   at ExamReport.ZedGraph.SmoothData(Double[][] data, Int32 smooth_degree) in D:\project\ExamReporterL\ExamReporterL\ExamReport\ZedGraph.cs:line 759
-   at ExamReport.ZedGraph.createCuve(String xStr, String yStr, Double[][] init_cuveData, Double minX, Double maxX, Double maxY) in D:\project\ExamReporterL\ExamReporterL\ExamReport\ZedGraph.cs:line 229
-   at ExamReport.ZedGraph.createDiffCuve(Double[][] cuveData, Double minX, Double maxX) in D:\project\ExamReporterL\ExamReporterL\ExamReport\ZedGraph.cs:line 23
-   at ExamReport.SchoolWordCreator.insertGroupDiffChart(String title, DataTable difficulty_data) in D:\project\ExamReporterL\ExamReporterL\ExamReport\SchoolWordCreator.cs:line 432
-   at ExamReport.SchoolWordCreator.creating_ZH_word() in D:\project\ExamReporterL\ExamReporterL\ExamReport\SchoolWordCreator.cs:line 100
+System.ArgumentException: 第41_1题满分值小于实际分值！
+   at ExamReport.GK_database.DBF_data_process(String fileadd) in D:\project\ExamReporterL\ExamReporterL\ExamReport\GK_database.cs:line 412
+   at ExamReport.ExecuteMethod.GK_process() in D:\project\ExamReporterL\ExamReporterL\ExamReport\ExecuteMethod.cs:line 459
+   at ExamReport.ExecuteMethod.pre_process() in D:\project\ExamReporterL\ExamReporterL\ExamReport\ExecuteMethod.cs:line 199
+   at ExamReport.Form1.startProcess.data_process() in D:\project\ExamReporterL\ExamReporterL\ExamReport\Form1.cs:line 783
    at System.Threading.ThreadHelper.ThreadStart_Context(Object state)
    at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean ignoreSyncCtx)
    at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
