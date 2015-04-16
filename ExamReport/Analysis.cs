@@ -28,6 +28,8 @@ namespace ExamReport
         public decimal _sub_fullmark;
         public bool is_sub_cor = false;
 
+        public DataTable custom_data;
+
 
         public Dictionary<string, string> school;
         public Dictionary<string, string> school_qx;
@@ -206,6 +208,8 @@ namespace ExamReport
                                 mdata.get_SF_data(sf_addr);
                                 gk_schedule(mdata, gk_xx_process, gk_xx_wl_process);
                                 break;
+                            case "":
+
                             default:
                                 break;
                         }
@@ -216,6 +220,12 @@ namespace ExamReport
                 }
             }
             _form.ShowPro(exam_type, 2, "完成！");
+        }
+        public void gk_custom_start()
+        {
+            exam_type = "gk_cus";
+            _exam = "gk";
+            start();
         }
         public void hk_zt_start()
         {

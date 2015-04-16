@@ -1,38 +1,13 @@
-System.NullReferenceException: 未将对象引用设置到对象的实例。
-   在 ExamReport.CustomRelation.insert(String temp) 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\CustomRelation.cs:行号 22
-   在 ExamReport.mainform.custom_insert_Click(Object sender, EventArgs e) 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\MainRadForm.cs:行号 1204
-   在 System.Windows.Forms.Control.OnClick(EventArgs e)
-   在 Telerik.WinControls.RadControl.OnClick(EventArgs e)
-   在 Telerik.WinControls.UI.RadButtonBase.buttonElement_Click(Object sender, EventArgs e)
-   在 Telerik.WinControls.RadItem.OnClick(EventArgs e)
-   在 Telerik.WinControls.UI.RadButtonItem.OnClick(EventArgs e)
-   在 Telerik.WinControls.UI.RadButtonElement.OnClick(EventArgs e)
-   在 Telerik.WinControls.RadItem.DoClick(EventArgs e)
-   在 Telerik.WinControls.RadItem.RaiseBubbleEvent(RadElement sender, RoutedEventArgs args)
-   在 Telerik.WinControls.RadElement.RaiseRoutedEvent(RadElement sender, RoutedEventArgs args)
-   在 Telerik.WinControls.RadItem.RaiseBubbleEvent(RadElement sender, RoutedEventArgs args)
-   在 Telerik.WinControls.RadElement.RaiseRoutedEvent(RadElement sender, RoutedEventArgs args)
-   在 Telerik.WinControls.RadElement.DoMouseUp(MouseEventArgs e)
-   在 Telerik.WinControls.ComponentInputBehavior.OnMouseUp(MouseEventArgs e)
-   在 Telerik.WinControls.RadControl.OnMouseUp(MouseEventArgs e)
-   在 System.Windows.Forms.Control.WmMouseUp(Message& m, MouseButtons button, Int32 clicks)
-   在 System.Windows.Forms.Control.WndProc(Message& m)
-   在 System.Windows.Forms.ScrollableControl.WndProc(Message& m)
-   在 Telerik.WinControls.RadControl.WndProc(Message& m)
-   在 System.Windows.Forms.Control.ControlNativeWindow.OnMessage(Message& m)
-   在 System.Windows.Forms.Control.ControlNativeWindow.WndProc(Message& m)
-   在 System.Windows.Forms.NativeWindow.DebuggableCallback(IntPtr hWnd, Int32 msg, IntPtr wparam, IntPtr lparam)
-   在 System.Windows.Forms.UnsafeNativeMethods.DispatchMessageW(MSG& msg)
-   在 System.Windows.Forms.Application.ComponentManager.System.Windows.Forms.UnsafeNativeMethods.IMsoComponentManager.FPushMessageLoop(IntPtr dwComponentID, Int32 reason, Int32 pvLoopData)
-   在 System.Windows.Forms.Application.ThreadContext.RunMessageLoopInner(Int32 reason, ApplicationContext context)
-   在 System.Windows.Forms.Application.ThreadContext.RunMessageLoop(Int32 reason, ApplicationContext context)
-   在 System.Windows.Forms.Application.Run(Form mainForm)
-   在 ExamReport.Program.Main() 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\Program.cs:行号 21
-   在 System.AppDomain._nExecuteAssembly(RuntimeAssembly assembly, String[] args)
-   在 System.AppDomain.ExecuteAssembly(String assemblyFile, Evidence assemblySecurity, String[] args)
-   在 Microsoft.VisualStudio.HostingProcess.HostProc.RunUsersAssembly()
-   在 System.Threading.ThreadHelper.ThreadStart_Context(Object state)
-   在 System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
-   在 System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
-   在 System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
-   在 System.Threading.ThreadHelper.ThreadStart()
+MySql.Data.MySqlClient.MySqlException (0x80004005): Unable to connect to any of the specified MySQL hosts. ---> System.Exception: Exception of type 'System.Exception' was thrown.
+   at MySql.Data.MySqlClient.NativeDriver.Open()
+   at ExamReport.MySqlHelper.GetDataSet(String connectionString, CommandType cmdType, String cmdText, MySqlParameter[] commandParameters) in D:\project\ExamReporterL\ExamReporterL\ExamReport\MySqlHelper.cs:line 164
+   at ExamReport.mainform.Grid_load() in D:\project\ExamReporterL\ExamReporterL\ExamReport\MainRadForm.cs:line 130
+   at ExamReport.mainform..ctor() in D:\project\ExamReporterL\ExamReporterL\ExamReport\MainRadForm.cs:line 40
+   at ExamReport.Program.Main() in D:\project\ExamReporterL\ExamReporterL\ExamReport\Program.cs:line 21
+   at System.AppDomain._nExecuteAssembly(RuntimeAssembly assembly, String[] args)
+   at System.AppDomain.ExecuteAssembly(String assemblyFile, Evidence assemblySecurity, String[] args)
+   at Microsoft.VisualStudio.HostingProcess.HostProc.RunUsersAssembly()
+   at System.Threading.ThreadHelper.ThreadStart_Context(Object state)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean ignoreSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.ThreadHelper.ThreadStart()

@@ -30,7 +30,7 @@ namespace ExamReport
         Dictionary<string, string> schoolcode_kv = new Dictionary<string, string>();
         Dictionary<string, string> school_qx = new Dictionary<string, string>();
 
-        List<CustomRelation> custom = new List<CustomRelation>();
+        DataTable Cust_data = new DataTable();
         CustomRelation temp_cust = new CustomRelation();
         string currentdic = System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath);
         //Thread thread;
@@ -58,6 +58,16 @@ namespace ExamReport
             pass_low.Value = 60m;
             fail_high.Value = 60m;
             fail_low.Value = 0m;
+
+            Cust_data.Columns.Add("name", typeof(string));
+            Cust_data.Columns.Add("condition", typeof(string));
+
+            CustomGridView.TableElement.BeginUpdate();
+            CustomGridView.MasterTemplate.AllowAddNewRow = false;
+            CustomGridView.MasterTemplate.AllowDragToGroup = false;
+            CustomGridView.MasterTemplate.AllowEditRow = false;
+            CustomGridView.DataSource = Cust_data;
+            CustomGridView.TableElement.EndUpdate();
         }
         void init_dictionary()
         {
@@ -69,6 +79,7 @@ namespace ExamReport
             progress_label.Add("gk_qx", gk_qx_progresslabel);
             progress_label.Add("gk_xx", gk_xx_progresslabel);
             progress_label.Add("hk_zt", hk_zt_progresslabel);
+            progress_label.Add("gk_cus", gk_cus_progresslabel);
 
             run_button.Add("zk_zt", zk_zt_start);
             run_button.Add("zk_qx", zk_qx_start);
@@ -78,6 +89,7 @@ namespace ExamReport
             run_button.Add("gk_qx", gk_qx_start);
             run_button.Add("gk_xx", gk_xx_start);
             run_button.Add("hk_zt", hk_start);
+            run_button.Add("gk_cus", gk_cus_start);
 
             cancel_button.Add("zk_zt", zk_zt_cancel);
             cancel_button.Add("zk_qx", zk_qx_cancel);
@@ -87,6 +99,7 @@ namespace ExamReport
             cancel_button.Add("gk_qx", gk_qx_cancel);
             cancel_button.Add("gk_xx", gk_xx_cancel);
             cancel_button.Add("hk_zt", hk_cancel);
+            cancel_button.Add("gk_cus", gk_cus_cancel);
 
             waiting_bar.Add("zk_zt", zk_zt_waitingbar);
             waiting_bar.Add("zk_qx", zk_qx_WaitingBar);
@@ -96,6 +109,7 @@ namespace ExamReport
             waiting_bar.Add("gk_qx", gk_qx_waitingbar);
             waiting_bar.Add("gk_xx", gk_xx_waitingbar);
             waiting_bar.Add("hk_zt", hk_waitingbar);
+            waiting_bar.Add("gk_cus", gk_cus_waitingbar);
 
             
         }
@@ -557,7 +571,7 @@ namespace ExamReport
 
             foreach (GridViewRowInfo row in gridview.Rows)
             {
-                if (row.Cells["checkbox"].Value != null)
+                if (row.Cells["checkbox"].Value != null && (bool)row.Cells["checkbox"].Value)
                     count++;
 
             }
@@ -1117,7 +1131,7 @@ namespace ExamReport
         {
             foreach (GridViewRowInfo row in HKGridView.Rows)
             {
-                if (row.Cells["checkbox"].Value != null)
+                if (row.Cells["checkbox"].Value != null && (bool)row.Cells["checkbox"].Value == true)
                 {
                     try
                     {
@@ -1246,6 +1260,74 @@ namespace ExamReport
             custom_result.Text = "";
 
             temp_cust.reset();
+        }
+
+        private void cus_result_insert_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(custom_result.Text.Trim()))
+            {
+                Error("输入为空");
+                return;
+            }
+
+            DataRow newrow = Cust_data.NewRow();
+            newrow["name"] = temp_cust._tag;
+            newrow["condition"] = temp_cust.get_relation();
+
+            CustomGridView.TableElement.BeginUpdate();
+            Cust_data.Rows.Add(newrow);
+            CustomGridView.TableElement.EndUpdate();
+
+            radButton13_Click(null, null);
+
+        }
+
+        private void cus_result_revoke_Click(object sender, EventArgs e)
+        {
+            GridViewDataRowInfo dataRowInfo = CustomGridView.CurrentRow as GridViewDataRowInfo;
+            if (dataRowInfo != null)
+            {
+                CustomGridView.Rows.Remove(dataRowInfo);
+            }
+        }
+
+        private void gk_cus_start_Click(object sender, EventArgs e)
+        {
+            if (CheckGridView(gk_gridview))
+                return;
+
+            if (Cust_data.Rows.Count == 0)
+            {
+                Error("自定义分组不能为空，请至少定义一组");
+                return;
+            }
+
+            Analysis analysis = new Analysis(this);
+            analysis.custom_data = Cust_data.Copy();
+            analysis._gridview = gk_gridview;
+            analysis.save_address = gk_save_address.Text;
+            analysis.isVisible = gk_isVisible.Checked;
+            analysis.CurrentDirectory = currentdic;
+            analysis.sf_addr = gk_sf_addr.Text.ToString().Trim();
+            Thread thread = new Thread(new ThreadStart(analysis.gk_sf_start));
+            thread.IsBackground = true;
+            thread.SetApartmentState(ApartmentState.STA);
+            thread_store.Add("gk_sf", thread);
+            thread.Start();
+        }
+
+        private void gk_cus_cancel_Click(object sender, EventArgs e)
+        {
+            if (thread_store.ContainsKey("gk_cus"))
+            {
+                Thread thread = thread_store["gk_cus"];
+                if (thread.IsAlive)
+                {
+                    thread.Abort();
+                    thread_store.Remove("gk_cus");
+                    ShowPro("gk_cus", 2, "");
+                }
+            }
         }
        
     }
