@@ -292,7 +292,8 @@ namespace ExamReport
             insertText(ExamTitle1, "总体分析");
             if (_report_type.Equals("区县"))
                 insertTotalTable("    总分分析表", _totaldata);
-            else if (_report_type.Equals("两类示范校") || _report_type.Equals("城郊"))
+            //else if (_report_type.Equals("两类示范校") || _report_type.Equals("城郊"))
+            else
                 insertTotalTable("    总分分析表", _sdata);
 
 
@@ -307,7 +308,8 @@ namespace ExamReport
                 insertTotalTopic("    题目整体分析表", _totaldata);
                 insertGroupTopic("    题组整体分析表", _totaldata, ((PartitionData)_totaldata[_totaldata.Count - 1]).groups_analysis.Rows.Count);
             }
-            else if (_report_type.Equals("两类示范校") || _report_type.Equals("城郊"))
+            //else if (_report_type.Equals("两类示范校") || _report_type.Equals("城郊"))
+            else
             {
                 insertTotalTopic("    题目整体分析表", _sdata);
                 insertGroupTopic("    题组整体分析表", _sdata, ((PartitionData)_sdata[_sdata.Count - 1]).groups_analysis.Rows.Count);

@@ -57,6 +57,7 @@ namespace ExamReport
         public static string GK_CJ_title_2 = "城区、郊区数据统计分析报告";
         public static string GK_SF_title_2 = "示范校数据统计分析报告";
         public static string GK_QX_title_2 = "分类校数据统计分析报告";
+        public static string GK_CUS_title_2 = "自选数据统计分析报告";
         public static string GK_title_2 = "实测数据统计分析报告";
         public static string GK_ZF_title_1 = "年北京市普通高考";
         public static string GK_ZF_title_2 = "试卷总分统计分析报告";
@@ -72,7 +73,7 @@ namespace ExamReport
                 WriteIntoDocument(oDoc, "QX", config.QX);
                 WriteIntoDocument(oDoc, "QX_subject", config.subject);
             }
-            else if (config.report_style.Equals("总体"))
+            else if (config.report_style.Equals("总体") || config.report_style.Equals("自定义"))
             {
                 WriteIntoDocument(oDoc, "QX", "全市");
                 WriteIntoDocument(oDoc, "QX_subject", config.subject);
@@ -232,7 +233,25 @@ namespace ExamReport
                                 WriteIntoDocument(oDoc, "subject", config.subject);
                             }
                         }
-                        
+                        else if (config.report_style.Equals("自定义"))
+                        {
+                            WriteIntoDocument(oDoc, "title_2", GK_CUS_title_2);
+                            if (config.subject.Contains("理综"))
+                            {
+                                WriteIntoDocument(oDoc, "CJ_ZH", "理科综合");
+                                WriteIntoDocument(oDoc, "CJ_ZH_subject", config.subject.Substring(3));
+                            }
+                            else if (config.subject.Contains("文综"))
+                            {
+                                WriteIntoDocument(oDoc, "CJ_ZH", "文科综合");
+                                WriteIntoDocument(oDoc, "CJ_ZH_subject", config.subject.Substring(3));
+                            }
+                            else
+                            {
+                                WriteIntoDocument(oDoc, "QX", "全市");
+                                WriteIntoDocument(oDoc, "QX_subject", config.subject);
+                            }
+                        }
 
                     }
                 
@@ -347,7 +366,13 @@ namespace ExamReport
                         else
                             final = config.year + "年" + config.subject + "数据统计分析报告(最终版）.docx";
                     }
-                    
+                    else if (config.report_style.Equals("自定义"))
+                    {
+                        if (config.subject.Contains("理综") || config.subject.Contains("文综"))
+                            final = config.year + "年" + config.subject.Substring(3) + "自选数据统计分析报告(最终版）.docx";
+                        else
+                            final = config.year + "年" + config.subject + "自选数据统计分析报告(最终版）.docx";
+                    }
                 }
             }
             final = addr + final;
@@ -654,10 +679,12 @@ namespace ExamReport
                     return "<=";
                 case "不等于":
                     return "<>";
+                case "近似于":
+                    return "like";
                 case "并且":
-                    return "AND";
+                    return "and";
                 case "或者":
-                    return "OR";
+                    return "or";
                 default:
                     return "";
             }

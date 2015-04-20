@@ -89,6 +89,7 @@
     <Compile Include="Configuration.cs" />
     <Compile Include="Config\SchoolCodeConfig.cs" />
     <Compile Include="CustomRelation.cs" />
+    <Compile Include="Database.cs" />
     <Compile Include="DataTableExtension.cs" />
     <Compile Include="DBHelper.cs" />
     <Compile Include="GK_database.cs" />

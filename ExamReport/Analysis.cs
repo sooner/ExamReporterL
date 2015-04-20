@@ -71,151 +71,158 @@ namespace ExamReport
                     MetaData mdata = new MetaData(year, exam, sub);
                     //try
                     //{
-                    mdata.get_meta_data();
-                    _fullmark = mdata._fullmark;
-                    
-                    //}
-                    //catch (Exception e)
-                    //{
-                    //    _form.ErrorM(e.Message);
-                    //}
+                        mdata.get_meta_data();
+                        _fullmark = mdata._fullmark;
 
-                    if (_exam.Equals("gk") && (sub.Equals("yy") || sub.Equals("yw")))
-                        mdata.ywyy_choice = row.Cells["SpecChoice"].Value.ToString().Trim();
-                    
-                    mdata.log_name = log;
-                    if (sub.Equals("zf"))
-                    {
-                        mdata.get_zf_data();
-                    }
-                    else
-                    {
-                        mdata.get_basic_data();
-                        mdata.get_group_data();
-                        mdata.get_ans();
-                        mdata.get_fz();
-                    }
-                    if (Utils.is_gk_zh(exam, chi_sub))
-                    {
-                        mdata.get_zh_basic_data();
-                        mdata.get_zh_group_data();
-                        mdata.get_zh_ans();
-                        mdata.get_zh_fz();
 
-                        if (row.Cells["SpecChoice"].Value.ToString().Trim().Equals("科目总分相关"))
+
+                        if (_exam.Equals("gk") && (sub.Equals("yy") || sub.Equals("yw")))
+                            mdata.ywyy_choice = row.Cells["SpecChoice"].Value.ToString().Trim();
+
+                        mdata.log_name = log;
+                        if (sub.Equals("zf"))
                         {
-                            is_sub_cor = true;
-                            _sub_fullmark = mdata._sub_fullmark;
-
+                            mdata.get_zf_data();
                         }
                         else
                         {
-                            is_sub_cor = false;
-                            _sub_fullmark = mdata._fullmark;
+                            mdata.get_basic_data();
+                            mdata.get_group_data();
+                            mdata.get_ans();
+                            mdata.get_fz();
                         }
-                        switch (exam_type)
+                        if (Utils.is_gk_zh(exam, chi_sub))
                         {
-                            case "gk_zt":
-                                gk_zh_zt_process(mdata);
-                                break;
-                            case "gk_cj":
-                                mdata.get_CJ_data(cj_addr);
-                                gk_zh_cj_process(mdata);
-                                break;
-                            case "gk_sf":
-                                mdata.get_SF_data(sf_addr);
-                                gk_zh_sf_process(mdata);
-                                break;
-                            case "gk_qx":
-                                mdata.get_QXSF_data(qx_addr);
-                                mdata.get_CJ_data(cj_addr);
-                                mdata.get_SF_data(sf_addr);
-                                gk_zh_qx_process(mdata);
-                                break;
-                            case "gk_xx":
-                                mdata.get_CJ_data(cj_addr);
-                                mdata.get_SF_data(sf_addr);
-                                gk_zh_xx_process(mdata);
-                                break;
-                            default:
-                                break;
+                            mdata.get_zh_basic_data();
+                            mdata.get_zh_group_data();
+                            mdata.get_zh_ans();
+                            mdata.get_zh_fz();
+
+                            if (row.Cells["SpecChoice"].Value.ToString().Trim().Equals("科目总分相关"))
+                            {
+                                is_sub_cor = true;
+                                _sub_fullmark = mdata._sub_fullmark;
+
+                            }
+                            else
+                            {
+                                is_sub_cor = false;
+                                _sub_fullmark = mdata._fullmark;
+                            }
+                            switch (exam_type)
+                            {
+                                case "gk_zt":
+                                    gk_zh_zt_process(mdata);
+                                    break;
+                                case "gk_cj":
+                                    mdata.get_CJ_data(cj_addr);
+                                    gk_zh_cj_process(mdata);
+                                    break;
+                                case "gk_sf":
+                                    mdata.get_SF_data(sf_addr);
+                                    gk_zh_sf_process(mdata);
+                                    break;
+                                case "gk_qx":
+                                    mdata.get_QXSF_data(qx_addr);
+                                    mdata.get_CJ_data(cj_addr);
+                                    mdata.get_SF_data(sf_addr);
+                                    gk_zh_qx_process(mdata);
+                                    break;
+                                case "gk_xx":
+                                    mdata.get_CJ_data(cj_addr);
+                                    mdata.get_SF_data(sf_addr);
+                                    gk_zh_xx_process(mdata);
+                                    break;
+                                case "gk_cus":
+                                    gk_zh_cus_process(mdata);
+                                    break;
+                                default:
+                                    break;
+                            }
                         }
-                    }
-                    else if(sub.Equals("zf"))
-                    {
-                        switch (exam_type)
+                        else if (sub.Equals("zf"))
                         {
-                            case "gk_zt":
-                                gk_zf_zt_process(mdata);
-                                break;
-                            case "gk_cj":
-                                mdata.get_CJ_data(cj_addr);
-                                gk_zf_cj_process(mdata);
-                                break;
-                            case "gk_sf":
-                                mdata.get_SF_data(sf_addr);
-                                gk_zf_sf_process(mdata);
-                                break;
-                            case "gk_qx":
-                                mdata.get_QXSF_data(qx_addr);
-                                mdata.get_CJ_data(cj_addr);
-                                mdata.get_SF_data(sf_addr);
-                                gk_zf_qx_process(mdata);
-                                break;
-                            case "gk_xx":
-                                mdata.get_CJ_data(cj_addr);
-                                mdata.get_SF_data(sf_addr);
-                                gk_zf_xx_process(mdata);
-                                break;
-                            default:
-                                break;
+                            switch (exam_type)
+                            {
+                                case "gk_zt":
+                                    gk_zf_zt_process(mdata);
+                                    break;
+                                case "gk_cj":
+                                    mdata.get_CJ_data(cj_addr);
+                                    gk_zf_cj_process(mdata);
+                                    break;
+                                case "gk_sf":
+                                    mdata.get_SF_data(sf_addr);
+                                    gk_zf_sf_process(mdata);
+                                    break;
+                                case "gk_qx":
+                                    mdata.get_QXSF_data(qx_addr);
+                                    mdata.get_CJ_data(cj_addr);
+                                    mdata.get_SF_data(sf_addr);
+                                    gk_zf_qx_process(mdata);
+                                    break;
+                                case "gk_xx":
+                                    mdata.get_CJ_data(cj_addr);
+                                    mdata.get_SF_data(sf_addr);
+                                    gk_zf_xx_process(mdata);
+                                    break;
+                                case "gk_cus":
+                                    gk_zf_custom_process(mdata);
+                                    break;
+                                default:
+                                    break;
+                            }
                         }
-                    }
-                    else
-                    {
-                        switch (exam_type)
+                        else
                         {
-                            case "zk_zt":
-                                zk_zt_process(mdata);
-                                break;
-                            case "zk_qx":
-                                mdata.get_CJ_data(cj_addr);
-                                mdata.get_QXSF_data(qx_addr);
-                                zk_qx_process(mdata);
-                                break;
-                            case "hk_zt":
-                                hk_zt_process(mdata);
-                                break;
-                            case "gk_zt":
-                                gk_schedule(mdata, gk_zt_process, gk_zt_wl_process);
-                                break;
-                            case "gk_cj":
-                                mdata.get_CJ_data(cj_addr);
-                                gk_cj_process(mdata);
-                                break;
-                            case "gk_sf":
-                                mdata.get_CJ_data(sf_addr);
-                                gk_sf_process(mdata);
-                                break;
-                            case "gk_qx":
-                                mdata.get_QXSF_data(qx_addr);
-                                mdata.get_CJ_data(cj_addr);
-                                mdata.get_SF_data(sf_addr);
-                                gk_schedule(mdata, gk_qx_process, gk_qx_wl_process);
-                                break;
-                            case "gk_xx":
-                                mdata.get_CJ_data(cj_addr);
-                                mdata.get_SF_data(sf_addr);
-                                gk_schedule(mdata, gk_xx_process, gk_xx_wl_process);
-                                break;
-                            case "":
+                            switch (exam_type)
+                            {
+                                case "zk_zt":
+                                    zk_zt_process(mdata);
+                                    break;
+                                case "zk_qx":
+                                    mdata.get_CJ_data(cj_addr);
+                                    mdata.get_QXSF_data(qx_addr);
+                                    zk_qx_process(mdata);
+                                    break;
+                                case "hk_zt":
+                                    hk_zt_process(mdata);
+                                    break;
+                                case "gk_zt":
+                                    gk_schedule(mdata, gk_zt_process, gk_zt_wl_process);
+                                    break;
+                                case "gk_cj":
+                                    mdata.get_CJ_data(cj_addr);
+                                    gk_cj_process(mdata);
+                                    break;
+                                case "gk_sf":
+                                    mdata.get_CJ_data(sf_addr);
+                                    gk_sf_process(mdata);
+                                    break;
+                                case "gk_qx":
+                                    mdata.get_QXSF_data(qx_addr);
+                                    mdata.get_CJ_data(cj_addr);
+                                    mdata.get_SF_data(sf_addr);
+                                    gk_schedule(mdata, gk_qx_process, gk_qx_wl_process);
+                                    break;
+                                case "gk_xx":
+                                    mdata.get_CJ_data(cj_addr);
+                                    mdata.get_SF_data(sf_addr);
+                                    gk_schedule(mdata, gk_xx_process, gk_xx_wl_process);
+                                    break;
+                                case "gk_cus":
+                                    gk_cus_process(mdata);
+                                    break;
+                                default:
+                                    break;
+                            }
 
-                            default:
-                                break;
                         }
-
-                    }
-
+                    //}
+                    //catch (Exception e)
+                    //{
+                    //    _form.ErrorM(exam_type, e.Message);
+                    //}
 
                 }
             }
@@ -226,6 +233,115 @@ namespace ExamReport
             exam_type = "gk_cus";
             _exam = "gk";
             start();
+        }
+        public void gk_zf_custom_process(MetaData mdata)
+        {
+            Configuration config = initConfig(mdata._sub, "自定义", "高考");
+            List<ZF_statistic> result = new List<ZF_statistic>();
+            _form.ShowPro(exam_type, 1, mdata.log_name + "数据分析中...");
+            foreach (DataRow dr in custom_data.Rows)
+            {
+                DataTable temp = get_filterdata(mdata.basic, dr["condition"].ToString().Trim());
+                ZF_statistic stat = new ZF_statistic(config, temp, mdata._fullmark, dr["name"].ToString().Trim());
+                stat.partition_process();
+                result.Add(stat);
+            }
+            _form.ShowPro(exam_type, 1, mdata.log_name + "报告生成中...");
+            ZF_wordcreator create = new ZF_wordcreator(config);
+            create.partition_wordcreate(result, "自定义");
+        }
+        public void gk_zh_cus_process(MetaData mdata)
+        {
+            Configuration config = initConfig(mdata._sub, "自定义", "高考");
+            ArrayList sdata = new ArrayList();
+            ArrayList ZH_data = new ArrayList();
+            _form.ShowPro(exam_type, 1, mdata.log_name + "数据分析中...");
+
+            string totalfilter = "";
+            int count = 0;
+            foreach (DataRow dr in custom_data.Rows)
+            {
+                string name = dr["name"].ToString().Trim();
+                string condition = dr["condition"].ToString().Trim();
+
+                CustomDataProcess(sdata, name, mdata, condition, config, mdata._sub_fullmark);
+                ZHCustomDataProcess(ZH_data, name, mdata, condition, config);
+                count++;
+                totalfilter += "(" + condition + ")";
+                if (count != custom_data.Rows.Count)
+                    totalfilter += " OR ";
+            }
+
+            CustomDataProcess(sdata, "分类整体", mdata, totalfilter, config, mdata._sub_fullmark);
+            ZHCustomDataProcess(ZH_data, "分类整体", mdata, totalfilter, config);
+
+            _form.ShowPro(exam_type, 1, mdata.log_name + "报告生成中...");
+            Partition_wordcreator create = new Partition_wordcreator(sdata, mdata.grp, mdata.groups_group);
+            create.SetConfig(config);
+            create.creating_ZH_word(ZH_data, mdata.zh_grp, mdata.zh_groups_group);
+        }
+        public void ZHCustomDataProcess(ArrayList list, string name, MetaData mdata, string filter, Configuration config)
+        {
+            DataTable basic = get_filterdata(mdata.zh_basic, filter);
+            DataTable group = get_filterdata(mdata.zh_group, filter);
+            if (basic.Rows.Count == 0)
+                throw new ArgumentException("条件 " + filter + " 没有数据！");
+            basic.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
+            group.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
+            Partition_statistic total = new Partition_statistic(name, basic, mdata._fullmark, mdata.zh_ans, group, mdata.zh_grp, mdata._group_num);
+            total._config = config;
+            total.statistic_process(true);
+            list.Add(total.result);
+        }
+        public void gk_cus_process(MetaData mdata)
+        {
+            Configuration config = initConfig(mdata._sub, "自定义", "高考");
+            ArrayList list = new ArrayList();
+            _form.ShowPro(exam_type, 1, mdata.log_name + "数据分析中...");
+
+            string totalfilter = "";
+            int count = 0;
+            foreach (DataRow dr in custom_data.Rows)
+            {
+                string name = dr["name"].ToString().Trim();
+                string condition = dr["condition"].ToString().Trim();
+
+                CustomDataProcess(list, name, mdata, condition, config, mdata._fullmark);
+                count++;
+                totalfilter += "(" + condition + ")";
+                if (count != custom_data.Rows.Count)
+                    totalfilter += " OR ";
+            }
+
+            CustomDataProcess(list, "分类整体", mdata, totalfilter, config, mdata._fullmark);
+            _form.ShowPro(exam_type, 1, mdata.log_name + "报告生成中...");
+            Partition_wordcreator create = new Partition_wordcreator(list, mdata.grp, mdata.groups_group);
+            create.SetConfig(config);
+            create.creating_word();
+        }
+        public void CustomDataProcess(ArrayList list, string name, MetaData mdata, string filter, Configuration config, decimal fullmark)
+        {
+            DataTable basic = get_filterdata(mdata.basic, filter);
+            DataTable group = get_filterdata(mdata.group, filter);
+            if (basic.Rows.Count == 0)
+                throw new ArgumentException("条件 " + filter + " 没有数据！");
+            basic.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
+            group.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
+            if (basic.Columns.Contains("XZ"))
+                XZ_group_separate(basic, mdata);
+            Partition_statistic total = new Partition_statistic(name, basic, fullmark, mdata.ans, group, mdata.grp, mdata._group_num);
+            total._config = config;
+            total.statistic_process(false);
+            if (basic.Columns.Contains("XZ"))
+                total.xz_postprocess(mdata.xz);
+            list.Add(total.result);
+        }
+
+        public DataTable get_filterdata(DataTable dt, string filter)
+        {
+            DataView dv = dt.AsDataView();
+            dv.RowFilter = filter;
+            return dv.ToTable();
         }
         public void hk_zt_start()
         {

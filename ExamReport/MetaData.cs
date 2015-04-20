@@ -138,9 +138,12 @@ namespace ExamReport
                 + Utils.language_trans(_sub) + "'", null);
             if (!reader.Read())
                 throw new Exception("数据库异常，不存在该数据");
-
-            reader = MySqlHelper.ExecuteReader(MySqlHelper.Conn, CommandType.Text, "select COLUMN_NAME from information_schema.COLUMNS where table_name = '" + Utils.get_basic_tablename(_year, _exam, Utils.language_trans(_sub)) + "'", null);
-
+            string table_name = Utils.get_basic_tablename(_year, _exam, Utils.language_trans(_sub));
+            if (_sub.Contains("理综") || _sub.Contains("文综"))
+                table_name = table_name;//留个地方
+            else if (_sub.Equals("总分"))
+                table_name = Utils.get_zt_tablename(_year);
+            reader = MySqlHelper.ExecuteReader(MySqlHelper.Conn, CommandType.Text, "select COLUMN_NAME from information_schema.COLUMNS where table_name = '" + table_name + "'", null);
             List<string> name = new List<string>();
             while (reader.Read())
             {
@@ -158,8 +161,12 @@ namespace ExamReport
                 + Utils.language_trans(_sub) + "'", null);
             if (!reader.Read())
                 throw new Exception("数据库异常，不存在该数据");
-
-            reader = MySqlHelper.ExecuteReader(MySqlHelper.Conn, CommandType.Text, "describe " + Utils.get_basic_tablename(_year, _exam, Utils.language_trans(_sub)) + " " + column_name, null);
+            string table_name = Utils.get_basic_tablename(_year, _exam, Utils.language_trans(_sub));
+            if (_sub.Contains("理综") || _sub.Contains("文综"))
+                table_name = table_name;//留个地方
+            else if (_sub.Equals("总分"))
+                table_name = Utils.get_zt_tablename(_year);
+            reader = MySqlHelper.ExecuteReader(MySqlHelper.Conn, CommandType.Text, "describe " + table_name + " " + column_name, null);
 
             if(!reader.Read())
                 throw new Exception("数据库异常，不存在该列");

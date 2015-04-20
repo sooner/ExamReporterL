@@ -44,8 +44,11 @@ namespace ExamReport
             HKTreeView.SelectedNodeChanged += HKTreeNode_Selected;
 
             gk_gridview.EditorRequired += radGridView1_EditorRequired;
-            
+
+            gk_isVisible.Checked = true;
+
             init_dictionary();
+            init_config_addr();
             save_address.Text = currentdic;
             gk_save_address.Text = currentdic;
             hk_save_addr.Text = currentdic;
@@ -68,6 +71,19 @@ namespace ExamReport
             CustomGridView.MasterTemplate.AllowEditRow = false;
             CustomGridView.DataSource = Cust_data;
             CustomGridView.TableElement.EndUpdate();
+        }
+        void init_config_addr()
+        {
+            string cj_addr = @"\config\gk_cj.xlsx";
+            string sf_addr = @"\config\gk_sf.xlsx";
+
+            gk_cj_addr.Text = currentdic + cj_addr;
+            gk_qx_cj_addr.Text = currentdic + cj_addr;
+            gk_xx_cj_addr.Text = currentdic + cj_addr;
+
+            gk_sf_addr.Text = currentdic + sf_addr;
+            gk_qx_sf_addr.Text = currentdic + sf_addr;
+            gk_xx_sf_addr.Text = currentdic + sf_addr;
         }
         void init_dictionary()
         {
@@ -267,6 +283,7 @@ namespace ExamReport
             GKTreeView.Nodes.Add(new RadTreeNode("总体"));
             GKTreeView.Nodes.Add(new RadTreeNode("示范校"));
             GKTreeView.Nodes.Add(new RadTreeNode("城郊"));
+            GKTreeView.Nodes.Add(new RadTreeNode("自定义"));
             GKTreeView.Nodes.Add(new RadTreeNode("区县"));
             GKTreeView.Nodes.Add(new RadTreeNode("学校"));
 
@@ -298,21 +315,21 @@ namespace ExamReport
                 code = string.Join(",", c.GroupBy(p => p.Field<string>("qxdm")).Select(p => p.Key.ToString().Trim()).ToArray())
             }).ToDataTable();
             int count = 0;
-            GKTreeView.Nodes[5].CheckType = CheckType.CheckBox;
+            GKTreeView.Nodes[6].CheckType = CheckType.CheckBox;
             foreach (DataRow dr in qxdm.Rows)
             {
                 //RadTreeNode node = new RadTreeNode(dr["qxmc"].ToString().Trim());
                 ZKTreeView.Nodes[2].Nodes.Add(new RadTreeNode(dr["qxmc"].ToString().Trim()));
-                GKTreeView.Nodes[4].Nodes.Add(new RadTreeNode(dr["qxmc"].ToString().Trim()));
                 GKTreeView.Nodes[5].Nodes.Add(new RadTreeNode(dr["qxmc"].ToString().Trim()));
-                GKTreeView.Nodes[5].Nodes[count].CheckType = CheckType.CheckBox;
+                GKTreeView.Nodes[6].Nodes.Add(new RadTreeNode(dr["qxmc"].ToString().Trim()));
+                GKTreeView.Nodes[6].Nodes[count].CheckType = CheckType.CheckBox;
                 
                 List<string> names = get_school_name(schoolcode_table, dr["code"].ToString().Trim());
                 int children_count = 0;
                 foreach (string name in names)
                 {
-                    GKTreeView.Nodes[5].Nodes[count].Nodes.Add(new RadTreeNode(name));
-                    GKTreeView.Nodes[5].Nodes[count].Nodes[children_count].CheckType = CheckType.CheckBox;
+                    GKTreeView.Nodes[6].Nodes[count].Nodes.Add(new RadTreeNode(name));
+                    GKTreeView.Nodes[6].Nodes[count].Nodes[children_count].CheckType = CheckType.CheckBox;
                     children_count++;
                 }
                 count++;
@@ -401,6 +418,7 @@ namespace ExamReport
                 gk_data_pre_panel.Hide();
                 gk_docGroupBox.Show();
                 gk_xx_panel.Hide();
+                custom_panel.Hide();
             }
             else if (element.SelectedNode.Text.Trim().Equals("区县") || (element.SelectedNode.Parent != null && element.SelectedNode.Parent.Text.Trim().Equals("区县")))
             {
@@ -411,6 +429,7 @@ namespace ExamReport
                 gk_data_pre_panel.Hide();
                 gk_docGroupBox.Show();
                 gk_xx_panel.Hide();
+                custom_panel.Hide();
             }
             else if (element.SelectedNode.Text.Trim().Equals("数据录入"))
             {
@@ -421,6 +440,7 @@ namespace ExamReport
                 gk_data_pre_panel.Show();
                 gk_docGroupBox.Hide();
                 gk_xx_panel.Hide();
+                custom_panel.Hide();
             }
             else if (element.SelectedNode.Text.Trim().Equals("示范校"))
             {
@@ -431,6 +451,7 @@ namespace ExamReport
                 gk_data_pre_panel.Hide();
                 gk_docGroupBox.Show();
                 gk_xx_panel.Hide();
+                custom_panel.Hide();
             }
             else if (element.SelectedNode.Text.Trim().Equals("城郊"))
             {
@@ -441,8 +462,20 @@ namespace ExamReport
                 gk_data_pre_panel.Hide();
                 gk_docGroupBox.Show();
                 gk_xx_panel.Hide();
+                custom_panel.Hide();
             }
-            else if (element.SelectedNode.Text.Trim().Equals("学校") 
+            else if (element.SelectedNode.Text.Trim().Equals("自定义"))
+            {
+                gk_zt_panel.Hide();
+                gk_sf_panel.Hide();
+                gk_cj_panel.Hide();
+                gk_qx_panel.Hide();
+                gk_data_pre_panel.Hide();
+                gk_docGroupBox.Show();
+                gk_xx_panel.Hide();
+                custom_panel.Show();
+            }
+            else if (element.SelectedNode.Text.Trim().Equals("学校")
                 || (element.SelectedNode.Parent != null && element.SelectedNode.Parent.Text.Trim().Equals("学校"))
                 || (element.SelectedNode.Parent.Parent != null && element.SelectedNode.Parent.Parent.Text.Trim().Equals("学校")))
             {
@@ -453,6 +486,7 @@ namespace ExamReport
                 gk_data_pre_panel.Hide();
                 gk_docGroupBox.Show();
                 gk_xx_panel.Show();
+                custom_panel.Hide();
             }
         }
         private void ZKTreeNode_Selected(object sender, RadTreeViewEventArgs e)
@@ -997,7 +1031,7 @@ namespace ExamReport
             }
             if (CheckGridView(gk_gridview))
                 return;
-            Dictionary<string, string> school = TreeViewCheck(GKTreeView.Nodes[5]);
+            Dictionary<string, string> school = TreeViewCheck(GKTreeView.Nodes[6]);
 
             if (school.Count == 0)
             {
@@ -1220,7 +1254,7 @@ namespace ExamReport
 
             StringBuilder sb = new StringBuilder();
             sb.Append(custom_col.SelectedItem.Text.Trim());
-            sb.Append(Utils.OperatorTrans(custom_comp.SelectedItem.Text.Trim()));
+            sb.Append(" " + Utils.OperatorTrans(custom_comp.SelectedItem.Text.Trim()) + " ");
             string type = "varchar";
             foreach (GridViewRowInfo row in gk_gridview.Rows)
             {
@@ -1243,6 +1277,18 @@ namespace ExamReport
                 sb.Append("'");
                 sb.Append(custom_value.Text.Trim());
                 sb.Append("'");
+            }
+            else if (custom_comp.SelectedItem.Text.Trim().Equals("近似于"))
+            {
+                Error("不能近似于一个数字！");
+                if (!temp_cust.isEmpty())
+                    temp_cust.revoke();
+                custom_col.ResetText();
+                custom_comp.ResetText();
+                custom_value.Text = "";
+                custom_relation.ResetText();
+                custom_result.Text = "";
+                return;
             }
             else
                 sb.Append(custom_value.Text.Trim());
@@ -1308,11 +1354,10 @@ namespace ExamReport
             analysis.save_address = gk_save_address.Text;
             analysis.isVisible = gk_isVisible.Checked;
             analysis.CurrentDirectory = currentdic;
-            analysis.sf_addr = gk_sf_addr.Text.ToString().Trim();
-            Thread thread = new Thread(new ThreadStart(analysis.gk_sf_start));
+            Thread thread = new Thread(new ThreadStart(analysis.gk_custom_start));
             thread.IsBackground = true;
             thread.SetApartmentState(ApartmentState.STA);
-            thread_store.Add("gk_sf", thread);
+            thread_store.Add("gk_cus", thread);
             thread.Start();
         }
 
