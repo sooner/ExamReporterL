@@ -89,8 +89,9 @@ namespace ExamReport
             
             ZH_standard_ans = StandardAnsRecontruction(temp_ZH_standard_ans, ZH_name_list);
             zh_single_data = new DataTable();
-            zh_single_data.Columns.Add("studentid", System.Type.GetType("System.String"));
-            zh_single_data.Columns.Add("schoolcode", System.Type.GetType("System.String"));
+            zh_single_data.Columns.Add("kh", System.Type.GetType("System.String"));
+            zh_single_data.Columns.Add("xxdm", System.Type.GetType("System.String"));
+            zh_single_data.Columns.Add("xb", System.Type.GetType("System.String"));
             zh_single_data.Columns.Add("totalmark", typeof(decimal));
             foreach (DataRow dr in ZH_standard_ans.Rows)
             {
@@ -107,7 +108,7 @@ namespace ExamReport
                 }
             }
             zh_single_data.Columns.Add("Groups", typeof(string));
-            zh_single_data.Columns.Add("QX", typeof(string));
+            zh_single_data.Columns.Add("qxdm", typeof(string));
             if (_basic_data.Columns.Contains("XZ"))
                 zh_single_data.Columns.Add("XZ", typeof(string));
             zh_single_data.Columns.Add("ZH_totalmark", typeof(decimal));
@@ -117,7 +118,7 @@ namespace ExamReport
             {
                 DataRow newrow = zh_single_data.NewRow();
 
-                for (int i = 0; i < 3; i++)
+                for (int i = 0; i < 4; i++)
                     newrow[i] = dr[zh_single_data.Columns[i].ColumnName];
 
                 decimal totalmark = 0;
@@ -125,8 +126,8 @@ namespace ExamReport
                 {
                     if (ZH_name_list[i] == null)
                     {
-                        newrow[i + 3] = dr[zh_single_data.Columns[i + 3].ColumnName];
-                        totalmark += (decimal)newrow[i + 3];
+                        newrow[i + 4] = dr[zh_single_data.Columns[i + 4].ColumnName];
+                        totalmark += (decimal)newrow[i + 4];
                     }
 
                     else
@@ -136,14 +137,14 @@ namespace ExamReport
                         {
                             temp_mark += (decimal)dr["T" + temp_th];
                         }
-                        newrow[i + 3] = temp_mark;
+                        newrow[i + 4] = temp_mark;
                     }
                 }
-                for (int i = ZH_standard_ans.Rows.Count + 3; i < zh_single_data.Columns.Count - 1; i++)
+                for (int i = ZH_standard_ans.Rows.Count + 4; i < zh_single_data.Columns.Count - 1; i++)
                     newrow[i] = dr[zh_single_data.Columns[i].ColumnName];
 
                 newrow["ZH_totalmark"] = totalmark;
-                if (!_group_data.Rows[row]["studentid"].ToString().Trim().Equals(newrow["studentid"].ToString().Trim()))
+                if (!_group_data.Rows[row]["kh"].ToString().Trim().Equals(newrow["kh"].ToString().Trim()))
                     throw new Exception();
                 _group_data.Rows[row]["ZH_totalmark"] = totalmark;
                 zh_single_data.Rows.Add(newrow);
@@ -151,9 +152,9 @@ namespace ExamReport
             }
             //var zh_result = _group_data.AsEnumerable().Join(zh_single_data.AsEnumerable().Select(c => new
             //{
-            //    studentid = c.Field<string>("studentid"),
+            //    kh = c.Field<string>("kh"),
             //    ZH_totalmark = c.Field<decimal>("ZH_totalmark")
-            //}), c => c.Field<string>("studentid"), p => p.studentid, (c, p) => new
+            //}), c => c.Field<string>("kh"), p => p.kh, (c, p) => new
             //{
             //    c = c,
             //    p = p
@@ -166,8 +167,9 @@ namespace ExamReport
             //}
             List<List<string>> group_th = new List<List<string>>();
             zh_group_data = new DataTable();
-            zh_group_data.Columns.Add("studentid", typeof(string));
-            zh_group_data.Columns.Add("schoolcode", typeof(string));
+            zh_group_data.Columns.Add("kh", typeof(string));
+            zh_group_data.Columns.Add("xxdm", typeof(string));
+            zh_group_data.Columns.Add("xb", typeof(string));
             zh_group_data.Columns.Add("totalmark", typeof(decimal));
             int cor_count = 1;
             foreach (DataRow dr in zh_groups.Rows)
@@ -183,16 +185,17 @@ namespace ExamReport
                 cor_count++;
             }
             zh_group_data.Columns.Add("Groups", typeof(string));
-            zh_group_data.Columns.Add("QX", typeof(string));
+            zh_group_data.Columns.Add("qxdm", typeof(string));
 
             foreach (DataRow dr in _basic_data.Rows)
             {
                 DataRow newrow = zh_group_data.NewRow();
-                newrow["studentid"] = dr[0].ToString();
-                newrow["schoolcode"] = dr[1].ToString();
+                newrow["kh"] = dr["kh"].ToString();
+                newrow["xxdm"] = dr["xxdm"].ToString();
                 newrow["Groups"] = ((string)dr["Groups"]).Trim();
-                newrow["QX"] = dr["QX"].ToString().Trim();
-                newrow["totalmark"] = dr[2];
+                newrow["qxdm"] = dr["qxdm"].ToString().Trim();
+                newrow["totalmark"] = dr["totalmark"];
+                newrow["xb"] = dr["xb"].ToString().Trim();
 
                 for (int i = 0; i < zh_groups.Rows.Count; i++)
                 {
@@ -202,7 +205,7 @@ namespace ExamReport
                     {
                         mark += (decimal)dr["T" + temp];
                     }
-                    newrow[i + 3] = mark;
+                    newrow[i + 4] = mark;
 
                 }
                 zh_group_data.Rows.Add(newrow);
@@ -274,6 +277,7 @@ namespace ExamReport
 
         public string DBF_data_process(string fileadd)
         {
+
             filePath = @fileadd;
             file = System.IO.Path.GetFileName(filePath);
             path = System.IO.Path.GetDirectoryName(filePath);
@@ -281,7 +285,7 @@ namespace ExamReport
             filext = System.IO.Path.GetExtension(filePath);
 
             string conn = @"Provider=vfpoledb;Data Source=" + path + ";Collating Sequence=machine;";
-            Regex topic = new Regex("^[Ss]\\d+$");
+            Regex choice = new Regex("^[A-Za-z0@]+$");
             dbfConnection = new OleDbConnection(conn);
 
             OleDbDataAdapter adpt = new OleDbDataAdapter("select * from " + file, dbfConnection);
@@ -306,31 +310,22 @@ namespace ExamReport
             newStandard = StandardAnsRecontruction(_standard_ans, name_list);
 
             DataTable basic_data = new DataTable();
-            basic_data.Columns.Add("studentid", System.Type.GetType("System.String"));
-            basic_data.Columns.Add("schoolcode", System.Type.GetType("System.String"));
+            basic_data.Columns.Add("kh", System.Type.GetType("System.String"));
+            basic_data.Columns.Add("xxdm", System.Type.GetType("System.String"));
             basic_data.Columns.Add("totalmark", typeof(decimal));
+            basic_data.Columns.Add("xb", typeof(string));
+            basic_data.Columns.Add("Groups", typeof(string));
+            basic_data.Columns.Add("qxdm", typeof(string));
+            //if (has_xz)
+            //    basic_data.Columns.Add("XZ", typeof(string));
             for (i = 0; i < newStandard.Rows.Count; i++)
                 basic_data.Columns.Add("T" + ((string)newStandard.Rows[i]["th"]).Trim(), System.Type.GetType("System.Decimal"));
-            bool first = true;
 
-            string omrstr = dt.Columns.Contains("Omrstr") ? "Omrstr" : "Info";
-            bool has_xz = false;
-            if (dt.Columns.Contains("xz"))
-                has_xz = true;
-            if (!dt.Columns.Contains("zf"))
-            {
-                dt.Columns.Add("zf", typeof(decimal));
-                
-                foreach (DataRow dr in dt.Rows)
-                {
-                    dr["zf"] = 0;
-                    foreach (DataColumn dc in dt.Columns)
-                    {
-                        if (topic.IsMatch(dc.ColumnName))
-                            dr["zf"] = (decimal)dr["zf"] + (decimal)dr[dc];
-                    }
-                }
-            }
+            for (i = 0; i < _standard_ans.Rows.Count; i++)
+                if (!_standard_ans.Rows[i]["da"].ToString().Trim().Equals(""))
+                    basic_data.Columns.Add("D" + ((string)_standard_ans.Rows[i]["th"]).Trim(), typeof(string));
+            
+            
             Hashtable Multi_ans = new Hashtable(); 
             foreach (DataRow dr in newStandard.Rows)
             {
@@ -364,43 +359,25 @@ namespace ExamReport
 
                 }
             }
+
+            foreach(DataRow dr in _standard_ans.Rows)
+            {
+                if(!dt.Columns.Contains("T" + dr["th"].ToString().Trim()))
+                    throw new ArgumentException("数据库中不存在题号为" + "T" + dr["th"].ToString().Trim() + "数据");
+                
+            }
             foreach (DataRow dr in dt.Rows)
             {
-                string an = ((string)dr[omrstr]).Trim();
-                char[] ans;
-                if (an.Contains(','))
-                    //ans = TransferNewString(an.Split(new char[] { ',' }));
-                    ans = TransferCharArray(an.Split(new char[] { ',' }));
-                else
-                    ans = an.Trim().ToCharArray();
-
-                if (first)
-                {
-                    try
-                    {
-                        foreach(DataRow ans_dr in newStandard.Rows)
-                            if(!ans_dr["da"].ToString().Trim().Equals(""))
-                                basic_data.Columns.Add("D" + ((string)ans_dr["th"]).Trim(), typeof(string));
-                    }
-                    catch (DuplicateNameException e)
-                    {
-                        throw new System.ArgumentException("标准答案题号“" + newStandard.Rows[i]["th"].ToString().Trim() + "”重复");
-                    }
-                    first = false;
-                    basic_data.Columns.Add("Groups", typeof(string));
-                    basic_data.Columns.Add("QX", typeof(string));
-                    if(has_xz)
-                        basic_data.Columns.Add("XZ", typeof(string));
-                }
-
                 DataRow newRow = basic_data.NewRow();
-                newRow["studentid"] = dr["Mh"].ToString().Trim();
-                newRow["schoolcode"] = dr["Schoolcode"].ToString().Trim();
-                newRow["totalmark"] = (decimal)dr["Zf"];
-                if (_mdata.sub_iszero && (decimal)dr["Zf"] == 0)
-                    continue;
+                newRow["kh"] = dr["kh"].ToString().Trim();
+                newRow["xxdm"] = dr["xxdm"].ToString().Trim();
+                newRow["totalmark"] = 0;
+                newRow["xb"] = dr["xb"].ToString().Trim();
+                newRow["Groups"] = "";
+                newRow["qxdm"] = dr["qxdm"].ToString().Trim();
                 decimal obj_mark = 0;
-                int obj_count = 0, sub_count = 0, total_count = 0;
+                decimal sub_mark = 0;
+                int total_count = 0;
 
                 foreach (DataRow ans_dr in newStandard.Rows)
                 {
@@ -408,15 +385,11 @@ namespace ExamReport
                     {
                         if (name_list[total_count] == null)
                         {
-                            if (!topic.IsMatch(dt.Columns[sub_count].ColumnName.ToString().Trim()))
-                            {
-                                throw new ArgumentException("标准答案与数据库文件题数不相符");
-                                //error!!
-                            }
-                            if ((decimal)dr[sub_count] > Convert.ToDecimal(ans_dr["fs"]))
+                            if ((decimal)dr["T" + (string)ans_dr["th"]] > Convert.ToDecimal(ans_dr["fs"]))
                                 throw new ArgumentException("第" + (string)ans_dr["th"] + "题满分值小于实际分值！");
-                            newRow["T" + (string)ans_dr["th"]] = (decimal)dr[sub_count];
-                            sub_count++;
+                            newRow["T" + (string)ans_dr["th"]] = (decimal)dr["T" + (string)ans_dr["th"]];
+                            sub_mark += (decimal)dr["T" + (string)ans_dr["th"]];
+                            newRow["totalmark"] = (decimal)newRow["totalmark"] + (decimal)dr["T" + (string)ans_dr["th"]];
                         }
                         else
                         {
@@ -430,102 +403,66 @@ namespace ExamReport
                     }
                     else
                     {
-                        if (obj_count < ans.Length)
+
+                        string th = "T" + ((string)ans_dr["th"]).Trim();
+                        string temp_ans = dr[th].ToString().Trim();
+                        if (!choice.IsMatch(temp_ans))
+                            throw new ArgumentException("考号" + dr["kh"] + "的第" + ((string)ans_dr["th"]).Trim() + "题的答案为：" + temp_ans + " 不属于字母组合！");
+                        if (Multi_ans.Contains(ans_dr["th"]))
                         {
-                            string th = "T" + ((string)ans_dr["th"]).Trim();
-                            if (Multi_ans.Contains(ans_dr["th"]))
+                            Hashtable hs_temp = (Hashtable)Multi_ans[ans_dr["th"]];
+                            decimal val;
+                            if (hs_temp.Contains(temp_ans))
+                                val = (decimal)hs_temp[temp_ans];
+                            else
+                                val = 0;
+                            newRow[th] = val;
+                            obj_mark += val;
+                            newRow["totalmark"] = (decimal)newRow["totalmark"] + val;
+
+                        }
+                        else
+                        {
+                            string temp = ((string)ans_dr["da"]).Trim();
+
+                            if (temp_ans.Equals(temp))
                             {
-                                Hashtable hs_temp = (Hashtable)Multi_ans[ans_dr["th"]];
-                                decimal val;
-                                if (hs_temp.Contains(ans[obj_count].ToString()))
-                                    val = (decimal)hs_temp[ans[obj_count].ToString()];
-                                else
-                                    val = 0;
+                                decimal val = Convert.ToDecimal(ans_dr["fs"]);
                                 newRow[th] = val;
                                 obj_mark += val;
                                 newRow["totalmark"] = (decimal)newRow["totalmark"] + val;
 
                             }
-                            else
+                            else if (_mdata.PartialRight != 0 && Utils.isContain(temp, temp_ans))
                             {
-                                string temp = ((string)ans_dr["da"]).Trim();
+                                if (_mdata.PartialRight > Convert.ToDecimal(ans_dr["fs"]))
+                                    throw new ArgumentException("选择题半分分数大于满分分数！");
 
-                                if (ans[obj_count].ToString().Equals(temp))
-                                {
-                                    decimal val = Convert.ToDecimal(ans_dr["fs"]);
-                                    newRow[th] = val;
-                                    obj_mark += val;
-                                    newRow["totalmark"] = (decimal)newRow["totalmark"] + val;
+                                decimal val = _mdata.PartialRight;
+                                newRow[th] = val;
+                                obj_mark += val;
+                                newRow["totalmark"] = (decimal)newRow["totalmark"] + val;
 
-                                }
-                                else if (_mdata.PartialRight != 0 && Utils.isContain(temp, ans[obj_count].ToString()))
-                                {
-                                    if (_mdata.PartialRight > Convert.ToDecimal(ans_dr["fs"]))
-                                        throw new ArgumentException("选择题半分分数大于满分分数！");
-                                    
-                                        decimal val = _mdata.PartialRight;
-                                        newRow[th] = val;
-                                        obj_mark += val;
-                                        newRow["totalmark"] = (decimal)newRow["totalmark"] + val;
-                                    
 
-                                }
-                                else
-                                    newRow[th] = 0.0;
                             }
-                            newRow["D" + ((string)ans_dr["th"]).Trim()] = ans[obj_count].ToString();
-
-                            obj_count++;
+                            else
+                                newRow[th] = 0.0;
                         }
-                        else
-                            throw new ArgumentException("标准答案选择题数量大于数据库中选择题数量");
+                        newRow["D" + ((string)ans_dr["th"]).Trim()] = temp_ans;
+
                     }
                     total_count++;
                 }
-                //for (i = 0; i < ans.Length; i++)
-                //{
-                //    string temp = ((string)newStandard.Rows[i]["da"]).Trim();
-                //    string th = "T" + ((string)newStandard.Rows[i]["th"]).Trim();
-                //    if (ans[i].ToString().Equals(temp))
-                //    {
-                //        decimal val = Convert.ToDecimal(newStandard.Rows[i]["fs"]);
-                //        newRow[th] = val;
-                //        obj_mark += val;
-                //        newRow["totalmark"] = (decimal)newRow["totalmark"] + val;
-
-                //    }
-                //    else if (Utils.half_mark && Utils.isContain(temp, ans[i].ToString()))
-                //    {
-                //        if (Convert.ToDecimal(newStandard.Rows[i]["fs"]) > 1)
-                //        {
-                //            decimal val = Convert.ToDecimal(newStandard.Rows[i]["fs"]) / 2;
-                //            newRow[th] = val;
-                //            obj_mark += val;
-                //            newRow["totalmark"] = (decimal)newRow["totalmark"] + val;
-                //        }
-                //        else
-                //            newRow[th] = 0;
-
-                //    }
-                //    else
-                //        newRow[th] = 0.0;
-                //    newRow["D" + ((string)newStandard.Rows[i]["th"]).Trim()] = ans[i].ToString();
-                //}
-                if (obj_count != ans.Length)
-                    throw new ArgumentException("标准答案选择题数量小于数据库中选择题数量");
-                if(topic.IsMatch(dt.Columns[sub_count].ColumnName))
-                    throw new ArgumentException("标准答案主观题数量小于数据库中主观题数量");
-                //if (Utils.obj_iszero && obj_mark == 0)
-                //    continue;
+                    
+                
+                
                 if (_mdata.fullmark_iszero && (decimal)newRow["totalmark"] == 0)
                     continue;
-                
-                if (sub_count + obj_count != _standard_ans.Rows.Count)
-                    throw new ArgumentException("标准答案与数据库文件题数不一致！");
-                newRow["Groups"] = "";
-                newRow["QX"] = dr["Qx"].ToString().Trim();
-                if (has_xz)
-                    newRow["XZ"] = dr["xz"].ToString().Trim();
+                if (_mdata.sub_iszero && sub_mark == 0)
+                    continue;
+               
+                //if (has_xz)
+                //    newRow["XZ"] = dr["xz"].ToString().Trim();
                 basic_data.Rows.Add(newRow);
             }
 
@@ -717,29 +654,16 @@ namespace ExamReport
                 throw new ArgumentException("标准答案 " + serial + " 题号格式不正确！");
             return match[0].ToString();
         }
-        public void update_standard_ans()
-        {
-            for (int k = 0; k < _standard_ans.Rows.Count; k++)
-            {
-                int fs = Convert.ToInt32(_standard_ans.Rows[k]["fs"]);
-                if (Math.Abs(fs) != fs)
-                {
-                    int num = Math.Abs(fs);
-                    decimal mark = 0;
-                    for (int j = 1; j <= num; j++)
-                        mark += Convert.ToDecimal(_standard_ans.Rows[k + j]["fs"]);
-                    _standard_ans.Rows[k]["fs"] = mark.ToString();
-                }
-            }
-        }
+        
         
         public void create_groups()
         {
             #region divide the table into groups
             //StringBuilder objectdata = new StringBuilder();
-            _group_data.Columns.Add("studentid", System.Type.GetType("System.String"));
-            _group_data.Columns.Add("schoolcode", System.Type.GetType("System.String"));
+            _group_data.Columns.Add("kh", System.Type.GetType("System.String"));
+            _group_data.Columns.Add("xxdm", System.Type.GetType("System.String"));
             _group_data.Columns.Add("totalmark", System.Type.GetType("System.Decimal"));
+            _group_data.Columns.Add("xb", typeof(string));
             ArrayList tm = new ArrayList();
             string spattern = "^\\d+~\\d+$";
             for (int i = 0; i < _groups.Rows.Count; i++)
@@ -772,14 +696,15 @@ namespace ExamReport
                 tm.Add(tz);
             }
             _group_data.Columns.Add("Groups", typeof(string));
-            _group_data.Columns.Add("QX", typeof(string));
+            _group_data.Columns.Add("qxdm", typeof(string));
             foreach (DataRow dr in _basic_data.Rows)
             {
                 DataRow newRow = _group_data.NewRow();
-                newRow["studentid"] = ((string)dr[0]).Trim();
-                newRow["schoolcode"] = ((string)dr[1]).Trim();
+                newRow["kh"] = ((string)dr[0]).Trim();
+                newRow["xxdm"] = ((string)dr[1]).Trim();
                 newRow["Groups"] = ((string)dr["Groups"]).Trim();
-                newRow["QX"] = dr["QX"].ToString().Trim();
+                newRow["qxdm"] = dr["qxdm"].ToString().Trim();
+                newRow["xb"] = dr["xb"].ToString().Trim();
                 newRow["totalmark"] = dr[2];
                 int j;
                 for (j = 0; j < _groups.Rows.Count; j++)

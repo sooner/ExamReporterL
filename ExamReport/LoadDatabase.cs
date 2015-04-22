@@ -74,8 +74,8 @@ namespace ExamReport
                 md._grouptype = grouptype;
                 md._group_num = Convert.ToInt32(divider);
             }
-            try
-            {
+            //try
+            //{
                 md.insert_data();
 
 
@@ -94,18 +94,18 @@ namespace ExamReport
                         break;
 
                 }
-            }
-            catch (DuplicateNameException ex)
-            {
+            //}
+            //catch (DuplicateNameException ex)
+            //{
                 
-                wizard.ErrorM("该数据已存储，请先删除后再添加");
-            }
-            catch (Exception ex)
-            {
-                md.rollback();
-                wizard.ErrorM(ex.Message);
+            //    wizard.ErrorM("该数据已存储，请先删除后再添加");
+            //}
+            //catch (Exception ex)
+            //{
+            //    md.rollback();
+            //    wizard.ErrorM(ex.Message);
 
-            }
+            //}
         }
 
         public void zk_database_process(MetaData mdata)
@@ -187,13 +187,16 @@ namespace ExamReport
             }
             else
             {
-                GK_database db = new GK_database(mdata, ans.dt, groups.dt, grouptype, divider);
+                //GK_database db = new GK_database(mdata, ans.dt, groups.dt, grouptype, divider);
+                //db.DBF_data_process(database_str);
+
+                Database db = new Database(mdata, ans.dt, groups.dt, grouptype, divider);
                 db.DBF_data_process(database_str);
 
-                if (db._basic_data.Columns.Contains("XZ"))
-                {
-                    XZ_group_separate(db._basic_data);
-                }
+                //if (db._basic_data.Columns.Contains("XZ"))
+                //{
+                //    XZ_group_separate(db._basic_data);
+                //}
 
                 basic_data = db._basic_data;
                 group_data = db._group_data;
@@ -223,7 +226,7 @@ namespace ExamReport
                 DataTable inter_table = dv.ToTable();
                 inter_table.SeperateGroups(grouptype, divider, "xz_groups");
                 var temp = from row in temp_dt.AsEnumerable()
-                           join row2 in inter_table.AsEnumerable() on row.Field<string>("studentid") equals row2.Field<string>("studentid")
+                           join row2 in inter_table.AsEnumerable() on row.Field<string>("kh") equals row2.Field<string>("kh")
                            where row.Field<string>("XZ") == item.name
                            select new
                            {

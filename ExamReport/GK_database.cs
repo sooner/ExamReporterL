@@ -89,8 +89,8 @@ namespace ExamReport
             
             ZH_standard_ans = StandardAnsRecontruction(temp_ZH_standard_ans, ZH_name_list);
             zh_single_data = new DataTable();
-            zh_single_data.Columns.Add("studentid", System.Type.GetType("System.String"));
-            zh_single_data.Columns.Add("schoolcode", System.Type.GetType("System.String"));
+            zh_single_data.Columns.Add("kh", System.Type.GetType("System.String"));
+            zh_single_data.Columns.Add("xxdm", System.Type.GetType("System.String"));
             zh_single_data.Columns.Add("totalmark", typeof(decimal));
             foreach (DataRow dr in ZH_standard_ans.Rows)
             {
@@ -107,7 +107,7 @@ namespace ExamReport
                 }
             }
             zh_single_data.Columns.Add("Groups", typeof(string));
-            zh_single_data.Columns.Add("QX", typeof(string));
+            zh_single_data.Columns.Add("qxdm", typeof(string));
             if (_basic_data.Columns.Contains("XZ"))
                 zh_single_data.Columns.Add("XZ", typeof(string));
             zh_single_data.Columns.Add("ZH_totalmark", typeof(decimal));
@@ -143,7 +143,7 @@ namespace ExamReport
                     newrow[i] = dr[zh_single_data.Columns[i].ColumnName];
 
                 newrow["ZH_totalmark"] = totalmark;
-                if (!_group_data.Rows[row]["studentid"].ToString().Trim().Equals(newrow["studentid"].ToString().Trim()))
+                if (!_group_data.Rows[row]["kh"].ToString().Trim().Equals(newrow["kh"].ToString().Trim()))
                     throw new Exception();
                 _group_data.Rows[row]["ZH_totalmark"] = totalmark;
                 zh_single_data.Rows.Add(newrow);
@@ -151,9 +151,9 @@ namespace ExamReport
             }
             //var zh_result = _group_data.AsEnumerable().Join(zh_single_data.AsEnumerable().Select(c => new
             //{
-            //    studentid = c.Field<string>("studentid"),
+            //    kh = c.Field<string>("kh"),
             //    ZH_totalmark = c.Field<decimal>("ZH_totalmark")
-            //}), c => c.Field<string>("studentid"), p => p.studentid, (c, p) => new
+            //}), c => c.Field<string>("kh"), p => p.kh, (c, p) => new
             //{
             //    c = c,
             //    p = p
@@ -166,8 +166,8 @@ namespace ExamReport
             //}
             List<List<string>> group_th = new List<List<string>>();
             zh_group_data = new DataTable();
-            zh_group_data.Columns.Add("studentid", typeof(string));
-            zh_group_data.Columns.Add("schoolcode", typeof(string));
+            zh_group_data.Columns.Add("kh", typeof(string));
+            zh_group_data.Columns.Add("xxdm", typeof(string));
             zh_group_data.Columns.Add("totalmark", typeof(decimal));
             int cor_count = 1;
             foreach (DataRow dr in zh_groups.Rows)
@@ -183,15 +183,15 @@ namespace ExamReport
                 cor_count++;
             }
             zh_group_data.Columns.Add("Groups", typeof(string));
-            zh_group_data.Columns.Add("QX", typeof(string));
+            zh_group_data.Columns.Add("qxdm", typeof(string));
 
             foreach (DataRow dr in _basic_data.Rows)
             {
                 DataRow newrow = zh_group_data.NewRow();
-                newrow["studentid"] = dr[0].ToString();
-                newrow["schoolcode"] = dr[1].ToString();
+                newrow["kh"] = dr[0].ToString();
+                newrow["xxdm"] = dr[1].ToString();
                 newrow["Groups"] = ((string)dr["Groups"]).Trim();
-                newrow["QX"] = dr["QX"].ToString().Trim();
+                newrow["qxdm"] = dr["qxdm"].ToString().Trim();
                 newrow["totalmark"] = dr[2];
 
                 for (int i = 0; i < zh_groups.Rows.Count; i++)
@@ -306,8 +306,8 @@ namespace ExamReport
             newStandard = StandardAnsRecontruction(_standard_ans, name_list);
 
             DataTable basic_data = new DataTable();
-            basic_data.Columns.Add("studentid", System.Type.GetType("System.String"));
-            basic_data.Columns.Add("schoolcode", System.Type.GetType("System.String"));
+            basic_data.Columns.Add("kh", System.Type.GetType("System.String"));
+            basic_data.Columns.Add("xxdm", System.Type.GetType("System.String"));
             basic_data.Columns.Add("totalmark", typeof(decimal));
             for (i = 0; i < newStandard.Rows.Count; i++)
                 basic_data.Columns.Add("T" + ((string)newStandard.Rows[i]["th"]).Trim(), System.Type.GetType("System.Decimal"));
@@ -388,14 +388,14 @@ namespace ExamReport
                     }
                     first = false;
                     basic_data.Columns.Add("Groups", typeof(string));
-                    basic_data.Columns.Add("QX", typeof(string));
+                    basic_data.Columns.Add("qxdm", typeof(string));
                     if(has_xz)
                         basic_data.Columns.Add("XZ", typeof(string));
                 }
 
                 DataRow newRow = basic_data.NewRow();
-                newRow["studentid"] = dr["Mh"].ToString().Trim();
-                newRow["schoolcode"] = dr["Schoolcode"].ToString().Trim();
+                newRow["kh"] = dr["Mh"].ToString().Trim();
+                newRow["xxdm"] = dr["xxdm"].ToString().Trim();
                 newRow["totalmark"] = (decimal)dr["Zf"];
                 if (_mdata.sub_iszero && (decimal)dr["Zf"] == 0)
                     continue;
@@ -523,7 +523,7 @@ namespace ExamReport
                 if (sub_count + obj_count != _standard_ans.Rows.Count)
                     throw new ArgumentException("标准答案与数据库文件题数不一致！");
                 newRow["Groups"] = "";
-                newRow["QX"] = dr["Qx"].ToString().Trim();
+                newRow["qxdm"] = dr["qxdm"].ToString().Trim();
                 if (has_xz)
                     newRow["XZ"] = dr["xz"].ToString().Trim();
                 basic_data.Rows.Add(newRow);
@@ -765,7 +765,7 @@ namespace ExamReport
                     {
                         while (true)
                         {
-                            
+
                             popstack(newtable, sk, name);
                             if (!sk.Peek().Contains("_"))
                             {
@@ -796,7 +796,7 @@ namespace ExamReport
             }
             while (sk.Count > 0)
             {
-                
+
                 popstack(newtable, sk, name);
                 if (!sk.Peek().Contains("_"))
                     sk.Pop();
@@ -860,8 +860,8 @@ namespace ExamReport
         {
             #region divide the table into groups
             //StringBuilder objectdata = new StringBuilder();
-            _group_data.Columns.Add("studentid", System.Type.GetType("System.String"));
-            _group_data.Columns.Add("schoolcode", System.Type.GetType("System.String"));
+            _group_data.Columns.Add("kh", System.Type.GetType("System.String"));
+            _group_data.Columns.Add("xxdm", System.Type.GetType("System.String"));
             _group_data.Columns.Add("totalmark", System.Type.GetType("System.Decimal"));
             ArrayList tm = new ArrayList();
             string spattern = "^\\d+~\\d+$";
@@ -895,14 +895,14 @@ namespace ExamReport
                 tm.Add(tz);
             }
             _group_data.Columns.Add("Groups", typeof(string));
-            _group_data.Columns.Add("QX", typeof(string));
+            _group_data.Columns.Add("qxdm", typeof(string));
             foreach (DataRow dr in _basic_data.Rows)
             {
                 DataRow newRow = _group_data.NewRow();
-                newRow["studentid"] = ((string)dr[0]).Trim();
-                newRow["schoolcode"] = ((string)dr[1]).Trim();
+                newRow["kh"] = ((string)dr[0]).Trim();
+                newRow["xxdm"] = ((string)dr[1]).Trim();
                 newRow["Groups"] = ((string)dr["Groups"]).Trim();
-                newRow["QX"] = dr["QX"].ToString().Trim();
+                newRow["qxdm"] = dr["qxdm"].ToString().Trim();
                 newRow["totalmark"] = dr[2];
                 int j;
                 for (j = 0; j < _groups.Rows.Count; j++)

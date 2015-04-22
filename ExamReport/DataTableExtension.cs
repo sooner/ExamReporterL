@@ -198,7 +198,7 @@ namespace ExamReport
                     case "qxdm":
                         key = "区县代码";
                         break;
-                    case "schoolcode":
+                    case "xxdm":
                         key = "学校代码";
                         break;
                     default:

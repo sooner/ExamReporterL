@@ -66,8 +66,8 @@ namespace ExamReport
                 newStandard = StandardAnsRecontruction(_standard_ans, name_list);
 
                 DataTable basic_data = new DataTable();
-                basic_data.Columns.Add("studentid", System.Type.GetType("System.String"));
-                basic_data.Columns.Add("schoolcode", System.Type.GetType("System.String"));
+                basic_data.Columns.Add("kh", System.Type.GetType("System.String"));
+                basic_data.Columns.Add("xxdm", System.Type.GetType("System.String"));
                 basic_data.Columns.Add("totalmark", typeof(decimal));
                 for (i = 0; i < newStandard.Rows.Count; i++)
                     basic_data.Columns.Add("T" + ((string)newStandard.Rows[i]["th"]).Trim(), System.Type.GetType("System.Decimal"));
@@ -91,17 +91,17 @@ namespace ExamReport
                         }
                         first = false;
                         basic_data.Columns.Add("Groups",typeof(string));
-                        basic_data.Columns.Add("QX", typeof(string));
+                        basic_data.Columns.Add("qxdm", typeof(string));
                         if(has_xz)
                             basic_data.Columns.Add("XZ", typeof(string));
                     }
 
                     DataRow newRow = basic_data.NewRow();
-                    newRow["studentid"] = ((string)dr["studentid"]).Trim();
+                    newRow["kh"] = ((string)dr["kh"]).Trim();
                     if (dt.Columns.Contains("xxdm"))
-                        newRow["schoolcode"] = dr["xxdm"].ToString().Trim();
+                        newRow["xxdm"] = dr["xxdm"].ToString().Trim();
                     else
-                        newRow["schoolcode"] = "00";
+                        newRow["xxdm"] = "00";
                     newRow["totalmark"] = (decimal)dr["totalmark"];
                     decimal obj_mark = 0;
                     decimal sub_mark = 0;
@@ -178,9 +178,9 @@ namespace ExamReport
                         continue;
                     newRow["Groups"] = "";
                     if (dt.Columns.Contains("qxdm"))
-                        newRow["QX"] = dr["qxdm"].ToString().Trim();
+                        newRow["qxdm"] = dr["qxdm"].ToString().Trim();
                     else
-                        newRow["QX"] = "00";
+                        newRow["qxdm"] = "00";
                     if (has_xz)
                         newRow["XZ"] = dr["xz"].ToString().Trim();
                     basic_data.Rows.Add(newRow);
@@ -240,8 +240,8 @@ namespace ExamReport
                 
                 #region divide the table into groups
                 //StringBuilder objectdata = new StringBuilder();
-                _group_data.Columns.Add("studentid", System.Type.GetType("System.String"));
-                _group_data.Columns.Add("schoolcode", System.Type.GetType("System.String"));
+                _group_data.Columns.Add("kh", System.Type.GetType("System.String"));
+                _group_data.Columns.Add("xxdm", System.Type.GetType("System.String"));
                 _group_data.Columns.Add("totalmark", System.Type.GetType("System.Decimal"));
                 ArrayList tm = new ArrayList();
                 string spattern = "^\\d+~\\d+$";
@@ -276,14 +276,14 @@ namespace ExamReport
                     tm.Add(tz);
                 }
                 _group_data.Columns.Add("Groups", typeof(string));
-                _group_data.Columns.Add("QX", typeof(string));
+                _group_data.Columns.Add("qxdm", typeof(string));
                 foreach (DataRow dr in _basic_data.Rows)
                 {
                     DataRow newRow = _group_data.NewRow();
-                    newRow["studentid"] = ((string)dr[0]).Trim();
-                    newRow["schoolcode"] = ((string)dr[1]).Trim();
+                    newRow["kh"] = ((string)dr[0]).Trim();
+                    newRow["xxdm"] = ((string)dr[1]).Trim();
                     newRow["Groups"] = ((string)dr["Groups"]).Trim();
-                    newRow["QX"] = dr["QX"].ToString().Trim();
+                    newRow["qxdm"] = dr["qxdm"].ToString().Trim();
                     newRow["totalmark"] = dr[2];
                     int j;
                     for (j = 0; j < _groups.Rows.Count; j++)

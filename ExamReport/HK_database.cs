@@ -80,8 +80,8 @@ namespace ExamReport
             int count = dt.Columns.Count;
             int i;
             DataTable basic_data = new DataTable();
-            basic_data.Columns.Add("studentid", System.Type.GetType("System.String"));
-            basic_data.Columns.Add("schoolcode", System.Type.GetType("System.String"));
+            basic_data.Columns.Add("kh", System.Type.GetType("System.String"));
+            basic_data.Columns.Add("xxdm", System.Type.GetType("System.String"));
             basic_data.Columns.Add("totalmark", typeof(decimal));
             //for (i = 0; i < _standard_ans.Rows.Count; i++)
             //    basic_data.Columns.Add("T" + ((string)_standard_ans.Rows[i]["th"]).Trim(), System.Type.GetType("System.Decimal"));
@@ -134,12 +134,12 @@ namespace ExamReport
                         throw new ArgumentException("选择题答案与数据库文件答案数量不一致");
                     first = false;
                     basic_data.Columns.Add("Groups", typeof(string));
-                    basic_data.Columns.Add("QX", typeof(string));
+                    basic_data.Columns.Add("qxdm", typeof(string));
                 }
 
                 DataRow newRow = basic_data.NewRow();
-                newRow["studentid"] = dr["exam_no"].ToString().Trim();
-                newRow["schoolcode"] = dr["school_cod"].ToString().Trim();
+                newRow["kh"] = dr["exam_no"].ToString().Trim();
+                newRow["xxdm"] = dr["school_cod"].ToString().Trim();
                 newRow["totalmark"] = 0m;
                 decimal obj_mark = 0;
                 decimal sub_mark = 0;
@@ -208,7 +208,7 @@ namespace ExamReport
                 
 
                 newRow["Groups"] = "";
-                newRow["QX"] = dr["Qxdm"].ToString().Trim();
+                newRow["qxdm"] = dr["Qxdm"].ToString().Trim();
                 basic_data.Rows.Add(newRow);
             }
             _basic_data = basic_data.Copy();
@@ -294,8 +294,8 @@ namespace ExamReport
             StringBuilder objectdata = new StringBuilder();
             string newTable = filename + "_full";
             objectdata.Append("CREATE TABLE `" + newTable + "` (\n");
-            objectdata.Append("\t`studentid` c(10),\n");
-            objectdata.Append("\t`schoolcode` c(10),\n");
+            objectdata.Append("\t`kh` c(10),\n");
+            objectdata.Append("\t`xxdm` c(10),\n");
             objectdata.Append("\t`totalmark` n(4,1),\n");
 
             for (i = 3; i < _basic_data.Columns["d1"].Ordinal; i++)
@@ -347,8 +347,8 @@ namespace ExamReport
         {
             #region divide the table into groups
             //StringBuilder objectdata = new StringBuilder();
-            _group_data.Columns.Add("studentid", System.Type.GetType("System.String"));
-            _group_data.Columns.Add("schoolcode", System.Type.GetType("System.String"));
+            _group_data.Columns.Add("kh", System.Type.GetType("System.String"));
+            _group_data.Columns.Add("xxdm", System.Type.GetType("System.String"));
             _group_data.Columns.Add("totalmark", System.Type.GetType("System.Decimal"));
             ArrayList tm = new ArrayList();
             string spattern = "^\\d+~\\d+$";
@@ -399,14 +399,14 @@ namespace ExamReport
                 tm.Add(tz);
             }
             _group_data.Columns.Add("Groups", typeof(string));
-            _group_data.Columns.Add("Qx", typeof(string));
+            _group_data.Columns.Add("qxdm", typeof(string));
             foreach (DataRow dr in _basic_data.Rows)
             {
                 DataRow newRow = _group_data.NewRow();
-                newRow["studentid"] = ((string)dr[0]).Trim();
-                newRow["schoolcode"] = ((string)dr[1]).Trim();
+                newRow["kh"] = ((string)dr[0]).Trim();
+                newRow["xxdm"] = ((string)dr[1]).Trim();
                 newRow["Groups"] = ((string)dr["Groups"]).Trim();
-                newRow["Qx"] = dr["Qx"].ToString().Trim();
+                newRow["qxdm"] = dr["qxdm"].ToString().Trim();
                 newRow["totalmark"] = dr[2];
                 int j;
                 for (j = 0; j < _groups.Rows.Count; j++)
@@ -431,8 +431,8 @@ namespace ExamReport
             int i = 0;
             string group_Table = filename + "_groups";
             objectdata.Append("CREATE TABLE `" + group_Table + "` (\n");
-            objectdata.Append("\t`studentid` c(10),\n");
-            objectdata.Append("\t`schoolcode` c(10),\n");
+            objectdata.Append("\t`kh` c(10),\n");
+            objectdata.Append("\t`xxdm` c(10),\n");
             objectdata.Append("\t`totalmark` n(4,1),\n");
             for (i = 3; i < _group_data.Columns.Count - 2; i++)
             {

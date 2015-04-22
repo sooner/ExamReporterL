@@ -1,15 +1,7 @@
-System.Threading.AbandonedMutexException: The wait completed due to an abandoned mutex.
-   at System.Threading.WaitHandle.InternalWaitOne(SafeHandle waitableSafeHandle, Int64 millisecondsTimeout, Boolean hasThreadAffinity, Boolean exitContext)
-   at System.Threading.WaitHandle.WaitOne(Int32 millisecondsTimeout, Boolean exitContext)
-   at System.Threading.WaitHandle.WaitOne()
-   at ExamReport.ZedGraph.createMultipleCuve(DataTable dt, String xStr, String yStr, Double minX, Double maxX, Decimal fullmark) in D:\project\ExamReporterL\ExamReporterL\ExamReport\ZedGraph.cs:line 206
-   at ExamReport.SchoolWordCreator.insertChart(String title, DataTable dt, String x_axis, String y_axis, Object type, Decimal fullmark) in D:\project\ExamReporterL\ExamReporterL\ExamReport\SchoolWordCreator.cs:line 723
-   at ExamReport.SchoolWordCreator.creating_word_part2() in D:\project\ExamReporterL\ExamReporterL\ExamReport\SchoolWordCreator.cs:line 139
-   at ExamReport.SchoolWordCreator.creating_word() in D:\project\ExamReporterL\ExamReporterL\ExamReport\SchoolWordCreator.cs:line 125
-   at ExamReport.Analysis.gk_xx_process(MetaData mdata) in D:\project\ExamReporterL\ExamReporterL\ExamReport\Analysis.cs:line 600
-   at ExamReport.Analysis.gk_schedule(MetaData mdata, gk_process zt_process, gk_process wl_process) in D:\project\ExamReporterL\ExamReporterL\ExamReport\Analysis.cs:line 1134
-   at ExamReport.Analysis.start() in D:\project\ExamReporterL\ExamReporterL\ExamReport\Analysis.cs:line 211
-   at ExamReport.Analysis.gk_xx_start() in D:\project\ExamReporterL\ExamReporterL\ExamReport\Analysis.cs:line 541
+System.ArgumentException: 考号11046911的第17题的答案为：9 不属于字母组合！
+   at ExamReport.Database.DBF_data_process(String fileadd) in D:\project\ExamReporterL\ExamReporterL\ExamReport\Database.cs:line 410
+   at ExamReport.LoadDatabase.gk_database_process(MetaData mdata) in D:\project\ExamReporterL\ExamReporterL\ExamReport\LoadDatabase.cs:line 194
+   at ExamReport.LoadDatabase.start_process() in D:\project\ExamReporterL\ExamReporterL\ExamReport\LoadDatabase.cs:line 91
    at System.Threading.ThreadHelper.ThreadStart_Context(Object state)
    at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean ignoreSyncCtx)
    at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)

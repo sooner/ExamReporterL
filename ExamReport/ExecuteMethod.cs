@@ -254,8 +254,8 @@ namespace ExamReport
                 //    {
                 //        CQ_code[i - 1] = CJ_list[mark][i].ToString().Trim();
                 //    }
-                //    DataTable CQ_data = db._basic_data.filteredtable("QX", CQ_code);
-                //    DataTable CQ_groups_data = db._group_data.filteredtable("QX", CQ_code);
+                //    DataTable CQ_data = db._basic_data.filteredtable("qxdm", CQ_code);
+                //    DataTable CQ_groups_data = db._group_data.filteredtable("qxdm", CQ_code);
 
                 //    Partition_statistic CQ = new Partition_statistic(CJ_list[mark][0].ToString().Trim(), CQ_data, fullmark, ans.dt, CQ_groups_data, groups.dt, db._group_num);
                 //    CQ.statistic_process(false);
@@ -264,8 +264,8 @@ namespace ExamReport
                 //    totaldata.Add(CQ.result);
                 //}
 
-                //DataTable QX_total_data = db._basic_data.filteredtable("QX", QXTransfer(Quxian_list));
-                //DataTable QX_groups_data = db._group_data.filteredtable("QX", QXTransfer(Quxian_list));
+                //DataTable QX_total_data = db._basic_data.filteredtable("qxdm", QXTransfer(Quxian_list));
+                //DataTable QX_groups_data = db._group_data.filteredtable("qxdm", QXTransfer(Quxian_list));
 
                 //Partition_statistic QX_total = new Partition_statistic("区整体", QX_total_data, fullmark, ans.dt, QX_groups_data, groups.dt, db._group_num);
                 //QX_total.statistic_process(false);
@@ -311,7 +311,7 @@ namespace ExamReport
         //                string[] SF_code = new string[SF_list[i].Count - 1];
         //                for (int j = 1; j < SF_list[i].Count; j++)
         //                    SF_code[j - 1] = SF_list[i][j].ToString().Trim();
-        //                DataTable temp = db._basic_data.filteredtable("schoolcode", SF_code);
+        //                DataTable temp = db._basic_data.filteredtable("xxdm", SF_code);
         //                ZF_statistic stat = new ZF_statistic(temp, fullmark, SF_list[i][0].ToString().Trim());
         //                stat.partition_process();
         //                result.Add(stat);
@@ -491,14 +491,14 @@ namespace ExamReport
         //            ArrayList ZH_data = new ArrayList();
 
         //            string[] total_code = CalculateTotal(SF_list);
-        //            DataTable total = db._basic_data.filteredtable("schoolcode", total_code);
-        //            DataTable total_group = db.zh_group_data.filteredtable("schoolcode", total_code);
+        //            DataTable total = db._basic_data.filteredtable("xxdm", total_code);
+        //            DataTable total_group = db.zh_group_data.filteredtable("xxdm", total_code);
 
         //            int groupnum = total.SeperateGroups(grouptype, divider, "groups");
         //            total_group.SeperateGroups(grouptype, divider, "groups");
 
-        //            DataTable single_total = db.zh_single_data.filteredtable("schoolcode", total_code);
-        //            DataTable single_total_group = db._group_data.filteredtable("schoolcode", total_code);
+        //            DataTable single_total = db.zh_single_data.filteredtable("xxdm", total_code);
+        //            DataTable single_total_group = db._group_data.filteredtable("xxdm", total_code);
 
         //            single_total.SeperateGroups(grouptype, divider, "groups");
         //            single_total_group.SeperateGroups(grouptype, divider, "groups");
@@ -507,14 +507,14 @@ namespace ExamReport
         //                string[] SF_code = new string[SF_list[i].Count - 1];
         //                for (int j = 1; j < SF_list[i].Count; j++)
         //                    SF_code[j - 1] = SF_list[i][j].ToString().Trim();
-        //                DataTable temp = total.filteredtable("schoolcode", SF_code);
-        //                DataTable temp_group = total_group.filteredtable("schoolcode", SF_code);
+        //                DataTable temp = total.filteredtable("xxdm", SF_code);
+        //                DataTable temp_group = total_group.filteredtable("xxdm", SF_code);
         //                Partition_statistic stat = new Partition_statistic(SF_list[i][0].ToString().Trim(), temp, fullmark, ans.dt, temp_group, wenli.dt, groupnum);
         //                stat.statistic_process(true);
         //                ZH_data.Add(stat.result);
 
-        //                DataTable single = single_total.filteredtable("schoolcode", SF_code);
-        //                DataTable single_group = single_total_group.filteredtable("schoolcode", SF_code);
+        //                DataTable single = single_total.filteredtable("xxdm", SF_code);
+        //                DataTable single_group = single_total_group.filteredtable("xxdm", SF_code);
         //                Partition_statistic single_stat = new Partition_statistic(SF_list[i][0].ToString().Trim(), single, sub_fullmark, wenli_standard, single_group, groups.dt, groupnum);
         //                single_stat.statistic_process(false);
         //                sdata.Add(single_stat.result);
@@ -536,14 +536,14 @@ namespace ExamReport
         //            ArrayList ZH_data = new ArrayList();
         //            string[] total_code = CalculateTotal(CJ_list);
 
-        //            DataTable total = db._basic_data.filteredtable("QX", total_code);
-        //            DataTable total_group = db.zh_group_data.filteredtable("QX", total_code);
+        //            DataTable total = db._basic_data.filteredtable("qxdm", total_code);
+        //            DataTable total_group = db.zh_group_data.filteredtable("qxdm", total_code);
 
         //            int groupnum = total.SeperateGroups(grouptype, divider, "groups");
         //            total_group.SeperateGroups(grouptype, divider, "groups");
 
-        //            DataTable single_total = db.zh_single_data.filteredtable("QX", total_code);
-        //            DataTable single_total_group = db._group_data.filteredtable("QX", total_code);
+        //            DataTable single_total = db.zh_single_data.filteredtable("qxdm", total_code);
+        //            DataTable single_total_group = db._group_data.filteredtable("qxdm", total_code);
 
         //            single_total.SeperateGroups(grouptype, divider, "groups");
         //            single_total_group.SeperateGroups(grouptype, divider, "groups");
@@ -552,14 +552,14 @@ namespace ExamReport
         //                string[] SF_code = new string[CJ_list[i].Count - 1];
         //                for (int j = 1; j < CJ_list[i].Count; j++)
         //                    SF_code[j - 1] = CJ_list[i][j].ToString().Trim();
-        //                DataTable temp = total.filteredtable("QX", SF_code);
-        //                DataTable temp_group = total_group.filteredtable("QX", SF_code);
+        //                DataTable temp = total.filteredtable("qxdm", SF_code);
+        //                DataTable temp_group = total_group.filteredtable("qxdm", SF_code);
         //                Partition_statistic stat = new Partition_statistic(CJ_list[i][0].ToString().Trim(), temp, fullmark, ans.dt, temp_group, wenli.dt, groupnum);
         //                stat.statistic_process(true);
         //                ZH_data.Add(stat.result);
 
-        //                DataTable single = single_total.filteredtable("QX", SF_code);
-        //                DataTable single_group = single_total_group.filteredtable("QX", SF_code);
+        //                DataTable single = single_total.filteredtable("qxdm", SF_code);
+        //                DataTable single_group = single_total_group.filteredtable("qxdm", SF_code);
         //                Partition_statistic single_stat = new Partition_statistic(CJ_list[i][0].ToString().Trim(), single, sub_fullmark, wenli_standard, single_group, groups.dt, groupnum);
         //                single_stat.statistic_process(false);
         //                sdata.Add(single_stat.result);
@@ -591,11 +591,11 @@ namespace ExamReport
         //                string[] SF_code = new string[SF_list[i].Count - 1];
         //                for (int j = 1; j < SF_list[i].Count; j++)
         //                    SF_code[j - 1] = SF_list[i][j].ToString().Trim();
-        //                DataTable temp = db._basic_data.filteredtable("schoolcode", SF_code);
-        //                DataTable temp_group = db.zh_group_data.filteredtable("schoolcode", SF_code);
+        //                DataTable temp = db._basic_data.filteredtable("xxdm", SF_code);
+        //                DataTable temp_group = db.zh_group_data.filteredtable("xxdm", SF_code);
 
-        //                DataTable single = db.zh_single_data.filteredtable("schoolcode", SF_code);
-        //                DataTable single_table = db._group_data.filteredtable("schoolcode", SF_code);
+        //                DataTable single = db.zh_single_data.filteredtable("xxdm", SF_code);
+        //                DataTable single_table = db._group_data.filteredtable("xxdm", SF_code);
         //                CalculatePartition(ZH_total, SF_list[i][0].ToString(), temp, temp_group, fullmark, wenli.dt, db._group_num, true, ans.dt);
         //                CalculatePartition(total, SF_list[i][0].ToString(), single, single_table, sub_fullmark, groups.dt, db._group_num, false, wenli_standard);
         //            }
@@ -604,28 +604,28 @@ namespace ExamReport
         //                string[] SF_code = new string[CJ_list[i].Count - 1];
         //                for (int j = 1; j < CJ_list[i].Count; j++)
         //                    SF_code[j - 1] = CJ_list[i][j].ToString().Trim();
-        //                DataTable temp = db._basic_data.filteredtable("QX", SF_code);
-        //                DataTable temp_group = db.zh_group_data.filteredtable("QX", SF_code);
+        //                DataTable temp = db._basic_data.filteredtable("qxdm", SF_code);
+        //                DataTable temp_group = db.zh_group_data.filteredtable("qxdm", SF_code);
 
-        //                DataTable single = db.zh_single_data.filteredtable("QX", SF_code);
-        //                DataTable single_table = db._group_data.filteredtable("QX", SF_code);
+        //                DataTable single = db.zh_single_data.filteredtable("qxdm", SF_code);
+        //                DataTable single_table = db._group_data.filteredtable("qxdm", SF_code);
         //                CalculatePartition(ZH_total, CJ_list[i][0].ToString(), temp, temp_group, fullmark, wenli.dt, db._group_num, true, ans.dt);
         //                CalculatePartition(total, CJ_list[i][0].ToString(), single, single_table, sub_fullmark, groups.dt, db._group_num, false, wenli_standard);
         //            }
-        //            DataTable QX_ZH_data = db._basic_data.filteredtable("QX", QXTransfer(Quxian_list));
-        //            DataTable QX_ZH_group = db.zh_group_data.filteredtable("QX", QXTransfer(Quxian_list));
+        //            DataTable QX_ZH_data = db._basic_data.filteredtable("qxdm", QXTransfer(Quxian_list));
+        //            DataTable QX_ZH_group = db.zh_group_data.filteredtable("qxdm", QXTransfer(Quxian_list));
 
-        //            DataTable QX_data = db.zh_single_data.filteredtable("QX", QXTransfer(Quxian_list));
-        //            DataTable QX_group = db._group_data.filteredtable("QX", QXTransfer(Quxian_list));
+        //            DataTable QX_data = db.zh_single_data.filteredtable("qxdm", QXTransfer(Quxian_list));
+        //            DataTable QX_group = db._group_data.filteredtable("qxdm", QXTransfer(Quxian_list));
 
         //            CalculatePartition(ZH_total, "区整体", QX_ZH_data, QX_ZH_group, fullmark, wenli.dt, db._group_num, true, ans.dt);
         //            CalculatePartition(total, "区整体", QX_data, QX_group, sub_fullmark, groups.dt, db._group_num, false, wenli_standard);
 
         //            string[] qxsf_code = CalculateTotal(QXSF_list);
-        //            DataTable qxsf_zh_data = QX_ZH_data.filteredtable("schoolcode", qxsf_code);
-        //            DataTable qxsf_zh_group = QX_ZH_group.filteredtable("schoolcode", qxsf_code);
-        //            DataTable qxsf_data = QX_data.filteredtable("schoolcode", qxsf_code);
-        //            DataTable qxsf_group = QX_group.filteredtable("schoolcode", qxsf_code);
+        //            DataTable qxsf_zh_data = QX_ZH_data.filteredtable("xxdm", qxsf_code);
+        //            DataTable qxsf_zh_group = QX_ZH_group.filteredtable("xxdm", qxsf_code);
+        //            DataTable qxsf_data = QX_data.filteredtable("xxdm", qxsf_code);
+        //            DataTable qxsf_group = QX_group.filteredtable("xxdm", qxsf_code);
 
         //            qxsf_zh_data.SeperateGroups(grouptype, divider, "groups");
         //            qxsf_zh_group.SeperateGroups(grouptype, divider, "groups");
@@ -639,11 +639,11 @@ namespace ExamReport
         //                string[] SF_code = new string[QXSF_list[i].Count - 1];
         //                for (int j = 1; j < QXSF_list[i].Count; j++)
         //                    SF_code[j - 1] = QXSF_list[i][j].ToString().Trim();
-        //                DataTable temp = qxsf_zh_data.filteredtable("schoolcode", SF_code);
-        //                DataTable temp_group = qxsf_zh_group.filteredtable("schoolcode", SF_code);
+        //                DataTable temp = qxsf_zh_data.filteredtable("xxdm", SF_code);
+        //                DataTable temp_group = qxsf_zh_group.filteredtable("xxdm", SF_code);
 
-        //                DataTable single = qxsf_data.filteredtable("schoolcode", SF_code);
-        //                DataTable single_table = qxsf_group.filteredtable("schoolcode", SF_code);
+        //                DataTable single = qxsf_data.filteredtable("xxdm", SF_code);
+        //                DataTable single_table = qxsf_group.filteredtable("xxdm", SF_code);
         //                CalculatePartition(ZH_total, QXSF_list[i][0].ToString(), temp, temp_group, fullmark, wenli.dt, db._group_num, true, ans.dt);
         //                CalculatePartition(total, QXSF_list[i][0].ToString(), single, single_table, sub_fullmark, groups.dt, db._group_num, false, wenli_standard);
         //                CalculatePartition(ZH_QX, QXSF_list[i][0].ToString(), temp, temp_group, fullmark, wenli.dt, db._group_num, true, ans.dt);
@@ -721,8 +721,8 @@ namespace ExamReport
         //                ArrayList WSLG = new ArrayList();
 
 
-        //                DataTable W_data = db._basic_data.Likefilter("studentid", "'1*'");
-        //                DataTable W_group = db._group_data.Likefilter("studentid", "'1*'");
+        //                DataTable W_data = db._basic_data.Likefilter("kh", "'1*'");
+        //                DataTable W_group = db._group_data.Likefilter("kh", "'1*'");
 
         //                Partition_statistic w_stat = new Partition_statistic("文科", W_data, fullmark, ans.dt, W_group, groups.dt, db._group_num);
         //                w_stat.statistic_process(false);
@@ -730,8 +730,8 @@ namespace ExamReport
         //                    w_stat.xz_postprocess(ans.xz_th);
         //                WSLG.Add(w_stat.result);
 
-        //                DataTable l_data = db._basic_data.Likefilter("studentid", "'5*'");
-        //                DataTable l_group = db._group_data.Likefilter("studentid", "'5*'");
+        //                DataTable l_data = db._basic_data.Likefilter("kh", "'5*'");
+        //                DataTable l_group = db._group_data.Likefilter("kh", "'5*'");
 
         //                Partition_statistic l_stat = new Partition_statistic("理科", l_data, fullmark, ans.dt, l_group, groups.dt, db._group_num);
         //                l_stat.statistic_process(false);
@@ -753,7 +753,7 @@ namespace ExamReport
         //        else if (report_style.Equals("两类示范校"))
         //        {
         //            ArrayList list = new ArrayList();
-        //            PartitionDataProcess(list, SF_list, "schoolcode", db._basic_data, db._group_data, db._group_num, false);
+        //            PartitionDataProcess(list, SF_list, "xxdm", db._basic_data, db._group_data, db._group_num, false);
         //            form.ShowPro(70, 4);
         //            Partition_wordcreator create = new Partition_wordcreator(list, groups.dt, groups.groups_group);
         //            create.creating_word();
@@ -761,7 +761,7 @@ namespace ExamReport
         //        else if (report_style.Equals("城郊"))
         //        {
         //            ArrayList list = new ArrayList();
-        //            PartitionDataProcess(list, CJ_list, "QX", db._basic_data, db._group_data, db._group_num, false);
+        //            PartitionDataProcess(list, CJ_list, "qxdm", db._basic_data, db._group_data, db._group_num, false);
         //            form.ShowPro(70, 4);
         //            Partition_wordcreator create = new Partition_wordcreator(list, groups.dt, groups.groups_group);
         //            create.creating_word();
@@ -780,8 +780,8 @@ namespace ExamReport
         //                form.ShowPro(80, 6);
         //                Utils.WSLG = true;
         //                ArrayList WSLG = new ArrayList();
-        //                DataTable QX_data = db._basic_data.filteredtable("QX", QXTransfer(Quxian_list));
-        //                DataTable QX_group = db._group_data.filteredtable("QX", QXTransfer(Quxian_list));
+        //                DataTable QX_data = db._basic_data.filteredtable("qxdm", QXTransfer(Quxian_list));
+        //                DataTable QX_group = db._group_data.filteredtable("qxdm", QXTransfer(Quxian_list));
 
         //                WSLGCal(QX_data, QX_group, WSLG);
 
@@ -823,8 +823,8 @@ namespace ExamReport
         //                foreach (KeyValuePair<string, string> kv in School_code)
         //                {
         //                    ArrayList WSLG = new ArrayList();
-        //                    DataTable XX_data = db._basic_data.filteredtable("schoolcode", new string[] { kv.Key });
-        //                    DataTable XX_group = db._group_data.filteredtable("schoolcode", new string[] { kv.Key });
+        //                    DataTable XX_data = db._basic_data.filteredtable("xxdm", new string[] { kv.Key });
+        //                    DataTable XX_group = db._group_data.filteredtable("xxdm", new string[] { kv.Key });
 
         //                    WSLGCal(XX_data, XX_group, WSLG);
         //                    Partition_wordcreator create2 = new Partition_wordcreator(WSLG, groups.dt, groups.groups_group);
@@ -853,8 +853,8 @@ namespace ExamReport
             QX_group.SeperateGroups(grouptype, divider, "groups");
             if (QX_data.Columns.Contains("XZ"))
                 XZ_group_separate(QX_data);
-            DataTable W_data = QX_data.Likefilter("studentid", "'1*'");
-            DataTable W_group = QX_group.Likefilter("studentid", "'1*'");
+            DataTable W_data = QX_data.Likefilter("kh", "'1*'");
+            DataTable W_group = QX_group.Likefilter("kh", "'1*'");
 
             Partition_statistic w_stat = new Partition_statistic("文科", W_data, fullmark, ans.dt, W_group, groups.dt, group);
             w_stat.statistic_process(false);
@@ -862,8 +862,8 @@ namespace ExamReport
                 w_stat.xz_postprocess(ans.xz_th);
             WSLG.Add(w_stat.result);
 
-            DataTable l_data = QX_data.Likefilter("studentid", "'5*'");
-            DataTable l_group = QX_group.Likefilter("studentid", "'5*'");
+            DataTable l_data = QX_data.Likefilter("kh", "'5*'");
+            DataTable l_group = QX_group.Likefilter("kh", "'5*'");
 
             Partition_statistic l_stat = new Partition_statistic("理科", l_data, fullmark, ans.dt, l_group, groups.dt, group);
             l_stat.statistic_process(false);
@@ -881,8 +881,8 @@ namespace ExamReport
         }
         WordData TotalSchoolCal(DataTable data, DataTable group, int groupnum, string school, DataTable my_ans, DataTable my_group, bool isZonghe, decimal my_mark)
         {
-            DataTable XX = data.filteredtable("schoolcode", new string[] { school });
-            DataTable XX_group = group.filteredtable("schoolcode", new string[] { school });
+            DataTable XX = data.filteredtable("xxdm", new string[] { school });
+            DataTable XX_group = group.filteredtable("xxdm", new string[] { school });
 
             XX.SeperateGroups(grouptype, Convert.ToDecimal(groupnum), "groups");
             XX_group.SeperateGroups(grouptype, Convert.ToDecimal(groupnum), "groups");
@@ -897,8 +897,8 @@ namespace ExamReport
         }
         void PartitionXX(List<WSLG_partitiondata> result, DataTable data, DataTable group, int groupnum, string school, DataTable my_ans, DataTable my_group, decimal my_mark)
         {
-            DataTable XX = data.filteredtable("schoolcode", new string[] { school });
-            DataTable XX_group = group.filteredtable("schoolcode", new string[] { school });
+            DataTable XX = data.filteredtable("xxdm", new string[] { school });
+            DataTable XX_group = group.filteredtable("xxdm", new string[] { school });
             Partition_statistic XX_stat = new Partition_statistic("本学校", XX, my_mark, my_ans, XX_group, my_group, groupnum);
             XX_stat.statistic_process(false);
             if (data.Columns.Contains("XZ"))
@@ -908,8 +908,8 @@ namespace ExamReport
         void PartitionXXDataProcess(List<WSLG_partitiondata> result, DataTable data, DataTable group, int groupnum, DataTable my_ans, DataTable my_group, decimal my_mark)
         {
             
-            DataTable QX = data.filteredtable("QX", QXTransfer(Quxian_list));
-            DataTable QX_group = group.filteredtable("QX", QXTransfer(Quxian_list));
+            DataTable QX = data.filteredtable("qxdm", QXTransfer(Quxian_list));
+            DataTable QX_group = group.filteredtable("qxdm", QXTransfer(Quxian_list));
             Partition_statistic qx_stat = new Partition_statistic("区整体", QX, my_mark, my_ans, QX_group, my_group, groupnum);
             qx_stat.statistic_process(false);
             if (data.Columns.Contains("XZ"))
@@ -929,8 +929,8 @@ namespace ExamReport
                 string[] xx_code = new string[cj.Count - 1];
                 for (int j = 1; j < cj.Count; j++)
                     xx_code[j - 1] = cj[j].ToString().Trim();
-                DataTable temp = data.filteredtable("QX", xx_code);
-                DataTable temp_group = group.filteredtable("QX", xx_code);
+                DataTable temp = data.filteredtable("qxdm", xx_code);
+                DataTable temp_group = group.filteredtable("qxdm", xx_code);
                 Partition_statistic stat = new Partition_statistic(cj[0].ToString(), temp, my_mark, my_ans, temp_group, my_group, groupnum);
                 stat.statistic_process(false);
                 if (data.Columns.Contains("XZ"))
@@ -944,8 +944,8 @@ namespace ExamReport
                 string[] xx_code = new string[sf.Count - 1];
                 for (int j = 1; j < sf.Count; j++)
                     xx_code[j - 1] = sf[j].ToString().Trim();
-                DataTable temp = data.filteredtable("schoolcode", xx_code);
-                DataTable temp_group = group.filteredtable("schoolcode", xx_code);
+                DataTable temp = data.filteredtable("xxdm", xx_code);
+                DataTable temp_group = group.filteredtable("xxdm", xx_code);
                 Partition_statistic stat = new Partition_statistic(sf[0].ToString(), temp, my_mark, my_ans, temp_group, my_group, groupnum);
                 stat.statistic_process(false);
                 if (data.Columns.Contains("XZ"))
@@ -970,7 +970,7 @@ namespace ExamReport
                 DataTable inter_table = dv.ToTable();
                 inter_table.SeperateGroups(grouptype, divider, "xz_groups");
                 var temp = from row in temp_dt.AsEnumerable()
-                           join row2 in inter_table.AsEnumerable() on row.Field<string>("studentid") equals row2.Field<string>("studentid")
+                           join row2 in inter_table.AsEnumerable() on row.Field<string>("kh") equals row2.Field<string>("kh")
                            where row.Field<string>("XZ") == item.name
                            select new
                            {
@@ -1014,8 +1014,8 @@ namespace ExamReport
                 string[] xx_code = new string[sf.Count - 1];
                 for (int j = 1; j < sf.Count; j++)
                     xx_code[j - 1] = sf[j].ToString().Trim();
-                DataTable temp = data.filteredtable("schoolcode", xx_code);
-                DataTable temp_group = group.filteredtable("schoolcode", xx_code);
+                DataTable temp = data.filteredtable("xxdm", xx_code);
+                DataTable temp_group = group.filteredtable("xxdm", xx_code);
                 Partition_statistic stat = new Partition_statistic(sf[0].ToString(), temp, fullmark, ans.dt, temp_group, groups.dt, groupnum);
                 stat.statistic_process(false);
                 if(data.Columns.Contains("XZ"))
@@ -1029,8 +1029,8 @@ namespace ExamReport
                 string[] xx_code = new string[cj.Count - 1];
                 for (int j = 1; j < cj.Count; j++)
                     xx_code[j - 1] = cj[j].ToString().Trim();
-                DataTable temp = data.filteredtable("QX", xx_code);
-                DataTable temp_group = group.filteredtable("QX", xx_code);
+                DataTable temp = data.filteredtable("qxdm", xx_code);
+                DataTable temp_group = group.filteredtable("qxdm", xx_code);
                 Partition_statistic stat = new Partition_statistic(cj[0].ToString(), temp, fullmark, ans.dt, temp_group, groups.dt, groupnum);
                 stat.statistic_process(false);
                 if (data.Columns.Contains("XZ"))
@@ -1038,8 +1038,8 @@ namespace ExamReport
                 result.Add(stat.result);
             }
             
-            DataTable QX = data.filteredtable("QX", QXTransfer(Quxian_list));
-            DataTable QX_group = group.filteredtable("QX", QXTransfer(Quxian_list));
+            DataTable QX = data.filteredtable("qxdm", QXTransfer(Quxian_list));
+            DataTable QX_group = group.filteredtable("qxdm", QXTransfer(Quxian_list));
             Partition_statistic qx_stat = new Partition_statistic("区整体", QX, fullmark, ans.dt, QX_group, groups.dt, groupnum);
             qx_stat.statistic_process(false);
             if (data.Columns.Contains("XZ"))
@@ -1047,8 +1047,8 @@ namespace ExamReport
             result.Add(qx_stat.result);
             if (!Utils.OnlyQZT)
             {
-                PartitionDataProcess(result, QXSF_list, "schoolcode", QX, QX_group, groupnum, true);
-                PartitionDataProcess(sresult, QXSF_list, "schoolcode", QX, QX_group, groupnum, false);
+                PartitionDataProcess(result, QXSF_list, "xxdm", QX, QX_group, groupnum, true);
+                PartitionDataProcess(sresult, QXSF_list, "xxdm", QX, QX_group, groupnum, false);
             }
             else
             {
@@ -1175,8 +1175,8 @@ namespace ExamReport
                     totalnum++;
                 }
             }
-            DataTable ClassTotal_data = total.filteredtable("schoolcode", SF_code);
-            DataTable ClassGroupTotal_data = groups_data.filteredtable("schoolcode", SF_code);
+            DataTable ClassTotal_data = total.filteredtable("xxdm", SF_code);
+            DataTable ClassGroupTotal_data = groups_data.filteredtable("xxdm", SF_code);
 
             int groupnum = ClassTotal_data.SeperateGroups(grouptype, divider, "groups");
             ClassGroupTotal_data.SeperateGroups(grouptype, divider, "groups");
@@ -1194,8 +1194,8 @@ namespace ExamReport
                 string[] xx_code = new string[temp.Count - 1];
                 for (int j = 1; j < temp.Count; j++)
                     xx_code[j - 1] = temp[j].ToString().Trim();
-                DataTable xx_data = ClassTotal_data.filteredtable("schoolcode", xx_code);
-                DataTable xx_group_data = ClassGroupTotal_data.filteredtable("schoolcode", xx_code);
+                DataTable xx_data = ClassTotal_data.filteredtable("xxdm", xx_code);
+                DataTable xx_group_data = ClassGroupTotal_data.filteredtable("xxdm", xx_code);
 
                 Partition_statistic XXTotal = new Partition_statistic(temp[0].ToString().Trim(), xx_data, fullmark, ans.dt, xx_group_data, groups.dt, groupnum);
                 XXTotal.statistic_process(false);
