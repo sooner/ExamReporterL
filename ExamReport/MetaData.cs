@@ -55,18 +55,19 @@ namespace ExamReport
             _exam = exam;
             _sub = Utils.language_trans(sub);
         }
-
-        public bool insert_data()
+        public bool check()
         {
-            //检查是否已存在该数据
             MySqlDataReader reader = MySqlHelper.ExecuteReader(MySqlHelper.Conn, CommandType.Text, "select * from exam_meta_data where year='"
                 + _year + "' and exam='"
                 + _exam + "' and sub='"
                 + Utils.language_trans(_sub) + "'", null);
             if (reader.Read())
-                throw new DuplicateNameException();
-
-
+                return false;
+            return true;
+        }
+        public bool insert_data()
+        {
+            //检查是否已存在该数据
             int val = MySqlHelper.ExecuteNonQuery(MySqlHelper.Conn, CommandType.Text, "insert into exam_meta_data (year,exam,sub,ans,grp,fullmark,zh,gtype,gnum) values ('"
                 + _year + "', '"
             + _exam + "','"

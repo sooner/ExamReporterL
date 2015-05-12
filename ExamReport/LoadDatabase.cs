@@ -61,6 +61,7 @@ namespace ExamReport
             md.fullmark_iszero = fullmark_iszero;
             md.sub_iszero = sub_iszero;
             md.PartialRight = PartialRight;
+            md.xz = ans.xz_th;
 
             if (sub.Contains("理综") || sub.Contains("文综"))
             {
@@ -74,9 +75,10 @@ namespace ExamReport
                 md._grouptype = grouptype;
                 md._group_num = Convert.ToInt32(divider);
             }
-            //try
-            //{
-                md.insert_data();
+            try
+            {
+            if (!md.check())
+                throw new ArgumentException("该数据已存在");
 
 
                 switch (exam)
@@ -94,18 +96,22 @@ namespace ExamReport
                         break;
 
                 }
-            //}
-            //catch (DuplicateNameException ex)
-            //{
-                
-            //    wizard.ErrorM("该数据已存储，请先删除后再添加");
-            //}
-            //catch (Exception ex)
-            //{
-            //    md.rollback();
-            //    wizard.ErrorM(ex.Message);
+                md.insert_data();
+            }
+            catch (System.Threading.ThreadAbortException e)
+            {
+            }
+            catch (DuplicateNameException ex)
+            {
 
-            //}
+                wizard.ErrorM("该数据已存储，请先删除后再添加");
+            }
+            catch (Exception ex)
+            {
+                md.rollback();
+                wizard.ErrorM(ex.Message);
+
+            }
         }
 
         public void zk_database_process(MetaData mdata)

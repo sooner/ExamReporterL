@@ -62,6 +62,12 @@ namespace ExamReport
             fail_high.Value = 60m;
             fail_low.Value = 0m;
 
+            int curryear = DateTime.Now.Year;
+            for (int i = curryear - 10; i < curryear + 10; i++)
+                year_list.Items.Add(i);
+            year_list.SelectedItem = curryear;
+            currmonth.SelectedItem = DateTime.Now.Month.ToString() + "月";
+
             Cust_data.Columns.Add("name", typeof(string));
             Cust_data.Columns.Add("condition", typeof(string));
 
@@ -818,6 +824,8 @@ namespace ExamReport
             analysis.save_address = gk_save_address.Text;
             analysis.isVisible = gk_isVisible.Checked;
             analysis.CurrentDirectory = currentdic;
+            analysis.curryear = year_list.SelectedItem.ToString().Trim();
+            analysis.currmonth = currmonth.SelectedItem.ToString().Trim();
             Thread thread = new Thread(new ThreadStart(analysis.gk_zt_start));
             thread.IsBackground = true;
             thread.SetApartmentState(ApartmentState.STA);
@@ -874,6 +882,8 @@ namespace ExamReport
             analysis.isVisible = gk_isVisible.Checked;
             analysis.CurrentDirectory = currentdic;
             analysis.cj_addr = gk_cj_addr.Text.ToString().Trim();
+            analysis.curryear = year_list.SelectedItem.ToString().Trim();
+            analysis.currmonth = currmonth.SelectedItem.ToString().Trim();
             Thread thread = new Thread(new ThreadStart(analysis.gk_cj_start));
             thread.IsBackground = true;
             thread.SetApartmentState(ApartmentState.STA);
@@ -898,6 +908,8 @@ namespace ExamReport
             analysis.isVisible = gk_isVisible.Checked;
             analysis.CurrentDirectory = currentdic;
             analysis.sf_addr = gk_sf_addr.Text.ToString().Trim();
+            analysis.curryear = year_list.SelectedItem.ToString().Trim();
+            analysis.currmonth = currmonth.SelectedItem.ToString().Trim();
             Thread thread = new Thread(new ThreadStart(analysis.gk_sf_start));
             thread.IsBackground = true;
             thread.SetApartmentState(ApartmentState.STA);
@@ -951,6 +963,8 @@ namespace ExamReport
             analysis.qx_addr = gk_qx_xx_addr.Text.Trim();
             analysis.cj_addr = gk_qx_cj_addr.Text.Trim();
             analysis.sf_addr = gk_qx_sf_addr.Text.Trim();
+            analysis.curryear = year_list.SelectedItem.ToString().Trim();
+            analysis.currmonth = currmonth.SelectedItem.ToString().Trim();
             string QX_code = schoolcode_table.AsEnumerable().GroupBy(c => c.Field<string>("qxmc")).Select(c => new
             {
                 school = c.Key.ToString().Trim(),
@@ -1047,6 +1061,8 @@ namespace ExamReport
             analysis.sf_addr = gk_xx_sf_addr.Text.Trim();
             analysis.school = school;
             analysis.school_qx = school_qx;
+            analysis.curryear = year_list.SelectedItem.ToString().Trim();
+            analysis.currmonth = currmonth.SelectedItem.ToString().Trim();
             Thread thread = new Thread(new ThreadStart(analysis.gk_xx_start));
             thread.IsBackground = true;
             thread.SetApartmentState(ApartmentState.STA);
@@ -1354,6 +1370,8 @@ namespace ExamReport
             analysis.save_address = gk_save_address.Text;
             analysis.isVisible = gk_isVisible.Checked;
             analysis.CurrentDirectory = currentdic;
+            analysis.curryear = year_list.SelectedItem.ToString().Trim();
+            analysis.currmonth = currmonth.SelectedItem.ToString().Trim();
             Thread thread = new Thread(new ThreadStart(analysis.gk_custom_start));
             thread.IsBackground = true;
             thread.SetApartmentState(ApartmentState.STA);

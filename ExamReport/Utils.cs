@@ -406,6 +406,51 @@ namespace ExamReport
             foreach (Microsoft.Office.Interop.Word.TableOfContents table in doc.TablesOfContents)
                 table.Update();
         }
+        public static String ToSBC(String input)
+        {
+            // 半角转全角：
+            char[] c = input.ToCharArray();
+            for (int i = 0; i < c.Length; i++)
+            {
+                if (c[i] == 32)
+                {
+                    c[i] = (char)12288;
+                    continue;
+                }
+                if (c[i] < 127)
+                    c[i] = (char)(c[i] + 65248);
+            }
+            return new String(c);
+        }
+        public static void XZ_group_separate(DataTable temp_dt, Configuration config, string th)
+        {
+            if (!temp_dt.Columns.Contains("xz_groups"))
+                temp_dt.Columns.Add("xz_groups", typeof(string));
+            var xz_tuple = from row in temp_dt.AsEnumerable()
+                           group row by row.Field<string>(th) into grp
+                           select new
+                           {
+                               name = grp.Key
+                           };
+            foreach (var item in xz_tuple)
+            {
+                DataView dv = temp_dt.equalfilter(th, item.name).DefaultView;
+                DataTable inter_table = dv.ToTable();
+                inter_table.SeperateGroups(config._grouptype, config._group_num, "xz_groups");
+                var temp = from row in temp_dt.AsEnumerable()
+                           join row2 in inter_table.AsEnumerable() on row.Field<string>("kh") equals row2.Field<string>("kh")
+                           where row.Field<string>(th) == item.name
+                           select new
+                           {
+                               row1 = row,
+                               groups = row2.Field<string>("xz_groups")
+                           };
+                foreach (var inner_item in temp)
+                {
+                    inner_item.row1.SetField<string>("xz_groups", inner_item.groups);
+                }
+            }
+        }
         public static string choiceTransfer(string choice)
         {
             switch (choice.Trim())

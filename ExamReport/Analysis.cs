@@ -28,6 +28,12 @@ namespace ExamReport
         public decimal _sub_fullmark;
         public bool is_sub_cor = false;
 
+        public string curryear;
+        public string currmonth;
+
+        public ZK_database.GroupType _grouptype;
+        public int _group_num = 0;
+
         public DataTable custom_data;
 
 
@@ -69,12 +75,13 @@ namespace ExamReport
                     string log = year + "年" + Utils.language_trans(exam) + row.Cells["sub"].Value.ToString().Trim();
                     _form.ShowPro(exam_type, 1, log + "数据读取...");
                     MetaData mdata = new MetaData(year, exam, sub);
-                    //try
-                    //{
+                    try
+                    {
                         mdata.get_meta_data();
                         _fullmark = mdata._fullmark;
 
-
+                        _grouptype = mdata._grouptype;
+                        _group_num = mdata._group_num;
 
                         if (_exam.Equals("gk") && (sub.Equals("yy") || sub.Equals("yw")))
                             mdata.ywyy_choice = row.Cells["SpecChoice"].Value.ToString().Trim();
@@ -218,11 +225,14 @@ namespace ExamReport
                             }
 
                         }
-                    //}
-                    //catch (Exception e)
-                    //{
-                    //    _form.ErrorM(exam_type, e.Message);
-                    //}
+                    }
+                    catch (System.Threading.ThreadAbortException e)
+                    {
+                    }
+                    catch (Exception e)
+                    {
+                        _form.ErrorM(exam_type, e.Message);
+                    }
 
                 }
             }
@@ -327,12 +337,12 @@ namespace ExamReport
                 throw new ArgumentException("条件 " + filter + " 没有数据！");
             basic.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
             group.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
-            if (basic.Columns.Contains("XZ"))
-                XZ_group_separate(basic, mdata);
+            //if (basic.Columns.Contains("XZ"))
+            //    XZ_group_separate(basic, mdata);
             Partition_statistic total = new Partition_statistic(name, basic, fullmark, mdata.ans, group, mdata.grp, mdata._group_num);
             total._config = config;
             total.statistic_process(false);
-            if (basic.Columns.Contains("XZ"))
+            if (mdata.xz.Count > 0)
                 total.xz_postprocess(mdata.xz);
             list.Add(total.result);
         }
@@ -611,7 +621,7 @@ namespace ExamReport
             Total_statistic stat = new Total_statistic(result, XX, my_mark, my_ans, XX_group, my_group, groupnum);
             stat._config = config;
             stat.statistic_process(isZonghe);
-            if (data.Columns.Contains("XZ"))
+            if (mdata.xz.Count > 0)
                 stat.xz_postprocess(mdata.xz);
 
             return result;
@@ -623,7 +633,7 @@ namespace ExamReport
             Partition_statistic XX_stat = new Partition_statistic("本学校", XX, my_mark, my_ans, XX_group, my_group, groupnum);
             XX_stat._config = config;
             XX_stat.statistic_process(false);
-            if (data.Columns.Contains("XZ"))
+            if (mdata.xz.Count > 0)
                 XX_stat.xz_postprocess(mdata.xz);
             result.Insert(0, (WSLG_partitiondata)XX_stat.result);
         }
@@ -635,7 +645,7 @@ namespace ExamReport
             Partition_statistic qx_stat = new Partition_statistic("区整体", QX, my_mark, my_ans, QX_group, my_group, groupnum);
             qx_stat._config = config;
             qx_stat.statistic_process(false);
-            if (data.Columns.Contains("XZ"))
+            if (mdata.xz.Count > 0)
                 qx_stat.xz_postprocess(mdata.xz);
             result.Add((WSLG_partitiondata)qx_stat.result);
 
@@ -643,7 +653,7 @@ namespace ExamReport
             Partition_statistic total = new Partition_statistic("市整体", data, my_mark, my_ans, group, my_group, groupnum);
             total._config = config;
             total.statistic_process(false);
-            if (data.Columns.Contains("XZ"))
+            if (mdata.xz.Count > 0)
                 total.xz_postprocess(mdata.xz);
             result.Add((WSLG_partitiondata)total.result);
 
@@ -658,7 +668,7 @@ namespace ExamReport
                 Partition_statistic stat = new Partition_statistic(cj[0].ToString(), temp, my_mark, my_ans, temp_group, my_group, groupnum);
                 stat._config = config;
                 stat.statistic_process(false);
-                if (data.Columns.Contains("XZ"))
+                if (mdata.xz.Count > 0)
                     stat.xz_postprocess(mdata.xz);
                 result.Add((WSLG_partitiondata)stat.result);
             }
@@ -674,7 +684,7 @@ namespace ExamReport
                 Partition_statistic stat = new Partition_statistic(sf[0].ToString(), temp, my_mark, my_ans, temp_group, my_group, groupnum);
                 stat._config = config;
                 stat.statistic_process(false);
-                if (data.Columns.Contains("XZ"))
+                if (mdata.xz.Count > 0)
                     stat.xz_postprocess(mdata.xz);
                 result.Add((WSLG_partitiondata)stat.result);
             }
@@ -699,6 +709,10 @@ namespace ExamReport
             config.fullmark = _fullmark;
             config.sub_fullmark = _sub_fullmark;
             config.is_sub_cor = is_sub_cor;
+            config._group_num = _group_num;
+            config._grouptype = _grouptype;
+            config.year = curryear;
+            config.month = currmonth;
             return config;
         }
         public void gk_qx_start()
@@ -816,15 +830,15 @@ namespace ExamReport
 
             int group = QX_data.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
             QX_group.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
-            if (QX_data.Columns.Contains("XZ"))
-                XZ_group_separate(QX_data, mdata);
+            //if (QX_data.Columns.Contains("XZ"))
+            //    XZ_group_separate(QX_data, mdata);
             DataTable W_data = QX_data.Likefilter("kh", "'1*'");
             DataTable W_group = QX_group.Likefilter("kh", "'1*'");
 
             Partition_statistic w_stat = new Partition_statistic("文科", W_data, mdata._fullmark, mdata.ans, W_group, mdata.grp, group);
             w_stat._config = config;
             w_stat.statistic_process(false);
-            if (QX_data.Columns.Contains("XZ"))
+            if (mdata.xz.Count > 0)
                 w_stat.xz_postprocess(mdata.xz);
             WSLG.Add(w_stat.result);
 
@@ -834,14 +848,14 @@ namespace ExamReport
             Partition_statistic l_stat = new Partition_statistic("理科", l_data, mdata._fullmark, mdata.ans, l_group, mdata.grp, group);
             l_stat._config = config;
             l_stat.statistic_process(false);
-            if (QX_data.Columns.Contains("XZ"))
+            if (mdata.xz.Count > 0)
                 l_stat.xz_postprocess(mdata.xz);
             WSLG.Add(l_stat.result);
 
             Partition_statistic total_stat = new Partition_statistic("分类整体", QX_data, mdata._fullmark, mdata.ans, QX_group, mdata.grp, group);
             total_stat._config = config;
             total_stat.statistic_process(false);
-            if (QX_data.Columns.Contains("XZ"))
+            if (mdata.xz.Count > 0)
                 total_stat.xz_postprocess(mdata.xz);
             WSLG.Add(total_stat.result);
 
@@ -866,7 +880,7 @@ namespace ExamReport
             Partition_statistic total = new Partition_statistic("市整体", data, mdata._fullmark, mdata.ans, group, mdata.grp, groupnum);
             total._config = config;
             total.statistic_process(false);
-            if (data.Columns.Contains("XZ"))
+            if (mdata.xz.Count > 0)
                 total.xz_postprocess(mdata.xz);
             result.Add(total.result);
 
@@ -881,7 +895,7 @@ namespace ExamReport
                 Partition_statistic stat = new Partition_statistic(sf[0].ToString(), temp, mdata._fullmark, mdata.ans, temp_group, mdata.grp, groupnum);
                 stat._config = config;
                 stat.statistic_process(false);
-                if (data.Columns.Contains("XZ"))
+                if (mdata.xz.Count > 0)
                     stat.xz_postprocess(mdata.xz);
                 result.Add(stat.result);
             }
@@ -897,7 +911,7 @@ namespace ExamReport
                 Partition_statistic stat = new Partition_statistic(cj[0].ToString(), temp, mdata._fullmark, mdata.ans, temp_group, mdata.grp, groupnum);
                 stat._config = config;
                 stat.statistic_process(false);
-                if (data.Columns.Contains("XZ"))
+                if (mdata.xz.Count > 0)
                     stat.xz_postprocess(mdata.xz);
                 result.Add(stat.result);
             }
@@ -907,7 +921,7 @@ namespace ExamReport
             Partition_statistic qx_stat = new Partition_statistic("区整体", QX, mdata._fullmark, mdata.ans, QX_group, mdata.grp, groupnum);
             qx_stat._config = config;
             qx_stat.statistic_process(false);
-            if (data.Columns.Contains("XZ"))
+            if (mdata.xz.Count > 0)
                 qx_stat.xz_postprocess(mdata.xz);
             result.Add(qx_stat.result);
             if (!Utils.OnlyQZT)
@@ -1079,12 +1093,12 @@ namespace ExamReport
             DataTable dt_group = group.filteredtable(filter, SF_code);
             dt.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
             dt_group.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
-            if (dt.Columns.Contains("XZ"))
-                XZ_group_separate(dt, mdata);
+            //if (dt.Columns.Contains("XZ"))
+            //    XZ_group_separate(dt, mdata);
             Partition_statistic total = new Partition_statistic("分类整体", dt, mdata._fullmark, mdata.ans, dt_group, mdata.grp, groupnum);
             total._config = config;
             total.statistic_process(false);
-            if (dt.Columns.Contains("XZ"))
+            if (mdata.xz.Count > 0)
                 total.xz_postprocess(mdata.xz);
             if (isQXSF)
                 result.Add(total.result);
@@ -1099,7 +1113,7 @@ namespace ExamReport
                 Partition_statistic stat = new Partition_statistic(temp[0].ToString(), temp_dt, mdata._fullmark, mdata.ans, temp_group, mdata.grp, groupnum);
                 stat._config = config;
                 stat.statistic_process(false);
-                if (dt.Columns.Contains("XZ"))
+                if (mdata.xz.Count > 0)
                     stat.xz_postprocess(mdata.xz);
                 result.Add(stat.result);
             }
@@ -1158,7 +1172,7 @@ namespace ExamReport
             Total_statistic stat = new Total_statistic(data, mdata.basic, mdata._fullmark, mdata.ans, mdata.group, mdata.grp, mdata._group_num);
             stat._config = config;
             stat.statistic_process(false);
-            if (mdata.basic.Columns.Contains("XZ"))
+            if (mdata.xz.Count > 0)
                 stat.xz_postprocess(mdata.xz);
             _form.ShowPro("gk_zt", 1, mdata.log_name + "报告生成中...");
             WordCreator create = new WordCreator(data, config);
@@ -1177,7 +1191,7 @@ namespace ExamReport
             Partition_statistic w_stat = new Partition_statistic("文科", W_data, mdata._fullmark, mdata.ans, W_group, mdata.grp, mdata._group_num);
             w_stat._config = config;
             w_stat.statistic_process(false);
-            if (mdata.basic.Columns.Contains("XZ"))
+            if (mdata.xz.Count > 0)
                 w_stat.xz_postprocess(mdata.xz);
             WSLG.Add(w_stat.result);
 
@@ -1187,14 +1201,14 @@ namespace ExamReport
             Partition_statistic l_stat = new Partition_statistic("理科", l_data, mdata._fullmark, mdata.ans, l_group, mdata.grp, mdata._group_num);
             l_stat._config = config;
             l_stat.statistic_process(false);
-            if (mdata.basic.Columns.Contains("XZ"))
+            if (mdata.xz.Count > 0)
                 l_stat.xz_postprocess(mdata.xz);
             WSLG.Add(l_stat.result);
 
             Partition_statistic total_stat = new Partition_statistic("分类整体", mdata.basic, mdata._fullmark, mdata.ans, mdata.group, mdata.grp, mdata._group_num);
             total_stat._config = config;
             total_stat.statistic_process(false);
-            if (mdata.basic.Columns.Contains("XZ"))
+            if (mdata.xz.Count > 0)
                 total_stat.xz_postprocess(mdata.xz);
             WSLG.Add(total_stat.result);
             _form.ShowPro("gk_zt", 1, mdata.log_name + "文理报告生成中...");
@@ -1234,7 +1248,7 @@ namespace ExamReport
             Total_statistic stat = new Total_statistic(result, mdata.basic, mdata._fullmark, mdata.ans, mdata.group, mdata.grp, mdata._group_num);
             stat._config = config;
             stat.statistic_process(false);
-            if (mdata.basic.Columns.Contains("XZ"))
+            if (mdata.xz.Count > 0)
                 stat.xz_postprocess(mdata.xz);
             _form.ShowPro("zk_zt", 1, mdata.log_name + "报告生成中...");
             WordCreator creator = new WordCreator(result, config);
@@ -1260,7 +1274,7 @@ namespace ExamReport
             Partition_statistic total = new Partition_statistic("市整体", mdata.basic, mdata._fullmark, mdata.ans, mdata.group, mdata.grp, mdata._group_num);
             total._config = config;
             total.statistic_process(false);
-            if (mdata.basic.Columns.Contains("XZ"))
+            if (mdata.xz.Count > 0)
                 total.xz_postprocess(mdata.xz);
             totaldata.Add(total.result);
 
@@ -1278,7 +1292,7 @@ namespace ExamReport
                 Partition_statistic CQ = new Partition_statistic(mdata.CJ_list[mark][0].ToString().Trim(), CQ_data, mdata._fullmark, mdata.ans, CQ_groups_data, mdata.group, mdata._group_num);
                 CQ._config = config;
                 CQ.statistic_process(false);
-                if (mdata.basic.Columns.Contains("XZ"))
+                if (mdata.xz.Count > 0)
                     CQ.xz_postprocess(mdata.xz);
                 totaldata.Add(CQ.result);
             }
@@ -1289,7 +1303,7 @@ namespace ExamReport
             Partition_statistic QX_total = new Partition_statistic("区整体", QX_total_data, mdata._fullmark, mdata.ans, QX_groups_data, mdata.group, mdata._group_num);
             QX_total._config = config;
             QX_total.statistic_process(false);
-            if (mdata.basic.Columns.Contains("XZ"))
+            if (mdata.xz.Count > 0)
                 QX_total.xz_postprocess(mdata.xz);
             totaldata.Add(QX_total.result);
 
@@ -1335,12 +1349,12 @@ namespace ExamReport
 
             int groupnum = ClassTotal_data.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
             ClassGroupTotal_data.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
-            if (ClassTotal_data.Columns.Contains("XZ"))
-                XZ_group_separate(ClassTotal_data, mdata);
+            //if (ClassTotal_data.Columns.Contains("XZ"))
+            //    XZ_group_separate(ClassTotal_data, mdata);
             Partition_statistic ClassTotal = new Partition_statistic("分类整体", ClassTotal_data, mdata._fullmark, mdata.ans, ClassGroupTotal_data, mdata.group, mdata._group_num);
             ClassTotal._config = config;
             ClassTotal.statistic_process(false);
-            if (ClassTotal_data.Columns.Contains("XZ"))
+            if (mdata.xz.Count > 0)
                 ClassTotal.xz_postprocess(mdata.xz);
             totaldata.Add(ClassTotal.result);
 
@@ -1356,7 +1370,7 @@ namespace ExamReport
                 Partition_statistic XXTotal = new Partition_statistic(temp[0].ToString().Trim(), xx_data, mdata._fullmark, mdata.ans, xx_group_data, mdata.group, mdata._group_num);
                 XXTotal._config = config;
                 XXTotal.statistic_process(false);
-                if (ClassTotal_data.Columns.Contains("XZ"))
+                if (mdata.xz.Count > 0)
                     XXTotal.xz_postprocess(mdata.xz);
                 totaldata.Add(XXTotal.result);
                 sdata.Add(XXTotal.result);
@@ -1365,34 +1379,34 @@ namespace ExamReport
             sdata.Add(ClassTotal.result);
         }
 
-        void XZ_group_separate(DataTable temp_dt, MetaData mdata)
-        {
-            if (!temp_dt.Columns.Contains("xz_groups"))
-                temp_dt.Columns.Add("xz_groups", typeof(string));
-            var xz_tuple = from row in temp_dt.AsEnumerable()
-                           group row by row.Field<string>("XZ") into grp
-                           select new
-                           {
-                               name = grp.Key
-                           };
-            foreach (var item in xz_tuple)
-            {
-                DataView dv = temp_dt.equalfilter("XZ", item.name).DefaultView;
-                DataTable inter_table = dv.ToTable();
-                inter_table.SeperateGroups(mdata._grouptype, mdata._group_num, "xz_groups");
-                var temp = from row in temp_dt.AsEnumerable()
-                           join row2 in inter_table.AsEnumerable() on row.Field<string>("kh") equals row2.Field<string>("kh")
-                           where row.Field<string>("XZ") == item.name
-                           select new
-                           {
-                               row1 = row,
-                               groups = row2.Field<string>("xz_groups")
-                           };
-                foreach (var inner_item in temp)
-                {
-                    inner_item.row1.SetField<string>("xz_groups", inner_item.groups);
-                }
-            }
-        }
+        //void XZ_group_separate(DataTable temp_dt, MetaData mdata)
+        //{
+        //    if (!temp_dt.Columns.Contains("xz_groups"))
+        //        temp_dt.Columns.Add("xz_groups", typeof(string));
+        //    var xz_tuple = from row in temp_dt.AsEnumerable()
+        //                   group row by row.Field<string>("XZ") into grp
+        //                   select new
+        //                   {
+        //                       name = grp.Key
+        //                   };
+        //    foreach (var item in xz_tuple)
+        //    {
+        //        DataView dv = temp_dt.equalfilter("XZ", item.name).DefaultView;
+        //        DataTable inter_table = dv.ToTable();
+        //        inter_table.SeperateGroups(mdata._grouptype, mdata._group_num, "xz_groups");
+        //        var temp = from row in temp_dt.AsEnumerable()
+        //                   join row2 in inter_table.AsEnumerable() on row.Field<string>("kh") equals row2.Field<string>("kh")
+        //                   where row.Field<string>("XZ") == item.name
+        //                   select new
+        //                   {
+        //                       row1 = row,
+        //                       groups = row2.Field<string>("xz_groups")
+        //                   };
+        //        foreach (var inner_item in temp)
+        //        {
+        //            inner_item.row1.SetField<string>("xz_groups", inner_item.groups);
+        //        }
+        //    }
+        //}
     }
 }

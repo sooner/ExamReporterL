@@ -109,8 +109,8 @@ namespace ExamReport
             }
             zh_single_data.Columns.Add("Groups", typeof(string));
             zh_single_data.Columns.Add("qxdm", typeof(string));
-            if (_basic_data.Columns.Contains("XZ"))
-                zh_single_data.Columns.Add("XZ", typeof(string));
+            if (_basic_data.Columns.Contains("X"))
+                zh_single_data.Columns.Add("X", typeof(string));
             zh_single_data.Columns.Add("ZH_totalmark", typeof(decimal));
             _group_data.Columns.Add("ZH_totalmark", typeof(decimal));
             int row = 0;
@@ -306,7 +306,7 @@ namespace ExamReport
             DataTable dt = mySet.Tables[0];
             int count = dt.Columns.Count;
             int i;
-
+            xz_check(dt, _mdata.xz);
             newStandard = StandardAnsRecontruction(_standard_ans, name_list);
 
             DataTable basic_data = new DataTable();
@@ -317,15 +317,16 @@ namespace ExamReport
             basic_data.Columns.Add("Groups", typeof(string));
             basic_data.Columns.Add("qxdm", typeof(string));
             //if (has_xz)
-            //    basic_data.Columns.Add("XZ", typeof(string));
+            //    basic_data.Columns.Add("X", typeof(string));
             for (i = 0; i < newStandard.Rows.Count; i++)
                 basic_data.Columns.Add("T" + ((string)newStandard.Rows[i]["th"]).Trim(), System.Type.GetType("System.Decimal"));
 
             for (i = 0; i < _standard_ans.Rows.Count; i++)
                 if (!_standard_ans.Rows[i]["da"].ToString().Trim().Equals(""))
                     basic_data.Columns.Add("D" + ((string)_standard_ans.Rows[i]["th"]).Trim(), typeof(string));
-            
-            
+
+            foreach (string xz in _mdata.xz)
+                basic_data.Columns.Add("X" + xz, typeof(string));
             Hashtable Multi_ans = new Hashtable(); 
             foreach (DataRow dr in newStandard.Rows)
             {
@@ -406,8 +407,8 @@ namespace ExamReport
 
                         string th = "T" + ((string)ans_dr["th"]).Trim();
                         string temp_ans = dr[th].ToString().Trim();
-                        if (!choice.IsMatch(temp_ans))
-                            throw new ArgumentException("考号" + dr["kh"] + "的第" + ((string)ans_dr["th"]).Trim() + "题的答案为：" + temp_ans + " 不属于字母组合！");
+                        //if (!choice.IsMatch(temp_ans))
+                        //    throw new ArgumentException("考号" + dr["kh"] + "的第" + ((string)ans_dr["th"]).Trim() + "题的答案为：" + temp_ans + " 不属于字母组合！");
                         if (Multi_ans.Contains(ans_dr["th"]))
                         {
                             Hashtable hs_temp = (Hashtable)Multi_ans[ans_dr["th"]];
@@ -454,7 +455,8 @@ namespace ExamReport
                     total_count++;
                 }
                     
-                
+                foreach(string xz in _mdata.xz)
+                    newRow["X" + xz] = dr["X" + xz];
                 
                 if (_mdata.fullmark_iszero && (decimal)newRow["totalmark"] == 0)
                     continue;
@@ -462,7 +464,7 @@ namespace ExamReport
                     continue;
                
                 //if (has_xz)
-                //    newRow["XZ"] = dr["xz"].ToString().Trim();
+                //    newRow["X"] = dr["X"].ToString().Trim();
                 basic_data.Rows.Add(newRow);
             }
 
@@ -700,12 +702,12 @@ namespace ExamReport
             foreach (DataRow dr in _basic_data.Rows)
             {
                 DataRow newRow = _group_data.NewRow();
-                newRow["kh"] = ((string)dr[0]).Trim();
-                newRow["xxdm"] = ((string)dr[1]).Trim();
+                newRow["kh"] = ((string)dr["kh"]).Trim();
+                newRow["xxdm"] = ((string)dr["xxdm"]).Trim();
                 newRow["Groups"] = ((string)dr["Groups"]).Trim();
                 newRow["qxdm"] = dr["qxdm"].ToString().Trim();
                 newRow["xb"] = dr["xb"].ToString().Trim();
-                newRow["totalmark"] = dr[2];
+                newRow["totalmark"] = dr["totalmark"];
                 int j;
                 for (j = 0; j < _groups.Rows.Count; j++)
                 {
@@ -714,7 +716,7 @@ namespace ExamReport
                     {
                         count_ += (decimal)dr["T" + s.ToString()];
                     }
-                    newRow[j + 3] = count_;
+                    newRow[j + 4] = count_;
                 }
                 _group_data.Rows.Add(newRow);
             }
@@ -722,7 +724,14 @@ namespace ExamReport
             #endregion
         }
 
-        
 
+        public void xz_check(DataTable db, List<string> xz)
+        {
+            foreach (string temp in xz)
+            {
+                if (!db.Columns.Contains("X" + temp))
+                    throw new ArgumentException("标答所记录选做题" + temp + "在数据库中不存在！");
+            }
+        }
     }
 }

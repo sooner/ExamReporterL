@@ -158,14 +158,14 @@ namespace ExamReport
 
             #region group table
             ArrayList groupStdev = new ArrayList();
-
+            int ans_count = 0;
             for (int i = 3; i < _groups_data.Columns.Count - 2; i++)
             {
                 if (_groups_data.Columns[i].ColumnName.StartsWith("FZ"))
                 {
                     DataRow dr = result.groups_analysis.NewRow();
                     dr["number"] = _groups_data.Columns[i].ColumnName;
-                    dr["fullmark"] = group_fullmark(dr["number"].ToString(), i - 3);
+                    dr["fullmark"] = group_fullmark(dr["number"].ToString(), ans_count);
                     dr["max"] = _groups_data.Compute("Max([" + _groups_data.Columns[i].ColumnName + "])", "");
                     dr["min"] = _groups_data.Compute("Min([" + _groups_data.Columns[i].ColumnName + "])", "");
                     dr["avg"] = _groups_data.Compute("Avg([" + _groups_data.Columns[i].ColumnName + "])", "");
@@ -178,24 +178,28 @@ namespace ExamReport
                         ((WSLG_partitiondata)result).group.Add(new WSLG_partitiondata.Disc(result.total_num, (decimal)dr["fullmark"]));
                     }
                     result.groups_analysis.Rows.Add(dr);
+                    ans_count++;
                 }
             }
             //修改上限
             row = 1;
+            
             foreach (DataRow dr in _groups_data.Rows)
             {
+                ans_count = 0;
                 for (int i = 3; i < _groups_data.Columns.Count - 2; i++)
                 {
                     if (_groups_data.Columns[i].ColumnName.StartsWith("FZ"))
                     {
-                        ((stdev)groupStdev[i - 3]).add((decimal)dr[_groups_data.Columns[i]]);
+                        ((stdev)groupStdev[ans_count]).add((decimal)dr[_groups_data.Columns[i]]);
                         if (_config.WSLG)
                         {
                             if (row <= ((WSLG_partitiondata)result).PLN)
-                                ((WSLG_partitiondata)result).group[i - 3].AddData((decimal)dr[i], true);
+                                ((WSLG_partitiondata)result).group[ans_count].AddData((decimal)dr[i], true);
                             else if (row >= ((WSLG_partitiondata)result).PHN)
-                                ((WSLG_partitiondata)result).group[i - 3].AddData((decimal)dr[i], false);
+                                ((WSLG_partitiondata)result).group[ans_count].AddData((decimal)dr[i], false);
                         }
+                        ans_count++;
                     }
 
                 }
@@ -335,13 +339,7 @@ namespace ExamReport
 
 
 
-                    if (_standard_ans.Rows.Find(dr["number"].ToString().Substring(1))["da"].ToString().Trim().Equals("1") ||
-                       _standard_ans.Rows.Find(dr["number"].ToString().Substring(1))["da"].ToString().Trim().Equals("2") ||
-                       _standard_ans.Rows.Find(dr["number"].ToString().Substring(1))["da"].ToString().Trim().Equals("4") ||
-                       _standard_ans.Rows.Find(dr["number"].ToString().Substring(1))["da"].ToString().Trim().Equals("8") ||
-                       _standard_ans.Rows.Find(dr["number"].ToString().Substring(1))["da"].ToString().Trim().Equals("@") ||
-                       _standard_ans.Rows.Find(dr["number"].ToString().Substring(1))["da"].ToString().Trim().Equals("p") ||
-                       _standard_ans.Rows.Find(dr["number"].ToString().Substring(1))["da"].ToString().Trim().Equals("P"))
+                    if (_standard_ans.Rows.Find(dr["number"].ToString().Substring(1))["da"].ToString().Trim().Length == 1)
                     {
 
 
@@ -564,25 +562,24 @@ namespace ExamReport
 
 
         }
-
-        public void xz_postprocess(List<string> xz_th)
+        public void xz_single_postprocess(string th)
         {
+            #region 选做题部分
             DataTable xz_data = new DataTable();
             List<DataTable> xz_total = new List<DataTable>();
             List<List<PartitionData.single_data>> xz_single = new List<List<PartitionData.single_data>>();
             List<string> xz_name = new List<string>();
             List<List<decimal>> xz_total_disc = new List<List<decimal>>();
-            xz_data.Columns.Add("totalmark", typeof(decimal));
-            xz_data.Columns.Add("XZ", typeof(string));
-            xz_data.Columns.Add("xz_groups", typeof(string));
-            foreach (string th in xz_th)
-            {
-                xz_data.Columns.Add("T" + th, typeof(decimal));
-                DataRow dr = _standard_ans.Rows.Find(th);
 
-                if (!dr["da"].Equals(""))
-                    xz_data.Columns.Add("D" + th, typeof(string));
-            }
+            Utils.XZ_group_separate(_basic_data, _config, "X" + th);
+            xz_data.Columns.Add("totalmark", typeof(decimal));
+            xz_data.Columns.Add("X" + th, typeof(string));
+            xz_data.Columns.Add("xz_groups", typeof(string));
+            xz_data.Columns.Add("T" + th, typeof(decimal));
+            DataRow ans_dr = _standard_ans.Rows.Find(th);
+
+            if (!ans_dr["da"].Equals(""))
+                xz_data.Columns.Add("D" + th, typeof(string));
             foreach (DataRow dr in _basic_data.Rows)
             {
                 DataRow newrow = xz_data.NewRow();
@@ -591,7 +588,7 @@ namespace ExamReport
                 xz_data.Rows.Add(newrow);
             }
             var xz_tuple = from row in xz_data.AsEnumerable()
-                           group row by row.Field<string>("XZ") into grp
+                           group row by row.Field<string>("X" + th) into grp
                            orderby grp.Key ascending
                            select new
                            {
@@ -600,7 +597,7 @@ namespace ExamReport
                            };
             foreach (var item in xz_tuple)
             {
-                DataView dv = xz_data.equalfilter("XZ", item.name).DefaultView;
+                DataView dv = xz_data.equalfilter("X" + th, item.name).DefaultView;
                 dv.Sort = "totalmark";
                 xz_name.Add(item.name);
                 xz_group_analysis(dv.ToTable(), item.count, xz_total, xz_single, xz_total_disc);
@@ -620,7 +617,71 @@ namespace ExamReport
                     }
                 }
             }
+
+            #endregion
         }
+
+        public void xz_postprocess(List<string> xz_th)
+        {
+            foreach (string th in xz_th)
+                xz_single_postprocess(th);
+        }
+        //public void xz_postprocess(List<string> xz_th)
+        //{
+        //    DataTable xz_data = new DataTable();
+        //    List<DataTable> xz_total = new List<DataTable>();
+        //    List<List<PartitionData.single_data>> xz_single = new List<List<PartitionData.single_data>>();
+        //    List<string> xz_name = new List<string>();
+        //    List<List<decimal>> xz_total_disc = new List<List<decimal>>();
+        //    xz_data.Columns.Add("totalmark", typeof(decimal));
+        //    xz_data.Columns.Add("XZ", typeof(string));
+        //    xz_data.Columns.Add("xz_groups", typeof(string));
+        //    foreach (string th in xz_th)
+        //    {
+        //        xz_data.Columns.Add("T" + th, typeof(decimal));
+        //        DataRow dr = _standard_ans.Rows.Find(th);
+
+        //        if (!dr["da"].Equals(""))
+        //            xz_data.Columns.Add("D" + th, typeof(string));
+        //    }
+        //    foreach (DataRow dr in _basic_data.Rows)
+        //    {
+        //        DataRow newrow = xz_data.NewRow();
+        //        foreach (DataColumn dc in xz_data.Columns)
+        //            newrow[dc.ColumnName] = dr[dc.ColumnName];
+        //        xz_data.Rows.Add(newrow);
+        //    }
+        //    var xz_tuple = from row in xz_data.AsEnumerable()
+        //                   group row by row.Field<string>("XZ") into grp
+        //                   orderby grp.Key ascending
+        //                   select new
+        //                   {
+        //                       name = grp.Key,
+        //                       count = grp.Count()
+        //                   };
+        //    foreach (var item in xz_tuple)
+        //    {
+        //        DataView dv = xz_data.equalfilter("XZ", item.name).DefaultView;
+        //        dv.Sort = "totalmark";
+        //        xz_name.Add(item.name);
+        //        xz_group_analysis(dv.ToTable(), item.count, xz_total, xz_single, xz_total_disc);
+        //    }
+
+        //    for (int i = 0; i < xz_total[0].Rows.Count; i++)
+        //    {
+        //        for (int j = 0; j < xz_total.Count; j++)
+        //        {
+        //            DataRow dr = xz_total[j].Rows[i];
+        //            dr["number"] = (string)dr["number"] + "选" + xz_name[j];
+        //            result.total_analysis.ImportRow(dr);
+        //            result.single_topic_analysis.Add(xz_single[j][i]);
+        //            if (_config.WSLG)
+        //            {
+        //                ((WSLG_partitiondata)result).total_discriminant.Add(xz_total_disc[j][i]);
+        //            }
+        //        }
+        //    }
+        //}
         public void xz_group_analysis(DataTable dt, int xz_count, List<DataTable> xz_total, List<List<PartitionData.single_data>> xz_single, List<List<decimal>> xz_total_disc)
         {
             //dt.SeperateGroups(Utils.group_type, _groupnum);
@@ -793,13 +854,7 @@ namespace ExamReport
 
 
 
-                    if (_standard_ans.Rows.Find(dr["number"].ToString().Substring(1))["da"].ToString().Trim().Equals("1") ||
-                       _standard_ans.Rows.Find(dr["number"].ToString().Substring(1))["da"].ToString().Trim().Equals("2") ||
-                       _standard_ans.Rows.Find(dr["number"].ToString().Substring(1))["da"].ToString().Trim().Equals("4") ||
-                       _standard_ans.Rows.Find(dr["number"].ToString().Substring(1))["da"].ToString().Trim().Equals("8") ||
-                       _standard_ans.Rows.Find(dr["number"].ToString().Substring(1))["da"].ToString().Trim().Equals("@") ||
-                       _standard_ans.Rows.Find(dr["number"].ToString().Substring(1))["da"].ToString().Trim().Equals("p") ||
-                       _standard_ans.Rows.Find(dr["number"].ToString().Substring(1))["da"].ToString().Trim().Equals("P"))
+                    if (_standard_ans.Rows.Find(dr["number"].ToString().Substring(1))["da"].ToString().Trim().Length == 1)
                     {
 
 
@@ -1383,74 +1438,13 @@ namespace ExamReport
         }
         public string choiceTransfer(string choice)
         {
-            switch (choice.Trim())
-            {
-                case "0":
-                    return "未选";
-                case "1":
-                    return "A";
-                case "2":
-                    return "B";
-                case "4":
-                    return "C";
-                case "8":
-                    return "D";
-                case "@":
-                    return "E";
-                case "P":
-                    return "F";
-                case "p":
-                    return "G";
-                case "3":
-                    return "AB";
-                case "5":
-                    return "AC";
-                case "6":
-                    return "BC";
-                case "7":
-                    return "ABC";
-                case "9":
-                    return "AD";
-                case ":":
-                    return "BD";
-                case ";":
-                    return "ABD";
-                case "<":
-                    return "CD";
-                case "=":
-                    return "ACD";
-                case ">":
-                    return "BCD";
-                case "?":
-                    return "ABCD";
-                case "A":
-                    return "AE";
-                case "B":
-                    return "BE";
-                case "C":
-                    return "ABE";
-                case "D":
-                    return "CE";
-                case "E":
-                    return "ACE";
-                case "F":
-                    return "BCE";
-                case "G":
-                    return "ABCE";
-                case "H":
-                    return "DE";
-                case "I":
-                    return "ADE";
-                case "J":
-                    return "BDE";
-                case "K":
-                    return "ABDE";
-                case "L":
-                    return "CDE";
-                default:
-                    throw new Exception();
-
-            }
+            Regex reg = new Regex("^[A-Za-z]+$");
+            if (reg.IsMatch(choice))
+                return Utils.ToSBC(choice);
+            else if (choice.Trim().Equals("0"))
+                return "未选";
+            else
+                return choice.Trim();
 
         }
         public void group_mark(DataTable dt)

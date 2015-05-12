@@ -174,9 +174,9 @@ namespace ExamReport
                 string numstr = "第" + getSingleName(2, i).Substring(1) + "题";
                 insertText(ExamTitle3, numstr);
                 insertSingleGroupTotal("    " + numstr + "分析表", i, false, _pdata);
-                insertSingleChart("    " + numstr + "题难度曲线图", ((WordData.single_data)_sdata.single_topic_analysis[i]).single_difficulty, "分数", "难度", Excel.XlChartType.xlXYScatterSmooth);
-                insertMultipleChart("    " + "第" + numstr + "题分组难度曲线图", ((WordData.single_data)_sdata.single_topic_analysis[i]).single_dist, "分组", "难度", Excel.XlChartType.xlLineMarkers);
-                insertGroupTable("    " + "第" + numstr + "题分组分析表", ((WordData.single_data)_sdata.single_topic_analysis[i]).single_detail, ((WordData.single_data)_sdata.single_topic_analysis[i]).stype);
+                insertSingleChart("    " + numstr + "难度曲线图", ((WordData.single_data)_sdata.single_topic_analysis[i]).single_difficulty, "分数", "难度", Excel.XlChartType.xlXYScatterSmooth);
+                insertMultipleChart("    " + numstr + "分组难度曲线图", ((WordData.single_data)_sdata.single_topic_analysis[i]).single_dist, "分组", "难度", Excel.XlChartType.xlLineMarkers);
+                insertGroupTable("    " + numstr + "分组分析表", ((WordData.single_data)_sdata.single_topic_analysis[i]).single_detail, ((WordData.single_data)_sdata.single_topic_analysis[i]).stype);
                 oDoc.Characters.Last.InsertBreak(oPagebreak);
             }
 

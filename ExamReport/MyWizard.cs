@@ -146,13 +146,19 @@ namespace ExamReport
                     ld.grouptype = ZK_database.GroupType.population;
                     ld.divider = popu_num.Value;
                 }
-                if (Mark_choice.Checked)
+                else if (Mark_choice.Checked)
                 {
 
                     ld.grouptype = ZK_database.GroupType.totalmark;
                     ld.divider = remark_num.Value;
 
                 }
+                else
+                {
+                    Error("必须选择一种分类方式");
+                }
+                if (ld.divider <= 0)
+                    Error("分组数必须大于0");
             }
             ld.fullmark = fullmark.Value;
             ld.PartialRight = PartialRight.Value;

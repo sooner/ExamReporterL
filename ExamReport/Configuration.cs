@@ -36,6 +36,9 @@ namespace ExamReport
         public int smooth_degree = 10;
         public bool is_sub_cor = false;
 
+        public ZK_database.GroupType _grouptype;
+        public int _group_num = 0;
+
         public void change()
         {
             fullmark = sub_fullmark;
