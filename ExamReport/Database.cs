@@ -32,6 +32,8 @@ namespace ExamReport
         string filext;
         List<List<string>> name_list;
         MetaData _mdata;
+        public DataTable zh_groups;
+        public string _sub_name = null;
 
         OleDbConnection dbfConnection;
 
@@ -47,13 +49,28 @@ namespace ExamReport
             name_list = new List<List<string>>();
             _mdata = mdata;
         }
+        public Database(MetaData mdata, DataTable standard_ans, DataTable groups, ZK_database.GroupType gtype, decimal divider, DataTable wenli, string sub_name)
+        {
+            zh_groups = wenli;
+            _sub_name = sub_name;
+            _groups = groups;
+            _gtype = gtype;
+            _divider = divider;
+            _standard_ans = standard_ans;
+            _standard_ans.PrimaryKey = new DataColumn[] { _standard_ans.Columns[0] };
+            _basic_data = new DataTable();
+            _group_data = new DataTable();
+            name_list = new List<List<string>>();
+            _mdata = mdata;
 
+        }
         public Database()
         {
         }
 
-        public int ZH_postprocess(DataTable zh_groups, string name)
+        public int ZH_postprocess()
         {
+            string name = _sub_name.Substring(3);
             Regex number = new Regex("^[Tt]\\d+$");
             //zh_groups.PrimaryKey = new DataColumn[] { zh_groups.Columns[0] };
             //DataRow target = zh_groups.Rows.Find(name);
@@ -71,23 +88,35 @@ namespace ExamReport
             string[] tz = target[1].ToString().Trim().Split(new char[2] { ',', '，' });
             List<string> tzs = new List<string>();
             group_process(tz, tzs);
-            List<List<string>> ZH_name_list = new List<List<string>>();
-            DataTable temp_ZH_standard_ans = newStandard.Clone();
+            var standard_th = newStandard.AsEnumerable().Select(c => c.Field<string>("th").Trim());
+            List<string> whole_th = new List<string>();
+            foreach (string th in tzs)
+            {
+                var similar = standard_th.Where(c => c.StartsWith(th + "_")).Select(c => c.ToString().Trim());
+                if (similar.Count() != 0)
+                {
+                    foreach (var temp_th in similar)
+                        whole_th.Add(temp_th);
+                }
+            }
+            whole_th.AddRange(tzs);
+            //List<List<string>> ZH_name_list = new List<List<string>>();
+            ZH_standard_ans = newStandard.Clone();
             //ZH_standard_ans = newStandard.Clone();
             int name_list_count = 0;
             foreach (DataRow dr in newStandard.Rows)
             {
-                if (tzs.Contains((string)dr["th"]))
+                if (whole_th.Contains((string)dr["th"]))
                 {
-                    temp_ZH_standard_ans.ImportRow(dr);
+                    ZH_standard_ans.ImportRow(dr);
                     //ZH_name_list.Add(name_list[name_list_count]);
                 }
                 name_list_count++;
             }
-            if (temp_ZH_standard_ans.Rows.Count != tzs.Count)
+            if (ZH_standard_ans.Rows.Count != whole_th.Count)
                 throw new ArgumentException(name + " 题组中存在未知题号！");
-            
-            ZH_standard_ans = StandardAnsRecontruction(temp_ZH_standard_ans, ZH_name_list);
+
+            //ZH_standard_ans = StandardAnsRecontruction(temp_ZH_standard_ans, ZH_name_list);
             zh_single_data = new DataTable();
             zh_single_data.Columns.Add("kh", System.Type.GetType("System.String"));
             zh_single_data.Columns.Add("xxdm", System.Type.GetType("System.String"));
@@ -99,7 +128,7 @@ namespace ExamReport
             }
 
             int multiple_choice_num = 0;
-            foreach (string temp in tzs)
+            foreach (string temp in whole_th)
             {
                 if (_basic_data.Columns.Contains("D" + temp))
                 {
@@ -117,35 +146,44 @@ namespace ExamReport
             foreach (DataRow dr in _basic_data.Rows)
             {
                 DataRow newrow = zh_single_data.NewRow();
-
-                for (int i = 0; i < 4; i++)
-                    newrow[i] = dr[zh_single_data.Columns[i].ColumnName];
-
                 decimal totalmark = 0;
-                for (int i = 0; i < ZH_standard_ans.Rows.Count; i++)
+                foreach (DataColumn dc in zh_single_data.Columns)
                 {
-                    if (ZH_name_list[i] == null)
+                    if (!dc.ColumnName.Equals("ZH_totalmark"))
                     {
-                        newrow[i + 4] = dr[zh_single_data.Columns[i + 4].ColumnName];
-                        totalmark += (decimal)newrow[i + 4];
-                    }
-
-                    else
-                    {
-                        decimal temp_mark = 0;
-                        foreach (string temp_th in ZH_name_list[i])
-                        {
-                            temp_mark += (decimal)dr["T" + temp_th];
-                        }
-                        newrow[i + 4] = temp_mark;
+                        newrow[dc] = dr[dc.ColumnName];
+                        
                     }
                 }
-                for (int i = ZH_standard_ans.Rows.Count + 4; i < zh_single_data.Columns.Count - 1; i++)
-                    newrow[i] = dr[zh_single_data.Columns[i].ColumnName];
+                foreach (string th in tzs)
+                {
+                    totalmark += (decimal)newrow["T" + th];
+                }
+                
+                //for (int i = 0; i < ZH_standard_ans.Rows.Count; i++)
+                //{
+                //    if (ZH_name_list[i] == null)
+                //    {
+                //        newrow[i + 4] = dr[zh_single_data.Columns[i + 4].ColumnName];
+                //        totalmark += (decimal)newrow[i + 4];
+                //    }
+
+                //    else
+                //    {
+                //        decimal temp_mark = 0;
+                //        foreach (string temp_th in ZH_name_list[i])
+                //        {
+                //            temp_mark += (decimal)dr["T" + temp_th];
+                //        }
+                //        newrow[i + 4] = temp_mark;
+                //    }
+                //}
+                //for (int i = ZH_standard_ans.Rows.Count + 4; i < zh_single_data.Columns.Count - 1; i++)
+                //    newrow[i] = dr[zh_single_data.Columns[i].ColumnName];
 
                 newrow["ZH_totalmark"] = totalmark;
-                if (!_group_data.Rows[row]["kh"].ToString().Trim().Equals(newrow["kh"].ToString().Trim()))
-                    throw new Exception();
+                //if (!_group_data.Rows[row]["kh"].ToString().Trim().Equals(newrow["kh"].ToString().Trim()))
+                //    throw new Exception();
                 _group_data.Rows[row]["ZH_totalmark"] = totalmark;
                 zh_single_data.Rows.Add(newrow);
                 row++;
@@ -277,7 +315,7 @@ namespace ExamReport
 
         public string DBF_data_process(string fileadd)
         {
-
+            List<string> sub_tz = new List<string>();
             filePath = @fileadd;
             file = System.IO.Path.GetFileName(filePath);
             path = System.IO.Path.GetDirectoryName(filePath);
@@ -307,6 +345,26 @@ namespace ExamReport
             int count = dt.Columns.Count;
             int i;
             xz_check(dt, _mdata.xz);
+            if (_mdata.sub_iszero)
+            {
+                DataTable group_t;
+                if (_sub_name == null)
+                    group_t = _groups;
+                else
+                    group_t = zh_groups;
+
+                if (group_t.AsEnumerable().Where(c => c.Field<string>("tz").Trim().Equals("主观题")).Count() == 0)
+                {
+                    _mdata.wizard.CheckData(1, "数据分析题组中没有主观题，默认按无选择题选项的题目为主观题？");
+                    foreach (DataRow dr in _standard_ans.Rows)
+                        if (dr["da"].ToString().Trim().Equals(""))
+                            sub_tz.Add(dr["th"].ToString().Trim());
+                }
+                else
+                    th_parse(group_t.AsEnumerable()
+                        .Where(c => c.Field<string>("tz").Trim().Equals("主观题"))
+                        .First().Field<string>("th").Trim(), sub_tz);
+            }
             newStandard = StandardAnsRecontruction(_standard_ans, name_list);
 
             DataTable basic_data = new DataTable();
@@ -377,9 +435,9 @@ namespace ExamReport
                 newRow["Groups"] = "";
                 newRow["qxdm"] = dr["qxdm"].ToString().Trim();
                 decimal obj_mark = 0;
-                decimal sub_mark = 0;
+                
                 int total_count = 0;
-
+                
                 foreach (DataRow ans_dr in newStandard.Rows)
                 {
                     if (ans_dr["da"].ToString().Trim().Equals(""))
@@ -389,7 +447,7 @@ namespace ExamReport
                             if ((decimal)dr["T" + (string)ans_dr["th"]] > Convert.ToDecimal(ans_dr["fs"]))
                                 throw new ArgumentException("第" + (string)ans_dr["th"] + "题满分值小于实际分值！");
                             newRow["T" + (string)ans_dr["th"]] = (decimal)dr["T" + (string)ans_dr["th"]];
-                            sub_mark += (decimal)dr["T" + (string)ans_dr["th"]];
+                            //sub_mark += (decimal)dr["T" + (string)ans_dr["th"]];
                             newRow["totalmark"] = (decimal)newRow["totalmark"] + (decimal)dr["T" + (string)ans_dr["th"]];
                         }
                         else
@@ -460,8 +518,20 @@ namespace ExamReport
                 
                 if (_mdata.fullmark_iszero && (decimal)newRow["totalmark"] == 0)
                     continue;
-                if (_mdata.sub_iszero && sub_mark == 0)
-                    continue;
+
+                if (_mdata.sub_iszero)
+                {
+                    decimal sub_mark = 0;
+                    foreach (string sub_th in sub_tz)
+                    {
+
+                        sub_mark += (decimal)newRow["T" + sub_th];
+                    }
+                    if (sub_mark == 0)
+                        continue;
+                }
+                //if (_mdata.sub_iszero && sub_mark == 0)
+                //    continue;
                
                 //if (has_xz)
                 //    newRow["X"] = dr["X"].ToString().Trim();
@@ -532,6 +602,7 @@ namespace ExamReport
             //}
             return "";
         }
+        
         public char[] TransferCharArray(string[] ans_group)
         {
             char[] newgroup = new char[ans_group.Length];
@@ -666,35 +737,16 @@ namespace ExamReport
             _group_data.Columns.Add("xxdm", System.Type.GetType("System.String"));
             _group_data.Columns.Add("totalmark", System.Type.GetType("System.Decimal"));
             _group_data.Columns.Add("xb", typeof(string));
-            ArrayList tm = new ArrayList();
-            string spattern = "^\\d+~\\d+$";
+            List<List<string>> tm = new List<List<string>>();
+            
             for (int i = 0; i < _groups.Rows.Count; i++)
             {
-                ArrayList tz = new ArrayList();
+                List<string> tz = new List<string>();
                 //string row_name = _groups.Rows[i][0].ToString().Trim();
                 _group_data.Columns.Add("FZ"+(i+1).ToString(), System.Type.GetType("System.Decimal"));
                 string org = _groups.Rows[i][1].ToString().Trim();
-                string[] org_char = org.Split(new char[2] { ',', '，' });
-                foreach (string th in org_char)
-                {
-
-                    if (System.Text.RegularExpressions.Regex.IsMatch(th, spattern))
-                    //if(th.Contains('~'))
-                    {
-                        string[] num = th.Split('~');
-                        int j;
-                        int size = Convert.ToInt32(num[0]) < Convert.ToInt32(num[1]) ? Convert.ToInt32(num[1]) : Convert.ToInt32(num[0]);
-                        int start = Convert.ToInt32(num[0]) > Convert.ToInt32(num[1]) ? Convert.ToInt32(num[1]) : Convert.ToInt32(num[0]);
-                        //此处需判断size和start的边界问题
-                        for (j = start; j < size + 1; j++)
-                        {
-                            tz.Add(j);
-                        }
-
-                    }
-                    else
-                        tz.Add(th);
-                }
+                th_parse(org, tz);
+                
                 tm.Add(tz);
             }
             _group_data.Columns.Add("Groups", typeof(string));
@@ -712,9 +764,9 @@ namespace ExamReport
                 for (j = 0; j < _groups.Rows.Count; j++)
                 {
                     decimal count_ = 0;
-                    foreach (object s in (ArrayList)tm[j])
+                    foreach (string s in tm[j])
                     {
-                        count_ += (decimal)dr["T" + s.ToString()];
+                        count_ += (decimal)dr["T" + s];
                     }
                     newRow[j + 4] = count_;
                 }
@@ -731,6 +783,32 @@ namespace ExamReport
             {
                 if (!db.Columns.Contains("X" + temp))
                     throw new ArgumentException("标答所记录选做题" + temp + "在数据库中不存在！");
+            }
+        }
+
+        public void th_parse(string org, List<string> tz)
+        {
+            string spattern = "^\\d+~\\d+$";
+            string[] org_char = org.Split(new char[2] { ',', '，' });
+            foreach (string th in org_char)
+            {
+
+                if (System.Text.RegularExpressions.Regex.IsMatch(th, spattern))
+                //if(th.Contains('~'))
+                {
+                    string[] num = th.Split('~');
+                    int j;
+                    int size = Convert.ToInt32(num[0]) < Convert.ToInt32(num[1]) ? Convert.ToInt32(num[1]) : Convert.ToInt32(num[0]);
+                    int start = Convert.ToInt32(num[0]) > Convert.ToInt32(num[1]) ? Convert.ToInt32(num[1]) : Convert.ToInt32(num[0]);
+                    //此处需判断size和start的边界问题
+                    for (j = start; j < size + 1; j++)
+                    {
+                        tz.Add(j.ToString().Trim());
+                    }
+
+                }
+                else
+                    tz.Add(th);
             }
         }
     }

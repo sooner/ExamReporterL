@@ -61,8 +61,11 @@ namespace ExamReport
             md.fullmark_iszero = fullmark_iszero;
             md.sub_iszero = sub_iszero;
             md.PartialRight = PartialRight;
-            md.xz = ans.xz_th;
-
+            if (!sub.Equals("总分"))
+            {
+                md.xz = ans.xz_th;
+            }
+            md.wizard = wizard;
             if (sub.Contains("理综") || sub.Contains("文综"))
             {
                 md._sub_fullmark = sub_fullmark;
@@ -75,11 +78,12 @@ namespace ExamReport
                 md._grouptype = grouptype;
                 md._group_num = Convert.ToInt32(divider);
             }
+            //try
+            //{
+            if (!md.check())
+                wizard.ErrorM("该数据已存储，请先删除后再添加");
             try
             {
-            if (!md.check())
-                throw new ArgumentException("该数据已存在");
-
 
                 switch (exam)
                 {
@@ -170,10 +174,10 @@ namespace ExamReport
                     sub.Contains("文综"))
             {
                 int ch_num = 0;
-                GK_database db = new GK_database(mdata, ans.dt, groups.dt, grouptype, divider);
+                Database db = new Database(mdata, ans.dt, groups.dt, grouptype, divider, wenli.dt, sub);
                 db.DBF_data_process(database_str);
 
-                ch_num = db.ZH_postprocess(wenli.dt, sub.Substring(3));
+                ch_num = db.ZH_postprocess();
 
                 basic_data = db._basic_data;
                 group_data = db._group_data;

@@ -13,6 +13,7 @@ namespace ExamReport
 {
 
     //public delegate void MyDelegate(int i, int status);
+    public delegate void CheckDataMethod(int status, string message);
     public partial class MyWizard : Form
     {
         Thread thread;
@@ -203,12 +204,43 @@ namespace ExamReport
                 }
             }
         }
+        public void CheckData(int status, string message)
+        {
+            if (this.InvokeRequired)
+                this.Invoke(new CheckDataMethod(CheckData), status, message);
+            else
+            {
+                switch (status)
+                {
+                    case 1:
 
+                        MessageBoxButtons messButton = MessageBoxButtons.OKCancel;
+                        DialogResult dr = MessageBox.Show(message + "\n仍然继续嘛？", "是否继续", messButton);
+                        if (dr == DialogResult.Cancel)
+                        {
+                            thread.Abort();
+                            ShowPro(100, 2);
+                        }
+                        break;
+                    
+                    default:
+                        break;
+                }
+            }
+        }
         private void after_process()
         {
-            basic_gridView.DataSource = ld.basic_data;
-            group_gridView.DataSource = ld.group_data;
-            this.radWizard1.SelectedPage = this.radWizard1.Pages[2];
+            if (subject.SelectedItem.ToString().Equals("总分"))
+            {
+                basic_gridView.DataSource = ld.basic_data;
+                this.radWizard1.SelectedPage = this.radWizard1.Pages[2];
+            }
+            else
+            {
+                basic_gridView.DataSource = ld.basic_data;
+                group_gridView.DataSource = ld.group_data;
+                this.radWizard1.SelectedPage = this.radWizard1.Pages[2];
+            }
         }
         private void exam_type_SelectedIndexChanged(object sender, EventArgs e)
         {

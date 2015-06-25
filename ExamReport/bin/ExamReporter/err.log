@@ -1,5 +1,5 @@
-System.ArgumentException: 该数据已存在
-   在 ExamReport.LoadDatabase.start_process() 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\LoadDatabase.cs:行号 81
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ExamReport.LoadDatabase.start_process() 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\LoadDatabase.cs:行号 64
    在 System.Threading.ThreadHelper.ThreadStart_Context(Object state)
    在 System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
    在 System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)

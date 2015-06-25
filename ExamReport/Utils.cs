@@ -533,10 +533,10 @@ namespace ExamReport
 
         public static bool isContain(string da, string ans)
         {
-            char[] ans_ = choiceTransfer(ans).ToCharArray();
+            char[] ans_ = ans.ToCharArray();
             foreach (char temp in ans_)
             {
-                if (!choiceTransfer(da).Contains(temp))
+                if (!da.Contains(temp))
                     return false;
             }
             return true;

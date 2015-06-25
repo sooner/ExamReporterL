@@ -49,6 +49,8 @@ namespace ExamReport
 
         public List<string> xz;
         public Dictionary<string, List<string>> groups_group;
+
+        public MyWizard wizard;
         public MetaData(string year, string exam, string sub)
         {
             _year = year;
@@ -95,6 +97,26 @@ namespace ExamReport
                 + Utils.language_trans(_sub) + "'", null);
             }
 
+            MySqlHelper.ExecuteNonQuery(MySqlHelper.Conn, CommandType.Text, "drop table if exists " + 
+                Utils.get_ans_tablename(_year, _exam, Utils.language_trans(_sub)), null);
+            MySqlHelper.ExecuteNonQuery(MySqlHelper.Conn, CommandType.Text, "drop table if exists " +
+                Utils.get_fz_tablename(_year, _exam, Utils.language_trans(_sub)), null);
+            MySqlHelper.ExecuteNonQuery(MySqlHelper.Conn, CommandType.Text, "drop table if exists " +
+                Utils.get_basic_tablename(_year, _exam, Utils.language_trans(_sub)), null);
+            MySqlHelper.ExecuteNonQuery(MySqlHelper.Conn, CommandType.Text, "drop table if exists " +
+                Utils.get_group_tablename(_year, _exam, Utils.language_trans(_sub)), null);
+
+            MySqlHelper.ExecuteNonQuery(MySqlHelper.Conn, CommandType.Text, "drop table if exists " + "zh_" +
+                Utils.get_ans_tablename(_year, _exam, Utils.language_trans(_sub)), null);
+            MySqlHelper.ExecuteNonQuery(MySqlHelper.Conn, CommandType.Text, "drop table if exists " + "zh_" +
+                Utils.get_fz_tablename(_year, _exam, Utils.language_trans(_sub)), null);
+            MySqlHelper.ExecuteNonQuery(MySqlHelper.Conn, CommandType.Text, "drop table if exists " + "zh_" +
+                Utils.get_basic_tablename(_year, _exam, Utils.language_trans(_sub)), null);
+            MySqlHelper.ExecuteNonQuery(MySqlHelper.Conn, CommandType.Text, "drop table if exists " + "zh_" +
+                Utils.get_group_tablename(_year, _exam, Utils.language_trans(_sub)), null);
+
+            MySqlHelper.ExecuteNonQuery(MySqlHelper.Conn, CommandType.Text, "drop table if exists " +
+                Utils.get_zt_tablename(_year), null);
 
 
         }

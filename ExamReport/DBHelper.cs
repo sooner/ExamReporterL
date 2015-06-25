@@ -104,18 +104,25 @@ namespace ExamReport
                 + year + "' and exam='"
                 + _exam + "' and sub='"
                 + _sub + "'", null);
-            MySqlHelper.ExecuteNonQuery(trans, CommandType.Text, "drop table " + Utils.get_basic_tablename(year, _exam, _sub), null);
-            MySqlHelper.ExecuteNonQuery(trans, CommandType.Text, "drop table " + Utils.get_group_tablename(year, _exam, _sub), null);
-            MySqlHelper.ExecuteNonQuery(trans, CommandType.Text, "drop table " + Utils.get_ans_tablename(year, _exam, _sub), null);
-            MySqlHelper.ExecuteNonQuery(trans, CommandType.Text, "drop table " + Utils.get_fz_tablename(year, _exam, _sub), null);
-
-            if (Utils.language_trans(_sub).Contains("理综") || Utils.language_trans(_sub).Contains("文综"))
+            if (_sub.Equals("zf"))
             {
-                MySqlHelper.ExecuteNonQuery(trans, CommandType.Text, "drop table " + "zh_" + Utils.get_basic_tablename(year, _exam, _sub), null);
-                MySqlHelper.ExecuteNonQuery(trans, CommandType.Text, "drop table " + "zh_" + Utils.get_group_tablename(year, _exam, _sub), null);
-                MySqlHelper.ExecuteNonQuery(trans, CommandType.Text, "drop table " + "zh_" + Utils.get_ans_tablename(year, _exam, _sub), null);
-                MySqlHelper.ExecuteNonQuery(trans, CommandType.Text, "drop table " + "zh_" + Utils.get_fz_tablename(year, _exam, _sub), null);
+                MySqlHelper.ExecuteNonQuery(trans, CommandType.Text, "drop table " + Utils.get_zt_tablename(year), null);
+            }
+            else
+            {
+                MySqlHelper.ExecuteNonQuery(trans, CommandType.Text, "drop table " + Utils.get_basic_tablename(year, _exam, _sub), null);
+                MySqlHelper.ExecuteNonQuery(trans, CommandType.Text, "drop table " + Utils.get_group_tablename(year, _exam, _sub), null);
+                MySqlHelper.ExecuteNonQuery(trans, CommandType.Text, "drop table " + Utils.get_ans_tablename(year, _exam, _sub), null);
+                MySqlHelper.ExecuteNonQuery(trans, CommandType.Text, "drop table " + Utils.get_fz_tablename(year, _exam, _sub), null);
 
+                if (Utils.language_trans(_sub).Contains("理综") || Utils.language_trans(_sub).Contains("文综"))
+                {
+                    MySqlHelper.ExecuteNonQuery(trans, CommandType.Text, "drop table " + "zh_" + Utils.get_basic_tablename(year, _exam, _sub), null);
+                    MySqlHelper.ExecuteNonQuery(trans, CommandType.Text, "drop table " + "zh_" + Utils.get_group_tablename(year, _exam, _sub), null);
+                    MySqlHelper.ExecuteNonQuery(trans, CommandType.Text, "drop table " + "zh_" + Utils.get_ans_tablename(year, _exam, _sub), null);
+                    MySqlHelper.ExecuteNonQuery(trans, CommandType.Text, "drop table " + "zh_" + Utils.get_fz_tablename(year, _exam, _sub), null);
+
+                }
             }
             trans.Commit();
             conn.Close();
@@ -126,6 +133,7 @@ namespace ExamReport
         }
         public static void create_mysql_table(DataTable groups_data, string filename, string charsize)
         {
+            MySqlHelper.ExecuteNonQuery(MySqlHelper.Conn, CommandType.Text, "drop table if exists " + filename, null);
             StringBuilder objectdata = new StringBuilder();
             objectdata.Clear();
             int i = 0;
@@ -149,9 +157,13 @@ namespace ExamReport
             }
 
             MySqlHelper.ExecuteNonQuery(MySqlHelper.Conn, CommandType.Text, objectdata.ToString(), null);
-
+            MySqlTransaction tx = null;
             using (MySqlConnection conn = new MySqlConnection(MySqlHelper.Conn))
             {
+                conn.Open();
+                tx = conn.BeginTransaction();
+                
+                int row_count = 0;
                 foreach (DataRow dr in groups_data.Rows)
                 {
                     objectdata.Clear();
@@ -170,10 +182,20 @@ namespace ExamReport
                             objectdata.Append(");");
 
                     }
+                    MySqlHelper.ExecuteNonQuery(tx, CommandType.Text, objectdata.ToString(), null);
 
-                    MySqlHelper.ExecuteNonQuery(conn, CommandType.Text, objectdata.ToString(), null);
+                    if (row_count % 500 == 0)
+                    {
+                        tx.Commit();
+                        tx = conn.BeginTransaction();
+                    }
 
+                    row_count++;
                 }
+
+                tx.Commit();
+                conn.Close();
+               
             }
         }
         public static void create_mysql_table(DataTable groups_data, string filename)
