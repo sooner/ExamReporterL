@@ -741,7 +741,7 @@ namespace ExamReport
         {
             foreach (GridViewRowInfo row in gk_gridview.Rows)
             {
-                if (row.Cells["checkbox"].Value != null)
+                if (row.Cells["checkbox"].Value != null && (bool)row.Cells["checkbox"].Value == true)
                 {
                     try
                     {

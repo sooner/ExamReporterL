@@ -119,6 +119,7 @@ namespace ExamReport
             //ZH_standard_ans = StandardAnsRecontruction(temp_ZH_standard_ans, ZH_name_list);
             zh_single_data = new DataTable();
             zh_single_data.Columns.Add("kh", System.Type.GetType("System.String"));
+            zh_single_data.Columns.Add("zkzh", System.Type.GetType("System.String"));
             zh_single_data.Columns.Add("xxdm", System.Type.GetType("System.String"));
             zh_single_data.Columns.Add("xb", System.Type.GetType("System.String"));
             zh_single_data.Columns.Add("totalmark", typeof(decimal));
@@ -206,6 +207,7 @@ namespace ExamReport
             List<List<string>> group_th = new List<List<string>>();
             zh_group_data = new DataTable();
             zh_group_data.Columns.Add("kh", typeof(string));
+            zh_group_data.Columns.Add("zkzh", System.Type.GetType("System.String"));
             zh_group_data.Columns.Add("xxdm", typeof(string));
             zh_group_data.Columns.Add("xb", typeof(string));
             zh_group_data.Columns.Add("totalmark", typeof(decimal));
@@ -229,6 +231,7 @@ namespace ExamReport
             {
                 DataRow newrow = zh_group_data.NewRow();
                 newrow["kh"] = dr["kh"].ToString();
+                newrow["zkzh"] = dr["zkzh"].ToString();
                 newrow["xxdm"] = dr["xxdm"].ToString();
                 newrow["Groups"] = ((string)dr["Groups"]).Trim();
                 newrow["qxdm"] = dr["qxdm"].ToString().Trim();
@@ -243,7 +246,7 @@ namespace ExamReport
                     {
                         mark += (decimal)dr["T" + temp];
                     }
-                    newrow[i + 4] = mark;
+                    newrow[i + 5] = mark;
 
                 }
                 zh_group_data.Rows.Add(newrow);
@@ -369,6 +372,7 @@ namespace ExamReport
 
             DataTable basic_data = new DataTable();
             basic_data.Columns.Add("kh", System.Type.GetType("System.String"));
+            basic_data.Columns.Add("zkzh", System.Type.GetType("System.String"));
             basic_data.Columns.Add("xxdm", System.Type.GetType("System.String"));
             basic_data.Columns.Add("totalmark", typeof(decimal));
             basic_data.Columns.Add("xb", typeof(string));
@@ -429,6 +433,7 @@ namespace ExamReport
             {
                 DataRow newRow = basic_data.NewRow();
                 newRow["kh"] = dr["kh"].ToString().Trim();
+                newRow["zkzh"] = dr["zkzh"].ToString().Trim();
                 newRow["xxdm"] = dr["xxdm"].ToString().Trim();
                 newRow["totalmark"] = 0;
                 newRow["xb"] = dr["xb"].ToString().Trim();
@@ -734,6 +739,7 @@ namespace ExamReport
             #region divide the table into groups
             //StringBuilder objectdata = new StringBuilder();
             _group_data.Columns.Add("kh", System.Type.GetType("System.String"));
+            _group_data.Columns.Add("zkzh", System.Type.GetType("System.String"));
             _group_data.Columns.Add("xxdm", System.Type.GetType("System.String"));
             _group_data.Columns.Add("totalmark", System.Type.GetType("System.Decimal"));
             _group_data.Columns.Add("xb", typeof(string));
@@ -755,6 +761,7 @@ namespace ExamReport
             {
                 DataRow newRow = _group_data.NewRow();
                 newRow["kh"] = ((string)dr["kh"]).Trim();
+                newRow["zkzh"] = ((string)dr["zkzh"]).Trim();
                 newRow["xxdm"] = ((string)dr["xxdm"]).Trim();
                 newRow["Groups"] = ((string)dr["Groups"]).Trim();
                 newRow["qxdm"] = dr["qxdm"].ToString().Trim();
@@ -768,7 +775,7 @@ namespace ExamReport
                     {
                         count_ += (decimal)dr["T" + s];
                     }
-                    newRow[j + 4] = count_;
+                    newRow[j + 5] = count_;
                 }
                 _group_data.Rows.Add(newRow);
             }

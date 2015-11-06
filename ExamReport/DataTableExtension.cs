@@ -164,6 +164,60 @@ namespace ExamReport
             }
             return _group_num;
         }
+        public static int SeperateGroupsByColumnName(this DataTable dt, ZK_database.GroupType gtype, decimal divider, string ColumnName)
+        {
+            int _group_num = 0;
+            int totalsize = dt.Rows.Count;
+            
+            
+            if (gtype.Equals(ZK_database.GroupType.population))
+            {
+                int remainder = 0;
+                int groupnum = Math.DivRem(totalsize, Convert.ToInt32(divider), out remainder);
+                _group_num = Convert.ToInt32(divider);
+                int remainderCount = 1;
+                string groupstring = "";
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    if (i < ((groupnum + 1) * remainder))
+                    {
+                        if (i % (groupnum + 1) == 0)
+                        {
+                            groupstring = "G" + remainderCount.ToString();
+                            remainderCount++;
+                        }
+
+                    }
+                    else
+                    {
+                        if ((i - (groupnum + 1) * remainder) % groupnum == 0)
+                        {
+                            groupstring = "G" + remainderCount.ToString();
+                            remainderCount++;
+                        }
+                    }
+                    dt.Rows[i]["groups"] = groupstring;
+                }
+            }
+            else
+            {
+                decimal baseMark = 0.0m;
+                string groupstring = "G1";
+                int dividerCount = 1;
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    if ((decimal)dt.Rows[i][ColumnName] > (baseMark + divider))
+                    {
+                        dividerCount++;
+                        groupstring = "G" + dividerCount.ToString();
+                        baseMark = (decimal)dt.Rows[i]["totalmark"];
+                    }
+                    dt.Rows[i]["groups"] = groupstring;
+                }
+                _group_num = dividerCount;
+            }
+            return _group_num;
+        }
         public static DataTable filteredtable(this DataTable dt, string keyword, string[] items)
         {
             DataView dv = dt.DefaultView;

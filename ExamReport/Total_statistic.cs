@@ -55,7 +55,10 @@ namespace ExamReport
                 totalmark_str = "totalmark";
 
             if (!isZonghe && _config.is_sub_cor)
+            {
                 cor_col = "ZH_totalmark";
+                
+            }
             result.max = (decimal) _basic_data.Compute("Max(" + totalmark_str + ")", "");
             result.min = (decimal) _basic_data.Compute("Min(" + totalmark_str + ")", "");
             result.avg = (decimal) _basic_data.Compute("Avg(" + totalmark_str + ")", "");

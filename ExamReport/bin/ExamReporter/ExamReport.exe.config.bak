@@ -5,8 +5,8 @@
     <section name="DistrictCode" type="ExamReport.SchoolCodeConfig, ExamReport"/>
   </configSections>
   <appSettings>
-    <add key ="charsize" value="50"/>
-    <add key ="server" value ="222.249.152.20"/>
+    <add key ="charsize" value="10"/>
+    <add key ="server" value ="133.133.134.183"/>
     <add key="database" value="examdata"/>
     <add key ="username" value="root"/>
     <add key ="password" value="123456"/>

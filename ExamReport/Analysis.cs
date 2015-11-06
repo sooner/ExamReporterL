@@ -110,11 +110,26 @@ namespace ExamReport
                                 is_sub_cor = true;
                                 _sub_fullmark = mdata._sub_fullmark;
 
+                                mdata.basic = SortTable(mdata.basic, "ZH_totalmark");
+                                mdata.group = SortTable(mdata.group, "ZH_totalmark");
+                                mdata.basic.SeperateGroupsByColumnName(mdata._grouptype, mdata._group_num, "ZH_totalmark");
+                                mdata.group.SeperateGroupsByColumnName(mdata._grouptype, mdata._group_num, "ZH_totalmark");
+                                //List<decimal> res = new List<decimal>();
+                                //List<string> flag = new List<string>();
+                                //for (int i = 0; i < mdata.basic.Rows.Count; i++)
+                                //{
+                                //    res.Add((decimal)mdata.basic.Rows[i]["ZH_totalmark"]);
+                                //    flag.Add((string)mdata.basic.Rows[i]["groups"]);
+                                //}
+                                //decimal num = res[40];
                             }
                             else
                             {
                                 is_sub_cor = false;
                                 _sub_fullmark = mdata._fullmark;
+
+                                //mdata.basic.SeperateGroupsByColumnName(mdata._grouptype, mdata._group_num, "totalmark");
+                                //mdata.group.SeperateGroupsByColumnName(mdata._grouptype, mdata._group_num, "totalmark");
                             }
                             switch (exam_type)
                             {
@@ -832,8 +847,8 @@ namespace ExamReport
             QX_group.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
             //if (QX_data.Columns.Contains("XZ"))
             //    XZ_group_separate(QX_data, mdata);
-            DataTable W_data = QX_data.Likefilter("kh", "'1*'");
-            DataTable W_group = QX_group.Likefilter("kh", "'1*'");
+            DataTable W_data = QX_data.Likefilter("zkzh", "'1*'");
+            DataTable W_group = QX_group.Likefilter("zkzh", "'1*'");
 
             Partition_statistic w_stat = new Partition_statistic("文科", W_data, mdata._fullmark, mdata.ans, W_group, mdata.grp, group);
             w_stat._config = config;
@@ -842,8 +857,8 @@ namespace ExamReport
                 w_stat.xz_postprocess(mdata.xz);
             WSLG.Add(w_stat.result);
 
-            DataTable l_data = QX_data.Likefilter("kh", "'5*'");
-            DataTable l_group = QX_group.Likefilter("kh", "'5*'");
+            DataTable l_data = QX_data.Likefilter("zkzh", "'5*'");
+            DataTable l_group = QX_group.Likefilter("zkzh", "'5*'");
 
             Partition_statistic l_stat = new Partition_statistic("理科", l_data, mdata._fullmark, mdata.ans, l_group, mdata.grp, group);
             l_stat._config = config;
@@ -1185,8 +1200,8 @@ namespace ExamReport
             ArrayList WSLG = new ArrayList();
             _form.ShowPro("gk_zt", 1, mdata.log_name + "文理数据分析中...");
 
-            DataTable W_data = mdata.basic.Likefilter("kh", "'1*'");
-            DataTable W_group = mdata.group.Likefilter("kh", "'1*'");
+            DataTable W_data = mdata.basic.Likefilter("zkzh", "'1*'");
+            DataTable W_group = mdata.group.Likefilter("zkzh", "'1*'");
 
             Partition_statistic w_stat = new Partition_statistic("文科", W_data, mdata._fullmark, mdata.ans, W_group, mdata.grp, mdata._group_num);
             w_stat._config = config;
@@ -1195,8 +1210,8 @@ namespace ExamReport
                 w_stat.xz_postprocess(mdata.xz);
             WSLG.Add(w_stat.result);
 
-            DataTable l_data = mdata.basic.Likefilter("kh", "'5*'");
-            DataTable l_group = mdata.group.Likefilter("kh", "'5*'");
+            DataTable l_data = mdata.basic.Likefilter("zkzh", "'5*'");
+            DataTable l_group = mdata.group.Likefilter("zkzh", "'5*'");
 
             Partition_statistic l_stat = new Partition_statistic("理科", l_data, mdata._fullmark, mdata.ans, l_group, mdata.grp, mdata._group_num);
             l_stat._config = config;
@@ -1378,7 +1393,13 @@ namespace ExamReport
             }
             sdata.Add(ClassTotal.result);
         }
-
+        public DataTable SortTable(DataTable dt, string ColumnName)
+        {
+            DataView dv = dt.DefaultView;
+            dv.Sort = ColumnName;
+            DataTable res = dv.ToTable();
+            return res;
+        }
         //void XZ_group_separate(DataTable temp_dt, MetaData mdata)
         //{
         //    if (!temp_dt.Columns.Contains("xz_groups"))
