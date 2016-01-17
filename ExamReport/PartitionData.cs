@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
 using System.Text;
@@ -19,7 +20,17 @@ namespace ExamReport
         public decimal stDev;
         public decimal Dfactor;
         public decimal difficulty;
+        public decimal discriminant;
 
+        public List<decimal> total_discriminant = new List<decimal>();
+        public List<decimal> group_discriminant = new List<decimal>();
+        public int PLN;
+        public int PHN;
+        public List<Disc> total = new List<Disc>();
+        public List<Disc> group = new List<Disc>();
+
+        
+        public DataTable Total_tuple_analysis;
 
         public DataTable total_analysis;
         public DataTable groups_analysis;
@@ -54,10 +65,12 @@ namespace ExamReport
             stDev = 0.0m;
             Dfactor = 0.0m;
             difficulty = 0.0m;
+            discriminant = 0.0m;
 
             total_analysis = new DataTable();
             groups_analysis = new DataTable();
             freq_analysis = new DataTable();
+            Total_tuple_analysis = new DataTable();
 
             single_group_analysis = new ArrayList();
             single_topic_analysis = new ArrayList();
@@ -92,6 +105,37 @@ namespace ExamReport
             //freq_analysis.PrimaryKey = new DataColumn[] { freq_analysis.Columns["totalmark"] };
 
             
+        }
+
+        public class Disc
+        {
+            decimal PLN;
+            decimal PHN;
+            int count;
+            decimal fullmark;
+
+            public Disc(int _count, decimal _fullmark)
+            {
+                PLN = 0m;
+                PHN = 0m;
+                count = Convert.ToInt32(Math.Ceiling(_count * 0.27));
+                fullmark = _fullmark;
+            }
+
+            public void AddData(decimal value, bool isPLN)
+            {
+                if (isPLN)
+                    PLN += value;
+                else
+                    PHN += value;
+            }
+            public decimal GetAns()
+            {
+                if (count > 0)
+                    return ((PHN - PLN) / count) / fullmark;
+                else
+                    return 0;
+            }
         }
     }
 }

@@ -1,7 +1,16 @@
-System.NullReferenceException: 未将对象引用设置到对象的实例。
-   在 ExamReport.LoadDatabase.start_process() 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\LoadDatabase.cs:行号 64
-   在 System.Threading.ThreadHelper.ThreadStart_Context(Object state)
-   在 System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
-   在 System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
-   在 System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
-   在 System.Threading.ThreadHelper.ThreadStart()
+MySql.Data.MySqlClient.MySqlException (0x80004005): Unknown column 'zh' in 'field list'
+   at MySql.Data.MySqlClient.MySqlStream.OpenPacket()
+   at MySql.Data.MySqlClient.NativeDriver.ReadResult(UInt64& affectedRows, Int64& lastInsertId)
+   at MySql.Data.MySqlClient.MySqlDataReader.GetResultSet()
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteNonQuery()
+   at ExamReport.MySqlHelper.ExecuteNonQuery(String connectionString, CommandType cmdType, String cmdText, MySqlParameter[] commandParameters) in G:\project\ExamReporterL\ExamReporterL\ExamReport\MySqlHelper.cs:line 45
+   at ExamReport.MetaData.insert_data() in G:\project\ExamReporterL\ExamReporterL\ExamReport\MetaData.cs:line 73
+   at ExamReport.LoadDatabase.start_process() in G:\project\ExamReporterL\ExamReporterL\ExamReport\LoadDatabase.cs:line 103
+   at System.Threading.ThreadHelper.ThreadStart_Context(Object state)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.ThreadHelper.ThreadStart()

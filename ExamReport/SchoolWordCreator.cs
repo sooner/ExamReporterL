@@ -79,7 +79,7 @@ namespace ExamReport
             {
                 chartdata.Add(temp.total_dist, temp.name);
             }
-            insertChart("    总分分布曲线图", chartdata.target, "分数", "人数", Excel.XlChartType.xlXYScatterLines, ((PartitionData)zh_pdata[0]).fullmark);
+            insertChart("    总分分布曲线图", chartdata.target, "分数", "比率（%）", Excel.XlChartType.xlXYScatterLines, ((PartitionData)zh_pdata[0]).fullmark);
             insertGroupTopic("    题组整体分析表", zh_pdata, 3);
             insertFreqTable("    总分频数分布表", zh_pdata);
             insertText(ExamTitle1, "题组分析");
@@ -136,7 +136,7 @@ namespace ExamReport
                 chartdata.Add(temp.total_dist, temp.name);
             }
 
-            insertChart("    总分分布曲线图", chartdata.target, "分数", "人数", Excel.XlChartType.xlLineMarkers, ((PartitionData)_pdata[0]).fullmark);
+            insertChart("    总分分布曲线图", chartdata.target, "分数", "比率（%）", Excel.XlChartType.xlLineMarkers, ((PartitionData)_pdata[0]).fullmark);
             insertTotalTopic("    题目整体分析表", _pdata);
             insertGroupTopic("    题组整体分析表", _pdata, ((PartitionData)_pdata[2]).groups_analysis.Rows.Count);
 

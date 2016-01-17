@@ -868,6 +868,43 @@ namespace ExamReport
             groups_range = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
             groups_range.InsertParagraphAfter();
         }
+        public void insertTotalTupleTable(WordData sdata, string title)
+        {
+            Word.Table tuple_table;
+            Word.Range freq_rng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+
+            tuple_table = oDoc.Tables.Add(freq_rng, 4, sdata.Total_tuple_analysis.Rows.Count + 1, ref oMissing, oTrue);
+            tuple_table.Rows[1].HeadingFormat = -1;
+            tuple_table.Range.InsertCaption(oWord.CaptionLabels["表"], title, oMissing, Word.WdCaptionPosition.wdCaptionPositionAbove, oMissing);
+            freq_rng.MoveEnd(Word.WdUnits.wdParagraph, 1);
+            freq_rng.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+            //freq_table.Range.set_Style(ref TableContent2);
+
+            //freq_table.Range.Select();
+            //oWord.Selection.Cells.VerticalAlignment = Word.WdCellVerticalAlignment.wdCellAlignVerticalCenter;
+            //oWord.Selection.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+            //freq_table.Range.ParagraphFormat.Space1();
+            tuple_table.Borders.OutsideLineStyle = Word.WdLineStyle.wdLineStyleSingle;
+            tuple_table.Borders.InsideLineStyle = Word.WdLineStyle.wdLineStyleSingle;
+
+            tuple_table.Cell(1, 1).Range.Text = "组别";
+            tuple_table.Cell(2, 1).Range.Text = "分值范围";
+            tuple_table.Cell(3, 1).Range.Text = "平均分";
+            tuple_table.Cell(4, 1).Range.Text = "得分率";
+
+            for (int i = 0; i < sdata.Total_tuple_analysis.Rows.Count; i++)
+            {
+                tuple_table.Cell(1, i + 2).Range.Text = sdata.Total_tuple_analysis.Rows[i]["name"].ToString().Trim();
+                tuple_table.Cell(2, i + 2).Range.Text = sdata.Total_tuple_analysis.Rows[i]["ScoreRange"].ToString().Trim();
+                tuple_table.Cell(3, i + 2).Range.Text = string.Format("{0:F1}", sdata.Total_tuple_analysis.Rows[i]["Average"]);
+                tuple_table.Cell(4, i + 2).Range.Text = string.Format("{0:F2}", sdata.Total_tuple_analysis.Rows[i]["difficulty"]);
+            }
+            tuple_table.Select();
+            oWord.Selection.set_Style(ref TableContent2);
+
+            freq_rng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+            freq_rng.InsertParagraphAfter();
+        }
         public void insertTotalFreqTable(WordData sdata)
         {
             Word.Table freq_table;
@@ -1061,6 +1098,7 @@ namespace ExamReport
                 insertTotalChart("    总分分布曲线图", _ZH_data);
                 insertTotalGroupTable("    科目整体分析表", _ZH_data, 4);
                 insertTotalFreqTable(_ZH_data);
+                insertTotalTupleTable(_ZH_data, "    综合总体分组分析表");
                 insertText(ExamTitle1, "题组分析");
                 List<string> keys = new List<string>(_ZH_data.groups_group.Keys);
                 int zh_group_count = 3;
@@ -1118,10 +1156,10 @@ namespace ExamReport
             insertTotalTable(_sdata);
 
             ///////////////////////////////////////////////////////////
-
+            //总分分布图表
             insertTotalChart("    总分分布曲线图", _sdata);
 
-
+            //区分度图表
             insertTotalDifficultyChart();
            
             //oDoc.Characters.Last.InsertBreak(oParagrahbreak);
@@ -1196,6 +1234,7 @@ namespace ExamReport
 
 
             insertTotalFreqTable(_sdata);
+            insertTotalTupleTable(_sdata, "    总体分组分析表");
             //oDoc.Characters.Last.InsertBreak(oPageBreak);
 
             oDoc.Characters.Last.InsertBreak(oPagebreak);
@@ -1490,7 +1529,8 @@ namespace ExamReport
             {
                 data[i] = new double[2];
                 data[i][0] = Convert.ToDouble(_sdata.total_analysis.Rows[i]["difficulty"]);
-                data[i][1] = Convert.ToDouble(_sdata.total_analysis.Rows[i]["discriminant"]);
+                //data[i][1] = Convert.ToDouble(_sdata.total_analysis.Rows[i]["discriminant"]);
+                data[i][1] = Convert.ToDouble(_sdata.total_analysis.Rows[i]["correlation"]);
             }
 
             ZedGraph.createGradient(data);

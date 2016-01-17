@@ -38,6 +38,7 @@ namespace ExamReport
         public DataTable total_analysis;
         public DataTable group_analysis;
         public DataTable frequency_dist;
+        public DataTable Total_tuple_analysis;
         public enum single_type { single, multiple, sub };
         public DataTable topicDifficultyTable;
 
@@ -88,6 +89,7 @@ namespace ExamReport
             frequency_dist = new DataTable();
             single_group_analysis = new ArrayList();
             single_topic_analysis = new ArrayList();
+            Total_tuple_analysis = new DataTable();
 
             totalmark_dist = new DataTable();
 
@@ -139,6 +141,7 @@ namespace ExamReport
             frequency_dist.Columns.Add("accumulateRate", typeof(decimal));
             //frequency_dist.PrimaryKey = new DataColumn[] { frequency_dist.Columns["totalmark"] };
 
+            
             group_cor = new List<DataTable>();
         }
 

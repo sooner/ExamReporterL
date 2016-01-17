@@ -82,8 +82,8 @@ namespace ExamReport
             //{
             if (!md.check())
                 wizard.ErrorM("该数据已存储，请先删除后再添加");
-            try
-            {
+            //try
+            //{
 
                 switch (exam)
                 {
@@ -101,21 +101,21 @@ namespace ExamReport
 
                 }
                 md.insert_data();
-            }
-            catch (System.Threading.ThreadAbortException e)
-            {
-            }
-            catch (DuplicateNameException ex)
-            {
+            //}
+            //catch (System.Threading.ThreadAbortException e)
+            //{
+            //}
+            //catch (DuplicateNameException ex)
+            //{
 
-                wizard.ErrorM("该数据已存储，请先删除后再添加");
-            }
-            catch (Exception ex)
-            {
-                md.rollback();
-                wizard.ErrorM(ex.Message);
+            //    wizard.ErrorM("该数据已存储，请先删除后再添加");
+            //}
+            //catch (Exception ex)
+            //{
+            //    md.rollback();
+            //    wizard.ErrorM(ex.Message);
 
-            }
+            //}
         }
 
         public void zk_database_process(MetaData mdata)

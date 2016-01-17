@@ -88,9 +88,10 @@ namespace ExamReport
             {
                 chartdata.Add(temp.total_dist, temp.name);
             }
-            insertChart("    总分分布曲线图", chartdata.target, "分数", "人数", Excel.XlChartType.xlLineMarkers, ((PartitionData)ZH_sdata[0]).fullmark);
+            insertChart("    总分分布曲线图", chartdata.target, "分数", "比率（%）", Excel.XlChartType.xlLineMarkers, ((PartitionData)ZH_sdata[0]).fullmark);
             insertGroupTopic("    题组整体分析表", ZH_totaldata, 3);
             insertFreqTable("    总分频数分布表", ZH_sdata);
+            insertTotalTupleTable("    " + subject.Substring(0,2) + "总体分组分析表", ZH_sdata);
             insertText(ExamTitle1, "题组分析");
             List<string> keys = new List<string>(wenli_group.Keys);
             int group_count = 3;
@@ -149,9 +150,10 @@ namespace ExamReport
             {
                 chartdata.Add(temp.total_dist, temp.name);
             }
-            insertChart("    总分分布曲线图", chartdata.target, "分数", "人数", Excel.XlChartType.xlXYScatterLines, ((PartitionData)ZH_sdata[0]).fullmark);
+            insertChart("    总分分布曲线图", chartdata.target, "分数", "比率（%）", Excel.XlChartType.xlXYScatterLines, ((PartitionData)ZH_sdata[0]).fullmark);
             insertGroupTopic("    题组整体分析表", ZH_sdata, 3);
             insertFreqTable("    总分频数分布表", ZH_sdata);
+            insertTotalTupleTable("    " + _config.subject.Substring(0, 2) + "总体分组分析表", ZH_sdata);
             insertText(ExamTitle1, "题组分析");
             List<string> keys = new List<string>(wenli_group.Keys);
             int group_count = 3;
@@ -229,11 +231,12 @@ namespace ExamReport
             {
                 chartdata.Add(temp.total_dist, temp.name);
             }
-            insertChart("    总分分布曲线图", chartdata.target, "分数", "人数", Excel.XlChartType.xlLineMarkers, ((PartitionData)_sdata[0]).fullmark);
+            insertChart("    总分分布曲线图", chartdata.target, "分数", "比率（%）", Excel.XlChartType.xlLineMarkers, ((PartitionData)_sdata[0]).fullmark);
             insertTotalTopic("    题目整体分析表", _sdata);
             insertGroupTopic("    题组整体分析表", _sdata, ((PartitionData)_sdata[_sdata.Count - 1]).groups_analysis.Rows.Count);
 
             insertFreqTable("    总分频数分布表", _sdata);
+            insertTotalTupleTable("    总体分组分析表", _sdata);
             oDoc.Characters.Last.InsertBreak(oPagebreak);
             insertText(ExamTitle1, "题组分析");
             List<string> keys = new List<string>(_groups_group.Keys);
@@ -302,7 +305,7 @@ namespace ExamReport
             {
                 chartdata.Add(temp.total_dist, temp.name);
             }
-            insertChart("    总分分布曲线图", chartdata.target, "分数", "人数", Excel.XlChartType.xlLineMarkers, ((PartitionData)_sdata[0]).fullmark);
+            insertChart("    总分分布曲线图", chartdata.target, "分数", "比率（%）", Excel.XlChartType.xlLineMarkers, ((PartitionData)_sdata[0]).fullmark);
             if (_report_type.Equals("区县"))
             {
                 insertTotalTopic("    题目整体分析表", _totaldata);
@@ -315,6 +318,7 @@ namespace ExamReport
                 insertGroupTopic("    题组整体分析表", _sdata, ((PartitionData)_sdata[_sdata.Count - 1]).groups_analysis.Rows.Count);
             }
             insertFreqTable("    总分频数分布表", _sdata);
+            insertTotalTupleTable("    总体分组分析表", _sdata);
             oDoc.Characters.Last.InsertBreak(oPagebreak);
             insertText(ExamTitle1, "题组分析");
             List<string> keys = new List<string>(_groups_group.Keys);
@@ -755,16 +759,56 @@ namespace ExamReport
             range = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
             range.InsertParagraphAfter();
         }
+        public void insertTotalTupleTable(string title, ArrayList totaldata)
+        {
+            int groupnum = ((PartitionData)totaldata[0]).Total_tuple_analysis.Rows.Count;
+            Word.Table table;
+            Word.Range range = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+            int col = 11;
+            table = oDoc.Tables.Add(range, totaldata.Count * 3 + 1, groupnum + 2, ref oMissing, oTrue);
+            table.Range.InsertCaption(oWord.CaptionLabels["表"], title, oMissing, Word.WdCaptionPosition.wdCaptionPositionAbove, oMissing);
+            range.MoveEnd(Word.WdUnits.wdParagraph, 1);
+            range.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+            table.Rows[1].HeadingFormat = -1;
+
+
+            table.Borders.OutsideLineStyle = Word.WdLineStyle.wdLineStyleSingle;
+            table.Borders.InsideLineStyle = Word.WdLineStyle.wdLineStyleSingle;
+
+            table.Cell(1, 1).Range.Text = "组别";
+            table.Cell(1, 2).Range.Text = "分类";
+            for (int i = 0; i < groupnum; i++)
+                table.Cell(1, i + 3).Range.Text = ((PartitionData)totaldata[0]).Total_tuple_analysis.Rows[i]["name"].ToString().Trim();
+            string[] name = { "分值范围", "平均分", "得分率" };
+
+            for (int i = 0; i < 3; i++)
+            {
+                int tablerow = i * totaldata.Count + 2;
+                foreach (PartitionData data in totaldata)
+                {
+                    table.Cell(tablerow, 1).Range.Text = name[i];
+                    table.Cell(tablerow, 2).Range.Text = data.name;
+                    for (int k = 0; k < groupnum; k++)
+                        table.Cell(tablerow, k + 3).Range.Text = data.Total_tuple_analysis.Rows[k][i+1].ToString().Trim();
+                    tablerow++;
+                }
+            }
+
+            table.Select();
+            oWord.Selection.set_Style(ref TableContent2);
+
+            verticalCellMerge(table, 2, 1);
+
+
+            range = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+            range.InsertParagraphAfter();
+        }
         public void insertGroupTopic(string title, ArrayList totaldata, int count)
         {
             //int count = ((PartitionData)totaldata[totaldata.Count - 1]).groups_analysis.Rows.Count;
             Word.Table table;
             Word.Range range = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-            int col;
-            if (_config.WSLG)
-                col = 11;
-            else
-                col = 10;
+            int col = 11;
             table = oDoc.Tables.Add(range, totaldata.Count * count + 1, col, ref oMissing, oTrue);
             table.Range.InsertCaption(oWord.CaptionLabels["表"], title, oMissing, Word.WdCaptionPosition.wdCaptionPositionAbove, oMissing);
             range.MoveEnd(Word.WdUnits.wdParagraph, 1);
@@ -785,8 +829,7 @@ namespace ExamReport
             table.Cell(1, 8).Range.Text = "标准差";
             table.Cell(1, 9).Range.Text = "差异系数";
             table.Cell(1, 10).Range.Text = "得分率";
-            if(_config.WSLG)
-                table.Cell(1, 11).Range.Text = "鉴别指数";
+            table.Cell(1, 11).Range.Text = "鉴别指数";
 
             for (int i = 0; i < count; i++)
             {
@@ -804,8 +847,7 @@ namespace ExamReport
                     table.Cell(tablerow, 9).Range.Text = string.Format("{0:F2}", data.groups_analysis.Rows[i]["dfactor"]);
                     table.Cell(tablerow, 10).Range.Text = string.Format("{0:F2}", data.groups_analysis.Rows[i]["difficulty"]);
                     
-                    if(_config.WSLG)
-                        table.Cell(tablerow, 11).Range.Text = string.Format("{0:F2}", ((WSLG_partitiondata)data).group_discriminant[i]);
+                    table.Cell(tablerow, 11).Range.Text = string.Format("{0:F2}", data.group_discriminant[i]);
                     tablerow++;
                 }
             }
@@ -823,11 +865,7 @@ namespace ExamReport
             int count = ((PartitionData)totaldata[totaldata.Count - 1]).total_analysis.Rows.Count;
             Word.Table table;
             Word.Range range = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-            int col;
-            if (_config.WSLG)
-                col = 11;
-            else
-                col = 10;
+            int col = 11;
             table = oDoc.Tables.Add(range, totaldata.Count * count + 1, col, ref oMissing, oTrue);
             table.Range.InsertCaption(oWord.CaptionLabels["表"], title, oMissing, Word.WdCaptionPosition.wdCaptionPositionAbove, oMissing);
             range.MoveEnd(Word.WdUnits.wdParagraph, 1);
@@ -848,8 +886,7 @@ namespace ExamReport
             table.Cell(1, 8).Range.Text = "标准差";
             table.Cell(1, 9).Range.Text = "差异系数";
             table.Cell(1, 10).Range.Text = "得分率";
-            if(_config.WSLG)
-                table.Cell(1, 11).Range.Text = "鉴别指数";
+            table.Cell(1, 11).Range.Text = "鉴别指数";
 
             for (int i = 0; i < count; i++)
             {
@@ -866,8 +903,7 @@ namespace ExamReport
                     table.Cell(tablerow, 8).Range.Text = string.Format("{0:F2}", data.total_analysis.Rows[i]["stDev"]);
                     table.Cell(tablerow, 9).Range.Text = string.Format("{0:F2}", data.total_analysis.Rows[i]["dfactor"]);
                     table.Cell(tablerow, 10).Range.Text = string.Format("{0:F2}", data.total_analysis.Rows[i]["difficulty"]);
-                    if(_config.WSLG)
-                        table.Cell(tablerow, 11).Range.Text = string.Format("{0:F2}", ((WSLG_partitiondata)data).total_discriminant[i]);
+                    table.Cell(tablerow, 11).Range.Text = string.Format("{0:F2}", data.total_discriminant[i]);
                     tablerow++;
                 }
             }
@@ -1039,11 +1075,8 @@ namespace ExamReport
         {
             Word.Table table;
             Word.Range range = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-            int count;
-            if (_config.WSLG)
-                count = 10;
-            else
-                count = 9;
+            int count = 10;
+
             table = oDoc.Tables.Add(range, totaldata.Count + 1, count, ref oMissing, oTrue);
             table.Range.InsertCaption(oWord.CaptionLabels["表"], title, oMissing, Word.WdCaptionPosition.wdCaptionPositionAbove, oMissing);
             range.MoveEnd(Word.WdUnits.wdParagraph, 1);
@@ -1063,8 +1096,7 @@ namespace ExamReport
             table.Cell(1, 7).Range.Text = "标准差";
             table.Cell(1, 8).Range.Text = "差异系数";
             table.Cell(1, 9).Range.Text = "得分率";
-            if(_config.WSLG)
-                table.Cell(1, 10).Range.Text = "鉴别指数";
+            table.Cell(1, 10).Range.Text = "鉴别指数";
 
             for (int i = 0; i < totaldata.Count; i++)
             {
@@ -1077,8 +1109,7 @@ namespace ExamReport
                 table.Cell(i + 2, 7).Range.Text = string.Format("{0:F2}", ((PartitionData)totaldata[i]).stDev);
                 table.Cell(i + 2, 8).Range.Text = string.Format("{0:F2}", ((PartitionData)totaldata[i]).Dfactor);
                 table.Cell(i + 2, 9).Range.Text = string.Format("{0:F2}", ((PartitionData)totaldata[i]).difficulty);
-                if(_config.WSLG)
-                    table.Cell(i + 2, 10).Range.Text = string.Format("{0:F2}", ((WSLG_partitiondata)totaldata[i]).discriminant);
+                table.Cell(i + 2, 10).Range.Text = string.Format("{0:F2}", ((PartitionData)totaldata[i]).discriminant);
             }
 
             table.Select();

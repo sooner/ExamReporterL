@@ -173,11 +173,52 @@ namespace ExamReport
             insertChart("    理科综合难度曲线图", data.sub[5], "分数", "难度", Excel.XlChartType.xlLineMarkers, 300m);
 
             insertText(ExamTitle1, "总分分数表");
-            insertFreqTable_final("    总分分数分布表", data);
+            //insertFreqTable_final("    总分分数分布表", data);
+            insertFreqTable_single("    文科总分分数分布表", data.w_result.frequency);
+            insertFreqTable_single("    理科总分分数分布表", data.l_result.frequency);
 
             foreach (Word.TableOfContents table in oDoc.TablesOfContents)
                 table.Update();
             Utils.Save(_config, oDoc, oWord);
+        }
+        void insertFreqTable_single(string title, DataTable dt)
+        {
+            Word.Table table;
+            Word.Range range = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+            table = oDoc.Tables.Add(range, dt.Rows.Count + 1, 5, ref oMissing, oTrue);
+
+            table.Range.InsertCaption(oWord.CaptionLabels["表"], title, oMissing, Word.WdCaptionPosition.wdCaptionPositionAbove, oMissing);
+            range.MoveEnd(Word.WdUnits.wdParagraph, 1);
+            range.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+
+
+            table.Cell(1, 1).Range.Text = "分值";
+            table.Cell(1, 2).Range.Text = "人数";
+            table.Cell(1, 3).Range.Text = "比率(%)";
+            table.Cell(1, 4).Range.Text = "累计人数";
+            table.Cell(1, 5).Range.Text = "累计比率(%)";
+
+
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                table.Cell(i + 2, 1).Range.Text = string.Format("{0:F0}", dt.Rows[i]["totalmark"]) + "～";
+                table.Cell(i + 2, 2).Range.Text = dt.Rows[i]["frequency"].ToString();
+                table.Cell(i + 2, 3).Range.Text = string.Format("{0:F2}", dt.Rows[i]["rate"]);
+                table.Cell(i + 2, 4).Range.Text = dt.Rows[i]["accumulateFreq"].ToString();
+                table.Cell(i + 2, 5).Range.Text = string.Format("{0:F2}", dt.Rows[i]["accumulateRate"]);
+            }
+
+            table.Rows[1].HeadingFormat = -1;
+
+
+            table.Borders.OutsideLineStyle = Word.WdLineStyle.wdLineStyleSingle;
+            table.Borders.InsideLineStyle = Word.WdLineStyle.wdLineStyleSingle;
+
+            table.Select();
+            oWord.Selection.set_Style(ref TableContent2);
+
+            range = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+            range.InsertParagraphAfter();
         }
         void insertFreqTable_final(string title, ZF_statistic temp)
         {
@@ -244,7 +285,7 @@ namespace ExamReport
             table.Borders.OutsideLineStyle = Word.WdLineStyle.wdLineStyleSingle;
             table.Borders.InsideLineStyle = Word.WdLineStyle.wdLineStyleSingle;
 
-            //table.Cell(1, 1).Range.Text = "分类";
+            table.Cell(1, 1).Range.Text = "分类";
             table.Cell(1, 2).Range.Text = "人数";
             table.Cell(1, 3).Range.Text = "满分值";
             table.Cell(1, 4).Range.Text = "最大值";

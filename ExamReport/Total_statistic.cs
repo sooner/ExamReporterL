@@ -369,7 +369,7 @@ namespace ExamReport
                     DataRow midRow = result.frequency_dist.Rows[result.frequency_dist.Rows.Count - 1];
                     if ((int)dr["frequency"] == 1)
                         if (isEven)
-                            result.mean = ((decimal)dr["totalmark"] + (decimal)midRow["totalmark"]) / 2;
+                            result.mean = ((decimal)dr["totalmark"] + ( decimal)midRow["totalmark"]) / 2;
                         else
                             result.mean = (decimal)dr["totalmark"];
                     else
@@ -382,11 +382,7 @@ namespace ExamReport
                     }
                     midCheck = false;
                 }
-                if (MaxFreq < (int)dr["frequency"])
-                {
-                    MaxFreq = (int)dr["frequency"];
-                    result.mode = (decimal)dr["totalmark"];
-                }
+                
                 result.frequency_dist.Rows.Add(dr);
             }
             DataTable new_freq = result.frequency_dist.Clone();
@@ -407,11 +403,24 @@ namespace ExamReport
                     oldrow["rate"] = ((int)oldrow["frequency"] / (decimal)result.total_num) * 100;
                     oldrow["accumulateFreq"] = (int)oldrow["accumulateFreq"] + (int)dr["frequency"];
                     oldrow["accumulateRate"] = ((int)oldrow["accumulateFreq"] / (decimal)result.total_num) * 100;
+                    if (MaxFreq < (int)oldrow["frequency"])
+                    {
+                        MaxFreq = (int)oldrow["frequency"];
+                        result.mode = (decimal)oldrow["totalmark"];
+                    }
+                    
                 }
-
+                if (MaxFreq < (int)dr["frequency"])
+                {
+                    MaxFreq = (int)dr["frequency"];
+                    result.mode = (decimal)dr["totalmark"];
+                }
             }
             result.frequency_dist = new_freq;
+
             #endregion
+
+            Total_tuple_analysis(result, totalmark_str);
             #region groups table process
             int group_dc;
             string spattern = "^\\d+~\\d+$";
@@ -1091,6 +1100,35 @@ namespace ExamReport
             else
                 zh_group_mark(_basic_data);
             return true;
+        }
+        public void Total_tuple_analysis(WordData wd, string totalmarkstr)
+        {
+            wd.Total_tuple_analysis.Columns.Add("name", typeof(string));
+            wd.Total_tuple_analysis.Columns.Add("ScoreRange", typeof(string));
+            wd.Total_tuple_analysis.Columns.Add("Average", typeof(decimal));
+            wd.Total_tuple_analysis.Columns.Add("difficulty", typeof(decimal));
+
+            wd.Total_tuple_analysis.PrimaryKey = new DataColumn[] { wd.Total_tuple_analysis.Columns["name"]};
+
+            var tuples = from row in _basic_data.AsEnumerable()
+                      group row by row.Field<string>("Groups") into grp
+                      select new
+                      {
+                          name = grp.Key,
+                          max = grp.Max(row => row.Field<decimal>(totalmarkstr)),
+                          min = grp.Min(row => row.Field<decimal>(totalmarkstr)),
+                          avg = grp.Average(row => row.Field<decimal>(totalmarkstr))
+                      };
+            foreach (var tuple in tuples)
+            {
+                DataRow dr = wd.Total_tuple_analysis.NewRow();
+                dr["name"] = tuple.name.Trim();
+                dr["ScoreRange"] = tuple.min + "～" + tuple.max;
+                dr["Average"] = tuple.avg;
+                dr["difficulty"] = tuple.avg / wd.fullmark;
+                wd.Total_tuple_analysis.Rows.Add(dr);
+            }
+
         }
         public void xz_single_postprocess(string th)
         {
