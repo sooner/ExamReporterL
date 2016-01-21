@@ -23,6 +23,13 @@ namespace ExamReport
             + ConfigurationManager.AppSettings["password"].ToString().Trim() + 
             "';charset='utf8';pooling=true";
 
+        public static string ConnNoDB = "Data Source='"
+            + ConfigurationManager.AppSettings["server"].ToString().Trim() +
+            "';User Id='"
+            + ConfigurationManager.AppSettings["username"].ToString().Trim() +
+            "';Password='"
+            + ConfigurationManager.AppSettings["password"].ToString().Trim() +
+            "';charset='utf8';pooling=true";
         // 用于缓存参数的HASH表
         private static Hashtable parmCache = Hashtable.Synchronized(new Hashtable());
 

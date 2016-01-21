@@ -1,16 +1,24 @@
-MySql.Data.MySqlClient.MySqlException (0x80004005): Unknown column 'zh' in 'field list'
-   at MySql.Data.MySqlClient.MySqlStream.OpenPacket()
-   at MySql.Data.MySqlClient.NativeDriver.ReadResult(UInt64& affectedRows, Int64& lastInsertId)
-   at MySql.Data.MySqlClient.MySqlDataReader.GetResultSet()
-   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
-   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
-   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader()
-   at MySql.Data.MySqlClient.MySqlCommand.ExecuteNonQuery()
-   at ExamReport.MySqlHelper.ExecuteNonQuery(String connectionString, CommandType cmdType, String cmdText, MySqlParameter[] commandParameters) in G:\project\ExamReporterL\ExamReporterL\ExamReport\MySqlHelper.cs:line 45
-   at ExamReport.MetaData.insert_data() in G:\project\ExamReporterL\ExamReporterL\ExamReport\MetaData.cs:line 73
-   at ExamReport.LoadDatabase.start_process() in G:\project\ExamReporterL\ExamReporterL\ExamReport\LoadDatabase.cs:line 103
-   at System.Threading.ThreadHelper.ThreadStart_Context(Object state)
-   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
-   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
-   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
-   at System.Threading.ThreadHelper.ThreadStart()
+MySql.Data.MySqlClient.MySqlException (0x80004005): Access denied for user 'root'@'133.133.133.107' (using password: YES)
+   在 MySql.Data.MySqlClient.MySqlStream.OpenPacket()
+   在 MySql.Data.MySqlClient.NativeDriver.Authenticate411()
+   在 MySql.Data.MySqlClient.NativeDriver.Authenticate()
+   在 MySql.Data.MySqlClient.NativeDriver.Open()
+   在 MySql.Data.MySqlClient.Driver.Create(MySqlConnectionStringBuilder settings)
+   在 MySql.Data.MySqlClient.MySqlPool.CreateNewPooledConnection()
+   在 MySql.Data.MySqlClient.MySqlPool.GetPooledConnection()
+   在 MySql.Data.MySqlClient.MySqlPool.GetConnection()
+   在 MySql.Data.MySqlClient.MySqlConnection.Open()
+   在 ExamReport.MySqlHelper.PrepareCommand(MySqlCommand cmd, MySqlConnection conn, MySqlTransaction trans, CommandType cmdType, String cmdText, MySqlParameter[] cmdParms) 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\MySqlHelper.cs:行号 268
+   在 ExamReport.MySqlHelper.ExecuteNonQuery(String connectionString, CommandType cmdType, String cmdText, MySqlParameter[] commandParameters) 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\MySqlHelper.cs:行号 51
+   在 ExamReport.mainform.DBCheck() 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\MainRadForm.cs:行号 158
+   在 ExamReport.mainform.Grid_load() 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\MainRadForm.cs:行号 164
+   在 ExamReport.mainform..ctor() 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\MainRadForm.cs:行号 40
+   在 ExamReport.Program.Main() 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\Program.cs:行号 21
+   在 System.AppDomain._nExecuteAssembly(RuntimeAssembly assembly, String[] args)
+   在 System.AppDomain.ExecuteAssembly(String assemblyFile, Evidence assemblySecurity, String[] args)
+   在 Microsoft.VisualStudio.HostingProcess.HostProc.RunUsersAssembly()
+   在 System.Threading.ThreadHelper.ThreadStart_Context(Object state)
+   在 System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   在 System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   在 System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+   在 System.Threading.ThreadHelper.ThreadStart()

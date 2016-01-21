@@ -96,14 +96,9 @@
             this.zk_gridview = new Telerik.WinControls.UI.RadGridView();
             this.ZKTreeView = new Telerik.WinControls.UI.RadTreeView();
             this.HKPageView = new Telerik.WinControls.UI.RadPageViewPage();
-            this.hk_pre_panel = new Telerik.WinControls.UI.RadPanel();
-            this.hk_delete = new System.Windows.Forms.Button();
-            this.hk_import = new System.Windows.Forms.Button();
-            this.hk_zt_panel = new Telerik.WinControls.UI.RadPanel();
-            this.hk_zt_progresslabel = new Telerik.WinControls.UI.RadLabel();
-            this.hk_waitingbar = new Telerik.WinControls.UI.RadWaitingBar();
-            this.hk_cancel = new Telerik.WinControls.UI.RadButton();
-            this.hk_start = new Telerik.WinControls.UI.RadButton();
+            this.hk_markReporter_panel = new Telerik.WinControls.UI.RadPanel();
+            this.radGroupBox1 = new Telerik.WinControls.UI.RadGroupBox();
+            this.hk_config_panel = new Telerik.WinControls.UI.RadGroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.label31 = new System.Windows.Forms.Label();
             this.fail_high = new System.Windows.Forms.NumericUpDown();
@@ -125,11 +120,18 @@
             this.label21 = new System.Windows.Forms.Label();
             this.excellent_low = new System.Windows.Forms.NumericUpDown();
             this.label20 = new System.Windows.Forms.Label();
-            this.hk_config_panel = new Telerik.WinControls.UI.RadGroupBox();
             this.radButton12 = new Telerik.WinControls.UI.RadButton();
             this.hk_save_addr = new Telerik.WinControls.UI.RadTextBox();
             this.radLabel12 = new Telerik.WinControls.UI.RadLabel();
             this.hk_isVisible = new Telerik.WinControls.UI.RadCheckBox();
+            this.hk_zt_panel = new Telerik.WinControls.UI.RadPanel();
+            this.hk_zt_progresslabel = new Telerik.WinControls.UI.RadLabel();
+            this.hk_waitingbar = new Telerik.WinControls.UI.RadWaitingBar();
+            this.hk_cancel = new Telerik.WinControls.UI.RadButton();
+            this.hk_start = new Telerik.WinControls.UI.RadButton();
+            this.hk_pre_panel = new Telerik.WinControls.UI.RadPanel();
+            this.hk_delete = new System.Windows.Forms.Button();
+            this.hk_import = new System.Windows.Forms.Button();
             this.HKTreeView = new Telerik.WinControls.UI.RadTreeView();
             this.HKGridView = new Telerik.WinControls.UI.RadGridView();
             this.GKPageView = new Telerik.WinControls.UI.RadPageViewPage();
@@ -215,6 +217,18 @@
             this.radLabel13 = new Telerik.WinControls.UI.RadLabel();
             this.GKTreeView = new Telerik.WinControls.UI.RadTreeView();
             this.gk_gridview = new Telerik.WinControls.UI.RadGridView();
+            this.radLabel19 = new Telerik.WinControls.UI.RadLabel();
+            this.radLabel20 = new Telerik.WinControls.UI.RadLabel();
+            this.radRadioButton1 = new Telerik.WinControls.UI.RadRadioButton();
+            this.radRadioButton2 = new Telerik.WinControls.UI.RadRadioButton();
+            this.radGroupBox2 = new Telerik.WinControls.UI.RadGroupBox();
+            this.radLabel22 = new Telerik.WinControls.UI.RadLabel();
+            this.radDropDownList1 = new Telerik.WinControls.UI.RadDropDownList();
+            this.radDropDownList2 = new Telerik.WinControls.UI.RadDropDownList();
+            this.radTextBox1 = new Telerik.WinControls.UI.RadTextBox();
+            this.radButton14 = new Telerik.WinControls.UI.RadButton();
+            this.radButton15 = new Telerik.WinControls.UI.RadButton();
+            this.radWaitingBar1 = new Telerik.WinControls.UI.RadWaitingBar();
             ((System.ComponentModel.ISupportInitialize)(this.wholepage)).BeginInit();
             this.wholepage.SuspendLayout();
             this.ZKPageView.SuspendLayout();
@@ -248,14 +262,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.zk_gridview.MasterTemplate)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ZKTreeView)).BeginInit();
             this.HKPageView.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.hk_pre_panel)).BeginInit();
-            this.hk_pre_panel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.hk_zt_panel)).BeginInit();
-            this.hk_zt_panel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.hk_zt_progresslabel)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.hk_waitingbar)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.hk_cancel)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.hk_start)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.hk_markReporter_panel)).BeginInit();
+            this.hk_markReporter_panel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.radGroupBox1)).BeginInit();
+            this.radGroupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.hk_config_panel)).BeginInit();
+            this.hk_config_panel.SuspendLayout();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fail_high)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fail_low)).BeginInit();
@@ -265,12 +277,18 @@
             ((System.ComponentModel.ISupportInitialize)(this.well_low)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.excellent_high)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.excellent_low)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.hk_config_panel)).BeginInit();
-            this.hk_config_panel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.radButton12)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.hk_save_addr)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radLabel12)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.hk_isVisible)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.hk_zt_panel)).BeginInit();
+            this.hk_zt_panel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.hk_zt_progresslabel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.hk_waitingbar)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.hk_cancel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.hk_start)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.hk_pre_panel)).BeginInit();
+            this.hk_pre_panel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.HKTreeView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.HKGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.HKGridView.MasterTemplate)).BeginInit();
@@ -361,6 +379,19 @@
             ((System.ComponentModel.ISupportInitialize)(this.GKTreeView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gk_gridview)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gk_gridview.MasterTemplate)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radLabel19)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radLabel20)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radRadioButton1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radRadioButton2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radGroupBox2)).BeginInit();
+            this.radGroupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.radLabel22)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radDropDownList1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radDropDownList2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radTextBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radButton14)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radButton15)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radWaitingBar1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
             this.SuspendLayout();
             // 
@@ -711,8 +742,9 @@
             // HKPageView
             // 
             this.HKPageView.Controls.Add(this.hk_pre_panel);
-            this.HKPageView.Controls.Add(this.hk_zt_panel);
+            this.HKPageView.Controls.Add(this.hk_markReporter_panel);
             this.HKPageView.Controls.Add(this.hk_config_panel);
+            this.HKPageView.Controls.Add(this.hk_zt_panel);
             this.HKPageView.Controls.Add(this.HKTreeView);
             this.HKPageView.Controls.Add(this.HKGridView);
             this.HKPageView.Location = new System.Drawing.Point(10, 37);
@@ -720,83 +752,55 @@
             this.HKPageView.Size = new System.Drawing.Size(855, 580);
             this.HKPageView.Text = "会考";
             // 
-            // hk_pre_panel
+            // hk_markReporter_panel
             // 
-            this.hk_pre_panel.Controls.Add(this.hk_delete);
-            this.hk_pre_panel.Controls.Add(this.hk_import);
-            this.hk_pre_panel.Location = new System.Drawing.Point(141, 234);
-            this.hk_pre_panel.Name = "hk_pre_panel";
-            this.hk_pre_panel.Size = new System.Drawing.Size(712, 337);
-            this.hk_pre_panel.TabIndex = 89;
-            this.hk_pre_panel.Text = "数据导入";
-            this.hk_pre_panel.TextAlignment = System.Drawing.ContentAlignment.TopLeft;
+            this.hk_markReporter_panel.Controls.Add(this.radWaitingBar1);
+            this.hk_markReporter_panel.Controls.Add(this.radButton15);
+            this.hk_markReporter_panel.Controls.Add(this.radButton14);
+            this.hk_markReporter_panel.Controls.Add(this.radRadioButton2);
+            this.hk_markReporter_panel.Controls.Add(this.radGroupBox2);
+            this.hk_markReporter_panel.Controls.Add(this.radRadioButton1);
+            this.hk_markReporter_panel.Controls.Add(this.radGroupBox1);
+            this.hk_markReporter_panel.Location = new System.Drawing.Point(141, 402);
+            this.hk_markReporter_panel.Name = "hk_markReporter_panel";
+            this.hk_markReporter_panel.Size = new System.Drawing.Size(711, 169);
+            this.hk_markReporter_panel.TabIndex = 90;
             // 
-            // hk_delete
+            // radGroupBox1
             // 
-            this.hk_delete.BackgroundImage = global::ExamReport.Properties.Resources.delete_item;
-            this.hk_delete.Location = new System.Drawing.Point(59, 35);
-            this.hk_delete.Name = "hk_delete";
-            this.hk_delete.Size = new System.Drawing.Size(32, 33);
-            this.hk_delete.TabIndex = 9;
-            this.hk_delete.UseVisualStyleBackColor = true;
-            this.hk_delete.Click += new System.EventHandler(this.hk_delete_Click);
+            this.radGroupBox1.AccessibleRole = System.Windows.Forms.AccessibleRole.Grouping;
+            this.radGroupBox1.Controls.Add(this.radDropDownList2);
+            this.radGroupBox1.Controls.Add(this.radDropDownList1);
+            this.radGroupBox1.Controls.Add(this.radLabel20);
+            this.radGroupBox1.Controls.Add(this.radLabel19);
+            this.radGroupBox1.HeaderText = "";
+            this.radGroupBox1.Location = new System.Drawing.Point(44, 9);
+            this.radGroupBox1.Name = "radGroupBox1";
             // 
-            // hk_import
             // 
-            this.hk_import.BackgroundImage = global::ExamReport.Properties.Resources.add_item;
-            this.hk_import.Location = new System.Drawing.Point(22, 35);
-            this.hk_import.Name = "hk_import";
-            this.hk_import.Size = new System.Drawing.Size(33, 33);
-            this.hk_import.TabIndex = 8;
-            this.hk_import.UseVisualStyleBackColor = true;
-            this.hk_import.Click += new System.EventHandler(this.hk_import_Click);
             // 
-            // hk_zt_panel
+            this.radGroupBox1.RootElement.Padding = new System.Windows.Forms.Padding(2, 18, 2, 2);
+            this.radGroupBox1.Size = new System.Drawing.Size(256, 68);
+            this.radGroupBox1.TabIndex = 0;
             // 
-            this.hk_zt_panel.Controls.Add(this.hk_zt_progresslabel);
-            this.hk_zt_panel.Controls.Add(this.hk_waitingbar);
-            this.hk_zt_panel.Controls.Add(this.hk_cancel);
-            this.hk_zt_panel.Controls.Add(this.hk_start);
-            this.hk_zt_panel.Controls.Add(this.groupBox3);
-            this.hk_zt_panel.Location = new System.Drawing.Point(141, 308);
-            this.hk_zt_panel.Name = "hk_zt_panel";
-            this.hk_zt_panel.Size = new System.Drawing.Size(711, 263);
-            this.hk_zt_panel.TabIndex = 4;
-            this.hk_zt_panel.TextAlignment = System.Drawing.ContentAlignment.TopLeft;
+            // hk_config_panel
             // 
-            // hk_zt_progresslabel
+            this.hk_config_panel.AccessibleRole = System.Windows.Forms.AccessibleRole.Grouping;
+            this.hk_config_panel.Controls.Add(this.groupBox3);
+            this.hk_config_panel.Controls.Add(this.radButton12);
+            this.hk_config_panel.Controls.Add(this.hk_save_addr);
+            this.hk_config_panel.Controls.Add(this.radLabel12);
+            this.hk_config_panel.Controls.Add(this.hk_isVisible);
+            this.hk_config_panel.HeaderText = "文档生成";
+            this.hk_config_panel.Location = new System.Drawing.Point(142, 237);
+            this.hk_config_panel.Name = "hk_config_panel";
             // 
-            this.hk_zt_progresslabel.AutoSize = true;
-            this.hk_zt_progresslabel.Location = new System.Drawing.Point(49, 189);
-            this.hk_zt_progresslabel.Name = "hk_zt_progresslabel";
-            this.hk_zt_progresslabel.Size = new System.Drawing.Size(2, 2);
-            this.hk_zt_progresslabel.TabIndex = 48;
             // 
-            // hk_waitingbar
             // 
-            this.hk_waitingbar.Location = new System.Drawing.Point(49, 174);
-            this.hk_waitingbar.Name = "hk_waitingbar";
-            this.hk_waitingbar.Size = new System.Drawing.Size(620, 12);
-            this.hk_waitingbar.TabIndex = 47;
-            this.hk_waitingbar.Text = "radWaitingBar1";
-            // 
-            // hk_cancel
-            // 
-            this.hk_cancel.Location = new System.Drawing.Point(542, 139);
-            this.hk_cancel.Name = "hk_cancel";
-            this.hk_cancel.Size = new System.Drawing.Size(95, 24);
-            this.hk_cancel.TabIndex = 46;
-            this.hk_cancel.Text = "取消";
-            this.hk_cancel.Click += new System.EventHandler(this.hk_cancel_Click);
-            // 
-            // hk_start
-            // 
-            this.hk_start.Location = new System.Drawing.Point(400, 139);
-            this.hk_start.Name = "hk_start";
-            this.hk_start.Size = new System.Drawing.Size(92, 24);
-            this.hk_start.TabIndex = 45;
-            this.hk_start.Text = "文档生成";
-            this.hk_start.Click += new System.EventHandler(this.hk_start_Click);
+            this.hk_config_panel.RootElement.Padding = new System.Windows.Forms.Padding(2, 18, 2, 2);
+            this.hk_config_panel.Size = new System.Drawing.Size(711, 159);
+            this.hk_config_panel.TabIndex = 88;
+            this.hk_config_panel.Text = "文档生成";
             // 
             // groupBox3
             // 
@@ -820,7 +824,7 @@
             this.groupBox3.Controls.Add(this.label21);
             this.groupBox3.Controls.Add(this.excellent_low);
             this.groupBox3.Controls.Add(this.label20);
-            this.groupBox3.Location = new System.Drawing.Point(49, 23);
+            this.groupBox3.Location = new System.Drawing.Point(397, 9);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(309, 143);
             this.groupBox3.TabIndex = 44;
@@ -991,27 +995,9 @@
             this.label20.TabIndex = 0;
             this.label20.Text = "优秀：";
             // 
-            // hk_config_panel
-            // 
-            this.hk_config_panel.AccessibleRole = System.Windows.Forms.AccessibleRole.Grouping;
-            this.hk_config_panel.Controls.Add(this.radButton12);
-            this.hk_config_panel.Controls.Add(this.hk_save_addr);
-            this.hk_config_panel.Controls.Add(this.radLabel12);
-            this.hk_config_panel.Controls.Add(this.hk_isVisible);
-            this.hk_config_panel.HeaderText = "文档生成";
-            this.hk_config_panel.Location = new System.Drawing.Point(142, 237);
-            this.hk_config_panel.Name = "hk_config_panel";
-            // 
-            // 
-            // 
-            this.hk_config_panel.RootElement.Padding = new System.Windows.Forms.Padding(2, 18, 2, 2);
-            this.hk_config_panel.Size = new System.Drawing.Size(711, 58);
-            this.hk_config_panel.TabIndex = 88;
-            this.hk_config_panel.Text = "文档生成";
-            // 
             // radButton12
             // 
-            this.radButton12.Location = new System.Drawing.Point(418, 19);
+            this.radButton12.Location = new System.Drawing.Point(292, 19);
             this.radButton12.Name = "radButton12";
             this.radButton12.Size = new System.Drawing.Size(70, 24);
             this.radButton12.TabIndex = 3;
@@ -1020,7 +1006,7 @@
             // 
             // hk_save_addr
             // 
-            this.hk_save_addr.Location = new System.Drawing.Point(186, 21);
+            this.hk_save_addr.Location = new System.Drawing.Point(60, 21);
             this.hk_save_addr.Name = "hk_save_addr";
             this.hk_save_addr.Size = new System.Drawing.Size(226, 20);
             this.hk_save_addr.TabIndex = 2;
@@ -1029,7 +1015,7 @@
             // radLabel12
             // 
             this.radLabel12.AutoSize = true;
-            this.radLabel12.Location = new System.Drawing.Point(135, 21);
+            this.radLabel12.Location = new System.Drawing.Point(9, 21);
             this.radLabel12.Name = "radLabel12";
             this.radLabel12.Size = new System.Drawing.Size(52, 18);
             this.radLabel12.TabIndex = 1;
@@ -1038,11 +1024,88 @@
             // hk_isVisible
             // 
             this.hk_isVisible.AutoSize = true;
-            this.hk_isVisible.Location = new System.Drawing.Point(22, 23);
+            this.hk_isVisible.Location = new System.Drawing.Point(21, 78);
             this.hk_isVisible.Name = "hk_isVisible";
             this.hk_isVisible.Size = new System.Drawing.Size(89, 18);
             this.hk_isVisible.TabIndex = 0;
             this.hk_isVisible.Text = "文档可视生成";
+            // 
+            // hk_zt_panel
+            // 
+            this.hk_zt_panel.Controls.Add(this.hk_zt_progresslabel);
+            this.hk_zt_panel.Controls.Add(this.hk_waitingbar);
+            this.hk_zt_panel.Controls.Add(this.hk_cancel);
+            this.hk_zt_panel.Controls.Add(this.hk_start);
+            this.hk_zt_panel.Location = new System.Drawing.Point(141, 402);
+            this.hk_zt_panel.Name = "hk_zt_panel";
+            this.hk_zt_panel.Size = new System.Drawing.Size(711, 169);
+            this.hk_zt_panel.TabIndex = 4;
+            this.hk_zt_panel.TextAlignment = System.Drawing.ContentAlignment.TopLeft;
+            // 
+            // hk_zt_progresslabel
+            // 
+            this.hk_zt_progresslabel.AutoSize = true;
+            this.hk_zt_progresslabel.Location = new System.Drawing.Point(49, 189);
+            this.hk_zt_progresslabel.Name = "hk_zt_progresslabel";
+            this.hk_zt_progresslabel.Size = new System.Drawing.Size(2, 2);
+            this.hk_zt_progresslabel.TabIndex = 48;
+            // 
+            // hk_waitingbar
+            // 
+            this.hk_waitingbar.Location = new System.Drawing.Point(61, 127);
+            this.hk_waitingbar.Name = "hk_waitingbar";
+            this.hk_waitingbar.Size = new System.Drawing.Size(620, 12);
+            this.hk_waitingbar.TabIndex = 47;
+            this.hk_waitingbar.Text = "radWaitingBar1";
+            // 
+            // hk_cancel
+            // 
+            this.hk_cancel.Location = new System.Drawing.Point(461, 77);
+            this.hk_cancel.Name = "hk_cancel";
+            this.hk_cancel.Size = new System.Drawing.Size(95, 24);
+            this.hk_cancel.TabIndex = 46;
+            this.hk_cancel.Text = "取消";
+            this.hk_cancel.Click += new System.EventHandler(this.hk_cancel_Click);
+            // 
+            // hk_start
+            // 
+            this.hk_start.Location = new System.Drawing.Point(115, 77);
+            this.hk_start.Name = "hk_start";
+            this.hk_start.Size = new System.Drawing.Size(92, 24);
+            this.hk_start.TabIndex = 45;
+            this.hk_start.Text = "文档生成";
+            this.hk_start.Click += new System.EventHandler(this.hk_start_Click);
+            // 
+            // hk_pre_panel
+            // 
+            this.hk_pre_panel.Controls.Add(this.hk_delete);
+            this.hk_pre_panel.Controls.Add(this.hk_import);
+            this.hk_pre_panel.Location = new System.Drawing.Point(141, 234);
+            this.hk_pre_panel.Name = "hk_pre_panel";
+            this.hk_pre_panel.Size = new System.Drawing.Size(712, 337);
+            this.hk_pre_panel.TabIndex = 89;
+            this.hk_pre_panel.Text = "数据导入";
+            this.hk_pre_panel.TextAlignment = System.Drawing.ContentAlignment.TopLeft;
+            // 
+            // hk_delete
+            // 
+            this.hk_delete.BackgroundImage = global::ExamReport.Properties.Resources.delete_item;
+            this.hk_delete.Location = new System.Drawing.Point(59, 35);
+            this.hk_delete.Name = "hk_delete";
+            this.hk_delete.Size = new System.Drawing.Size(32, 33);
+            this.hk_delete.TabIndex = 9;
+            this.hk_delete.UseVisualStyleBackColor = true;
+            this.hk_delete.Click += new System.EventHandler(this.hk_delete_Click);
+            // 
+            // hk_import
+            // 
+            this.hk_import.BackgroundImage = global::ExamReport.Properties.Resources.add_item;
+            this.hk_import.Location = new System.Drawing.Point(22, 35);
+            this.hk_import.Name = "hk_import";
+            this.hk_import.Size = new System.Drawing.Size(33, 33);
+            this.hk_import.TabIndex = 8;
+            this.hk_import.UseVisualStyleBackColor = true;
+            this.hk_import.Click += new System.EventHandler(this.hk_import_Click);
             // 
             // HKTreeView
             // 
@@ -2073,6 +2136,110 @@
             this.gk_gridview.TabIndex = 0;
             this.gk_gridview.Text = "radGridView2";
             // 
+            // radLabel19
+            // 
+            this.radLabel19.AutoSize = true;
+            this.radLabel19.Location = new System.Drawing.Point(24, 12);
+            this.radLabel19.Name = "radLabel19";
+            this.radLabel19.Size = new System.Drawing.Size(40, 18);
+            this.radLabel19.TabIndex = 0;
+            this.radLabel19.Text = "区县：";
+            // 
+            // radLabel20
+            // 
+            this.radLabel20.AutoSize = true;
+            this.radLabel20.Location = new System.Drawing.Point(24, 40);
+            this.radLabel20.Name = "radLabel20";
+            this.radLabel20.Size = new System.Drawing.Size(40, 18);
+            this.radLabel20.TabIndex = 1;
+            this.radLabel20.Text = "学校：";
+            // 
+            // radRadioButton1
+            // 
+            this.radRadioButton1.AutoSize = true;
+            this.radRadioButton1.Location = new System.Drawing.Point(40, 6);
+            this.radRadioButton1.Name = "radRadioButton1";
+            this.radRadioButton1.Size = new System.Drawing.Size(15, 15);
+            this.radRadioButton1.TabIndex = 2;
+            // 
+            // radRadioButton2
+            // 
+            this.radRadioButton2.AutoSize = true;
+            this.radRadioButton2.Location = new System.Drawing.Point(348, 6);
+            this.radRadioButton2.Name = "radRadioButton2";
+            this.radRadioButton2.Size = new System.Drawing.Size(15, 15);
+            this.radRadioButton2.TabIndex = 4;
+            // 
+            // radGroupBox2
+            // 
+            this.radGroupBox2.AccessibleRole = System.Windows.Forms.AccessibleRole.Grouping;
+            this.radGroupBox2.Controls.Add(this.radTextBox1);
+            this.radGroupBox2.Controls.Add(this.radLabel22);
+            this.radGroupBox2.HeaderText = "";
+            this.radGroupBox2.Location = new System.Drawing.Point(352, 9);
+            this.radGroupBox2.Name = "radGroupBox2";
+            // 
+            // 
+            // 
+            this.radGroupBox2.RootElement.Padding = new System.Windows.Forms.Padding(2, 18, 2, 2);
+            this.radGroupBox2.Size = new System.Drawing.Size(256, 68);
+            this.radGroupBox2.TabIndex = 3;
+            // 
+            // radLabel22
+            // 
+            this.radLabel22.AutoSize = true;
+            this.radLabel22.Location = new System.Drawing.Point(24, 12);
+            this.radLabel22.Name = "radLabel22";
+            this.radLabel22.Size = new System.Drawing.Size(40, 18);
+            this.radLabel22.TabIndex = 0;
+            this.radLabel22.Text = "学号：";
+            // 
+            // radDropDownList1
+            // 
+            this.radDropDownList1.Location = new System.Drawing.Point(70, 12);
+            this.radDropDownList1.Name = "radDropDownList1";
+            this.radDropDownList1.Size = new System.Drawing.Size(125, 20);
+            this.radDropDownList1.TabIndex = 2;
+            // 
+            // radDropDownList2
+            // 
+            this.radDropDownList2.Location = new System.Drawing.Point(70, 38);
+            this.radDropDownList2.Name = "radDropDownList2";
+            this.radDropDownList2.Size = new System.Drawing.Size(125, 20);
+            this.radDropDownList2.TabIndex = 3;
+            // 
+            // radTextBox1
+            // 
+            this.radTextBox1.Location = new System.Drawing.Point(68, 10);
+            this.radTextBox1.Name = "radTextBox1";
+            this.radTextBox1.Size = new System.Drawing.Size(161, 20);
+            this.radTextBox1.TabIndex = 3;
+            this.radTextBox1.TabStop = false;
+            // 
+            // radButton14
+            // 
+            this.radButton14.Location = new System.Drawing.Point(100, 97);
+            this.radButton14.Name = "radButton14";
+            this.radButton14.Size = new System.Drawing.Size(92, 24);
+            this.radButton14.TabIndex = 46;
+            this.radButton14.Text = "文档生成";
+            // 
+            // radButton15
+            // 
+            this.radButton15.Location = new System.Drawing.Point(420, 97);
+            this.radButton15.Name = "radButton15";
+            this.radButton15.Size = new System.Drawing.Size(95, 24);
+            this.radButton15.TabIndex = 47;
+            this.radButton15.Text = "取消";
+            // 
+            // radWaitingBar1
+            // 
+            this.radWaitingBar1.Location = new System.Drawing.Point(49, 145);
+            this.radWaitingBar1.Name = "radWaitingBar1";
+            this.radWaitingBar1.Size = new System.Drawing.Size(620, 12);
+            this.radWaitingBar1.TabIndex = 48;
+            this.radWaitingBar1.Text = "radWaitingBar1";
+            // 
             // mainform
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -2123,15 +2290,15 @@
             ((System.ComponentModel.ISupportInitialize)(this.zk_gridview)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ZKTreeView)).EndInit();
             this.HKPageView.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.hk_pre_panel)).EndInit();
-            this.hk_pre_panel.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.hk_zt_panel)).EndInit();
-            this.hk_zt_panel.ResumeLayout(false);
-            this.hk_zt_panel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.hk_zt_progresslabel)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.hk_waitingbar)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.hk_cancel)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.hk_start)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.hk_markReporter_panel)).EndInit();
+            this.hk_markReporter_panel.ResumeLayout(false);
+            this.hk_markReporter_panel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.radGroupBox1)).EndInit();
+            this.radGroupBox1.ResumeLayout(false);
+            this.radGroupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.hk_config_panel)).EndInit();
+            this.hk_config_panel.ResumeLayout(false);
+            this.hk_config_panel.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fail_high)).EndInit();
@@ -2142,13 +2309,19 @@
             ((System.ComponentModel.ISupportInitialize)(this.well_low)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.excellent_high)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.excellent_low)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.hk_config_panel)).EndInit();
-            this.hk_config_panel.ResumeLayout(false);
-            this.hk_config_panel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.radButton12)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.hk_save_addr)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radLabel12)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.hk_isVisible)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.hk_zt_panel)).EndInit();
+            this.hk_zt_panel.ResumeLayout(false);
+            this.hk_zt_panel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.hk_zt_progresslabel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.hk_waitingbar)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.hk_cancel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.hk_start)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.hk_pre_panel)).EndInit();
+            this.hk_pre_panel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.HKTreeView)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.HKGridView.MasterTemplate)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.HKGridView)).EndInit();
@@ -2246,6 +2419,20 @@
             ((System.ComponentModel.ISupportInitialize)(this.GKTreeView)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gk_gridview.MasterTemplate)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gk_gridview)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radLabel19)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radLabel20)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radRadioButton1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radRadioButton2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radGroupBox2)).EndInit();
+            this.radGroupBox2.ResumeLayout(false);
+            this.radGroupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.radLabel22)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radDropDownList1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radDropDownList2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radTextBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radButton14)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radButton15)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radWaitingBar1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
             this.ResumeLayout(false);
 
@@ -2401,6 +2588,20 @@
         private System.Windows.Forms.Label label46;
         private System.Windows.Forms.ComboBox year_list;
         private System.Windows.Forms.Label label45;
+        private Telerik.WinControls.UI.RadPanel hk_markReporter_panel;
+        private Telerik.WinControls.UI.RadGroupBox radGroupBox1;
+        private Telerik.WinControls.UI.RadWaitingBar radWaitingBar1;
+        private Telerik.WinControls.UI.RadButton radButton15;
+        private Telerik.WinControls.UI.RadButton radButton14;
+        private Telerik.WinControls.UI.RadRadioButton radRadioButton2;
+        private Telerik.WinControls.UI.RadGroupBox radGroupBox2;
+        private Telerik.WinControls.UI.RadTextBox radTextBox1;
+        private Telerik.WinControls.UI.RadLabel radLabel22;
+        private Telerik.WinControls.UI.RadRadioButton radRadioButton1;
+        private Telerik.WinControls.UI.RadDropDownList radDropDownList2;
+        private Telerik.WinControls.UI.RadDropDownList radDropDownList1;
+        private Telerik.WinControls.UI.RadLabel radLabel20;
+        private Telerik.WinControls.UI.RadLabel radLabel19;
 
     }
 }

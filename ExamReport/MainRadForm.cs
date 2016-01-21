@@ -153,8 +153,15 @@ namespace ExamReport
         {
 
         }
+        public void DBCheck()
+        {
+            MySqlHelper.ExecuteNonQuery(MySqlHelper.ConnNoDB, CommandType.Text, "create database if not exists `examdata`", null);
+            MySqlHelper.ExecuteNonQuery(MySqlHelper.Conn, CommandType.Text, "create table if not exists `exam_meta_data`"
+                + "(year varchar(255),exam varchar(255),sub varchar(255),ans varchar(255),grp varchar(255),fullmark int,zh int,gtype varchar(255),gnum int)", null);
+        }
         public void Grid_load()
         {
+            DBCheck();
             DataTable data = MySqlHelper.GetDataSet(MySqlHelper.Conn, CommandType.Text, "select * from exam_meta_data", null).Tables[0];
             zk_gridview.MasterTemplate.AllowAddNewRow = false;
             zk_gridview.TableElement.BeginUpdate();
@@ -293,8 +300,10 @@ namespace ExamReport
             GKTreeView.Nodes.Add(new RadTreeNode("区县"));
             GKTreeView.Nodes.Add(new RadTreeNode("学校"));
 
+            HKTreeView.Nodes.Clear();
             HKTreeView.Nodes.Add(new RadTreeNode("数据录入"));
             HKTreeView.Nodes.Add(new RadTreeNode("总体"));
+            HKTreeView.Nodes.Add(new RadTreeNode("成绩报告单"));
             string conn = @"Provider=vfpoledb;Data Source=" + currentdic + ";Collating Sequence=machine;";
 
             OleDbConnection dbfConnection = new OleDbConnection(conn);
@@ -404,12 +413,21 @@ namespace ExamReport
                 hk_pre_panel.Show();
                 hk_zt_panel.Hide();
                 hk_config_panel.Hide();
+                hk_markReporter_panel.Hide();
             }
             else if (element.SelectedNode.Text.Trim().Equals("总体"))
             {
                 hk_pre_panel.Hide();
                 hk_zt_panel.Show();
                 hk_config_panel.Show();
+                hk_markReporter_panel.Hide();
+            }
+            else if (element.SelectedNode.Text.Trim().Equals("成绩报告单"))
+            {
+                hk_pre_panel.Hide();
+                hk_markReporter_panel.Show();
+                hk_config_panel.Show();
+                hk_zt_panel.Hide();
             }
         }
         private void GKTreeNode_Selected(object sender, RadTreeViewEventArgs e)
