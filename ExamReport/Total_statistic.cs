@@ -1764,7 +1764,7 @@ namespace ExamReport
             Regex reg = new Regex("^[A-Za-z]+$");
             if (reg.IsMatch(choice))
                 return Utils.ToSBC(choice);
-            else if (choice.Trim().Equals("0"))
+            else if (choice.Trim().Equals("0") || choice.Trim().Equals(""))
                 return "未选";
             else
                 return choice.Trim();

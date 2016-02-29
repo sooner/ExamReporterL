@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,11 +9,13 @@ using System.Configuration;
 using System.Threading;
 using MySql.Data;
 using MySql.Data.MySqlClient;
+using Ionic.Zip;
 
 namespace ExamReport
 {
     public class Utils
     {
+        public enum UnionType { QX_XX, ID };
         public static string save_address;
         public static string exam;
         public static string subject;
@@ -541,7 +544,68 @@ namespace ExamReport
             }
             return true;
         }
-        
+        public static string hk_lang_trans(string name)
+        {
+            switch (name)
+            {
+                case "语文":
+                    return "yw";
+                case "数学":
+                    return "sx";
+                case "英语":
+                    return "yy";
+                case "化学":
+                    return "hx";
+                case "物理":
+                    return "wl";
+                case "生物":
+                    return "sw";
+                case "政治":
+                    return "zz";
+                case "地理":
+                    return "dl";
+                case "历史":
+                    return "ls";
+                case "中考":
+                    return "zk";
+                case "高考":
+                    return "gk";
+                case "会考":
+                    return "hk";
+                case "数学理":
+                    return "sxl";
+                case "数学文":
+                    return "sxw";
+                case "总分":
+                    return "zf";
+                case "yw":
+                    return "语文";
+                case "sx":
+                    return "数学";
+                case "yy":
+                    return "英语";
+                case "hx":
+                    return "化学";
+                case "wl":
+                    return "物理";
+                case "sw":
+                    return "生物";
+                case "zz":
+                    return "政治";
+                case "dl":
+                    return "地理";
+                case "ls":
+                    return "历史";
+                case "sxl":
+                    return "数学理";
+                case "sxw":
+                    return "数学文";
+                case "zf":
+                    return "总分";
+                default:
+                    return "";
+            }
+        }
         public static string language_trans(string name)
         {
             switch (name)
@@ -706,6 +770,47 @@ namespace ExamReport
             }
             group_trans.Commit();
             dbfConnection.Close();
+        }
+        public static void zip(string dir, string zipedFile)
+        {
+            using (Ionic.Zip.ZipFile zip = new Ionic.Zip.ZipFile(zipedFile + ".zip", Encoding.Default))
+            {
+                zip.AddDirectory(dir, new FileInfo(dir).Name);
+                zip.Save();
+            }
+
+            System.IO.File.Move(zipedFile + ".zip", Directory.GetParent(dir).Parent.FullName + Path.DirectorySeparatorChar + zipedFile + ".zip");
+
+            Directory.Delete(dir, true);
+        }
+
+        public static void unZip(string zipFile, string outputdir)
+        {
+            ReadOptions options = new ReadOptions();
+            options.Encoding = Encoding.Default;
+            using (ZipFile zip = ZipFile.Read(zipFile, options))
+            {
+                foreach (ZipEntry z in zip)
+                {
+                    FileInfo f = new FileInfo(outputdir + "/" + z.FileName);
+                    if (f.Exists)
+                    {
+                        string parent = f.Directory.Name;
+                        string name = f.Name.Replace(f.Extension, "");
+                        string str = parent + "|" + name;
+                        //if (MessageBox.Show("文件(" + str + ")已经存在，是否替换？", "确认", MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
+                        //{
+                        //    f.Delete();
+                        //}
+                        //else
+                        //{
+                        //    continue;
+                        //}
+                    }
+                    z.Extract(outputdir);
+                }
+            }
+
         }
 
         public static string OperatorTrans(string oper)

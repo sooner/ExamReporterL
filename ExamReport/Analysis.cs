@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using Telerik.WinControls.UI;
 using System.Data;
+using System.IO;
 
 namespace ExamReport
 {
@@ -55,6 +56,15 @@ namespace ExamReport
             public decimal fail_high;
 
         }
+
+        public Utils.UnionType hk_script_type;
+        public string stu_id;
+        public string qx;
+        public string qx_name;
+        public string xx;
+        public string xx_name;
+        public string date;
+
         public Analysis(mainform form)
         {
             _form = form;
@@ -75,8 +85,8 @@ namespace ExamReport
                     string log = year + "年" + Utils.language_trans(exam) + row.Cells["sub"].Value.ToString().Trim();
                     _form.ShowPro(exam_type, 1, log + "数据读取...");
                     MetaData mdata = new MetaData(year, exam, sub);
-                    try
-                    {
+                    //try
+                    //{
                         mdata.get_meta_data();
                         _fullmark = mdata._fullmark;
 
@@ -210,6 +220,9 @@ namespace ExamReport
                                 case "hk_zt":
                                     hk_zt_process(mdata);
                                     break;
+                                case "hk_script":
+                                    hk_script_process(mdata);
+                                    break;
                                 case "gk_zt":
                                     gk_schedule(mdata, gk_zt_process, gk_zt_wl_process);
                                     break;
@@ -240,18 +253,171 @@ namespace ExamReport
                             }
 
                         }
-                    }
-                    catch (System.Threading.ThreadAbortException e)
-                    {
-                    }
-                    catch (Exception e)
-                    {
-                        _form.ErrorM(exam_type, e.Message);
-                    }
+                    //}
+                    //catch (System.Threading.ThreadAbortException e)
+                    //{
+                    //}
+                    //catch (Exception e)
+                    //{
+                    //    _form.ErrorM(exam_type, e.Message);
+                    //}
 
                 }
             }
             _form.ShowPro(exam_type, 2, "完成！");
+        }
+        public List<DataRow> SearchIndex = new List<DataRow>();
+        public List<long> NotFoundIndex = new List<long>();
+        public void hk_script_start()
+        {
+            exam_type = "hk_script";
+            _exam = "hk";
+            start();
+        }
+
+        public void hk_script_process(MetaData mdata)
+        {
+            //try
+            //{
+                Configuration config = initConfig(mdata._sub, "报告单", "会考");
+
+                if (hk_script_type == Utils.UnionType.ID)
+                {
+                    if (FindRow(stu_id, mdata.basic) == null)
+                        _form.CheckStuID(2, "找不到该ID学生成绩！");
+                }
+
+                _form.ShowPro(exam_type, 1, mdata.log_name + "数据分析中...");
+                //HK_worddata result = new HK_worddata(mdata.groups_group);
+                //Total_statistic stat = new Total_statistic(result, mdata.basic, mdata._fullmark, mdata.ans, mdata.group, mdata.grp, mdata._group_num);
+                //stat._config = config;
+                //stat.statistic_process(false);
+                //stat.HK_postprocess(hk_hierarchy);
+                
+                
+                HKScriptCalculate cal = new HKScriptCalculate();
+                cal.preprocess(mdata.group, hk_hierarchy);
+                cal.execute(mdata.ans, mdata.grp, mdata.group);
+                _form.ShowPro(exam_type, 1, mdata.log_name + "报告生成中...");
+                HKScriptWordCreator wc = new HKScriptWordCreator();
+                if (hk_script_type == Utils.UnionType.ID)
+                {
+                    DataRow dr = FindRow(stu_id, cal._data);
+                    DataRow basic_dr = FindRow(stu_id, mdata.basic);
+                    wc.create_word(cal.total, dr, mdata.grp, mdata.groups_group, basic_dr, CurrentDirectory, date);
+                }
+                else
+                {
+
+                    if (CurrentDirectory[CurrentDirectory.Length - 1] != Path.DirectorySeparatorChar)
+                        CurrentDirectory += Path.DirectorySeparatorChar;
+                    string save_adr = CurrentDirectory + "会考成绩报告单";
+                    save_adr += Path.DirectorySeparatorChar;
+                    if (!Directory.Exists(save_adr))
+                        Directory.CreateDirectory(save_adr);
+                    if (qx.Equals("0") || xx.Equals("0"))
+                    {
+
+                        if (qx.Equals("0"))
+                        {
+                            var qxtuples = from row in _form.schoolcode_table.AsEnumerable()
+                                          group row by row.Field<string>("qxmc") into grp
+                                          select new
+                                          {
+                                              qx = grp.Key.ToString().Trim(),
+                                              code = string.Join(",", grp.GroupBy(p => p.Field<string>("qxdm")).Select(p => p.Key.ToString().Trim()).ToArray())
+                                          };
+                            foreach (var qxtuple in qxtuples)
+                                QXCreateWord(cal, mdata, wc, qxtuple.qx, qxtuple.code, save_adr);
+                        }
+                        else
+                        {
+                            QXCreateWord(cal, mdata, wc, qx_name, qx, save_adr);
+                        }
+
+                    }
+                    else
+                    {
+                        XXCreateWord(cal,mdata, wc, xx_name, xx, save_adr);
+                    }
+                }
+            //}
+            //catch (System.Threading.ThreadAbortException e)
+            //{
+            //}
+            //catch (Exception e)
+            //{
+            //    _form.CheckStuID(2, e.Message.ToString());
+            //}
+        }
+        public void QXCreateWord(HKScriptCalculate cal, MetaData mdata, HKScriptWordCreator wc, string qx, string qx_code, string adr)
+        {
+            string save_adr = adr + qx;
+            save_adr += Path.DirectorySeparatorChar;
+            if (!Directory.Exists(save_adr))
+                Directory.CreateDirectory(save_adr);
+            var schooltuple = from row in _form.schoolcode_table.AsEnumerable()
+                              where qx_code.Split(new char[1] { ',' }).Contains(row.Field<string>("xxdm").ToString().Trim().Substring(0, 2))
+                              select new
+                              {
+                                  school = row.Field<string>("xxmc").Trim(),
+                                  code = row.Field<string>("xxdm").Trim()
+                              };
+            foreach (var xx in schooltuple)
+            {
+                XXCreateWord(cal, mdata, wc, xx.school, xx.code, save_adr);
+            }
+            Utils.zip(save_adr, qx);
+        }
+        public void XXCreateWord(HKScriptCalculate cal, MetaData mdata, HKScriptWordCreator wc, string xx, string xx_code, string save_adr)
+        {
+            string adr = save_adr + xx;
+            adr += Path.DirectorySeparatorChar;
+            if (!Directory.Exists(adr))
+                Directory.CreateDirectory(adr);
+            List<string> stu_id = mdata.basic.AsEnumerable().Where(c => c.Field<string>("xxdm").Equals(xx_code)).Select(c => c.Field<string>("studentid")).ToList();
+            foreach (string id in stu_id)
+            {
+                DataRow dr = FindRow(id, cal._data);
+                DataRow basic_dr = FindRow(id, mdata.basic);
+                wc.create_word(cal.total, dr, mdata.grp, mdata.groups_group, basic_dr, adr, date);
+            }
+            Utils.zip(adr, xx);
+        }
+        public DataRow FindRow(string stu_id, DataTable dt)
+        {
+            return dt.Rows.Find(stu_id);
+        }
+        public void FindRows(string stu_id_start, string stu_id_stop, DataTable dt)
+        {
+            char[] idChar = stu_id_start.Trim().ToCharArray();
+            int size = idChar.Length;
+            long start = Convert.ToInt64(stu_id_start);
+            long stop = Convert.ToInt64(stu_id_stop);
+
+            if (start > stop)
+                throw new System.ArgumentException("起始学生ID不能大于终止学生ID!");
+
+            SearchIndex.Clear();
+            NotFoundIndex.Clear();
+
+            for (long i = start; i <= stop; i++)
+            {
+                char[] temp = i.ToString().ToCharArray();
+                StringBuilder sb = new StringBuilder(i.ToString());
+
+                if (temp.Length < size)
+                {
+                    for (int j = temp.Length; j < size; j++)
+                        sb.Insert(0, "0");
+                }
+                DataRow dr = FindRow(sb.ToString(), dt);
+                if (dr == null)
+                    NotFoundIndex.Add(i);
+                else
+                    SearchIndex.Add(dr);
+
+            }
         }
         public void gk_custom_start()
         {
@@ -383,6 +549,8 @@ namespace ExamReport
             stat._config = config;
             stat.statistic_process(false);
             stat.HK_postprocess(hk_hierarchy);
+            if (mdata.xz.Count > 0)
+                stat.xz_postprocess(mdata.xz);
             _form.ShowPro(exam_type, 1, mdata.log_name + "报告生成中...");
             WordCreator create = new WordCreator(result, config);
             create.creating_HK_word();

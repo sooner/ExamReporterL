@@ -433,7 +433,7 @@ namespace ExamReport
             {
                 DataRow newRow = basic_data.NewRow();
                 newRow["kh"] = dr["kh"].ToString().Trim();
-                newRow["zkzh"] = dr["mh"].ToString().Trim();
+                newRow["zkzh"] = dr["zkzh"].ToString().Trim();
                 newRow["xxdm"] = dr["xxdm"].ToString().Trim();
                 newRow["totalmark"] = 0;
                 newRow["xb"] = dr["xb"].ToString().Trim();

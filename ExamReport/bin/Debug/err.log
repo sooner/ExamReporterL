@@ -1,22 +1,16 @@
-MySql.Data.MySqlClient.MySqlException (0x80004005): Access denied for user 'root'@'133.133.133.107' (using password: YES)
-   在 MySql.Data.MySqlClient.MySqlStream.OpenPacket()
-   在 MySql.Data.MySqlClient.NativeDriver.Authenticate411()
-   在 MySql.Data.MySqlClient.NativeDriver.Authenticate()
-   在 MySql.Data.MySqlClient.NativeDriver.Open()
-   在 MySql.Data.MySqlClient.Driver.Create(MySqlConnectionStringBuilder settings)
-   在 MySql.Data.MySqlClient.MySqlPool.CreateNewPooledConnection()
-   在 MySql.Data.MySqlClient.MySqlPool.GetPooledConnection()
-   在 MySql.Data.MySqlClient.MySqlPool.GetConnection()
-   在 MySql.Data.MySqlClient.MySqlConnection.Open()
-   在 ExamReport.MySqlHelper.PrepareCommand(MySqlCommand cmd, MySqlConnection conn, MySqlTransaction trans, CommandType cmdType, String cmdText, MySqlParameter[] cmdParms) 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\MySqlHelper.cs:行号 268
-   在 ExamReport.MySqlHelper.ExecuteNonQuery(String connectionString, CommandType cmdType, String cmdText, MySqlParameter[] commandParameters) 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\MySqlHelper.cs:行号 51
-   在 ExamReport.mainform.DBCheck() 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\MainRadForm.cs:行号 158
-   在 ExamReport.mainform.Grid_load() 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\MainRadForm.cs:行号 164
-   在 ExamReport.mainform..ctor() 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\MainRadForm.cs:行号 40
-   在 ExamReport.Program.Main() 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\Program.cs:行号 21
-   在 System.AppDomain._nExecuteAssembly(RuntimeAssembly assembly, String[] args)
-   在 System.AppDomain.ExecuteAssembly(String assemblyFile, Evidence assemblySecurity, String[] args)
-   在 Microsoft.VisualStudio.HostingProcess.HostProc.RunUsersAssembly()
+System.ArgumentException: 列“schoolcode”不属于表 Table。
+   在 System.Data.DataRow.GetDataColumn(String columnName)
+   在 System.Data.DataRow.get_Item(String columnName)
+   在 System.Data.DataRowExtensions.Field[T](DataRow row, String columnName)
+   在 ExamReport.Analysis.<>c__DisplayClass10.<XXCreateWord>b__d(DataRow c) 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\Analysis.cs:行号 378
+   在 System.Linq.Enumerable.WhereEnumerableIterator`1.MoveNext()
+   在 System.Linq.Enumerable.WhereSelectEnumerableIterator`2.MoveNext()
+   在 System.Collections.Generic.List`1..ctor(IEnumerable`1 collection)
+   在 System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   在 ExamReport.Analysis.XXCreateWord(HKScriptCalculate cal, MetaData mdata, HKScriptWordCreator wc, String xx, String xx_code, String save_adr) 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\Analysis.cs:行号 378
+   在 ExamReport.Analysis.hk_script_process(MetaData mdata) 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\Analysis.cs:行号 341
+   在 ExamReport.Analysis.start() 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\Analysis.cs:行号 224
+   在 ExamReport.Analysis.hk_script_start() 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\Analysis.cs:行号 275
    在 System.Threading.ThreadHelper.ThreadStart_Context(Object state)
    在 System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
    在 System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)

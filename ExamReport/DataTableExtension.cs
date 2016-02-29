@@ -8,7 +8,7 @@ namespace ExamReport
 {
     public static class DataTableExtension
     {
-        public static DataTable LanguageTrans(this DataTable dt)
+        public static DataTable LanguageTrans(this DataTable dt, string exam)
         {
             foreach (DataRow dr in dt.Rows)
             {
@@ -16,7 +16,15 @@ namespace ExamReport
                 {
                     if (dc.ColumnName.Trim().Equals("sub"))
                     {
-                        dr[dc] = Utils.language_trans(dr[dc].ToString());
+                        switch (exam)
+                        {
+                            case "hk":
+                                dr[dc] = Utils.hk_lang_trans(dr[dc].ToString());
+                                break;
+                            default:
+                                dr[dc] = Utils.language_trans(dr[dc].ToString());
+                                break;
+                        }
                         //switch (dr[dc].ToString())
                         //{
                         //    case "sx":

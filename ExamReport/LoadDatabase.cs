@@ -143,17 +143,16 @@ namespace ExamReport
 
         public void hk_database_process(MetaData mdata)
         {
-            HK_database hk = new HK_database(mdata, ans.dt, groups.dt, grouptype, divider);
+            Database hk = new Database(mdata, ans.dt, groups.dt, grouptype, divider);
             hk.DBF_data_process(database_str);
-
 
             basic_data = hk._basic_data;
             group_data = hk._group_data;
 
-            DBHelper.create_mysql_table(basic_data, Utils.get_basic_tablename(year, Utils.language_trans(exam), Utils.language_trans(sub)));
-            DBHelper.create_mysql_table(group_data, Utils.get_group_tablename(year, Utils.language_trans(exam), Utils.language_trans(sub)));
-            DBHelper.create_ans_table(Utils.get_tablename(year, Utils.language_trans(exam), Utils.language_trans(sub)), hk.newStandard, ans.xz_th);
-            DBHelper.create_fz_table(Utils.get_tablename(year, Utils.language_trans(exam), Utils.language_trans(sub)), groups.dt, groups.groups_group);
+            DBHelper.create_mysql_table(basic_data, Utils.get_basic_tablename(year, Utils.hk_lang_trans(exam), Utils.hk_lang_trans(sub)));
+            DBHelper.create_mysql_table(group_data, Utils.get_group_tablename(year, Utils.hk_lang_trans(exam), Utils.hk_lang_trans(sub)));
+            DBHelper.create_ans_table(Utils.get_tablename(year, Utils.hk_lang_trans(exam), Utils.hk_lang_trans(sub)), hk.newStandard, ans.xz_th);
+            DBHelper.create_fz_table(Utils.get_tablename(year, Utils.hk_lang_trans(exam), Utils.hk_lang_trans(sub)), groups.dt, groups.groups_group);
             wizard.ShowPro(100, 3);
         }
 

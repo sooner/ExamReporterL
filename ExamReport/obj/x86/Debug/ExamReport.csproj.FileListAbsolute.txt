@@ -58,10 +58,6 @@ G:\project\ExamReporterL\ExamReporterL\ExamReport\bin\Debug\office.xml
 D:\project\ExamReporterL\ExamReporterL\ExamReport\bin\Debug\ExamReport.exe.config
 D:\project\ExamReporterL\ExamReporterL\ExamReport\bin\Debug\ExamReport.exe
 D:\project\ExamReporterL\ExamReporterL\ExamReport\bin\Debug\ExamReport.pdb
-D:\project\ExamReporterL\ExamReporterL\ExamReport\bin\Debug\Microsoft.Practices.EnterpriseLibrary.Common.dll
-D:\project\ExamReporterL\ExamReporterL\ExamReport\bin\Debug\Microsoft.Practices.ObjectBuilder.dll
-D:\project\ExamReporterL\ExamReporterL\ExamReport\bin\Debug\MySql.Data.dll
-D:\project\ExamReporterL\ExamReporterL\ExamReport\bin\Debug\ZedGraph.dll
 D:\project\ExamReporterL\ExamReporterL\ExamReport\bin\Debug\office.dll
 D:\project\ExamReporterL\ExamReporterL\ExamReport\bin\Debug\Microsoft.Vbe.Interop.dll
 D:\project\ExamReporterL\ExamReporterL\ExamReport\bin\Debug\Microsoft.Office.Interop.SmartTag.dll
@@ -75,3 +71,4 @@ D:\project\ExamReporterL\ExamReporterL\ExamReport\obj\x86\Debug\ExamReport.Prope
 D:\project\ExamReporterL\ExamReporterL\ExamReport\obj\x86\Debug\ExamReport.csproj.GenerateResource.Cache
 D:\project\ExamReporterL\ExamReporterL\ExamReport\obj\x86\Debug\ExamReport.exe
 D:\project\ExamReporterL\ExamReporterL\ExamReport\obj\x86\Debug\ExamReport.pdb
+D:\project\ExamReporterL\ExamReporterL\ExamReport\bin\Debug\Ionic.Zip.dll

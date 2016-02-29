@@ -55,7 +55,12 @@ namespace ExamReport
         {
             _year = year;
             _exam = exam;
-            _sub = Utils.language_trans(sub);
+            if (exam.Equals("gk"))
+                _sub = Utils.language_trans(sub);
+            else if (exam.Equals("hk"))
+                _sub = Utils.hk_lang_trans(sub);
+            else
+                _sub = Utils.language_trans(sub);
         }
         public bool check()
         {

@@ -16,7 +16,7 @@ using System.Threading;
 namespace ExamReport
 {
     public delegate void ProgressDelegate(string key, int status, string text);
-
+    public delegate void CheckStuIDMethod(int status, string message);
     public delegate void MyErrorMessage(string key, string Message);
     public partial class mainform : Telerik.WinControls.UI.RadForm
     {
@@ -32,6 +32,8 @@ namespace ExamReport
 
         DataTable Cust_data = new DataTable();
         CustomRelation temp_cust = new CustomRelation();
+        public DataTable schoolcode_table;
+        public DataTable school;
         string currentdic = System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath);
         //Thread thread;
         public mainform()
@@ -46,6 +48,9 @@ namespace ExamReport
             gk_gridview.EditorRequired += radGridView1_EditorRequired;
 
             gk_isVisible.Checked = true;
+            hk_group_button.IsChecked = true;
+            qx_combo.SelectedIndex = 0;
+            xx_combo.SelectedIndex = 0;
 
             init_dictionary();
             init_config_addr();
@@ -102,6 +107,7 @@ namespace ExamReport
             progress_label.Add("gk_xx", gk_xx_progresslabel);
             progress_label.Add("hk_zt", hk_zt_progresslabel);
             progress_label.Add("gk_cus", gk_cus_progresslabel);
+            progress_label.Add("hk_script", hk_script_progresslabel);
 
             run_button.Add("zk_zt", zk_zt_start);
             run_button.Add("zk_qx", zk_qx_start);
@@ -112,6 +118,7 @@ namespace ExamReport
             run_button.Add("gk_xx", gk_xx_start);
             run_button.Add("hk_zt", hk_start);
             run_button.Add("gk_cus", gk_cus_start);
+            run_button.Add("hk_script", hk_script_start);
 
             cancel_button.Add("zk_zt", zk_zt_cancel);
             cancel_button.Add("zk_qx", zk_qx_cancel);
@@ -122,6 +129,7 @@ namespace ExamReport
             cancel_button.Add("gk_xx", gk_xx_cancel);
             cancel_button.Add("hk_zt", hk_cancel);
             cancel_button.Add("gk_cus", gk_cus_cancel);
+            cancel_button.Add("hk_script", hk_script_cancel);
 
             waiting_bar.Add("zk_zt", zk_zt_waitingbar);
             waiting_bar.Add("zk_qx", zk_qx_WaitingBar);
@@ -132,10 +140,11 @@ namespace ExamReport
             waiting_bar.Add("gk_xx", gk_xx_waitingbar);
             waiting_bar.Add("hk_zt", hk_waitingbar);
             waiting_bar.Add("gk_cus", gk_cus_waitingbar);
+            waiting_bar.Add("hk_script", hk_script_progressbar);
 
             
         }
-        public DataTable schoolcode_table;
+        
         
         private void zk_zt_button_Click_1(object sender, EventArgs e)
         {
@@ -178,7 +187,7 @@ namespace ExamReport
                 gnum = c.Field<int>("gnum")
             }).ToDataTable();
 
-            zk_gridview.DataSource = zk_data.LanguageTrans();
+            zk_gridview.DataSource = zk_data.LanguageTrans("zk");
             zk_gridview.TableElement.EndUpdate();
 
             gk_gridview.MasterTemplate.AllowAddNewRow = false;
@@ -193,7 +202,7 @@ namespace ExamReport
                 gtype = c.Field<string>("gtype"),
                 gnum = c.Field<int>("gnum")
             }).ToDataTable();
-            gk_gridview.DataSource = gk_data.LanguageTrans();
+            gk_gridview.DataSource = gk_data.LanguageTrans("gk");
 
             foreach (GridViewRowInfo row in gk_gridview.Rows)
             {
@@ -231,9 +240,11 @@ namespace ExamReport
                 gtype = c.Field<string>("gtype"),
                 gnum = c.Field<int>("gnum")
             }).ToDataTable();
-            HKGridView.DataSource = hk_data.LanguageTrans();
+            HKGridView.DataSource = hk_data.LanguageTrans("hk");
 
             HKGridView.TableElement.EndUpdate();
+
+            
 
         }
         void radGridView1_EditorRequired(object sender, EditorRequiredEventArgs e)
@@ -309,12 +320,14 @@ namespace ExamReport
             OleDbConnection dbfConnection = new OleDbConnection(conn);
 
             OleDbDataAdapter adpt = new OleDbDataAdapter("select * from " + "schoolcode", dbfConnection);
+            OleDbDataAdapter adpt2 = new OleDbDataAdapter("select * from " + "school", dbfConnection);
             //OleDbDataAdapter adpt = new OleDbDataAdapter("select * from " + file + " where Qk<>1", dbfConnection);
             DataSet mySet = new DataSet();
-
+            DataSet mySet2 = new DataSet();
             try
             {
                 adpt.Fill(mySet);
+                adpt2.Fill(mySet2);
             }
             catch (OleDbException e)
             {
@@ -323,7 +336,7 @@ namespace ExamReport
             dbfConnection.Close();
 
             schoolcode_table = mySet.Tables[0];
-
+            school = mySet2.Tables[0];
             DataTable qxdm = schoolcode_table.AsEnumerable().GroupBy(c => c.Field<string>("qxmc")).Select(c => new
             {
                 qxmc = c.Key.ToString().Trim(),
@@ -368,6 +381,24 @@ namespace ExamReport
             }).ToDictionary(c => c.school, c => c.qx);
             GKTreeView.NodeCheckedChanged += new RadTreeView.TreeViewEventHandler(GKTreeView_NodeCheckedChanged);
             ZKTreeView.ExpandAll();
+
+            DataTable qx_data =
+                schoolcode_table.AsEnumerable().GroupBy(c => c.Field<string>("qxmc")).Select(c => new
+                {
+                    school = c.Key.ToString().Trim(),
+                    code = string.Join(",", c.GroupBy(p => p.Field<string>("qxdm")).Select(p => p.Key.ToString().Trim()).ToArray())
+                }).ToDataTable();
+
+            DataRow total = qx_data.NewRow();
+            total["school"] = "全部";
+            total["code"] = "0";
+            qx_data.Rows.InsertAt(total, 0);
+
+            qx_combo.DataSource = qx_data;
+            qx_combo.DisplayMember = "school";
+            qx_combo.ValueMember = "code";
+
+            qx_combo.ResetText();
         }
         private void GKTreeView_NodeCheckedChanged(object sender, RadTreeViewEventArgs e)
         {
@@ -428,6 +459,8 @@ namespace ExamReport
                 hk_markReporter_panel.Show();
                 hk_config_panel.Show();
                 hk_zt_panel.Hide();
+
+                
             }
         }
         private void GKTreeNode_Selected(object sender, RadTreeViewEventArgs e)
@@ -1410,6 +1443,119 @@ namespace ExamReport
                 }
             }
         }
+
+        public void CheckStuID(int status, string message)
+        {
+            if (this.InvokeRequired)
+                this.Invoke(new CheckStuIDMethod(CheckStuID), status, message);
+            else
+            {
+                switch (status)
+                {
+                    case 1:
+
+                        MessageBoxButtons messButton = MessageBoxButtons.OKCancel;
+                        DialogResult dr = MessageBox.Show(message + "\n仍然继续嘛？", "是否继续", messButton);
+                        if (dr == DialogResult.Cancel)
+                        {
+                            ShowPro("hk_script", 100, "取消");
+                        }
+                        break;
+                    case 2:
+
+                        Error(message);
+                        ShowPro("hk_script", 100, "错误退出");
+                        break;
+                    case 3:
+                        MessageBoxButtons deleteButton = MessageBoxButtons.OKCancel;
+                        DialogResult delete_dr = MessageBox.Show(message + "\n删除重复成绩继续？", "是否继续", deleteButton);
+                        if (delete_dr == DialogResult.Cancel)
+                        {
+                            ShowPro("hk_script", 100, "取消");
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        private void hk_script_start_Click(object sender, EventArgs e)
+        {
+            if (CheckGridView(HKGridView))
+                return;
+            if (!hk_check())
+                return;
+            Analysis analysis = new Analysis(this);
+            analysis._gridview = HKGridView;
+            analysis.save_address = hk_save_addr.Text;
+            analysis.isVisible = hk_isVisible.Checked;
+            analysis.CurrentDirectory = currentdic;
+            analysis.hk_hierarchy = new Analysis.HK_hierarchy();
+            analysis.hk_hierarchy.excellent_low = excellent_low.Value;
+            analysis.hk_hierarchy.excellent_high = excellent_high.Value;
+            analysis.hk_hierarchy.well_low = well_low.Value;
+            analysis.hk_hierarchy.well_high = well_high.Value;
+            analysis.hk_hierarchy.pass_low = pass_low.Value;
+            analysis.hk_hierarchy.pass_high = pass_high.Value;
+            analysis.hk_hierarchy.fail_low = fail_low.Value;
+            analysis.hk_hierarchy.fail_high = fail_high.Value;
+            analysis.date = dateTimePicker.Value.Year.ToString() + "年" + dateTimePicker.Value.Month.ToString() + "月";
+            if (hk_group_button.IsChecked)
+            {
+                analysis.hk_script_type = Utils.UnionType.QX_XX;
+                analysis.qx = qx_combo.SelectedValue.ToString().Trim();
+                analysis.xx = xx_combo.SelectedValue.ToString().Trim();
+                analysis.qx_name = qx_combo.Text.Trim();
+                analysis.xx_name = xx_combo.Text.Trim();
+            }
+
+            if (hk_id_button.IsChecked)
+            {
+                analysis.hk_script_type = Utils.UnionType.ID;
+                analysis.stu_id = stu_id.Text.Trim();
+            }
+            Thread thread = new Thread(new ThreadStart(analysis.hk_script_start));
+            thread.IsBackground = true;
+            thread.SetApartmentState(ApartmentState.STA);
+            thread_store.Add("hk_script", thread);
+            thread.Start();
+        }
+
+        private void qx_combo_SelectedIndexChanged(object sender, Twin.UI.Data.PositionChangedEventArgs e)
+        {
+            if (qx_combo.Text.Equals(""))
+                return;
+            if (qx_combo.DataSource != null && !qx_combo.Text.Equals("0"))
+            {
+
+                string code_str = qx_combo.SelectedValue.ToString();
+                string[] code = code_str.Split(new char[1] { ',' });
+
+                DataTable DT = school.AsEnumerable().Where(c => code.Contains(c.Field<string>("xxdm").ToString().Trim().Substring(0, 2))).Select(c => new
+                {
+                    code = c.Field<string>("xxdm").ToString().Trim(),
+                    school = c.Field<string>("xxmc").ToString().Trim()
+                }).ToDataTable();
+                DataRow total = DT.NewRow();
+                total["code"] = "0";
+                total["school"] = "全部";
+                DT.Rows.InsertAt(total, 0);
+
+                xx_combo.DataSource = DT;
+
+                xx_combo.DisplayMember = "school";
+                xx_combo.ValueMember = "code";
+
+                xx_combo.ResetText();
+            }
+            else
+            {
+                xx_combo.DataSource = null;
+                xx_combo.ResetText();
+            }
+        }
+
        
     }
 }
