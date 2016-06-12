@@ -1,5 +1,7 @@
-System.NullReferenceException: 未将对象引用设置到对象的实例。
-   在 ExamReport.LoadDatabase.start_process() 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\LoadDatabase.cs:行号 64
+System.ArgumentException: 第1题满分值小于实际分值！
+   在 ExamReport.Database.DBF_data_process(String fileadd) 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\Database.cs:行号 453
+   在 ExamReport.LoadDatabase.gk_database_process(MetaData mdata) 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\LoadDatabase.cs:行号 203
+   在 ExamReport.LoadDatabase.start_process() 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\LoadDatabase.cs:行号 97
    在 System.Threading.ThreadHelper.ThreadStart_Context(Object state)
    在 System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
    在 System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)

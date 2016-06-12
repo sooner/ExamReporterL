@@ -88,6 +88,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdminCal.cs" />
+    <Compile Include="AdminWordCreator.cs" />
+    <Compile Include="Admin_WordData.cs" />
     <Compile Include="Analysis.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="Config\SchoolCodeConfig.cs" />

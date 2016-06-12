@@ -71,4 +71,3 @@ D:\project\ExamReporterL\ExamReporterL\ExamReport\obj\x86\Debug\ExamReport.Prope
 D:\project\ExamReporterL\ExamReporterL\ExamReport\obj\x86\Debug\ExamReport.csproj.GenerateResource.Cache
 D:\project\ExamReporterL\ExamReporterL\ExamReport\obj\x86\Debug\ExamReport.exe
 D:\project\ExamReporterL\ExamReporterL\ExamReport\obj\x86\Debug\ExamReport.pdb
-D:\project\ExamReporterL\ExamReporterL\ExamReport\bin\Debug\Ionic.Zip.dll

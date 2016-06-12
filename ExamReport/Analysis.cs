@@ -85,8 +85,8 @@ namespace ExamReport
                     string log = year + "年" + Utils.language_trans(exam) + row.Cells["sub"].Value.ToString().Trim();
                     _form.ShowPro(exam_type, 1, log + "数据读取...");
                     MetaData mdata = new MetaData(year, exam, sub);
-                    //try
-                    //{
+                    try
+                    {
                         mdata.get_meta_data();
                         _fullmark = mdata._fullmark;
 
@@ -253,14 +253,14 @@ namespace ExamReport
                             }
 
                         }
-                    //}
-                    //catch (System.Threading.ThreadAbortException e)
-                    //{
-                    //}
-                    //catch (Exception e)
-                    //{
-                    //    _form.ErrorM(exam_type, e.Message);
-                    //}
+                    }
+                    catch (System.Threading.ThreadAbortException e)
+                    {
+                    }
+                    catch (Exception e)
+                    {
+                        _form.ErrorM(exam_type, e.Message);
+                    }
 
                 }
             }
@@ -277,8 +277,8 @@ namespace ExamReport
 
         public void hk_script_process(MetaData mdata)
         {
-            //try
-            //{
+            try
+            {
                 Configuration config = initConfig(mdata._sub, "报告单", "会考");
 
                 if (hk_script_type == Utils.UnionType.ID)
@@ -341,14 +341,14 @@ namespace ExamReport
                         XXCreateWord(cal,mdata, wc, xx_name, xx, save_adr);
                     }
                 }
-            //}
-            //catch (System.Threading.ThreadAbortException e)
-            //{
-            //}
-            //catch (Exception e)
-            //{
-            //    _form.CheckStuID(2, e.Message.ToString());
-            //}
+            }
+            catch (System.Threading.ThreadAbortException e)
+            {
+            }
+            catch (Exception e)
+            {
+                _form.CheckStuID(2, e.Message.ToString());
+            }
         }
         public void QXCreateWord(HKScriptCalculate cal, MetaData mdata, HKScriptWordCreator wc, string qx, string qx_code, string adr)
         {

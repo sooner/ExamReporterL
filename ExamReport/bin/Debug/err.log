@@ -1,16 +1,10 @@
-System.ArgumentException: 列“schoolcode”不属于表 Table。
+System.ArgumentException: 列“T”不属于表 。
    在 System.Data.DataRow.GetDataColumn(String columnName)
    在 System.Data.DataRow.get_Item(String columnName)
-   在 System.Data.DataRowExtensions.Field[T](DataRow row, String columnName)
-   在 ExamReport.Analysis.<>c__DisplayClass10.<XXCreateWord>b__d(DataRow c) 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\Analysis.cs:行号 378
-   在 System.Linq.Enumerable.WhereEnumerableIterator`1.MoveNext()
-   在 System.Linq.Enumerable.WhereSelectEnumerableIterator`2.MoveNext()
-   在 System.Collections.Generic.List`1..ctor(IEnumerable`1 collection)
-   在 System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
-   在 ExamReport.Analysis.XXCreateWord(HKScriptCalculate cal, MetaData mdata, HKScriptWordCreator wc, String xx, String xx_code, String save_adr) 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\Analysis.cs:行号 378
-   在 ExamReport.Analysis.hk_script_process(MetaData mdata) 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\Analysis.cs:行号 341
-   在 ExamReport.Analysis.start() 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\Analysis.cs:行号 224
-   在 ExamReport.Analysis.hk_script_start() 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\Analysis.cs:行号 275
+   在 ExamReport.Database.create_groups() 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\Database.cs:行号 776
+   在 ExamReport.Database.DBF_data_process(String fileadd) 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\Database.cs:行号 601
+   在 ExamReport.LoadDatabase.gk_database_process(MetaData mdata) 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\LoadDatabase.cs:行号 203
+   在 ExamReport.LoadDatabase.start_process() 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\LoadDatabase.cs:行号 97
    在 System.Threading.ThreadHelper.ThreadStart_Context(Object state)
    在 System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
    在 System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
