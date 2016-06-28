@@ -39,6 +39,14 @@ namespace ExamReport
         public ZK_database.GroupType _grouptype;
         public int _group_num = 0;
 
+        public int first_level;
+        public int second_level;
+        public int third_level;
+
+        public string[] urban_code;
+        public string[] country_code;
+        
+
         public void change()
         {
             fullmark = sub_fullmark;

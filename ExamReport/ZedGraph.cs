@@ -554,7 +554,7 @@ namespace ExamReport
             }
             PointPairList ppBar = new PointPairList(barX, barY);
             BarItem myCurve1 = myPane.AddBar("", ppBar, Color.FromArgb(0, 255, 255));
-
+            
             myCurve1.Bar.Fill = new Fill(Color.FromArgb(0, 255, 255), Color.FromArgb(0, 255, 255));
 
             myPane.Legend.IsVisible = false;
@@ -600,7 +600,27 @@ namespace ExamReport
             Clipboard.SetImage(sourceBitmap);
             //sourceBitmap.Save(cuveBmpPath + @"\testCuve.bmp");
         }
+        public static void createSubDiffBar(List<DataTable> data)
+        {
+            ZedGraphControl zgc = new ZedGraphControl();
+            //图大小设置
+            zgc.Width = 531;
+            zgc.Height = 271;
 
+
+            GraphPane myPane = zgc.GraphPane;
+            //标题清空
+            myPane.Title.Text = "";
+            myPane.XAxis.Title.Text = "";
+            myPane.YAxis.Title.Text = "";
+            //缓存清空
+            myPane.CurveList.Clear();
+            myPane.GraphObjList.Clear();
+
+            if (data.Count > 1)
+            {
+            }
+        }
         /// <summary>
         /// 柱状图的生成
         /// </summary>
@@ -639,7 +659,6 @@ namespace ExamReport
             }
             PointPairList ppBar = new PointPairList(barX, barY);
             BarItem myCurve1 = myPane.AddBar("", ppBar, Color.FromArgb(0, 255, 255));
-
             myCurve1.Bar.Fill = new Fill(Color.FromArgb(0, 255, 255), Color.FromArgb(0, 255, 255));
 
             myPane.Legend.IsVisible = false;

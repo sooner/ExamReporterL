@@ -8,6 +8,25 @@ namespace ExamReport
 {
     public static class DataTableExtension
     {
+        public static decimal StDev(this DataTable dt, string col)
+        {
+            decimal avg = Avg(dt, col);
+            double stdev = dt.AsEnumerable().Select(
+                c => Math.Pow((Convert.ToDouble(c.Field<string>(col)) - Convert.ToDouble(avg)), 2)).Average();
+            return Convert.ToDecimal(Math.Sqrt(stdev));
+        }
+        public static decimal Avg(this DataTable dt, string col)
+        {
+            return Convert.ToDecimal(dt.Compute("Avg(" + col + ")", ""));
+        }
+        public static decimal Max(this DataTable dt, string col)
+        {
+            return Convert.ToDecimal(dt.Compute("Max(" + col + ")", ""));
+        }
+        public static decimal Min(this DataTable dt, string col)
+        {
+            return Convert.ToDecimal(dt.Compute("Min(" + col + ")", ""));
+        }
         public static DataTable LanguageTrans(this DataTable dt, string exam)
         {
             foreach (DataRow dr in dt.Rows)

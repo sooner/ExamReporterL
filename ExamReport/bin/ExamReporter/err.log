@@ -1,5 +1,8 @@
-System.ArgumentException: 第1题满分值小于实际分值！
-   在 ExamReport.Database.DBF_data_process(String fileadd) 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\Database.cs:行号 453
+System.ArgumentException: 列“T”不属于表 。
+   在 System.Data.DataRow.GetDataColumn(String columnName)
+   在 System.Data.DataRow.get_Item(String columnName)
+   在 ExamReport.Database.create_groups() 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\Database.cs:行号 776
+   在 ExamReport.Database.DBF_data_process(String fileadd) 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\Database.cs:行号 601
    在 ExamReport.LoadDatabase.gk_database_process(MetaData mdata) 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\LoadDatabase.cs:行号 203
    在 ExamReport.LoadDatabase.start_process() 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\LoadDatabase.cs:行号 97
    在 System.Threading.ThreadHelper.ThreadStart_Context(Object state)
