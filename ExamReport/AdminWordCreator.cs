@@ -50,22 +50,194 @@ namespace ExamReport
 
             insertText(ExamTitle0, "北京市整体");
             insertText(ExamTitle1, "总体");
-            insertTotalTable_final("    试卷总分分析表", w_data, l_data);
-            insertChart("文科总分分数分布图", w_data.total_dist, "总分", "人数", 750);
-            insertFreqTable_single("文科总分频数分布表", w_data.total_freq);
-            insertChart("理科总分分数分布图", l_data.total_dist, "总分", "人数", 750);
-            insertFreqTable_single("理科总分频数分布表", l_data.total_freq);
+            insertTotalTable_final("    试卷总分分析表", "文科", w_data.total, "理科", l_data.total);
+            insertChart("    文科总分分数分布图", w_data.total_dist, "总分", "人数", 750);
+            insertFreqTable_single("    文科总分频数分布表", w_data.total_freq);
+            insertChart("    理科总分分数分布图", l_data.total_dist, "总分", "人数", 750);
+            insertFreqTable_single("    理科总分频数分布表", l_data.total_freq);
             insertGKLineTable("", w_data.total_level, l_data.total_level);
             insertText(ExamTitle1, "文科");
-            insertSubDiffTable("文科各学科得分率表", w_data.sub_diff);
-            
+            insertSubDiffTable("    文科各学科得分率表", w_data.sub_diff);
+            insertHistGraph("    文科各学科得分率图", w_data.sub_diff);
+            insertSubDiffTable("    理科各学科得分率表", l_data.sub_diff);
+            insertHistGraph("    理科各学科得分率图", l_data.sub_diff);
+
+            insertText(ExamTitle0, "城区、郊区");
+            insertText(ExamTitle1, "文科");
+
+            insertTotalTable_final("    城区、郊区总分分析表", "城区", w_data.urban, "郊区", w_data.country);
+            insertUrbCntTable("    城区、郊区文科各学科得分率分析表", w_data.urban_sub, w_data.country_sub);
+            insertMultiHistGraph("    城区、郊区文科各学科得分率分析图", w_data.urban_sub, w_data.country_sub);
+
+            insertText(ExamTitle1, "理科");
+
+            insertTotalTable_final("    城区、郊区总分分析表", "城区", l_data.urban, "郊区", l_data.country);
+            insertUrbCntTable("    城区、郊区文科各学科得分率分析表", l_data.urban_sub, l_data.country_sub);
+            insertMultiHistGraph("    城区、郊区文科各学科得分率分析图", l_data.urban_sub, l_data.country_sub);
+
+            insertText(ExamTitle0, "区县分析");
+            insertText(ExamTitle1, "文科");
+            insertText(ExamTitle2, "总分");
+
+            insertQXtable("    各区文科总分分析表", w_data.districts.Rows[0], w_data.districts.Rows[1]);
+            insertText(ExamTitle2, "语文学科"); 
+            insertQXtable("    语文学科得分率表", w_data.districts.Rows[2], w_data.districts.Rows[3]);
+            insertText(ExamTitle2, "数学（文）学科"); 
+            insertQXtable("    数学（文）学科得分率表", w_data.districts.Rows[4], w_data.districts.Rows[5]);
+            insertText(ExamTitle2, "英语"); 
+            insertQXtable("    英语学科得分率表", w_data.districts.Rows[6], w_data.districts.Rows[7]);
+            insertText(ExamTitle2, "历史"); 
+            insertQXtable("    历史学科得分率表", w_data.districts.Rows[8], w_data.districts.Rows[9]);
+            insertText(ExamTitle2, "地理"); 
+            insertQXtable("    地理学科得分率表", w_data.districts.Rows[10], w_data.districts.Rows[11]);
+            insertText(ExamTitle2, "政治"); 
+            insertQXtable("    政治学科得分率表", w_data.districts.Rows[12], w_data.districts.Rows[13]);
+
+            insertText(ExamTitle2, "总分"); 
+            insertQXtable("    各区理科总分分析表", l_data.districts.Rows[0], l_data.districts.Rows[1]);
+            insertText(ExamTitle2, "语文"); 
+            insertQXtable("    语文学科得分率表", l_data.districts.Rows[2], l_data.districts.Rows[3]);
+            insertText(ExamTitle2, "数学（理）"); 
+            insertQXtable("    数学（理）学科得分率表", l_data.districts.Rows[4], l_data.districts.Rows[5]);
+            insertText(ExamTitle2, "英语"); 
+            insertQXtable("    英语学科得分率表", l_data.districts.Rows[6], l_data.districts.Rows[7]);
+            insertText(ExamTitle2, "物理"); 
+            insertQXtable("    物理学科得分率表", l_data.districts.Rows[8], l_data.districts.Rows[9]);
+            insertText(ExamTitle2, "化学"); 
+            insertQXtable("    化学学科得分率表", l_data.districts.Rows[10], l_data.districts.Rows[11]);
+            insertText(ExamTitle2, "生物"); 
+            insertQXtable("    生物学科得分率表", l_data.districts.Rows[12], l_data.districts.Rows[13]);
+        }
+        public void insertQXtable(string title, DataRow avg, DataRow diff)
+        {
+            Word.Table table;
+            Word.Range range = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+            table = oDoc.Tables.Add(range, 6, 11, ref oMissing, oTrue);
+
+            table.Range.InsertCaption(oWord.CaptionLabels["表"], title, oMissing, Word.WdCaptionPosition.wdCaptionPositionAbove, oMissing);
+            range.MoveEnd(Word.WdUnits.wdParagraph, 1);
+            range.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+
+            table.Cell(1, 1).Range.Text = "区县";
+            table.Cell(1, 2).Range.Text = "全市";
+            table.Cell(1, 3).Range.Text = "城区";
+            table.Cell(1, 4).Range.Text = "郊区";
+            table.Cell(1, 5).Range.Text = "东城";
+            table.Cell(1, 6).Range.Text = "西城";
+            table.Cell(1, 7).Range.Text = "朝阳";
+            table.Cell(1, 8).Range.Text = "丰台";
+            table.Cell(1, 9).Range.Text = "石景山";
+            table.Cell(1, 10).Range.Text = "海淀";
+            table.Cell(1, 11).Range.Text = "门头沟";
+
+            table.Cell(4, 1).Range.Text = "区县";
+            table.Cell(4, 2).Range.Text = "燕山";
+            table.Cell(4, 3).Range.Text = "房山";
+            table.Cell(4, 4).Range.Text = "通州";
+            table.Cell(4, 5).Range.Text = "顺义";
+            table.Cell(4, 6).Range.Text = "昌平";
+            table.Cell(4, 7).Range.Text = "大兴";
+            table.Cell(4, 8).Range.Text = "怀柔";
+            table.Cell(4, 9).Range.Text = "平谷";
+            table.Cell(4, 10).Range.Text = "密云";
+            table.Cell(4, 11).Range.Text = "延庆";
+
+            table.Cell(2, 1).Range.Text = "平均分";
+            table.Cell(3, 1).Range.Text = "得分率";
+
+            table.Cell(5, 1).Range.Text = "平均分";
+            table.Cell(6, 1).Range.Text = "得分率";
+
+            for (int i = 0; i < 10; i++)
+            {
+                table.Cell(2, i + 2).Range.Text = string.Format("{0:F1}", avg[i]);
+                table.Cell(3, i + 2).Range.Text = string.Format("{0:F1}", diff[i]);
+
+                table.Cell(5, i + 2).Range.Text = string.Format("{0:F1}", avg[i + 10]);
+                table.Cell(6, i + 2).Range.Text = string.Format("{0:F1}", diff[i + 10]);
+            }
+            table.Rows[1].HeadingFormat = -1;
 
 
+            table.Borders.OutsideLineStyle = Word.WdLineStyle.wdLineStyleSingle;
+            table.Borders.InsideLineStyle = Word.WdLineStyle.wdLineStyleSingle;
 
+            table.Select();
+            oWord.Selection.set_Style(ref TableContent2);
+            range = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+            range.InsertParagraphAfter();
+
+        }
+        public void insertUrbCntTable(string title, DataTable urban, DataTable country)
+        {
+            Word.Table table;
+            Word.Range range = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+            table = oDoc.Tables.Add(range, 3, urban.Rows.Count + 1, ref oMissing, oTrue);
+
+            table.Range.InsertCaption(oWord.CaptionLabels["表"], title, oMissing, Word.WdCaptionPosition.wdCaptionPositionAbove, oMissing);
+            range.MoveEnd(Word.WdUnits.wdParagraph, 1);
+            range.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+
+            table.Cell(1, 1).Range.Text = "分类";
+            table.Cell(2, 1).Range.Text = "城区";
+            table.Cell(3, 1).Range.Text = "郊区";
+
+            for (int col = 2; col <= urban.Rows.Count + 1; col++)
+            {
+                table.Cell(1, col).Range.Text = urban.Rows[col - 2]["sub"].ToString().Trim();
+                table.Cell(2, col).Range.Text = string.Format("{0:F1}", urban.Rows[col - 2]["diff"]);
+                table.Cell(3, col).Range.Text = string.Format("{0:F1}", country.Rows[col - 2]["diff"]);
+            }
+
+            table.Rows[1].HeadingFormat = -1;
+
+
+            table.Borders.OutsideLineStyle = Word.WdLineStyle.wdLineStyleSingle;
+            table.Borders.InsideLineStyle = Word.WdLineStyle.wdLineStyleSingle;
+
+            table.Select();
+            oWord.Selection.set_Style(ref TableContent2);
+            range = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+            range.InsertParagraphAfter();
+        }
+        public void insertMultiHistGraph(string title, DataTable urban, DataTable country)
+        {
+            List<DataTable> data_list = new List<DataTable>();
+            data_list.Add(urban);
+            data_list.Add(country);
+
+            ZedGraph.createSubDiffBar(data_list);
+
+            Word.Range dist_rng = oDoc.Bookmarks.get_Item(oEndOfDoc).Range;
+            dist_rng.Paste();
+            Utils.mutex_clipboard.ReleaseMutex();
+            dist_rng.InsertCaption(oWord.CaptionLabels["图"], title, oMissing, Word.WdCaptionPosition.wdCaptionPositionAbove, oMissing);
+            dist_rng.MoveEnd(Word.WdUnits.wdParagraph, 1);
+            dist_rng.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+            dist_rng = oDoc.Bookmarks.get_Item(oEndOfDoc).Range;
+            dist_rng.MoveStart(Word.WdUnits.wdParagraph, 1);
+            dist_rng.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+            dist_rng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+            dist_rng.InsertParagraphAfter();
         }
         public void insertHistGraph(string title, DataTable data)
         {
+            List<DataTable> data_list = new List<DataTable>();
+            data_list.Add(data);
 
+            ZedGraph.createSubDiffBar(data_list);
+
+            Word.Range dist_rng = oDoc.Bookmarks.get_Item(oEndOfDoc).Range;
+            dist_rng.Paste();
+            Utils.mutex_clipboard.ReleaseMutex();
+            dist_rng.InsertCaption(oWord.CaptionLabels["图"], title, oMissing, Word.WdCaptionPosition.wdCaptionPositionAbove, oMissing);
+            dist_rng.MoveEnd(Word.WdUnits.wdParagraph, 1);
+            dist_rng.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+            dist_rng = oDoc.Bookmarks.get_Item(oEndOfDoc).Range;
+            dist_rng.MoveStart(Word.WdUnits.wdParagraph, 1);
+            dist_rng.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+            dist_rng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+            dist_rng.InsertParagraphAfter();
         }
         public void insertSubDiffTable(string title, DataTable data)
         {
@@ -236,7 +408,7 @@ namespace ExamReport
             oWord.Selection.Delete(Word.WdUnits.wdCharacter, oMissing);
             oWord.Selection.Range.set_Style(ExamBodyText);
         }
-        void insertTotalTable_final(string title, Admin_WordData w_data, Admin_WordData l_data)
+        void insertTotalTable_final(string title, string w_title, Admin_WordData.basic_stat w_data, string l_title, Admin_WordData.basic_stat l_data)
         {
             Word.Table table;
             Word.Range range = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
@@ -264,25 +436,25 @@ namespace ExamReport
             table.Cell(1, 8).Range.Text = "差异系数";
             table.Cell(1, 9).Range.Text = "得分率";
 
-            table.Cell(2, 1).Range.Text = "文科";
-            table.Cell(2, 2).Range.Text = w_data.total.totalnum.ToString();
-            table.Cell(2, 3).Range.Text = string.Format("{0:F1}", w_data.total.fullmark);
-            table.Cell(2, 4).Range.Text = string.Format("{0:F1}", w_data.total.max);
-            table.Cell(2, 5).Range.Text = string.Format("{0:F1}", w_data.total.min);
-            table.Cell(2, 6).Range.Text = string.Format("{0:F1}", w_data.total.avg);
-            table.Cell(2, 7).Range.Text = string.Format("{0:F2}", w_data.total.stDev);
-            table.Cell(2, 8).Range.Text = string.Format("{0:F2}", w_data.total.Dfactor);
-            table.Cell(2, 9).Range.Text = string.Format("{0:F2}", w_data.total.difficulty);
+            table.Cell(2, 1).Range.Text = w_title;
+            table.Cell(2, 2).Range.Text = w_data.totalnum.ToString();
+            table.Cell(2, 3).Range.Text = string.Format("{0:F1}", w_data.fullmark);
+            table.Cell(2, 4).Range.Text = string.Format("{0:F1}", w_data.max);
+            table.Cell(2, 5).Range.Text = string.Format("{0:F1}", w_data.min);
+            table.Cell(2, 6).Range.Text = string.Format("{0:F1}", w_data.avg);
+            table.Cell(2, 7).Range.Text = string.Format("{0:F2}", w_data.stDev);
+            table.Cell(2, 8).Range.Text = string.Format("{0:F2}", w_data.Dfactor);
+            table.Cell(2, 9).Range.Text = string.Format("{0:F2}", w_data.difficulty);
 
-            table.Cell(3, 1).Range.Text = "理科";
-            table.Cell(3, 2).Range.Text = l_data.total.totalnum.ToString();
-            table.Cell(3, 3).Range.Text = string.Format("{0:F1}", w_data.total.fullmark);
-            table.Cell(3, 4).Range.Text = string.Format("{0:F1}", w_data.total.max);
-            table.Cell(3, 5).Range.Text = string.Format("{0:F1}", w_data.total.min);
-            table.Cell(3, 6).Range.Text = string.Format("{0:F1}", w_data.total.avg);
-            table.Cell(3, 7).Range.Text = string.Format("{0:F2}", w_data.total.stDev);
-            table.Cell(3, 8).Range.Text = string.Format("{0:F2}", w_data.total.Dfactor);
-            table.Cell(3, 9).Range.Text = string.Format("{0:F2}", w_data.total.difficulty);
+            table.Cell(3, 1).Range.Text = l_title;
+            table.Cell(3, 2).Range.Text = l_data.totalnum.ToString();
+            table.Cell(3, 3).Range.Text = string.Format("{0:F1}", l_data.fullmark);
+            table.Cell(3, 4).Range.Text = string.Format("{0:F1}", l_data.max);
+            table.Cell(3, 5).Range.Text = string.Format("{0:F1}", l_data.min);
+            table.Cell(3, 6).Range.Text = string.Format("{0:F1}", l_data.avg);
+            table.Cell(3, 7).Range.Text = string.Format("{0:F2}", l_data.stDev);
+            table.Cell(3, 8).Range.Text = string.Format("{0:F2}", l_data.Dfactor);
+            table.Cell(3, 9).Range.Text = string.Format("{0:F2}", l_data.difficulty);
 
             table.Select();
             oWord.Selection.set_Style(ref TableContent2);
@@ -302,12 +474,14 @@ namespace ExamReport
 
             }
             ZedGraph.createCuve(_config, x_axis, y_axis, data, 0, fullmark, Convert.ToDouble(dt.Compute("Max([" + dt.Columns[1].ColumnName + "])", "")));
-            
-            
+
+
             Word.Range dist_rng = oDoc.Bookmarks.get_Item(oEndOfDoc).Range;
             dist_rng.Paste();
             Utils.mutex_clipboard.ReleaseMutex();
-           
+            dist_rng.InsertCaption(oWord.CaptionLabels["图"], title, oMissing, Word.WdCaptionPosition.wdCaptionPositionAbove, oMissing);
+            dist_rng.MoveEnd(Word.WdUnits.wdParagraph, 1);
+            dist_rng.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
             dist_rng = oDoc.Bookmarks.get_Item(oEndOfDoc).Range;
             dist_rng.MoveStart(Word.WdUnits.wdParagraph, 1);
             dist_rng.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;

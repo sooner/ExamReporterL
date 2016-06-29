@@ -617,9 +617,53 @@ namespace ExamReport
             myPane.CurveList.Clear();
             myPane.GraphObjList.Clear();
 
-            if (data.Count > 1)
+            for (int k = 0; k < data.Count; k++)
             {
+                DataTable dt = data[k];
+                double[] barX = new double[dt.Rows.Count];
+                double[] barY = new double[dt.Rows.Count];
+
+                int count = 1;
+                for (int i = 0; i < data.Count; i++)
+                {
+                    barX[i] = count;
+                    barY[i] = Convert.ToDouble(dt.Rows[i]["diff"]);
+                    count += 2;
+                }
+
+                PointPairList ppBar = new PointPairList(barX, barY);
+                BarItem myCurve1 = myPane.AddBar("", ppBar, mycolor[k]);
             }
+            string[] xlabels = new string[data[0].Rows.Count];
+            for (int i = 0; i < data[0].Rows.Count; i++)
+                xlabels[i] = data[0].Rows[i]["sub"].ToString().Trim();
+
+            myPane.Legend.IsVisible = false;
+            myPane.Title.IsVisible = true;
+
+            myPane.XAxis.Scale.TextLabels = xlabels;
+            myPane.YAxis.MinorTic.IsAllTics = false;
+            myPane.XAxis.MinorTic.IsAllTics = false;
+            myPane.YAxis.MajorTic.IsOpposite = false;
+            myPane.XAxis.MajorTic.IsOpposite = false;
+            myPane.XAxis.Scale.FontSpec.Size = 16;
+            myPane.XAxis.Title.FontSpec.Size = 18;
+            myPane.YAxis.Scale.FontSpec.Size = 16;
+            myPane.YAxis.Title.FontSpec.Size = 18;
+            myPane.XAxis.Title.FontSpec.Family = "宋体";
+            myPane.YAxis.Title.FontSpec.Family = "宋体";
+            myPane.YAxis.Scale.MagAuto = false;
+
+            zgc.AxisChange();
+            zgc.Refresh();
+
+            Bitmap sourceBitmap = new Bitmap(zgc.Width, zgc.Height);
+            zgc.DrawToBitmap(sourceBitmap, new Rectangle(0, 0, zgc.Width, zgc.Height));
+            //Thread.CurrentThread.SetApartmentState(ApartmentState.STA);
+            Utils.mutex_clipboard.WaitOne();
+            Clipboard.Clear();
+            Clipboard.SetImage(sourceBitmap);
+            
         }
         /// <summary>
         /// 柱状图的生成
@@ -678,8 +722,6 @@ namespace ExamReport
             if(barX[barData.Length - 1] > 20)
                 myPane.BarSettings.ClusterScaleWidth = Convert.ToInt32(barX[barData.Length - 1] / 20) + 1;
             
-
-
             double max;
             double min;
             if (Math.Floor(barX[barData.Length - 1]) == barX[barData.Length - 1])
