@@ -600,6 +600,81 @@ namespace ExamReport
             Clipboard.SetImage(sourceBitmap);
             //sourceBitmap.Save(cuveBmpPath + @"\testCuve.bmp");
         }
+        public static void createQXBar(DataRow diff)
+        {
+            ZedGraphControl zgc = new ZedGraphControl();
+            //图大小设置
+            zgc.Width = 531;
+            zgc.Height = 271;
+
+
+            GraphPane myPane = zgc.GraphPane;
+            //标题清空
+            myPane.Title.Text = "";
+            myPane.XAxis.Title.Text = "";
+            myPane.YAxis.Title.Text = "";
+            //缓存清空
+            myPane.CurveList.Clear();
+            myPane.GraphObjList.Clear();
+
+            double[] barX = new double[17];
+            double[] barY = new double[17];
+
+            int count = 1;
+            for (int i = 0; i < 17; i++)
+            {
+                barX[i] = count;
+                barY[i] = Convert.ToDouble(diff[i]);
+                count++;
+            }
+
+            PointPairList ppBar = new PointPairList(barX, barY);
+            BarItem myCurve1 = myPane.AddBar("", ppBar, Color.FromArgb(0, 255, 255));
+
+            myCurve1.Bar.Fill = new Fill(Color.FromArgb(0, 255, 255), Color.FromArgb(0, 255, 255));
+
+            //添加一条线
+            double Xmax = myPane.XAxis.Scale.Max;
+            LineObj line1 = new LineObj(0, Convert.ToDouble(diff[0]), Xmax, Convert.ToDouble(diff[0]));
+            myPane.GraphObjList.Add(line1);
+
+            LineObj line2 = new LineObj(0, Convert.ToDouble(diff[1]), Xmax, Convert.ToDouble(diff[1]));
+            myPane.GraphObjList.Add(line2);
+
+            LineObj line3 = new LineObj(0, Convert.ToDouble(diff[2]), Xmax, Convert.ToDouble(diff[2]));
+            myPane.GraphObjList.Add(line3);
+
+            myPane.Legend.IsVisible = false;
+            myPane.Title.IsVisible = true;
+
+            string[] xlabels = new string[17];
+            for (int i = 3; i < 20; i++)
+                xlabels[i] = diff.Table.Columns[i].ColumnName.ToString().Trim();
+
+            myPane.XAxis.Scale.TextLabels = xlabels;
+            myPane.YAxis.MinorTic.IsAllTics = false;
+            myPane.XAxis.MinorTic.IsAllTics = false;
+            myPane.YAxis.MajorTic.IsOpposite = false;
+            myPane.XAxis.MajorTic.IsOpposite = false;
+            myPane.XAxis.Scale.FontSpec.Size = 16;
+            myPane.XAxis.Title.FontSpec.Size = 18;
+            myPane.YAxis.Scale.FontSpec.Size = 16;
+            myPane.YAxis.Title.FontSpec.Size = 18;
+            myPane.XAxis.Title.FontSpec.Family = "宋体";
+            myPane.YAxis.Title.FontSpec.Family = "宋体";
+            myPane.YAxis.Scale.MagAuto = false;
+
+            zgc.AxisChange();
+            zgc.Refresh();
+
+            Bitmap sourceBitmap = new Bitmap(zgc.Width, zgc.Height);
+            zgc.DrawToBitmap(sourceBitmap, new Rectangle(0, 0, zgc.Width, zgc.Height));
+            //Thread.CurrentThread.SetApartmentState(ApartmentState.STA);
+            Utils.mutex_clipboard.WaitOne();
+            Clipboard.Clear();
+            Clipboard.SetImage(sourceBitmap);
+
+        }
         public static void createSubDiffBar(List<DataTable> data)
         {
             ZedGraphControl zgc = new ZedGraphControl();

@@ -1,10 +1,28 @@
-System.ArgumentException: 列“T”不属于表 。
-   在 System.Data.DataRow.GetDataColumn(String columnName)
-   在 System.Data.DataRow.get_Item(String columnName)
-   在 ExamReport.Database.create_groups() 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\Database.cs:行号 776
-   在 ExamReport.Database.DBF_data_process(String fileadd) 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\Database.cs:行号 601
-   在 ExamReport.LoadDatabase.gk_database_process(MetaData mdata) 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\LoadDatabase.cs:行号 203
-   在 ExamReport.LoadDatabase.start_process() 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\LoadDatabase.cs:行号 97
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ExamReport.mainform.GKTreeNode_Selected(Object sender, RadTreeViewEventArgs e) 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\MainRadForm.cs:行号 536
+   在 Telerik.WinControls.UI.RadTreeView.RadTreeViewEventHandler.Invoke(Object sender, RadTreeViewEventArgs e)
+   在 Telerik.WinControls.UI.RadTreeViewElement.OnSelectedNodeChanged(RadTreeViewEventArgs args)
+   在 Telerik.WinControls.UI.RadTreeViewElement.OnSelectedNodeChanged(RadTreeNode node)
+   在 Telerik.WinControls.UI.RadTreeViewElement.ProcessSelection(RadTreeNode node, Keys modifierKeys, Boolean isMouseSelection)
+   在 Telerik.WinControls.UI.RadTreeViewElement.ProcessMouseDown(MouseEventArgs e)
+   在 Telerik.WinControls.UI.RadTreeView.OnMouseDown(MouseEventArgs e)
+   在 System.Windows.Forms.Control.WmMouseDown(Message& m, MouseButtons button, Int32 clicks)
+   在 System.Windows.Forms.Control.WndProc(Message& m)
+   在 System.Windows.Forms.ScrollableControl.WndProc(Message& m)
+   在 Telerik.WinControls.RadControl.WndProc(Message& m)
+   在 Telerik.WinControls.UI.RadTreeView.WndProc(Message& m)
+   在 System.Windows.Forms.Control.ControlNativeWindow.OnMessage(Message& m)
+   在 System.Windows.Forms.Control.ControlNativeWindow.WndProc(Message& m)
+   在 System.Windows.Forms.NativeWindow.DebuggableCallback(IntPtr hWnd, Int32 msg, IntPtr wparam, IntPtr lparam)
+   在 System.Windows.Forms.UnsafeNativeMethods.DispatchMessageW(MSG& msg)
+   在 System.Windows.Forms.Application.ComponentManager.System.Windows.Forms.UnsafeNativeMethods.IMsoComponentManager.FPushMessageLoop(IntPtr dwComponentID, Int32 reason, Int32 pvLoopData)
+   在 System.Windows.Forms.Application.ThreadContext.RunMessageLoopInner(Int32 reason, ApplicationContext context)
+   在 System.Windows.Forms.Application.ThreadContext.RunMessageLoop(Int32 reason, ApplicationContext context)
+   在 System.Windows.Forms.Application.Run(Form mainForm)
+   在 ExamReport.Program.Main() 位置 D:\project\ExamReporterL\ExamReporterL\ExamReport\Program.cs:行号 21
+   在 System.AppDomain._nExecuteAssembly(RuntimeAssembly assembly, String[] args)
+   在 System.AppDomain.ExecuteAssembly(String assemblyFile, Evidence assemblySecurity, String[] args)
+   在 Microsoft.VisualStudio.HostingProcess.HostProc.RunUsersAssembly()
    在 System.Threading.ThreadHelper.ThreadStart_Context(Object state)
    在 System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
    在 System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
