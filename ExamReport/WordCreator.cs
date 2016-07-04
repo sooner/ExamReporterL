@@ -1236,7 +1236,7 @@ namespace ExamReport
             insertTotalFreqTable(_sdata);
             insertTotalTupleTable(_sdata, "    总体分组分析表");
             //oDoc.Characters.Last.InsertBreak(oPageBreak);
-
+            insertTotalTupleTable(_sdata, "    科目总体分组分析表");
             oDoc.Characters.Last.InsertBreak(oPagebreak);
             first = oDoc.Paragraphs.Add(ref oMissing).Range;
             first.set_Style(ExamTitle1);

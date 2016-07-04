@@ -310,7 +310,7 @@ namespace ExamReport
             GKTreeView.Nodes.Add(new RadTreeNode("自定义"));
             GKTreeView.Nodes.Add(new RadTreeNode("区县"));
             GKTreeView.Nodes.Add(new RadTreeNode("学校"));
-            GKTreeView.Nodes.Add(new RadTreeNode("行政版"));
+            //GKTreeView.Nodes.Add(new RadTreeNode("行政版"));
 
             HKTreeView.Nodes.Clear();
             HKTreeView.Nodes.Add(new RadTreeNode("数据录入"));

@@ -599,10 +599,10 @@ namespace ExamReport
             List<string> xz_name = new List<string>();
             List<List<decimal>> xz_total_disc = new List<List<decimal>>();
 
-            Utils.XZ_group_separate(_basic_data, _config, "X" + th);
+            //Utils.XZ_group_separate(_basic_data, _config, "X" + th);
             xz_data.Columns.Add("totalmark", typeof(decimal));
             xz_data.Columns.Add("X" + th, typeof(string));
-            xz_data.Columns.Add("xz_groups", typeof(string));
+            //xz_data.Columns.Add("xz_groups", typeof(string));
             xz_data.Columns.Add("T" + th, typeof(decimal));
             DataRow ans_dr = _standard_ans.Rows.Find(th);
 
@@ -628,6 +628,9 @@ namespace ExamReport
                 DataView dv = xz_data.equalfilter("X" + th, item.name).DefaultView;
                 dv.Sort = "totalmark";
                 xz_name.Add(item.name);
+                DataTable dt_temp = dv.ToTable();
+                dt_temp.Columns.Add("xz_groups", typeof(string));
+                dt_temp.SeperateGroups(_config._grouptype, _config._group_num, "xz_groups");
                 xz_group_analysis(dv.ToTable(), item.count, xz_total, xz_single, xz_total_disc);
             }
 
@@ -751,13 +754,12 @@ namespace ExamReport
                     if (number.IsMatch(dc.ColumnName))
                     {
                         stdevlist[CoCount].add((decimal)dr[dc]);
-                        if (_config.WSLG)
-                        {
+                        
                             if (row_num < PLN)
                                 xz_disc[CoCount].AddData((decimal)dr[dc], true);
                             else if (row_num >= PHN)
                                 xz_disc[CoCount].AddData((decimal)dr[dc], false);
-                        }
+                        
                         CoCount++;
                     }
                 }
@@ -772,13 +774,13 @@ namespace ExamReport
                     dr["dfactor"] = 0m;
                 else
                     dr["dfactor"] = (decimal)dr["stDev"] / (decimal)dr["avg"];
-                if (_config.WSLG)
-                    total_discriminant.Add(xz_disc[count].GetAns());
+                
+                total_discriminant.Add(xz_disc[count].GetAns());
                 count++;
             }
             xz_total.Add(xz_total_analysis);
-            if (_config.WSLG)
-                xz_total_disc.Add(total_discriminant);
+            
+            xz_total_disc.Add(total_discriminant);
             List<PartitionData.single_data> xz_single_data = new List<PartitionData.single_data>();
             int i = 0;
             foreach (DataRow dr in xz_total_analysis.Rows)

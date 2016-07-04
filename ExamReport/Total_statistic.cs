@@ -57,7 +57,6 @@ namespace ExamReport
             if (!isZonghe && _config.is_sub_cor)
             {
                 cor_col = "ZH_totalmark";
-                
             }
             result.max = (decimal) _basic_data.Compute("Max(" + totalmark_str + ")", "");
             result.min = (decimal) _basic_data.Compute("Min(" + totalmark_str + ")", "");
@@ -1138,10 +1137,10 @@ namespace ExamReport
             List<List<WordData.single_data>> xz_single = new List<List<WordData.single_data>>();
             List<string> xz_name = new List<string>();
 
-            Utils.XZ_group_separate(_basic_data, _config, "X" + th);
+            //Utils.XZ_group_separate(_basic_data, _config, "X" + th);
             xz_data.Columns.Add("totalmark", typeof(decimal));
             xz_data.Columns.Add("X" + th, typeof(string));
-            xz_data.Columns.Add("xz_groups", typeof(string));
+            //xz_data.Columns.Add("xz_groups", typeof(string));
             xz_data.Columns.Add("T" + th, typeof(decimal));
             DataRow ans_dr = _standard_ans.Rows.Find(th);
 
@@ -1167,7 +1166,10 @@ namespace ExamReport
                 DataView dv = xz_data.equalfilter("X"+th, item.name).DefaultView;
                 dv.Sort = "totalmark";
                 xz_name.Add(item.name);
-                xz_group_analysis(dv.ToTable(), item.count, xz_total, xz_single);
+                DataTable dt_temp = dv.ToTable();
+                dt_temp.Columns.Add("xz_groups", typeof(string));
+                dt_temp.SeperateGroups(_config._grouptype, _config._group_num, "xz_groups");
+                xz_group_analysis(dt_temp, item.count, xz_total, xz_single);
             }
 
             for (int i = 0; i < xz_total[0].Rows.Count; i++)

@@ -54,12 +54,10 @@ namespace ExamReport
 
         public class single_data
         {
-            
             public single_type stype;
             public DataTable single_difficulty = new DataTable();
             public DataTable single_dist = new DataTable();
             public DataTable single_detail = new DataTable();
-
         }
         public ArrayList single_topic_analysis;
         public DataTable _standard_ans;
