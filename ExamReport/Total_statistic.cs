@@ -1109,6 +1109,7 @@ namespace ExamReport
 
             wd.Total_tuple_analysis.PrimaryKey = new DataColumn[] { wd.Total_tuple_analysis.Columns["name"]};
 
+
             var tuples = from row in _basic_data.AsEnumerable()
                       group row by row.Field<string>("Groups") into grp
                       select new

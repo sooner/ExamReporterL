@@ -115,15 +115,17 @@ namespace ExamReport
                             mdata.get_zh_ans();
                             mdata.get_zh_fz();
 
+                            mdata.basic = SortTable(mdata.basic, "ZH_totalmark");
+                            mdata.group = SortTable(mdata.group, "ZH_totalmark");
+                            mdata.basic.SeperateGroupsByColumnName(mdata._grouptype, mdata._group_num, "ZH_totalmark");
+                            mdata.group.SeperateGroupsByColumnName(mdata._grouptype, mdata._group_num, "ZH_totalmark");
+
                             if (row.Cells["SpecChoice"].Value.ToString().Trim().Equals("科目总分相关"))
                             {
                                 is_sub_cor = true;
                                 _sub_fullmark = mdata._sub_fullmark;
 
-                                mdata.basic = SortTable(mdata.basic, "ZH_totalmark");
-                                mdata.group = SortTable(mdata.group, "ZH_totalmark");
-                                mdata.basic.SeperateGroupsByColumnName(mdata._grouptype, mdata._group_num, "ZH_totalmark");
-                                mdata.group.SeperateGroupsByColumnName(mdata._grouptype, mdata._group_num, "ZH_totalmark");
+                                
                                 //List<decimal> res = new List<decimal>();
                                 //List<string> flag = new List<string>();
                                 //for (int i = 0; i < mdata.basic.Rows.Count; i++)
@@ -797,9 +799,19 @@ namespace ExamReport
             DataTable XX = data.filteredtable("xxdm", new string[] { school });
             DataTable XX_group = group.filteredtable("xxdm", new string[] { school });
 
-            XX.SeperateGroups(mdata._grouptype, Convert.ToDecimal(groupnum), "groups");
-            XX_group.SeperateGroups(mdata._grouptype, Convert.ToDecimal(groupnum), "groups");
+            if (isZonghe)
+            {
+                XX.SeperateGroups(mdata._grouptype, Convert.ToDecimal(groupnum), "groups");
+                XX_group.SeperateGroups(mdata._grouptype, Convert.ToDecimal(groupnum), "groups");
+            }
+            else
+            {
+                XX = SortTable(XX, "ZH_totalmark");
+                XX_group = SortTable(XX_group, "ZH_totalmark");
 
+                XX.SeperateGroupsByColumnName(mdata._grouptype, Convert.ToDecimal(groupnum), "ZH_totalmark");
+                XX_group.SeperateGroupsByColumnName(mdata._grouptype, Convert.ToDecimal(groupnum), "ZH_totalmark");
+            }
             WordData result = new WordData(mdata.groups_group);
             Total_statistic stat = new Total_statistic(result, XX, my_mark, my_ans, XX_group, my_group, groupnum);
             stat._config = config;
@@ -954,13 +966,15 @@ namespace ExamReport
             string[] qxsf_code = CalculateTotal(mdata.QXSF_list);
             DataTable qxsf_zh_data = QX_ZH_data.filteredtable("xxdm", qxsf_code);
             DataTable qxsf_zh_group = QX_ZH_group.filteredtable("xxdm", qxsf_code);
-            DataTable qxsf_data = QX_data.filteredtable("xxdm", qxsf_code);
-            DataTable qxsf_group = QX_group.filteredtable("xxdm", qxsf_code);
+            DataTable qxsf_data = SortTable(QX_data.filteredtable("xxdm", qxsf_code), "ZH_totalmark");
+            DataTable qxsf_group = SortTable(QX_group.filteredtable("xxdm", qxsf_code), "ZH_totalmark");
 
             qxsf_zh_data.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
             qxsf_zh_group.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
-            qxsf_data.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
-            qxsf_group.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
+
+            
+            qxsf_data.SeperateGroupsByColumnName(mdata._grouptype, mdata._group_num, "ZH_totalmark");
+            qxsf_group.SeperateGroupsByColumnName(mdata._grouptype, mdata._group_num, "ZH_totalmark");
 
             CalculatePartition(config, ZH_total, "分类整体", qxsf_zh_data, qxsf_zh_group, mdata._fullmark, mdata.zh_grp, mdata._group_num, true, mdata.zh_ans);
             CalculatePartition(config, total, "分类整体", qxsf_data, qxsf_group, mdata._sub_fullmark, mdata.grp, mdata._group_num, false, mdata.ans);
@@ -1148,11 +1162,12 @@ namespace ExamReport
             int groupnum = total.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
             total_group.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
 
-            DataTable single_total = mdata.basic.filteredtable("xxdm", total_code);
-            DataTable single_total_group = mdata.group.filteredtable("xxdm", total_code);
+            DataTable single_total = SortTable(mdata.basic.filteredtable("xxdm", total_code), "ZH_totalmark");
+            DataTable single_total_group = SortTable(mdata.group.filteredtable("xxdm", total_code), "ZH_totalmark");
 
-            single_total.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
-            single_total_group.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
+
+            single_total.SeperateGroupsByColumnName(mdata._grouptype, mdata._group_num, "ZH_totalmark");
+            single_total_group.SeperateGroupsByColumnName(mdata._grouptype, mdata._group_num, "ZH_totalmark");
             for (int i = 0; i < mdata.SF_list.Count; i++)
             {
                 string[] SF_code = new string[mdata.SF_list[i].Count - 1];
@@ -1218,11 +1233,12 @@ namespace ExamReport
             int groupnum = total.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
             total_group.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
 
-            DataTable single_total = mdata.basic.filteredtable("qxdm", total_code);
-            DataTable single_total_group = mdata.group.filteredtable("qxdm", total_code);
+            DataTable single_total = SortTable(mdata.basic.filteredtable("qxdm", total_code), "ZH_totalmark");
+            DataTable single_total_group = SortTable(mdata.group.filteredtable("qxdm", total_code), "ZH_totalmark");;
 
-            single_total.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
-            single_total_group.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
+            
+            single_total.SeperateGroupsByColumnName(mdata._grouptype, mdata._group_num, "ZH_totalmark");
+            single_total_group.SeperateGroupsByColumnName(mdata._grouptype, mdata._group_num, "ZH_totalmark");
             for (int i = 0; i < mdata.CJ_list.Count; i++)
             {
                 string[] SF_code = new string[mdata.CJ_list[i].Count - 1];
