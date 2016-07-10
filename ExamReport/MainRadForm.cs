@@ -95,6 +95,8 @@ namespace ExamReport
             gk_sf_addr.Text = currentdic + sf_addr;
             gk_qx_sf_addr.Text = currentdic + sf_addr;
             gk_xx_sf_addr.Text = currentdic + sf_addr;
+
+            gk_xz_cj_addr.Text = currentdic + cj_addr;
         }
         void init_dictionary()
         {
@@ -108,6 +110,7 @@ namespace ExamReport
             progress_label.Add("hk_zt", hk_zt_progresslabel);
             progress_label.Add("gk_cus", gk_cus_progresslabel);
             progress_label.Add("hk_script", hk_script_progresslabel);
+            progress_label.Add("gk_xz", gk_xz_progresslabel);
 
             run_button.Add("zk_zt", zk_zt_start);
             run_button.Add("zk_qx", zk_qx_start);
@@ -119,6 +122,7 @@ namespace ExamReport
             run_button.Add("hk_zt", hk_start);
             run_button.Add("gk_cus", gk_cus_start);
             run_button.Add("hk_script", hk_script_start);
+            run_button.Add("gk_xz", gk_xz_start);
 
             cancel_button.Add("zk_zt", zk_zt_cancel);
             cancel_button.Add("zk_qx", zk_qx_cancel);
@@ -130,6 +134,8 @@ namespace ExamReport
             cancel_button.Add("hk_zt", hk_cancel);
             cancel_button.Add("gk_cus", gk_cus_cancel);
             cancel_button.Add("hk_script", hk_script_cancel);
+            cancel_button.Add("gk_xz", gk_xz_cancel);
+
 
             waiting_bar.Add("zk_zt", zk_zt_waitingbar);
             waiting_bar.Add("zk_qx", zk_qx_WaitingBar);
@@ -141,6 +147,7 @@ namespace ExamReport
             waiting_bar.Add("hk_zt", hk_waitingbar);
             waiting_bar.Add("gk_cus", gk_cus_waitingbar);
             waiting_bar.Add("hk_script", hk_script_progressbar);
+            waiting_bar.Add("gk_xz", gk_xz_waitingbar);
 
             
         }
@@ -310,7 +317,7 @@ namespace ExamReport
             GKTreeView.Nodes.Add(new RadTreeNode("自定义"));
             GKTreeView.Nodes.Add(new RadTreeNode("区县"));
             GKTreeView.Nodes.Add(new RadTreeNode("学校"));
-            //GKTreeView.Nodes.Add(new RadTreeNode("行政版"));
+            GKTreeView.Nodes.Add(new RadTreeNode("行政版"));
 
             HKTreeView.Nodes.Clear();
             HKTreeView.Nodes.Add(new RadTreeNode("数据录入"));
@@ -477,6 +484,7 @@ namespace ExamReport
                 gk_docGroupBox.Show();
                 gk_xx_panel.Hide();
                 custom_panel.Hide();
+                gk_xz_panel.Hide();
             }
             else if (element.SelectedNode.Text.Trim().Equals("区县") || (element.SelectedNode.Parent != null && element.SelectedNode.Parent.Text.Trim().Equals("区县")))
             {
@@ -488,6 +496,7 @@ namespace ExamReport
                 gk_docGroupBox.Show();
                 gk_xx_panel.Hide();
                 custom_panel.Hide();
+                gk_xz_panel.Hide();
             }
             else if (element.SelectedNode.Text.Trim().Equals("数据录入"))
             {
@@ -499,6 +508,7 @@ namespace ExamReport
                 gk_docGroupBox.Hide();
                 gk_xx_panel.Hide();
                 custom_panel.Hide();
+                gk_xz_panel.Hide();
             }
             else if (element.SelectedNode.Text.Trim().Equals("示范校"))
             {
@@ -510,6 +520,7 @@ namespace ExamReport
                 gk_docGroupBox.Show();
                 gk_xx_panel.Hide();
                 custom_panel.Hide();
+                gk_xz_panel.Hide();
             }
             else if (element.SelectedNode.Text.Trim().Equals("城郊"))
             {
@@ -521,6 +532,7 @@ namespace ExamReport
                 gk_docGroupBox.Show();
                 gk_xx_panel.Hide();
                 custom_panel.Hide();
+                gk_xz_panel.Hide();
             }
             else if (element.SelectedNode.Text.Trim().Equals("自定义"))
             {
@@ -532,7 +544,21 @@ namespace ExamReport
                 gk_docGroupBox.Show();
                 gk_xx_panel.Hide();
                 custom_panel.Show();
+                gk_xz_panel.Hide();
             }
+            else if (element.SelectedNode.Text.Trim().Equals("行政版"))
+            {
+                gk_xz_panel.Show();
+                gk_zt_panel.Hide();
+                gk_sf_panel.Hide();
+                gk_cj_panel.Hide();
+                gk_qx_panel.Hide();
+                gk_data_pre_panel.Hide();
+                gk_docGroupBox.Show();
+                gk_xx_panel.Hide();
+                custom_panel.Hide();
+            }
+
             else if (element.SelectedNode.Text.Trim().Equals("学校")
                 || (element.SelectedNode.Parent != null && element.SelectedNode.Parent.Text.Trim().Equals("学校"))
                 || (element.SelectedNode.Parent.Parent != null && element.SelectedNode.Parent.Parent.Text.Trim().Equals("学校")))
@@ -545,6 +571,7 @@ namespace ExamReport
                 gk_docGroupBox.Show();
                 gk_xx_panel.Show();
                 custom_panel.Hide();
+                gk_xz_panel.Hide();
             }
         }
         private void ZKTreeNode_Selected(object sender, RadTreeViewEventArgs e)
@@ -1555,6 +1582,48 @@ namespace ExamReport
                 xx_combo.DataSource = null;
                 xx_combo.ResetText();
             }
+        }
+
+        private void gk_xz_start_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(gk_xz_cj_addr.Text.Trim()))
+            {
+                Error("请输入城郊分类文件地址！");
+                return;
+            }
+
+            if (first_level.Value == 0 || second_level.Value == 0 || third_level.Value == 0)
+            {
+                Error("重点线不能为零！");
+                return;
+            }
+            if (first_level.Value < second_level.Value)
+            {
+                Error("一本线不应该低于二本线吧？");
+                return;
+            }
+            if (second_level.Value < third_level.Value)
+            {
+                Error("二本线不应该低于三本线吧？");
+                return;
+            }
+
+            if (CheckGridView(gk_gridview))
+                return;
+
+            Analysis analysis = new Analysis(this);
+            analysis._gridview = gk_gridview;
+            analysis.save_address = gk_save_address.Text;
+            analysis.isVisible = gk_isVisible.Checked;
+            analysis.CurrentDirectory = currentdic;
+            analysis.cj_addr = gk_xz_cj_addr.Text.ToString().Trim();
+            analysis.curryear = year_list.SelectedItem.ToString().Trim();
+            analysis.currmonth = currmonth.SelectedItem.ToString().Trim();
+            Thread thread = new Thread(new ThreadStart(analysis.gk_cj_start));
+            thread.IsBackground = true;
+            thread.SetApartmentState(ApartmentState.STA);
+            thread_store.Add("gk_cj", thread);
+            thread.Start();
         }
 
        
