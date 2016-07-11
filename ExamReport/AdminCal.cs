@@ -10,7 +10,7 @@ namespace ExamReport
     {
         DataTable _data;
         decimal _fullmark;
-        string _name;
+        //string _name;
         List<string[]> qx_code = new List<string[]>();
 
         public Admin_WordData w_result;
@@ -18,11 +18,10 @@ namespace ExamReport
 
         public Configuration _config;
 
-        public AdminCal(Configuration config, DataTable data, decimal fullmark, string name)
+        public AdminCal(Configuration config, DataTable data, decimal fullmark)
         {
             _data = data;
             _fullmark = fullmark;
-            _name = name;
 
             w_result = new Admin_WordData();
             l_result = new Admin_WordData();

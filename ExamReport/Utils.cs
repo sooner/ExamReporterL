@@ -599,7 +599,7 @@ namespace ExamReport
                 case "sxl":
                     return "数学理";
                 case "sxw":
-                    return "数学文";
+                    return "数学文"; 
                 case "zf":
                     return "总分";
                 default:
@@ -646,6 +646,9 @@ namespace ExamReport
                     return "sxw";
                 case "总分":
                     return "zf";
+                case "行政总分":
+                    return "zf_xz";
+
                 case "yw":
                     return "语文";
                 case "sx":
@@ -670,6 +673,8 @@ namespace ExamReport
                     return "数学文";
                 case "zf":
                     return "总分";
+                case "zf_xz":
+                    return "行政总分";
                 default:
                     return "";
             }

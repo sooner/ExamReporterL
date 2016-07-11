@@ -65,6 +65,10 @@ namespace ExamReport
         public string xx_name;
         public string date;
 
+        public int first_level;
+        public int second_level;
+        public int third_level;
+
         public Analysis(mainform form)
         {
             _form = form;
@@ -76,12 +80,15 @@ namespace ExamReport
             {
                 if (row.Cells["checkbox"].Value != null && (bool)row.Cells["checkbox"].Value == true)
                 {
+                    
 
                     string year = row.Cells["year"].Value.ToString().Trim();
                     string exam = _exam;
                     string chi_sub = row.Cells["sub"].Value.ToString().Trim();
                     string sub = Utils.language_trans(chi_sub);
 
+                    if (exam_type.Equals("gk_xz") && !sub.Equals("zf_xz"))
+                        continue;
                     string log = year + "年" + Utils.language_trans(exam) + row.Cells["sub"].Value.ToString().Trim();
                     _form.ShowPro(exam_type, 1, log + "数据读取...");
                     MetaData mdata = new MetaData(year, exam, sub);
@@ -250,6 +257,10 @@ namespace ExamReport
                                 case "gk_cus":
                                     gk_cus_process(mdata);
                                     break;
+                                case "gk_xz":
+                                    mdata.get_CJ_data(cj_addr);
+                                    gk_xz_process(mdata);
+                                    break;
                                 default:
                                     break;
                             }
@@ -268,6 +279,43 @@ namespace ExamReport
             }
             _form.ShowPro(exam_type, 2, "完成！");
         }
+
+        public void gk_xz_start()
+        {
+            exam_type = "gk_xz";
+            _exam = "gk";
+            start();
+        }
+
+        public void gk_xz_process(MetaData mdata)
+        {
+            Configuration config = initConfig(mdata._sub, "行政", "高考");
+            config.first_level = first_level;
+            config.second_level = second_level;
+            config.third_level = third_level;
+
+            int urban = mdata.CJ_list[0][0].Equals("城区") ? 0 : 1;
+            int country = mdata.CJ_list[0][1].Equals("郊区") ? 1 : 0;
+
+            config.urban_code = new string[mdata.CJ_list[urban].Count];
+            config.country_code = new string[mdata.CJ_list[country].Count];
+
+            for (int j = 1; j < mdata.CJ_list[urban].Count; j++)
+                config.urban_code[j-1] = mdata.CJ_list[urban][j].ToString().Trim();
+
+            for (int j = 1; j < mdata.CJ_list[country].Count; j++)
+                config.country_code[j - 1] = mdata.CJ_list[country][j].ToString().Trim();
+
+            _form.ShowPro("gk_xz", 1, mdata.log_name + "数据分析中...");
+            AdminCal xzCal = new AdminCal(config, mdata.basic, mdata._fullmark);
+            xzCal.Calculate();
+
+            _form.ShowPro("gk_xz", 1, mdata.log_name + "报告生成中...");
+            AdminWordCreator xzWordCreator = new AdminWordCreator(config);
+            xzWordCreator.creating_word(xzCal.w_result, xzCal.l_result);
+        }
+
+
         public List<DataRow> SearchIndex = new List<DataRow>();
         public List<long> NotFoundIndex = new List<long>();
         public void hk_script_start()

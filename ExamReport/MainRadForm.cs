@@ -1619,10 +1619,15 @@ namespace ExamReport
             analysis.cj_addr = gk_xz_cj_addr.Text.ToString().Trim();
             analysis.curryear = year_list.SelectedItem.ToString().Trim();
             analysis.currmonth = currmonth.SelectedItem.ToString().Trim();
-            Thread thread = new Thread(new ThreadStart(analysis.gk_cj_start));
+
+            analysis.first_level = Convert.ToInt32(first_level.Value);
+            analysis.second_level = Convert.ToInt32(second_level.Value);
+            analysis.third_level = Convert.ToInt32(third_level.Value);
+
+            Thread thread = new Thread(new ThreadStart(analysis.gk_xz_start));
             thread.IsBackground = true;
             thread.SetApartmentState(ApartmentState.STA);
-            thread_store.Add("gk_cj", thread);
+            thread_store.Add("gk_xz", thread);
             thread.Start();
         }
 
