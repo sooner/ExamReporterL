@@ -59,6 +59,8 @@ namespace ExamReport
                 _sub = Utils.language_trans(sub);
             else if (exam.Equals("hk"))
                 _sub = Utils.hk_lang_trans(sub);
+            else if(exam.Equals("zk"))
+                _sub = Utils.hk_lang_trans(sub);
             else
                 _sub = Utils.language_trans(sub);
         }

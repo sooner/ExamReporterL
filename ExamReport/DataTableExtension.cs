@@ -37,9 +37,11 @@ namespace ExamReport
                     {
                         switch (exam)
                         {
+                            case "zk":
                             case "hk":
                                 dr[dc] = Utils.hk_lang_trans(dr[dc].ToString());
                                 break;
+                            
                             default:
                                 dr[dc] = Utils.language_trans(dr[dc].ToString());
                                 break;
@@ -138,6 +140,12 @@ namespace ExamReport
                 }
             }
             return dt;
+        }
+        public static void sort(this DataTable dt, string col)
+        {
+            DataView dv = dt.DefaultView;
+            dv.Sort = col;
+            dt = dv.ToTable();
         }
         public static int SeperateGroups(this DataTable dt, ZK_database.GroupType gtype, decimal divider, string groupname)
         {

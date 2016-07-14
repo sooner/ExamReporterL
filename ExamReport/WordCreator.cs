@@ -1086,9 +1086,9 @@ namespace ExamReport
             oDoc = oWord.Documents.Add(ref filepath, ref oMissing,
             ref oMissing, ref oMissing);
             Utils.WriteFrontPage(_config, oDoc);
-            
+
             object oPageBreak = Microsoft.Office.Interop.Word.WdBreakType.wdPageBreak;
-            
+
             //oDoc.Characters.Last.InsertBreak(oPageBreak);
             if (isZonghe)
             {
@@ -1136,18 +1136,18 @@ namespace ExamReport
                 //}
                 insertText(ExamTitle0, _config.subject.Substring(3) + "统计分析");
             }
-            
+
             Word.Range first = oDoc.Paragraphs.Add(ref oMissing).Range;
             first.set_Style(ExamTitle1);
             first.InsertBefore("总体分析\n");
-            
-            
-            
+
+
+
             oDoc.Characters.Last.Select();
             oWord.Selection.HomeKey(Word.WdUnits.wdLine, oMissing);
             oWord.Selection.Delete(Word.WdUnits.wdCharacter, oMissing);
             oWord.Selection.Range.set_Style(ExamBodyText);
-            
+
             //oPara2.Range.ListFormat.ApplyListTemplate(listTemp, ref bContinuousPrev, ref applyTo, ref defaultListBehaviour);
             //oPara2.Format.SpaceAfter = 6;
             //oPara2.Range.InsertParagraphAfter();
@@ -1161,7 +1161,7 @@ namespace ExamReport
 
             //区分度图表
             insertTotalDifficultyChart();
-           
+
             //oDoc.Characters.Last.InsertBreak(oParagrahbreak);
 
 
@@ -1175,7 +1175,7 @@ namespace ExamReport
             topic_table.Range.InsertCaption(oWord.CaptionLabels["表"], topic_title, oMissing, Word.WdCaptionPosition.wdCaptionPositionAbove, oMissing);
             topic_Rng.MoveEnd(Word.WdUnits.wdParagraph, 1);
             topic_Rng.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
-            
+
             //topic_table.Range.Select();
             //oWord.Selection.Cells.VerticalAlignment = Word.WdCellVerticalAlignment.wdCellAlignVerticalCenter;
             //oWord.Selection.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
@@ -1197,7 +1197,7 @@ namespace ExamReport
             topic_table.Cell(1, 8).Range.Text = "难度";
             topic_table.Cell(1, 9).Range.Text = "相关系数";
             topic_table.Cell(1, 10).Range.Text = "鉴别指数";
-            
+
             for (int i = 0; i < _sdata.total_analysis.Rows.Count; i++)
             {
                 topic_table.Cell(i + 2, 1).Range.Text = _sdata.total_analysis.Rows[i]["number"].ToString().Substring(1);
@@ -1229,7 +1229,7 @@ namespace ExamReport
 
 
             insertTotalGroupTable("    题组整体分析表", _sdata, _sdata.group_analysis.Rows.Count + 1);
-            
+
             //oDoc.Characters.Last.InsertBreak(oParagrahbreak);
 
 
@@ -1255,16 +1255,16 @@ namespace ExamReport
                 List<string> groups = _sdata.groups_group[key];
                 foreach (string group in groups)
                 {
-                    if(group.Equals("totalmark"))
+                    if (group.Equals("totalmark"))
                         continue;
-                    
+
                     insertText(ExamTitle3, group);
                     insertTH(_sdata._groups_ans.Rows[group_num]["th"].ToString().Trim());
                     DataRow group_dr = _sdata.group_analysis.Rows[group_num];
-                    
+
                     insertGroupTotalTable(group_dr, group);
                     insertGroupDistChart("    " + group + "分数分布图", ((WordData.group_data)_sdata.single_group_analysis[group_num]).group_dist);
-                    if(isZonghe)
+                    if (isZonghe)
                         insertZHGroupDiffChart("    " + group + "难度曲线图", ((WordData.group_data)_sdata.single_group_analysis[group_num]).group_difficulty);
                     else
                         insertGroupDiffChart("    " + group + "难度曲线图", ((WordData.group_data)_sdata.single_group_analysis[group_num]).group_difficulty);
@@ -1277,7 +1277,7 @@ namespace ExamReport
 
             //foreach (DataRow group_dr in _sdata.group_analysis.Rows)
             //{
-                
+
             //    first = oDoc.Paragraphs.Add(ref oMissing).Range;
             //    first.set_Style(ExamTitle2);
             //    first.InsertBefore(group_dr["number"].ToString().Trim() + "\n");
@@ -1294,7 +1294,7 @@ namespace ExamReport
             //    insertGroupDistChart(group_dr["number"].ToString().Trim() + "分数分布图", ((WordData.group_data)_sdata.single_group_analysis[group_num]).group_dist);
             //    insertGroupDiffChart(group_dr["number"].ToString().Trim() + "难度曲线图", ((WordData.group_data)_sdata.single_group_analysis[group_num]).group_difficulty);
             //    insertGroupSingleAnalysis(group_dr["number"].ToString().Trim() + "分组分析表", ((WordData.group_data)_sdata.single_group_analysis[group_num]).group_detail);
-                
+
             //    group_num++;
 
             //}
@@ -1307,7 +1307,7 @@ namespace ExamReport
             {
                 insertText(ExamTitle3, "第" + dr["number"].ToString().Trim().Substring(1) + "题");
                 insertTotalTable("    " + "第" + dr["number"].ToString().Trim().Substring(1) + "题分析表", dr);
-                if(isZonghe)
+                if (isZonghe)
                     insertZHChart("    " + "第" + dr["number"].ToString().Trim().Substring(1) + "题难度曲线图", ((WordData.single_data)_sdata.single_topic_analysis[topic_num]).single_difficulty, "分数", "难度", Excel.XlChartType.xlXYScatterSmooth);
                 else
                     insertChart("    " + "第" + dr["number"].ToString().Trim().Substring(1) + "题难度曲线图", ((WordData.single_data)_sdata.single_topic_analysis[topic_num]).single_difficulty, "分数", "难度", Excel.XlChartType.xlXYScatterSmooth);
@@ -1328,7 +1328,7 @@ namespace ExamReport
             }
             oDoc.Characters.Last.InsertBreak(oPagebreak);
             #endregion
-            foreach(Word.TableOfContents table in oDoc.TablesOfContents)
+            foreach (Word.TableOfContents table in oDoc.TablesOfContents)
                 table.Update();
             Utils.Save(_config, oDoc, oWord);
             

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Data;
 
+
 namespace ExamReport
 {
     public class LoadDatabase
@@ -122,13 +123,13 @@ namespace ExamReport
         {
             
 
-            ZK_database db = new ZK_database(mdata, ans.dt, groups.dt, grouptype, divider);
-            db.DBF_data_process(database_str, wizard);
+            Database db = new Database(mdata, ans.dt, groups.dt, grouptype, divider);
+            db.DBF_data_process(database_str);
 
-            if (db._basic_data.Columns.Contains("XZ"))
-            {
-                XZ_group_separate(db._basic_data);
-            }
+            //if (db._basic_data.Columns.Contains("XZ"))
+            //{
+            //    XZ_group_separate(db._basic_data);
+            //}
             basic_data = db._basic_data;
             group_data = db._group_data;
 

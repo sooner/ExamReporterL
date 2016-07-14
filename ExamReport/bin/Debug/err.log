@@ -1,15 +1,11 @@
-MySql.Data.MySqlClient.MySqlException (0x80004005): Timeout expired.  The timeout period elapsed prior to completion of the operation or the server is not responding.
-   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
-   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader()
-   at MySql.Data.MySqlClient.MySqlCommand.ExecuteNonQuery()
-   at ExamReport.MySqlHelper.ExecuteNonQuery(String connectionString, CommandType cmdType, String cmdText, MySqlParameter[] commandParameters) in G:\wangsa\ExamReporterL\ExamReport\MySqlHelper.cs:line 52
-   at ExamReport.mainform.DBCheck() in G:\wangsa\ExamReporterL\ExamReport\MainRadForm.cs:line 167
-   at ExamReport.mainform.Grid_load() in G:\wangsa\ExamReporterL\ExamReport\MainRadForm.cs:line 173
-   at ExamReport.mainform..ctor() in G:\wangsa\ExamReporterL\ExamReport\MainRadForm.cs:line 42
-   at ExamReport.Program.Main() in G:\wangsa\ExamReporterL\ExamReport\Program.cs:line 21
-   at System.AppDomain._nExecuteAssembly(RuntimeAssembly assembly, String[] args)
-   at System.AppDomain.ExecuteAssembly(String assemblyFile, Evidence assemblySecurity, String[] args)
-   at Microsoft.VisualStudio.HostingProcess.HostProc.RunUsersAssembly()
+System.Runtime.InteropServices.COMException (0x800A16CA): 带指定名称的项目不存在。
+   at Microsoft.Office.Interop.Word.Range.set_Style(Object& prop)
+   at ExamReport.Utils.insertAddons(Configuration config, _Document doc, _Application oWord) in G:\wangsa\ExamReporterL\ExamReport\Utils.cs:line 396
+   at ExamReport.Utils.Save(Configuration config, _Document oDoc, _Application oWord) in G:\wangsa\ExamReporterL\ExamReport\Utils.cs:line 309
+   at ExamReport.WordCreator.creating_word() in G:\wangsa\ExamReporterL\ExamReport\WordCreator.cs:line 1333
+   at ExamReport.Analysis.zk_zt_process(MetaData mdata) in G:\wangsa\ExamReporterL\ExamReport\Analysis.cs:line 1493
+   at ExamReport.Analysis.start() in G:\wangsa\ExamReporterL\ExamReport\Analysis.cs:line 215
+   at ExamReport.Analysis.zk_zt_start() in G:\wangsa\ExamReporterL\ExamReport\Analysis.cs:line 1479
    at System.Threading.ThreadHelper.ThreadStart_Context(Object state)
    at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
    at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
