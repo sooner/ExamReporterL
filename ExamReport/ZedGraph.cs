@@ -624,7 +624,7 @@ namespace ExamReport
             for (int i = 0; i < 17; i++)
             {
                 barX[i] = count;
-                barY[i] = Convert.ToDouble(diff[i]);
+                barY[i] = Convert.ToDouble(diff[i+3]);
                 count++;
             }
 
@@ -636,6 +636,16 @@ namespace ExamReport
             //添加一条线
             double Xmax = myPane.XAxis.Scale.Max;
             LineObj line1 = new LineObj(0, Convert.ToDouble(diff[0]), Xmax, Convert.ToDouble(diff[0]));
+            line1.Line.Style = System.Drawing.Drawing2D.DashStyle.Custom;
+            line1.Line.DashOn = 10f;
+            line1.Line.DashOff = 8f;
+            line1.IsClippedToChartRect = true;
+            line1.Line.Color = Color.LightSteelBlue;
+            line1.ZOrder = ZOrder.F_BehindGrid;
+            line1.Location.AlignH = AlignH.Left;
+            line1.Location.AlignV = AlignV.Top;
+            line1.Location.CoordinateFrame = CoordType.AxisXYScale;
+
             myPane.GraphObjList.Add(line1);
 
             LineObj line2 = new LineObj(0, Convert.ToDouble(diff[1]), Xmax, Convert.ToDouble(diff[1]));
@@ -648,10 +658,13 @@ namespace ExamReport
             myPane.Title.IsVisible = true;
 
             string[] xlabels = new string[17];
-            for (int i = 3; i < 20; i++)
-                xlabels[i] = diff.Table.Columns[i].ColumnName.ToString().Trim();
+            for (int i = 0; i < 17; i++)
+                xlabels[i] = YaxisTransfer(Utils.QXTrans(diff.Table.Columns[i + 3].ColumnName.ToString().Trim()));
 
             myPane.XAxis.Scale.TextLabels = xlabels;
+            myPane.XAxis.Type = AxisType.Text;
+
+            myPane.XAxis.Scale.Align = AlignP.Inside;
             myPane.YAxis.MinorTic.IsAllTics = false;
             myPane.XAxis.MinorTic.IsAllTics = false;
             myPane.YAxis.MajorTic.IsOpposite = false;
@@ -699,7 +712,7 @@ namespace ExamReport
                 double[] barY = new double[dt.Rows.Count];
 
                 int count = 1;
-                for (int i = 0; i < data.Count; i++)
+                for (int i = 0; i < dt.Rows.Count; i++)
                 {
                     barX[i] = count;
                     barY[i] = Convert.ToDouble(dt.Rows[i]["diff"]);
@@ -717,6 +730,8 @@ namespace ExamReport
             myPane.Title.IsVisible = true;
 
             myPane.XAxis.Scale.TextLabels = xlabels;
+            //myPane.XAxis.Scale.MajorStep = 2;
+            myPane.XAxis.Type = AxisType.Text;
             myPane.YAxis.MinorTic.IsAllTics = false;
             myPane.XAxis.MinorTic.IsAllTics = false;
             myPane.YAxis.MajorTic.IsOpposite = false;

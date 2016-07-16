@@ -72,16 +72,20 @@
             this.DataPrePanel = new Telerik.WinControls.UI.RadPanel();
             this.button10 = new System.Windows.Forms.Button();
             this.button13 = new System.Windows.Forms.Button();
+            this.DocGroupBox = new Telerik.WinControls.UI.RadGroupBox();
+            this.zk_currmonth = new System.Windows.Forms.ComboBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.zk_yearlist = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.radButton1 = new Telerik.WinControls.UI.RadButton();
+            this.save_address = new Telerik.WinControls.UI.RadTextBox();
+            this.radLabel1 = new Telerik.WinControls.UI.RadLabel();
+            this.zk_isVisible = new Telerik.WinControls.UI.RadCheckBox();
             this.zk_zt_panel = new Telerik.WinControls.UI.RadPanel();
             this.zk_zt_progress = new Telerik.WinControls.UI.RadLabel();
             this.zk_zt_waitingbar = new Telerik.WinControls.UI.RadWaitingBar();
             this.zk_zt_cancel = new Telerik.WinControls.UI.RadButton();
             this.zk_zt_start = new Telerik.WinControls.UI.RadButton();
-            this.DocGroupBox = new Telerik.WinControls.UI.RadGroupBox();
-            this.radButton1 = new Telerik.WinControls.UI.RadButton();
-            this.save_address = new Telerik.WinControls.UI.RadTextBox();
-            this.radLabel1 = new Telerik.WinControls.UI.RadLabel();
-            this.zk_isVisible = new Telerik.WinControls.UI.RadCheckBox();
             this.zk_qx_panel = new Telerik.WinControls.UI.RadPanel();
             this.zk_qx_ProgressLabel = new Telerik.WinControls.UI.RadLabel();
             this.radButton4 = new Telerik.WinControls.UI.RadButton();
@@ -150,9 +154,40 @@
             this.HKTreeView = new Telerik.WinControls.UI.RadTreeView();
             this.HKGridView = new Telerik.WinControls.UI.RadGridView();
             this.GKPageView = new Telerik.WinControls.UI.RadPageViewPage();
+            this.gk_cj_panel = new Telerik.WinControls.UI.RadPanel();
+            this.gk_cj_progresslabel = new Telerik.WinControls.UI.RadLabel();
+            this.radButton2 = new Telerik.WinControls.UI.RadButton();
+            this.gk_cj_addr = new Telerik.WinControls.UI.RadTextBox();
+            this.radLabel6 = new Telerik.WinControls.UI.RadLabel();
+            this.gk_cj_waitingbar = new Telerik.WinControls.UI.RadWaitingBar();
+            this.gk_cj_cancel = new Telerik.WinControls.UI.RadButton();
+            this.gk_cj_start = new Telerik.WinControls.UI.RadButton();
+            this.gk_xz_panel = new Telerik.WinControls.UI.RadPanel();
+            this.gk_xz_progresslabel = new Telerik.WinControls.UI.RadLabel();
+            this.radButton14 = new Telerik.WinControls.UI.RadButton();
+            this.gk_xz_cj_addr = new Telerik.WinControls.UI.RadTextBox();
+            this.radLabel26 = new Telerik.WinControls.UI.RadLabel();
+            this.gk_xz_waitingbar = new Telerik.WinControls.UI.RadWaitingBar();
+            this.gk_xz_cancel = new Telerik.WinControls.UI.RadButton();
+            this.gk_xz_start = new Telerik.WinControls.UI.RadButton();
+            this.radLabel25 = new Telerik.WinControls.UI.RadLabel();
+            this.third_level = new System.Windows.Forms.NumericUpDown();
+            this.radLabel24 = new Telerik.WinControls.UI.RadLabel();
+            this.second_level = new System.Windows.Forms.NumericUpDown();
+            this.radLabel23 = new Telerik.WinControls.UI.RadLabel();
+            this.first_level = new System.Windows.Forms.NumericUpDown();
             this.gk_data_pre_panel = new Telerik.WinControls.UI.RadPanel();
             this.gk_data_delete = new System.Windows.Forms.Button();
             this.gk_data_import = new System.Windows.Forms.Button();
+            this.gk_docGroupBox = new Telerik.WinControls.UI.RadGroupBox();
+            this.currmonth = new System.Windows.Forms.ComboBox();
+            this.label46 = new System.Windows.Forms.Label();
+            this.year_list = new System.Windows.Forms.ComboBox();
+            this.label45 = new System.Windows.Forms.Label();
+            this.radButton7 = new Telerik.WinControls.UI.RadButton();
+            this.gk_save_address = new Telerik.WinControls.UI.RadTextBox();
+            this.radLabel4 = new Telerik.WinControls.UI.RadLabel();
+            this.gk_isVisible = new Telerik.WinControls.UI.RadCheckBox();
             this.gk_zt_panel = new Telerik.WinControls.UI.RadPanel();
             this.gk_zt_progresslabel = new Telerik.WinControls.UI.RadLabel();
             this.gk_zt_waitingbar = new Telerik.WinControls.UI.RadWaitingBar();
@@ -177,23 +212,6 @@
             this.gk_sf_waitingbar = new Telerik.WinControls.UI.RadWaitingBar();
             this.gk_sf_cancel = new Telerik.WinControls.UI.RadButton();
             this.gk_sf_start = new Telerik.WinControls.UI.RadButton();
-            this.gk_docGroupBox = new Telerik.WinControls.UI.RadGroupBox();
-            this.currmonth = new System.Windows.Forms.ComboBox();
-            this.label46 = new System.Windows.Forms.Label();
-            this.year_list = new System.Windows.Forms.ComboBox();
-            this.label45 = new System.Windows.Forms.Label();
-            this.radButton7 = new Telerik.WinControls.UI.RadButton();
-            this.gk_save_address = new Telerik.WinControls.UI.RadTextBox();
-            this.radLabel4 = new Telerik.WinControls.UI.RadLabel();
-            this.gk_isVisible = new Telerik.WinControls.UI.RadCheckBox();
-            this.gk_cj_panel = new Telerik.WinControls.UI.RadPanel();
-            this.gk_cj_progresslabel = new Telerik.WinControls.UI.RadLabel();
-            this.radButton2 = new Telerik.WinControls.UI.RadButton();
-            this.gk_cj_addr = new Telerik.WinControls.UI.RadTextBox();
-            this.radLabel6 = new Telerik.WinControls.UI.RadLabel();
-            this.gk_cj_waitingbar = new Telerik.WinControls.UI.RadWaitingBar();
-            this.gk_cj_cancel = new Telerik.WinControls.UI.RadButton();
-            this.gk_cj_start = new Telerik.WinControls.UI.RadButton();
             this.gk_qx_panel = new Telerik.WinControls.UI.RadPanel();
             this.gk_qx_progresslabel = new Telerik.WinControls.UI.RadLabel();
             this.radButton10 = new Telerik.WinControls.UI.RadButton();
@@ -232,41 +250,23 @@
             this.radLabel13 = new Telerik.WinControls.UI.RadLabel();
             this.GKTreeView = new Telerik.WinControls.UI.RadTreeView();
             this.gk_gridview = new Telerik.WinControls.UI.RadGridView();
-            this.gk_xz_panel = new Telerik.WinControls.UI.RadPanel();
-            this.first_level = new System.Windows.Forms.NumericUpDown();
-            this.radLabel23 = new Telerik.WinControls.UI.RadLabel();
-            this.radLabel24 = new Telerik.WinControls.UI.RadLabel();
-            this.second_level = new System.Windows.Forms.NumericUpDown();
-            this.radLabel25 = new Telerik.WinControls.UI.RadLabel();
-            this.third_level = new System.Windows.Forms.NumericUpDown();
-            this.radButton14 = new Telerik.WinControls.UI.RadButton();
-            this.gk_xz_cj_addr = new Telerik.WinControls.UI.RadTextBox();
-            this.radLabel26 = new Telerik.WinControls.UI.RadLabel();
-            this.gk_xz_waitingbar = new Telerik.WinControls.UI.RadWaitingBar();
-            this.gk_xz_cancel = new Telerik.WinControls.UI.RadButton();
-            this.gk_xz_start = new Telerik.WinControls.UI.RadButton();
-            this.gk_xz_progresslabel = new Telerik.WinControls.UI.RadLabel();
-            this.zk_currmonth = new System.Windows.Forms.ComboBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.zk_yearlist = new System.Windows.Forms.ComboBox();
-            this.label2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.wholepage)).BeginInit();
             this.wholepage.SuspendLayout();
             this.ZKPageView.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DataPrePanel)).BeginInit();
             this.DataPrePanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.zk_zt_panel)).BeginInit();
-            this.zk_zt_panel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.zk_zt_progress)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.zk_zt_waitingbar)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.zk_zt_cancel)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.zk_zt_start)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DocGroupBox)).BeginInit();
             this.DocGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.radButton1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.save_address)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radLabel1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.zk_isVisible)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.zk_zt_panel)).BeginInit();
+            this.zk_zt_panel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.zk_zt_progress)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.zk_zt_waitingbar)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.zk_zt_cancel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.zk_zt_start)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.zk_qx_panel)).BeginInit();
             this.zk_qx_panel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.zk_qx_ProgressLabel)).BeginInit();
@@ -329,8 +329,38 @@
             ((System.ComponentModel.ISupportInitialize)(this.HKGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.HKGridView.MasterTemplate)).BeginInit();
             this.GKPageView.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.gk_cj_panel)).BeginInit();
+            this.gk_cj_panel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.gk_cj_progresslabel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radButton2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gk_cj_addr)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radLabel6)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gk_cj_waitingbar)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gk_cj_cancel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gk_cj_start)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gk_xz_panel)).BeginInit();
+            this.gk_xz_panel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.gk_xz_progresslabel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radButton14)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gk_xz_cj_addr)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radLabel26)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gk_xz_waitingbar)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gk_xz_cancel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gk_xz_start)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radLabel25)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.third_level)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radLabel24)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.second_level)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radLabel23)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.first_level)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gk_data_pre_panel)).BeginInit();
             this.gk_data_pre_panel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.gk_docGroupBox)).BeginInit();
+            this.gk_docGroupBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.radButton7)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gk_save_address)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radLabel4)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gk_isVisible)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gk_zt_panel)).BeginInit();
             this.gk_zt_panel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gk_zt_progresslabel)).BeginInit();
@@ -358,21 +388,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.gk_sf_waitingbar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gk_sf_cancel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gk_sf_start)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gk_docGroupBox)).BeginInit();
-            this.gk_docGroupBox.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.radButton7)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gk_save_address)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radLabel4)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gk_isVisible)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gk_cj_panel)).BeginInit();
-            this.gk_cj_panel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.gk_cj_progresslabel)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radButton2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gk_cj_addr)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radLabel6)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gk_cj_waitingbar)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gk_cj_cancel)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gk_cj_start)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gk_qx_panel)).BeginInit();
             this.gk_qx_panel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gk_qx_progresslabel)).BeginInit();
@@ -415,21 +430,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.GKTreeView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gk_gridview)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gk_gridview.MasterTemplate)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gk_xz_panel)).BeginInit();
-            this.gk_xz_panel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.first_level)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radLabel23)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radLabel24)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.second_level)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radLabel25)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.third_level)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radButton14)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gk_xz_cj_addr)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radLabel26)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gk_xz_waitingbar)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gk_xz_cancel)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gk_xz_start)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gk_xz_progresslabel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
             this.SuspendLayout();
             // 
@@ -440,7 +440,7 @@
             this.wholepage.Controls.Add(this.GKPageView);
             this.wholepage.Location = new System.Drawing.Point(2, -1);
             this.wholepage.Name = "wholepage";
-            this.wholepage.SelectedPage = this.ZKPageView;
+            this.wholepage.SelectedPage = this.GKPageView;
             this.wholepage.Size = new System.Drawing.Size(876, 628);
             this.wholepage.TabIndex = 0;
             this.wholepage.Text = "radPageView1";
@@ -489,6 +489,110 @@
             this.button13.UseVisualStyleBackColor = true;
             this.button13.Click += new System.EventHandler(this.button13_Click);
             // 
+            // DocGroupBox
+            // 
+            this.DocGroupBox.AccessibleRole = System.Windows.Forms.AccessibleRole.Grouping;
+            this.DocGroupBox.Controls.Add(this.zk_currmonth);
+            this.DocGroupBox.Controls.Add(this.label1);
+            this.DocGroupBox.Controls.Add(this.zk_yearlist);
+            this.DocGroupBox.Controls.Add(this.label2);
+            this.DocGroupBox.Controls.Add(this.radButton1);
+            this.DocGroupBox.Controls.Add(this.save_address);
+            this.DocGroupBox.Controls.Add(this.radLabel1);
+            this.DocGroupBox.Controls.Add(this.zk_isVisible);
+            this.DocGroupBox.HeaderText = "文档生成";
+            this.DocGroupBox.Location = new System.Drawing.Point(141, 234);
+            this.DocGroupBox.Name = "DocGroupBox";
+            // 
+            // 
+            // 
+            this.DocGroupBox.RootElement.Padding = new System.Windows.Forms.Padding(2, 18, 2, 2);
+            this.DocGroupBox.Size = new System.Drawing.Size(712, 58);
+            this.DocGroupBox.TabIndex = 5;
+            this.DocGroupBox.Text = "文档生成";
+            // 
+            // zk_currmonth
+            // 
+            this.zk_currmonth.FormattingEnabled = true;
+            this.zk_currmonth.Items.AddRange(new object[] {
+            "1月",
+            "2月",
+            "3月",
+            "4月",
+            "5月",
+            "6月",
+            "7月",
+            "8月",
+            "9月",
+            "10月",
+            "11月",
+            "12月"});
+            this.zk_currmonth.Location = new System.Drawing.Point(643, 21);
+            this.zk_currmonth.Name = "zk_currmonth";
+            this.zk_currmonth.Size = new System.Drawing.Size(64, 20);
+            this.zk_currmonth.TabIndex = 83;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(605, 24);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(43, 13);
+            this.label1.TabIndex = 82;
+            this.label1.Text = "月份：";
+            // 
+            // zk_yearlist
+            // 
+            this.zk_yearlist.FormattingEnabled = true;
+            this.zk_yearlist.Location = new System.Drawing.Point(535, 21);
+            this.zk_yearlist.Name = "zk_yearlist";
+            this.zk_yearlist.Size = new System.Drawing.Size(67, 20);
+            this.zk_yearlist.TabIndex = 80;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(499, 24);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(43, 13);
+            this.label2.TabIndex = 81;
+            this.label2.Text = "年份：";
+            // 
+            // radButton1
+            // 
+            this.radButton1.Location = new System.Drawing.Point(411, 21);
+            this.radButton1.Name = "radButton1";
+            this.radButton1.Size = new System.Drawing.Size(70, 24);
+            this.radButton1.TabIndex = 3;
+            this.radButton1.Text = "另存至";
+            this.radButton1.Click += new System.EventHandler(this.radButton1_Click);
+            // 
+            // save_address
+            // 
+            this.save_address.Location = new System.Drawing.Point(179, 23);
+            this.save_address.Name = "save_address";
+            this.save_address.Size = new System.Drawing.Size(226, 20);
+            this.save_address.TabIndex = 2;
+            this.save_address.TabStop = false;
+            // 
+            // radLabel1
+            // 
+            this.radLabel1.AutoSize = true;
+            this.radLabel1.Location = new System.Drawing.Point(128, 23);
+            this.radLabel1.Name = "radLabel1";
+            this.radLabel1.Size = new System.Drawing.Size(52, 18);
+            this.radLabel1.TabIndex = 1;
+            this.radLabel1.Text = "保存至：";
+            // 
+            // zk_isVisible
+            // 
+            this.zk_isVisible.AutoSize = true;
+            this.zk_isVisible.Location = new System.Drawing.Point(22, 23);
+            this.zk_isVisible.Name = "zk_isVisible";
+            this.zk_isVisible.Size = new System.Drawing.Size(89, 18);
+            this.zk_isVisible.TabIndex = 0;
+            this.zk_isVisible.Text = "文档可视生成";
+            // 
             // zk_zt_panel
             // 
             this.zk_zt_panel.Controls.Add(this.zk_zt_progress);
@@ -535,63 +639,6 @@
             this.zk_zt_start.TabIndex = 76;
             this.zk_zt_start.Text = "文档生成";
             this.zk_zt_start.Click += new System.EventHandler(this.zk_zt_start_Click);
-            // 
-            // DocGroupBox
-            // 
-            this.DocGroupBox.AccessibleRole = System.Windows.Forms.AccessibleRole.Grouping;
-            this.DocGroupBox.Controls.Add(this.zk_currmonth);
-            this.DocGroupBox.Controls.Add(this.label1);
-            this.DocGroupBox.Controls.Add(this.zk_yearlist);
-            this.DocGroupBox.Controls.Add(this.label2);
-            this.DocGroupBox.Controls.Add(this.radButton1);
-            this.DocGroupBox.Controls.Add(this.save_address);
-            this.DocGroupBox.Controls.Add(this.radLabel1);
-            this.DocGroupBox.Controls.Add(this.zk_isVisible);
-            this.DocGroupBox.HeaderText = "文档生成";
-            this.DocGroupBox.Location = new System.Drawing.Point(141, 234);
-            this.DocGroupBox.Name = "DocGroupBox";
-            // 
-            // 
-            // 
-            this.DocGroupBox.RootElement.Padding = new System.Windows.Forms.Padding(2, 18, 2, 2);
-            this.DocGroupBox.Size = new System.Drawing.Size(712, 58);
-            this.DocGroupBox.TabIndex = 5;
-            this.DocGroupBox.Text = "文档生成";
-            // 
-            // radButton1
-            // 
-            this.radButton1.Location = new System.Drawing.Point(411, 21);
-            this.radButton1.Name = "radButton1";
-            this.radButton1.Size = new System.Drawing.Size(70, 24);
-            this.radButton1.TabIndex = 3;
-            this.radButton1.Text = "另存至";
-            this.radButton1.Click += new System.EventHandler(this.radButton1_Click);
-            // 
-            // save_address
-            // 
-            this.save_address.Location = new System.Drawing.Point(179, 23);
-            this.save_address.Name = "save_address";
-            this.save_address.Size = new System.Drawing.Size(226, 20);
-            this.save_address.TabIndex = 2;
-            this.save_address.TabStop = false;
-            // 
-            // radLabel1
-            // 
-            this.radLabel1.AutoSize = true;
-            this.radLabel1.Location = new System.Drawing.Point(128, 23);
-            this.radLabel1.Name = "radLabel1";
-            this.radLabel1.Size = new System.Drawing.Size(52, 18);
-            this.radLabel1.TabIndex = 1;
-            this.radLabel1.Text = "保存至：";
-            // 
-            // zk_isVisible
-            // 
-            this.zk_isVisible.AutoSize = true;
-            this.zk_isVisible.Location = new System.Drawing.Point(22, 23);
-            this.zk_isVisible.Name = "zk_isVisible";
-            this.zk_isVisible.Size = new System.Drawing.Size(89, 18);
-            this.zk_isVisible.TabIndex = 0;
-            this.zk_isVisible.Text = "文档可视生成";
             // 
             // zk_qx_panel
             // 
@@ -1373,10 +1420,7 @@
             // 
             // GKPageView
             // 
-            this.GKPageView.Controls.Add(this.gk_cj_panel);
             this.GKPageView.Controls.Add(this.gk_xz_panel);
-            this.GKPageView.Controls.Add(this.gk_data_pre_panel);
-            this.GKPageView.Controls.Add(this.gk_docGroupBox);
             this.GKPageView.Controls.Add(this.gk_zt_panel);
             this.GKPageView.Controls.Add(this.gk_data_pre_panel);
             this.GKPageView.Controls.Add(this.gk_xx_panel);
@@ -1391,6 +1435,225 @@
             this.GKPageView.Name = "GKPageView";
             this.GKPageView.Size = new System.Drawing.Size(855, 580);
             this.GKPageView.Text = "高考";
+            // 
+            // gk_cj_panel
+            // 
+            this.gk_cj_panel.Controls.Add(this.gk_cj_progresslabel);
+            this.gk_cj_panel.Controls.Add(this.radButton2);
+            this.gk_cj_panel.Controls.Add(this.gk_cj_addr);
+            this.gk_cj_panel.Controls.Add(this.radLabel6);
+            this.gk_cj_panel.Controls.Add(this.gk_cj_waitingbar);
+            this.gk_cj_panel.Controls.Add(this.gk_cj_cancel);
+            this.gk_cj_panel.Controls.Add(this.gk_cj_start);
+            this.gk_cj_panel.Location = new System.Drawing.Point(141, 306);
+            this.gk_cj_panel.Name = "gk_cj_panel";
+            this.gk_cj_panel.Size = new System.Drawing.Size(711, 263);
+            this.gk_cj_panel.TabIndex = 85;
+            this.gk_cj_panel.Text = "城郊报告";
+            this.gk_cj_panel.TextAlignment = System.Drawing.ContentAlignment.TopLeft;
+            // 
+            // gk_cj_progresslabel
+            // 
+            this.gk_cj_progresslabel.AutoSize = true;
+            this.gk_cj_progresslabel.Location = new System.Drawing.Point(39, 168);
+            this.gk_cj_progresslabel.Name = "gk_cj_progresslabel";
+            this.gk_cj_progresslabel.Size = new System.Drawing.Size(2, 2);
+            this.gk_cj_progresslabel.TabIndex = 85;
+            // 
+            // radButton2
+            // 
+            this.radButton2.Location = new System.Drawing.Point(579, 43);
+            this.radButton2.Name = "radButton2";
+            this.radButton2.Size = new System.Drawing.Size(74, 23);
+            this.radButton2.TabIndex = 84;
+            this.radButton2.Text = "打开";
+            this.radButton2.Click += new System.EventHandler(this.radButton2_Click);
+            // 
+            // gk_cj_addr
+            // 
+            this.gk_cj_addr.Location = new System.Drawing.Point(121, 45);
+            this.gk_cj_addr.Name = "gk_cj_addr";
+            this.gk_cj_addr.Size = new System.Drawing.Size(445, 20);
+            this.gk_cj_addr.TabIndex = 83;
+            this.gk_cj_addr.TabStop = false;
+            // 
+            // radLabel6
+            // 
+            this.radLabel6.AutoSize = true;
+            this.radLabel6.Location = new System.Drawing.Point(47, 45);
+            this.radLabel6.Name = "radLabel6";
+            this.radLabel6.Size = new System.Drawing.Size(63, 18);
+            this.radLabel6.TabIndex = 82;
+            this.radLabel6.Text = "城郊分类：";
+            // 
+            // gk_cj_waitingbar
+            // 
+            this.gk_cj_waitingbar.Location = new System.Drawing.Point(39, 145);
+            this.gk_cj_waitingbar.Name = "gk_cj_waitingbar";
+            this.gk_cj_waitingbar.Size = new System.Drawing.Size(641, 17);
+            this.gk_cj_waitingbar.TabIndex = 81;
+            this.gk_cj_waitingbar.Text = "radWaitingBar1";
+            // 
+            // gk_cj_cancel
+            // 
+            this.gk_cj_cancel.Location = new System.Drawing.Point(408, 103);
+            this.gk_cj_cancel.Name = "gk_cj_cancel";
+            this.gk_cj_cancel.Size = new System.Drawing.Size(110, 24);
+            this.gk_cj_cancel.TabIndex = 80;
+            this.gk_cj_cancel.Text = "取消";
+            this.gk_cj_cancel.Click += new System.EventHandler(this.gk_cj_cancel_Click);
+            // 
+            // gk_cj_start
+            // 
+            this.gk_cj_start.Location = new System.Drawing.Point(168, 103);
+            this.gk_cj_start.Name = "gk_cj_start";
+            this.gk_cj_start.Size = new System.Drawing.Size(110, 24);
+            this.gk_cj_start.TabIndex = 79;
+            this.gk_cj_start.Text = "文档生成";
+            this.gk_cj_start.Click += new System.EventHandler(this.gk_cj_start_Click);
+            // 
+            // gk_xz_panel
+            // 
+            this.gk_xz_panel.Controls.Add(this.gk_xz_progresslabel);
+            this.gk_xz_panel.Controls.Add(this.radButton14);
+            this.gk_xz_panel.Controls.Add(this.gk_xz_cj_addr);
+            this.gk_xz_panel.Controls.Add(this.radLabel26);
+            this.gk_xz_panel.Controls.Add(this.gk_xz_waitingbar);
+            this.gk_xz_panel.Controls.Add(this.gk_xz_cancel);
+            this.gk_xz_panel.Controls.Add(this.gk_xz_start);
+            this.gk_xz_panel.Controls.Add(this.radLabel25);
+            this.gk_xz_panel.Controls.Add(this.third_level);
+            this.gk_xz_panel.Controls.Add(this.radLabel24);
+            this.gk_xz_panel.Controls.Add(this.second_level);
+            this.gk_xz_panel.Controls.Add(this.radLabel23);
+            this.gk_xz_panel.Controls.Add(this.first_level);
+            this.gk_xz_panel.Location = new System.Drawing.Point(140, 308);
+            this.gk_xz_panel.Name = "gk_xz_panel";
+            this.gk_xz_panel.Size = new System.Drawing.Size(712, 265);
+            this.gk_xz_panel.TabIndex = 10;
+            this.gk_xz_panel.Text = "行政版";
+            this.gk_xz_panel.TextAlignment = System.Drawing.ContentAlignment.TopLeft;
+            // 
+            // gk_xz_progresslabel
+            // 
+            this.gk_xz_progresslabel.AutoSize = true;
+            this.gk_xz_progresslabel.Location = new System.Drawing.Point(37, 198);
+            this.gk_xz_progresslabel.Name = "gk_xz_progresslabel";
+            this.gk_xz_progresslabel.Size = new System.Drawing.Size(2, 2);
+            this.gk_xz_progresslabel.TabIndex = 91;
+            // 
+            // radButton14
+            // 
+            this.radButton14.Location = new System.Drawing.Point(576, 73);
+            this.radButton14.Name = "radButton14";
+            this.radButton14.Size = new System.Drawing.Size(74, 23);
+            this.radButton14.TabIndex = 90;
+            this.radButton14.Text = "打开";
+            // 
+            // gk_xz_cj_addr
+            // 
+            this.gk_xz_cj_addr.Location = new System.Drawing.Point(118, 75);
+            this.gk_xz_cj_addr.Name = "gk_xz_cj_addr";
+            this.gk_xz_cj_addr.Size = new System.Drawing.Size(445, 20);
+            this.gk_xz_cj_addr.TabIndex = 89;
+            this.gk_xz_cj_addr.TabStop = false;
+            // 
+            // radLabel26
+            // 
+            this.radLabel26.AutoSize = true;
+            this.radLabel26.Location = new System.Drawing.Point(44, 75);
+            this.radLabel26.Name = "radLabel26";
+            this.radLabel26.Size = new System.Drawing.Size(63, 18);
+            this.radLabel26.TabIndex = 88;
+            this.radLabel26.Text = "城郊分类：";
+            // 
+            // gk_xz_waitingbar
+            // 
+            this.gk_xz_waitingbar.Location = new System.Drawing.Point(36, 175);
+            this.gk_xz_waitingbar.Name = "gk_xz_waitingbar";
+            this.gk_xz_waitingbar.Size = new System.Drawing.Size(641, 17);
+            this.gk_xz_waitingbar.TabIndex = 87;
+            this.gk_xz_waitingbar.Text = "radWaitingBar1";
+            // 
+            // gk_xz_cancel
+            // 
+            this.gk_xz_cancel.Location = new System.Drawing.Point(405, 133);
+            this.gk_xz_cancel.Name = "gk_xz_cancel";
+            this.gk_xz_cancel.Size = new System.Drawing.Size(110, 24);
+            this.gk_xz_cancel.TabIndex = 86;
+            this.gk_xz_cancel.Text = "取消";
+            // 
+            // gk_xz_start
+            // 
+            this.gk_xz_start.Location = new System.Drawing.Point(165, 133);
+            this.gk_xz_start.Name = "gk_xz_start";
+            this.gk_xz_start.Size = new System.Drawing.Size(110, 24);
+            this.gk_xz_start.TabIndex = 85;
+            this.gk_xz_start.Text = "文档生成";
+            this.gk_xz_start.Click += new System.EventHandler(this.gk_xz_start_Click);
+            // 
+            // radLabel25
+            // 
+            this.radLabel25.AutoSize = true;
+            this.radLabel25.Location = new System.Drawing.Point(365, 21);
+            this.radLabel25.Name = "radLabel25";
+            this.radLabel25.Size = new System.Drawing.Size(52, 18);
+            this.radLabel25.TabIndex = 5;
+            this.radLabel25.Text = "三本线：";
+            // 
+            // third_level
+            // 
+            this.third_level.Location = new System.Drawing.Point(425, 20);
+            this.third_level.Maximum = new decimal(new int[] {
+            750,
+            0,
+            0,
+            0});
+            this.third_level.Name = "third_level";
+            this.third_level.Size = new System.Drawing.Size(63, 21);
+            this.third_level.TabIndex = 4;
+            // 
+            // radLabel24
+            // 
+            this.radLabel24.AutoSize = true;
+            this.radLabel24.Location = new System.Drawing.Point(206, 21);
+            this.radLabel24.Name = "radLabel24";
+            this.radLabel24.Size = new System.Drawing.Size(52, 18);
+            this.radLabel24.TabIndex = 3;
+            this.radLabel24.Text = "二本线：";
+            // 
+            // second_level
+            // 
+            this.second_level.Location = new System.Drawing.Point(266, 20);
+            this.second_level.Maximum = new decimal(new int[] {
+            750,
+            0,
+            0,
+            0});
+            this.second_level.Name = "second_level";
+            this.second_level.Size = new System.Drawing.Size(63, 21);
+            this.second_level.TabIndex = 2;
+            // 
+            // radLabel23
+            // 
+            this.radLabel23.AutoSize = true;
+            this.radLabel23.Location = new System.Drawing.Point(46, 21);
+            this.radLabel23.Name = "radLabel23";
+            this.radLabel23.Size = new System.Drawing.Size(52, 18);
+            this.radLabel23.TabIndex = 1;
+            this.radLabel23.Text = "一本线：";
+            // 
+            // first_level
+            // 
+            this.first_level.Location = new System.Drawing.Point(106, 20);
+            this.first_level.Maximum = new decimal(new int[] {
+            750,
+            0,
+            0,
+            0});
+            this.first_level.Name = "first_level";
+            this.first_level.Size = new System.Drawing.Size(63, 21);
+            this.first_level.TabIndex = 0;
             // 
             // gk_data_pre_panel
             // 
@@ -1422,6 +1685,110 @@
             this.gk_data_import.TabIndex = 8;
             this.gk_data_import.UseVisualStyleBackColor = true;
             this.gk_data_import.Click += new System.EventHandler(this.gk_data_import_Click);
+            // 
+            // gk_docGroupBox
+            // 
+            this.gk_docGroupBox.AccessibleRole = System.Windows.Forms.AccessibleRole.Grouping;
+            this.gk_docGroupBox.Controls.Add(this.currmonth);
+            this.gk_docGroupBox.Controls.Add(this.label46);
+            this.gk_docGroupBox.Controls.Add(this.year_list);
+            this.gk_docGroupBox.Controls.Add(this.label45);
+            this.gk_docGroupBox.Controls.Add(this.radButton7);
+            this.gk_docGroupBox.Controls.Add(this.gk_save_address);
+            this.gk_docGroupBox.Controls.Add(this.radLabel4);
+            this.gk_docGroupBox.Controls.Add(this.gk_isVisible);
+            this.gk_docGroupBox.HeaderText = "文档生成";
+            this.gk_docGroupBox.Location = new System.Drawing.Point(141, 234);
+            this.gk_docGroupBox.Name = "gk_docGroupBox";
+            // 
+            // 
+            // 
+            this.gk_docGroupBox.RootElement.Padding = new System.Windows.Forms.Padding(2, 18, 2, 2);
+            this.gk_docGroupBox.Size = new System.Drawing.Size(710, 58);
+            this.gk_docGroupBox.TabIndex = 87;
+            this.gk_docGroupBox.Text = "文档生成";
+            // 
+            // currmonth
+            // 
+            this.currmonth.FormattingEnabled = true;
+            this.currmonth.Items.AddRange(new object[] {
+            "1月",
+            "2月",
+            "3月",
+            "4月",
+            "5月",
+            "6月",
+            "7月",
+            "8月",
+            "9月",
+            "10月",
+            "11月",
+            "12月"});
+            this.currmonth.Location = new System.Drawing.Point(636, 24);
+            this.currmonth.Name = "currmonth";
+            this.currmonth.Size = new System.Drawing.Size(64, 20);
+            this.currmonth.TabIndex = 79;
+            // 
+            // label46
+            // 
+            this.label46.AutoSize = true;
+            this.label46.Location = new System.Drawing.Point(598, 27);
+            this.label46.Name = "label46";
+            this.label46.Size = new System.Drawing.Size(43, 13);
+            this.label46.TabIndex = 78;
+            this.label46.Text = "月份：";
+            // 
+            // year_list
+            // 
+            this.year_list.FormattingEnabled = true;
+            this.year_list.Location = new System.Drawing.Point(528, 24);
+            this.year_list.Name = "year_list";
+            this.year_list.Size = new System.Drawing.Size(67, 20);
+            this.year_list.TabIndex = 76;
+            // 
+            // label45
+            // 
+            this.label45.AutoSize = true;
+            this.label45.Location = new System.Drawing.Point(492, 27);
+            this.label45.Name = "label45";
+            this.label45.Size = new System.Drawing.Size(43, 13);
+            this.label45.TabIndex = 77;
+            this.label45.Text = "年份：";
+            // 
+            // radButton7
+            // 
+            this.radButton7.Location = new System.Drawing.Point(400, 21);
+            this.radButton7.Name = "radButton7";
+            this.radButton7.Size = new System.Drawing.Size(70, 24);
+            this.radButton7.TabIndex = 3;
+            this.radButton7.Text = "另存至";
+            this.radButton7.Click += new System.EventHandler(this.radButton7_Click);
+            // 
+            // gk_save_address
+            // 
+            this.gk_save_address.Location = new System.Drawing.Point(168, 23);
+            this.gk_save_address.Name = "gk_save_address";
+            this.gk_save_address.Size = new System.Drawing.Size(226, 20);
+            this.gk_save_address.TabIndex = 2;
+            this.gk_save_address.TabStop = false;
+            // 
+            // radLabel4
+            // 
+            this.radLabel4.AutoSize = true;
+            this.radLabel4.Location = new System.Drawing.Point(117, 23);
+            this.radLabel4.Name = "radLabel4";
+            this.radLabel4.Size = new System.Drawing.Size(52, 18);
+            this.radLabel4.TabIndex = 1;
+            this.radLabel4.Text = "保存至：";
+            // 
+            // gk_isVisible
+            // 
+            this.gk_isVisible.AutoSize = true;
+            this.gk_isVisible.Location = new System.Drawing.Point(14, 23);
+            this.gk_isVisible.Name = "gk_isVisible";
+            this.gk_isVisible.Size = new System.Drawing.Size(89, 18);
+            this.gk_isVisible.TabIndex = 0;
+            this.gk_isVisible.Text = "文档可视生成";
             // 
             // gk_zt_panel
             // 
@@ -1650,186 +2017,6 @@
             this.gk_sf_start.TabIndex = 79;
             this.gk_sf_start.Text = "文档生成";
             this.gk_sf_start.Click += new System.EventHandler(this.gk_sf_start_Click);
-            // 
-            // gk_docGroupBox
-            // 
-            this.gk_docGroupBox.AccessibleRole = System.Windows.Forms.AccessibleRole.Grouping;
-            this.gk_docGroupBox.Controls.Add(this.currmonth);
-            this.gk_docGroupBox.Controls.Add(this.label46);
-            this.gk_docGroupBox.Controls.Add(this.year_list);
-            this.gk_docGroupBox.Controls.Add(this.label45);
-            this.gk_docGroupBox.Controls.Add(this.radButton7);
-            this.gk_docGroupBox.Controls.Add(this.gk_save_address);
-            this.gk_docGroupBox.Controls.Add(this.radLabel4);
-            this.gk_docGroupBox.Controls.Add(this.gk_isVisible);
-            this.gk_docGroupBox.HeaderText = "文档生成";
-            this.gk_docGroupBox.Location = new System.Drawing.Point(141, 234);
-            this.gk_docGroupBox.Name = "gk_docGroupBox";
-            // 
-            // 
-            // 
-            this.gk_docGroupBox.RootElement.Padding = new System.Windows.Forms.Padding(2, 18, 2, 2);
-            this.gk_docGroupBox.Size = new System.Drawing.Size(710, 58);
-            this.gk_docGroupBox.TabIndex = 87;
-            this.gk_docGroupBox.Text = "文档生成";
-            // 
-            // currmonth
-            // 
-            this.currmonth.FormattingEnabled = true;
-            this.currmonth.Items.AddRange(new object[] {
-            "1月",
-            "2月",
-            "3月",
-            "4月",
-            "5月",
-            "6月",
-            "7月",
-            "8月",
-            "9月",
-            "10月",
-            "11月",
-            "12月"});
-            this.currmonth.Location = new System.Drawing.Point(636, 24);
-            this.currmonth.Name = "currmonth";
-            this.currmonth.Size = new System.Drawing.Size(64, 20);
-            this.currmonth.TabIndex = 79;
-            // 
-            // label46
-            // 
-            this.label46.AutoSize = true;
-            this.label46.Location = new System.Drawing.Point(598, 27);
-            this.label46.Name = "label46";
-            this.label46.Size = new System.Drawing.Size(43, 13);
-            this.label46.TabIndex = 78;
-            this.label46.Text = "月份：";
-            // 
-            // year_list
-            // 
-            this.year_list.FormattingEnabled = true;
-            this.year_list.Location = new System.Drawing.Point(528, 24);
-            this.year_list.Name = "year_list";
-            this.year_list.Size = new System.Drawing.Size(67, 20);
-            this.year_list.TabIndex = 76;
-            // 
-            // label45
-            // 
-            this.label45.AutoSize = true;
-            this.label45.Location = new System.Drawing.Point(492, 27);
-            this.label45.Name = "label45";
-            this.label45.Size = new System.Drawing.Size(43, 13);
-            this.label45.TabIndex = 77;
-            this.label45.Text = "年份：";
-            // 
-            // radButton7
-            // 
-            this.radButton7.Location = new System.Drawing.Point(400, 21);
-            this.radButton7.Name = "radButton7";
-            this.radButton7.Size = new System.Drawing.Size(70, 24);
-            this.radButton7.TabIndex = 3;
-            this.radButton7.Text = "另存至";
-            this.radButton7.Click += new System.EventHandler(this.radButton7_Click);
-            // 
-            // gk_save_address
-            // 
-            this.gk_save_address.Location = new System.Drawing.Point(168, 23);
-            this.gk_save_address.Name = "gk_save_address";
-            this.gk_save_address.Size = new System.Drawing.Size(226, 20);
-            this.gk_save_address.TabIndex = 2;
-            this.gk_save_address.TabStop = false;
-            // 
-            // radLabel4
-            // 
-            this.radLabel4.AutoSize = true;
-            this.radLabel4.Location = new System.Drawing.Point(117, 23);
-            this.radLabel4.Name = "radLabel4";
-            this.radLabel4.Size = new System.Drawing.Size(52, 18);
-            this.radLabel4.TabIndex = 1;
-            this.radLabel4.Text = "保存至：";
-            // 
-            // gk_isVisible
-            // 
-            this.gk_isVisible.AutoSize = true;
-            this.gk_isVisible.Location = new System.Drawing.Point(14, 23);
-            this.gk_isVisible.Name = "gk_isVisible";
-            this.gk_isVisible.Size = new System.Drawing.Size(89, 18);
-            this.gk_isVisible.TabIndex = 0;
-            this.gk_isVisible.Text = "文档可视生成";
-            // 
-            // gk_cj_panel
-            // 
-            this.gk_cj_panel.Controls.Add(this.gk_cj_progresslabel);
-            this.gk_cj_panel.Controls.Add(this.radButton2);
-            this.gk_cj_panel.Controls.Add(this.gk_cj_addr);
-            this.gk_cj_panel.Controls.Add(this.radLabel6);
-            this.gk_cj_panel.Controls.Add(this.gk_cj_waitingbar);
-            this.gk_cj_panel.Controls.Add(this.gk_cj_cancel);
-            this.gk_cj_panel.Controls.Add(this.gk_cj_start);
-            this.gk_cj_panel.Location = new System.Drawing.Point(141, 306);
-            this.gk_cj_panel.Name = "gk_cj_panel";
-            this.gk_cj_panel.Size = new System.Drawing.Size(711, 263);
-            this.gk_cj_panel.TabIndex = 85;
-            this.gk_cj_panel.Text = "城郊报告";
-            this.gk_cj_panel.TextAlignment = System.Drawing.ContentAlignment.TopLeft;
-            // 
-            // gk_cj_progresslabel
-            // 
-            this.gk_cj_progresslabel.AutoSize = true;
-            this.gk_cj_progresslabel.Location = new System.Drawing.Point(39, 168);
-            this.gk_cj_progresslabel.Name = "gk_cj_progresslabel";
-            this.gk_cj_progresslabel.Size = new System.Drawing.Size(2, 2);
-            this.gk_cj_progresslabel.TabIndex = 85;
-            // 
-            // radButton2
-            // 
-            this.radButton2.Location = new System.Drawing.Point(579, 43);
-            this.radButton2.Name = "radButton2";
-            this.radButton2.Size = new System.Drawing.Size(74, 23);
-            this.radButton2.TabIndex = 84;
-            this.radButton2.Text = "打开";
-            this.radButton2.Click += new System.EventHandler(this.radButton2_Click);
-            // 
-            // gk_cj_addr
-            // 
-            this.gk_cj_addr.Location = new System.Drawing.Point(121, 45);
-            this.gk_cj_addr.Name = "gk_cj_addr";
-            this.gk_cj_addr.Size = new System.Drawing.Size(445, 20);
-            this.gk_cj_addr.TabIndex = 83;
-            this.gk_cj_addr.TabStop = false;
-            // 
-            // radLabel6
-            // 
-            this.radLabel6.AutoSize = true;
-            this.radLabel6.Location = new System.Drawing.Point(47, 45);
-            this.radLabel6.Name = "radLabel6";
-            this.radLabel6.Size = new System.Drawing.Size(63, 18);
-            this.radLabel6.TabIndex = 82;
-            this.radLabel6.Text = "城郊分类：";
-            // 
-            // gk_cj_waitingbar
-            // 
-            this.gk_cj_waitingbar.Location = new System.Drawing.Point(39, 145);
-            this.gk_cj_waitingbar.Name = "gk_cj_waitingbar";
-            this.gk_cj_waitingbar.Size = new System.Drawing.Size(641, 17);
-            this.gk_cj_waitingbar.TabIndex = 81;
-            this.gk_cj_waitingbar.Text = "radWaitingBar1";
-            // 
-            // gk_cj_cancel
-            // 
-            this.gk_cj_cancel.Location = new System.Drawing.Point(408, 103);
-            this.gk_cj_cancel.Name = "gk_cj_cancel";
-            this.gk_cj_cancel.Size = new System.Drawing.Size(110, 24);
-            this.gk_cj_cancel.TabIndex = 80;
-            this.gk_cj_cancel.Text = "取消";
-            this.gk_cj_cancel.Click += new System.EventHandler(this.gk_cj_cancel_Click);
-            // 
-            // gk_cj_start
-            // 
-            this.gk_cj_start.Location = new System.Drawing.Point(168, 103);
-            this.gk_cj_start.Name = "gk_cj_start";
-            this.gk_cj_start.Size = new System.Drawing.Size(110, 24);
-            this.gk_cj_start.TabIndex = 79;
-            this.gk_cj_start.Text = "文档生成";
-            this.gk_cj_start.Click += new System.EventHandler(this.gk_cj_start_Click);
             // 
             // gk_qx_panel
             // 
@@ -2318,180 +2505,6 @@
             this.gk_gridview.TabIndex = 0;
             this.gk_gridview.Text = "radGridView2";
             // 
-            // gk_xz_panel
-            // 
-            this.gk_xz_panel.Controls.Add(this.gk_xz_progresslabel);
-            this.gk_xz_panel.Controls.Add(this.radButton14);
-            this.gk_xz_panel.Controls.Add(this.gk_xz_cj_addr);
-            this.gk_xz_panel.Controls.Add(this.radLabel26);
-            this.gk_xz_panel.Controls.Add(this.gk_xz_waitingbar);
-            this.gk_xz_panel.Controls.Add(this.gk_xz_cancel);
-            this.gk_xz_panel.Controls.Add(this.gk_xz_start);
-            this.gk_xz_panel.Controls.Add(this.radLabel25);
-            this.gk_xz_panel.Controls.Add(this.third_level);
-            this.gk_xz_panel.Controls.Add(this.radLabel24);
-            this.gk_xz_panel.Controls.Add(this.second_level);
-            this.gk_xz_panel.Controls.Add(this.radLabel23);
-            this.gk_xz_panel.Controls.Add(this.first_level);
-            this.gk_xz_panel.Location = new System.Drawing.Point(140, 308);
-            this.gk_xz_panel.Name = "gk_xz_panel";
-            this.gk_xz_panel.Size = new System.Drawing.Size(712, 265);
-            this.gk_xz_panel.TabIndex = 10;
-            this.gk_xz_panel.Text = "行政版";
-            this.gk_xz_panel.TextAlignment = System.Drawing.ContentAlignment.TopLeft;
-            // 
-            // first_level
-            // 
-            this.first_level.Location = new System.Drawing.Point(106, 20);
-            this.first_level.Name = "first_level";
-            this.first_level.Size = new System.Drawing.Size(63, 21);
-            this.first_level.TabIndex = 0;
-            // 
-            // radLabel23
-            // 
-            this.radLabel23.AutoSize = true;
-            this.radLabel23.Location = new System.Drawing.Point(46, 21);
-            this.radLabel23.Name = "radLabel23";
-            this.radLabel23.Size = new System.Drawing.Size(54, 18);
-            this.radLabel23.TabIndex = 1;
-            this.radLabel23.Text = "一本线：";
-            // 
-            // radLabel24
-            // 
-            this.radLabel24.AutoSize = true;
-            this.radLabel24.Location = new System.Drawing.Point(206, 21);
-            this.radLabel24.Name = "radLabel24";
-            this.radLabel24.Size = new System.Drawing.Size(54, 18);
-            this.radLabel24.TabIndex = 3;
-            this.radLabel24.Text = "二本线：";
-            // 
-            // second_level
-            // 
-            this.second_level.Location = new System.Drawing.Point(266, 20);
-            this.second_level.Name = "second_level";
-            this.second_level.Size = new System.Drawing.Size(63, 21);
-            this.second_level.TabIndex = 2;
-            // 
-            // radLabel25
-            // 
-            this.radLabel25.AutoSize = true;
-            this.radLabel25.Location = new System.Drawing.Point(365, 21);
-            this.radLabel25.Name = "radLabel25";
-            this.radLabel25.Size = new System.Drawing.Size(54, 18);
-            this.radLabel25.TabIndex = 5;
-            this.radLabel25.Text = "三本线：";
-            // 
-            // third_level
-            // 
-            this.third_level.Location = new System.Drawing.Point(425, 20);
-            this.third_level.Name = "third_level";
-            this.third_level.Size = new System.Drawing.Size(63, 21);
-            this.third_level.TabIndex = 4;
-            // 
-            // radButton14
-            // 
-            this.radButton14.Location = new System.Drawing.Point(576, 73);
-            this.radButton14.Name = "radButton14";
-            this.radButton14.Size = new System.Drawing.Size(74, 23);
-            this.radButton14.TabIndex = 90;
-            this.radButton14.Text = "打开";
-            // 
-            // gk_xz_cj_addr
-            // 
-            this.gk_xz_cj_addr.Location = new System.Drawing.Point(118, 75);
-            this.gk_xz_cj_addr.Name = "gk_xz_cj_addr";
-            this.gk_xz_cj_addr.Size = new System.Drawing.Size(445, 20);
-            this.gk_xz_cj_addr.TabIndex = 89;
-            this.gk_xz_cj_addr.TabStop = false;
-            // 
-            // radLabel26
-            // 
-            this.radLabel26.AutoSize = true;
-            this.radLabel26.Location = new System.Drawing.Point(44, 75);
-            this.radLabel26.Name = "radLabel26";
-            this.radLabel26.Size = new System.Drawing.Size(65, 18);
-            this.radLabel26.TabIndex = 88;
-            this.radLabel26.Text = "城郊分类：";
-            // 
-            // gk_xz_waitingbar
-            // 
-            this.gk_xz_waitingbar.Location = new System.Drawing.Point(36, 175);
-            this.gk_xz_waitingbar.Name = "gk_xz_waitingbar";
-            this.gk_xz_waitingbar.Size = new System.Drawing.Size(641, 17);
-            this.gk_xz_waitingbar.TabIndex = 87;
-            this.gk_xz_waitingbar.Text = "radWaitingBar1";
-            // 
-            // gk_xz_cancel
-            // 
-            this.gk_xz_cancel.Location = new System.Drawing.Point(405, 133);
-            this.gk_xz_cancel.Name = "gk_xz_cancel";
-            this.gk_xz_cancel.Size = new System.Drawing.Size(110, 24);
-            this.gk_xz_cancel.TabIndex = 86;
-            this.gk_xz_cancel.Text = "取消";
-            // 
-            // gk_xz_start
-            // 
-            this.gk_xz_start.Location = new System.Drawing.Point(165, 133);
-            this.gk_xz_start.Name = "gk_xz_start";
-            this.gk_xz_start.Size = new System.Drawing.Size(110, 24);
-            this.gk_xz_start.TabIndex = 85;
-            this.gk_xz_start.Text = "文档生成";
-            this.gk_xz_start.Click += new System.EventHandler(this.gk_xz_start_Click);
-            // 
-            // gk_xz_progresslabel
-            // 
-            this.gk_xz_progresslabel.AutoSize = true;
-            this.gk_xz_progresslabel.Location = new System.Drawing.Point(37, 198);
-            this.gk_xz_progresslabel.Name = "gk_xz_progresslabel";
-            this.gk_xz_progresslabel.Size = new System.Drawing.Size(2, 2);
-            this.gk_xz_progresslabel.TabIndex = 91;
-            // zk_currmonth
-            // 
-            this.zk_currmonth.FormattingEnabled = true;
-            this.zk_currmonth.Items.AddRange(new object[] {
-            "1月",
-            "2月",
-            "3月",
-            "4月",
-            "5月",
-            "6月",
-            "7月",
-            "8月",
-            "9月",
-            "10月",
-            "11月",
-            "12月"});
-            this.zk_currmonth.Location = new System.Drawing.Point(643, 21);
-            this.zk_currmonth.Name = "zk_currmonth";
-            this.zk_currmonth.Size = new System.Drawing.Size(64, 20);
-            this.zk_currmonth.TabIndex = 83;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(605, 24);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(43, 13);
-            this.label1.TabIndex = 82;
-            this.label1.Text = "月份：";
-            // 
-            // zk_yearlist
-            // 
-            this.zk_yearlist.FormattingEnabled = true;
-            this.zk_yearlist.Location = new System.Drawing.Point(535, 21);
-            this.zk_yearlist.Name = "zk_yearlist";
-            this.zk_yearlist.Size = new System.Drawing.Size(67, 20);
-            this.zk_yearlist.TabIndex = 80;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(499, 24);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(43, 13);
-            this.label2.TabIndex = 81;
-            this.label2.Text = "年份：";
-            // 
             // mainform
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -2511,13 +2524,6 @@
             this.ZKPageView.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.DataPrePanel)).EndInit();
             this.DataPrePanel.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.zk_zt_panel)).EndInit();
-            this.zk_zt_panel.ResumeLayout(false);
-            this.zk_zt_panel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.zk_zt_progress)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.zk_zt_waitingbar)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.zk_zt_cancel)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.zk_zt_start)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DocGroupBox)).EndInit();
             this.DocGroupBox.ResumeLayout(false);
             this.DocGroupBox.PerformLayout();
@@ -2525,6 +2531,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.save_address)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radLabel1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.zk_isVisible)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.zk_zt_panel)).EndInit();
+            this.zk_zt_panel.ResumeLayout(false);
+            this.zk_zt_panel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.zk_zt_progress)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.zk_zt_waitingbar)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.zk_zt_cancel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.zk_zt_start)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.zk_qx_panel)).EndInit();
             this.zk_qx_panel.ResumeLayout(false);
             this.zk_qx_panel.PerformLayout();
@@ -2594,8 +2607,41 @@
             ((System.ComponentModel.ISupportInitialize)(this.HKGridView.MasterTemplate)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.HKGridView)).EndInit();
             this.GKPageView.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.gk_cj_panel)).EndInit();
+            this.gk_cj_panel.ResumeLayout(false);
+            this.gk_cj_panel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.gk_cj_progresslabel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radButton2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gk_cj_addr)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radLabel6)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gk_cj_waitingbar)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gk_cj_cancel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gk_cj_start)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gk_xz_panel)).EndInit();
+            this.gk_xz_panel.ResumeLayout(false);
+            this.gk_xz_panel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.gk_xz_progresslabel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radButton14)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gk_xz_cj_addr)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radLabel26)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gk_xz_waitingbar)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gk_xz_cancel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gk_xz_start)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radLabel25)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.third_level)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radLabel24)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.second_level)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radLabel23)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.first_level)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gk_data_pre_panel)).EndInit();
             this.gk_data_pre_panel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.gk_docGroupBox)).EndInit();
+            this.gk_docGroupBox.ResumeLayout(false);
+            this.gk_docGroupBox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.radButton7)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gk_save_address)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radLabel4)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gk_isVisible)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gk_zt_panel)).EndInit();
             this.gk_zt_panel.ResumeLayout(false);
             this.gk_zt_panel.PerformLayout();
@@ -2626,23 +2672,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.gk_sf_waitingbar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gk_sf_cancel)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gk_sf_start)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gk_docGroupBox)).EndInit();
-            this.gk_docGroupBox.ResumeLayout(false);
-            this.gk_docGroupBox.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.radButton7)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gk_save_address)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radLabel4)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gk_isVisible)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gk_cj_panel)).EndInit();
-            this.gk_cj_panel.ResumeLayout(false);
-            this.gk_cj_panel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.gk_cj_progresslabel)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radButton2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gk_cj_addr)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radLabel6)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gk_cj_waitingbar)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gk_cj_cancel)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gk_cj_start)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gk_qx_panel)).EndInit();
             this.gk_qx_panel.ResumeLayout(false);
             this.gk_qx_panel.PerformLayout();
@@ -2687,22 +2716,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.GKTreeView)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gk_gridview.MasterTemplate)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gk_gridview)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gk_xz_panel)).EndInit();
-            this.gk_xz_panel.ResumeLayout(false);
-            this.gk_xz_panel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.first_level)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radLabel23)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radLabel24)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.second_level)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radLabel25)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.third_level)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radButton14)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gk_xz_cj_addr)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radLabel26)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gk_xz_waitingbar)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gk_xz_cancel)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gk_xz_start)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gk_xz_progresslabel)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
             this.ResumeLayout(false);
 

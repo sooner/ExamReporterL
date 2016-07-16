@@ -39,7 +39,7 @@ namespace ExamReport
 
         public void start_process()
         {
-            if (!sub.Equals("总分"))
+            if (!(sub.Equals("总分") || sub.Equals("总分-行政版")))
             {
                 ans = new excel_process(ans_str);
                 ans.run(true);
@@ -62,7 +62,7 @@ namespace ExamReport
             md.fullmark_iszero = fullmark_iszero;
             md.sub_iszero = sub_iszero;
             md.PartialRight = PartialRight;
-            if (!sub.Equals("总分"))
+            if (!(sub.Equals("总分")  || sub.Equals("总分-行政版")))
             {
                 md.xz = ans.xz_th;
             }
@@ -74,7 +74,7 @@ namespace ExamReport
             else
                 md._sub_fullmark = 0;
             md._fullmark = fullmark;
-            if (!sub.Equals("总分"))
+            if (!(sub.Equals("总分") || sub.Equals("总分-行政版")))
             {
                 md._grouptype = grouptype;
                 md._group_num = Convert.ToInt32(divider);
@@ -160,14 +160,14 @@ namespace ExamReport
         public void gk_database_process(MetaData mdata)
         {
 
-            if (sub.Equals("总分"))
+            if (sub.Equals("总分") || sub.Equals("总分-行政版"))
             {
                 GK_database db = new GK_database();
                 db.ZF_data_process(database_str);
 
                 basic_data = db._basic_data;
 
-                DBHelper.create_mysql_table(basic_data, Utils.get_zt_tablename(year));
+                DBHelper.create_mysql_table(basic_data, Utils.get_zt_tablename(year, Utils.language_trans(sub)));
                 wizard.ShowPro(100, 3);
             }
             else if (sub.Contains("理综") ||

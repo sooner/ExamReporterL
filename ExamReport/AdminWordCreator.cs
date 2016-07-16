@@ -185,10 +185,10 @@ namespace ExamReport
             for (int i = 0; i < 10; i++)
             {
                 table.Cell(2, i + 2).Range.Text = string.Format("{0:F1}", avg[i]);
-                table.Cell(3, i + 2).Range.Text = string.Format("{0:F1}", diff[i]);
+                table.Cell(3, i + 2).Range.Text = string.Format("{0:F2}", diff[i]);
 
                 table.Cell(5, i + 2).Range.Text = string.Format("{0:F1}", avg[i + 10]);
-                table.Cell(6, i + 2).Range.Text = string.Format("{0:F1}", diff[i + 10]);
+                table.Cell(6, i + 2).Range.Text = string.Format("{0:F2}", diff[i + 10]);
             }
             table.Rows[1].HeadingFormat = -1;
 
@@ -219,8 +219,8 @@ namespace ExamReport
             for (int col = 2; col <= urban.Rows.Count + 1; col++)
             {
                 table.Cell(1, col).Range.Text = urban.Rows[col - 2]["sub"].ToString().Trim();
-                table.Cell(2, col).Range.Text = string.Format("{0:F1}", urban.Rows[col - 2]["diff"]);
-                table.Cell(3, col).Range.Text = string.Format("{0:F1}", country.Rows[col - 2]["diff"]);
+                table.Cell(2, col).Range.Text = string.Format("{0:F2}", urban.Rows[col - 2]["diff"]);
+                table.Cell(3, col).Range.Text = string.Format("{0:F2}", country.Rows[col - 2]["diff"]);
             }
 
             table.Rows[1].HeadingFormat = -1;
@@ -289,7 +289,7 @@ namespace ExamReport
             for (int col = 2; col <= data.Rows.Count + 1; col++)
             {
                 table.Cell(1, col).Range.Text = data.Rows[col - 2]["sub"].ToString().Trim();
-                table.Cell(2, col).Range.Text = string.Format("{0:F1}", data.Rows[col - 2]["diff"]);
+                table.Cell(2, col).Range.Text = string.Format("{0:F2}", data.Rows[col - 2]["diff"]);
             }
 
             table.Rows[1].HeadingFormat = -1;
@@ -354,11 +354,11 @@ namespace ExamReport
             table.Cell(1, 1).Merge(table.Cell(2, 1));
             table.Cell(1, 1).Range.Text = "类别";
             table.Cell(1, 2).Merge(table.Cell(1, 3));
-            table.Cell(1, 2).Merge(table.Cell(1, 4));
+            table.Cell(1, 2).Merge(table.Cell(1, 3));
             table.Cell(1, 2).Range.Text = "文科";
-            table.Cell(1, 5).Merge(table.Cell(1, 6));
-            table.Cell(1, 5).Merge(table.Cell(1, 7));
-            table.Cell(1, 5).Range.Text = "理科";
+            table.Cell(1, 3).Merge(table.Cell(1, 4));
+            table.Cell(1, 3).Merge(table.Cell(1, 4));
+            table.Cell(1, 3).Range.Text = "理科";
 
 
             range = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
@@ -503,8 +503,8 @@ namespace ExamReport
             for (int i = 0; i < dt.Rows.Count; i++)
             {
                 data[i] = new double[2];
-                data[i][0] = Convert.ToDouble((decimal)dt.Rows[i][0]);
-                data[i][1] = Convert.ToDouble((decimal)dt.Rows[i][1]);
+                data[i][0] = Convert.ToDouble(dt.Rows[i][0]);
+                data[i][1] = Convert.ToDouble(dt.Rows[i][1]);
 
             }
             ZedGraph.createCuve(_config, x_axis, y_axis, data, 0, fullmark, Convert.ToDouble(dt.Compute("Max([" + dt.Columns[1].ColumnName + "])", "")));

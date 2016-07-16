@@ -76,9 +76,9 @@ namespace ExamReport
             qx_process("yw", 150, data, result.districts);
             qx_process("sx", 150, data, result.districts);
             qx_process("yy", 150, data, result.districts);
-            qx_process("ls", 100, data, result.districts);
-            qx_process("dl", 100, data, result.districts);
-            qx_process("zz", 100, data, result.districts);
+            qx_process("sw_ls", 100, data, result.districts);
+            qx_process("wl_dl", 100, data, result.districts);
+            qx_process("hx_zz", 100, data, result.districts);
 
         }
 
@@ -94,9 +94,9 @@ namespace ExamReport
             qx_process("yw", 150, data, result.districts);
             qx_process("sx", 150, data, result.districts);
             qx_process("yy", 150, data, result.districts);
-            qx_process("wl", 120, data, result.districts);
-            qx_process("hx", 100, data, result.districts);
-            qx_process("sh", 80, data, result.districts);
+            qx_process("wl_dl", 120, data, result.districts);
+            qx_process("hx_zz", 100, data, result.districts);
+            qx_process("sw_ls", 80, data, result.districts);
 
         }
         public void li_sub(DataTable data, DataTable sub)
@@ -104,9 +104,9 @@ namespace ExamReport
             InsertSubDiff("语文", "yw", 150, data, sub);
             InsertSubDiff("数学理", "sx", 150, data, sub);
             InsertSubDiff("英语", "yy", 150, data, sub);
-            InsertSubDiff("物理", "wl", 120, data, sub);
-            InsertSubDiff("化学", "hx", 100, data, sub);
-            InsertSubDiff("生物", "sh", 80, data, sub);
+            InsertSubDiff("物理", "wl_dl", 120, data, sub);
+            InsertSubDiff("化学", "hx_zz", 100, data, sub);
+            InsertSubDiff("生物", "sw_ls", 80, data, sub);
         }
         public void qx_process(string sub, decimal fullmark, DataTable data, DataTable districts)
         {
@@ -135,9 +135,9 @@ namespace ExamReport
             InsertSubDiff("语文", "yw", 150, data, sub);
             InsertSubDiff("数学文", "sx", 150, data, sub);
             InsertSubDiff("英语", "yy", 150, data, sub);
-            InsertSubDiff("历史", "ls", 100, data, sub);
-            InsertSubDiff("地理", "dl", 100, data, sub);
-            InsertSubDiff("政治", "zz", 100, data, sub);
+            InsertSubDiff("历史", "sw_ls", 100, data, sub);
+            InsertSubDiff("地理", "wl_dl", 100, data, sub);
+            InsertSubDiff("政治", "hx_zz", 100, data, sub);
         }
 
         public void single_process(DataTable data, Admin_WordData result)
@@ -161,7 +161,7 @@ namespace ExamReport
                     int count = data.AsEnumerable().Where(c => (c.Field<decimal>("zf") >= min && c.Field<decimal>("zf") <= max)).Count();
                     dr["count"] = count;
                 }
-
+                
                 result.total_dist.Rows.Add(dr);
 
             }
@@ -180,6 +180,8 @@ namespace ExamReport
                 dr["accumulateFreq"] = count + acct_count;
                 dr["accumulateRate"] = (count + acct_count) / Convert.ToDecimal(result.total.totalnum);
 
+                if (count == 0)
+                    continue;
                 result.total_freq.Rows.Add(dr);
                 acct_count += count;
 

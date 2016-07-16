@@ -646,7 +646,7 @@ namespace ExamReport
                     return "sxw";
                 case "总分":
                     return "zf";
-                case "行政总分":
+                case "总分-行政版":
                     return "zf_xz";
 
                 case "yw":
@@ -674,7 +674,7 @@ namespace ExamReport
                 case "zf":
                     return "总分";
                 case "zf_xz":
-                    return "行政总分";
+                    return "总分-行政版";
                 default:
                     return "";
             }
@@ -690,9 +690,9 @@ namespace ExamReport
             }
             return false;
         }
-        public static string get_zt_tablename(string year)
+        public static string get_zt_tablename(string year, string sub)
         {
-            return year + "_zf";
+            return year + "_" + sub;
         }
         public static string get_tablename(string year, string exam, string sub)
         {
@@ -840,6 +840,49 @@ namespace ExamReport
                     return "and";
                 case "或者":
                     return "or";
+                default:
+                    return "";
+            }
+        }
+
+        public static string QXTrans(string qx)
+        {
+            switch (qx)
+            {
+                case "dc":
+                    return "东城";
+                case "xc":
+                    return "西城";
+                case "cy":
+                    return "朝阳";
+                case "ft":
+                    return "丰台";
+                case "sjs":
+                    return "石景山";
+                case "hd":
+                    return "海淀";
+                case "mtg":
+                    return "门头沟";
+                case "ys":
+                    return "燕山";
+                case "fs":
+                    return "房山";
+                case "tz":
+                    return "通州";
+                case "sy":
+                    return "顺义";
+                case "cp":
+                    return "昌平";
+                case "dx":
+                    return "大兴";
+                case "hr":
+                    return "怀柔";
+                case "pg":
+                    return "平谷";
+                case "my":
+                    return "密云";
+                case "yq":
+                    return "延庆";
                 default:
                     return "";
             }

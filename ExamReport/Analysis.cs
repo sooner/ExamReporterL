@@ -92,8 +92,8 @@ namespace ExamReport
                     string log = year + "年" + Utils.language_trans(exam) + row.Cells["sub"].Value.ToString().Trim();
                     _form.ShowPro(exam_type, 1, log + "数据读取...");
                     MetaData mdata = new MetaData(year, exam, sub);
-                    try
-                    {
+                    //try
+                    //{
                         mdata.get_meta_data();
                         _fullmark = mdata._fullmark;
 
@@ -104,7 +104,7 @@ namespace ExamReport
                             mdata.ywyy_choice = row.Cells["SpecChoice"].Value.ToString().Trim();
 
                         mdata.log_name = log;
-                        if (sub.Equals("zf"))
+                        if (sub.Equals("zf") || sub.Equals("zf_xz"))
                         {
                             mdata.get_zf_data();
                         }
@@ -266,14 +266,14 @@ namespace ExamReport
                             }
 
                         }
-                    }
-                    catch (System.Threading.ThreadAbortException e)
-                    {
-                    }
-                    catch (Exception e)
-                    {
-                        _form.ErrorM(exam_type, e.Message);
-                    }
+                    //}
+                    //catch (System.Threading.ThreadAbortException e)
+                    //{
+                    //}
+                    //catch (Exception e)
+                    //{
+                    //    _form.ErrorM(exam_type, e.Message);
+                    //}
 
                 }
             }
@@ -295,7 +295,7 @@ namespace ExamReport
             config.third_level = third_level;
 
             int urban = mdata.CJ_list[0][0].Equals("城区") ? 0 : 1;
-            int country = mdata.CJ_list[0][1].Equals("郊区") ? 1 : 0;
+            int country = mdata.CJ_list[0][1].Equals("郊区") ? 0 : 1;
 
             config.urban_code = new string[mdata.CJ_list[urban].Count];
             config.country_code = new string[mdata.CJ_list[country].Count];

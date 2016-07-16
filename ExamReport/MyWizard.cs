@@ -112,7 +112,7 @@ namespace ExamReport
             ld.exam = exam.SelectedItem.ToString();
             ld.sub = subject.SelectedItem.ToString();
             ld.database_str = database_addr.Text;
-            if (!ld.sub.Equals("总分"))
+            if (!(ld.sub.Equals("总分") || ld.sub.Equals("总分-行政版")))
             {
                 ld.ans_str = ans_addr.Text;
                 ld.group_str = group_addr.Text;
@@ -230,7 +230,7 @@ namespace ExamReport
         }
         private void after_process()
         {
-            if (subject.SelectedItem.ToString().Equals("总分"))
+            if (subject.SelectedItem.ToString().Equals("总分") || subject.SelectedItem.ToString().Equals("总分-行政版"))
             {
                 basic_gridView.DataSource = ld.basic_data;
                 this.radWizard1.SelectedPage = this.radWizard1.Pages[2];
@@ -277,6 +277,7 @@ namespace ExamReport
 
                     subject.Items.Clear();
                     subject.Items.Add("总分");
+                    subject.Items.Add("总分-行政版");
                     subject.Items.Add("语文");
                     subject.Items.Add("英语");
                     subject.Items.Add("数学理");
@@ -338,7 +339,7 @@ namespace ExamReport
                 zh_panel.Show();
                 zongfen_enable();
             }
-            else if (subject.SelectedItem.ToString().Equals("总分"))
+            else if (subject.SelectedItem.ToString().Equals("总分") || subject.SelectedItem.ToString().Equals("总分-行政版"))
             {
                 zongfen_disable();
                 zh_panel.Hide();

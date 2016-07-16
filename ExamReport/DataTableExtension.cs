@@ -12,7 +12,7 @@ namespace ExamReport
         {
             decimal avg = Avg(dt, col);
             double stdev = dt.AsEnumerable().Select(
-                c => Math.Pow((Convert.ToDouble(c.Field<string>(col)) - Convert.ToDouble(avg)), 2)).Average();
+                c => Math.Pow((Convert.ToDouble(c.Field<decimal>(col)) - Convert.ToDouble(avg)), 2)).Average();
             return Convert.ToDecimal(Math.Sqrt(stdev));
         }
         public static decimal Avg(this DataTable dt, string col)
