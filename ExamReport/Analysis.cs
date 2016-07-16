@@ -502,15 +502,38 @@ namespace ExamReport
             int count = 0;
             foreach (DataRow dr in custom_data.Rows)
             {
+                string condition = dr["condition"].ToString().Trim();
+                count++;
+                totalfilter += "(" + condition + ")";
+                if (count != custom_data.Rows.Count)
+                    totalfilter += " OR ";
+            }
+
+            DataTable basic = SortTable(get_filterdata(mdata.basic, totalfilter), "ZH_totalmark");
+            DataTable group = SortTable(get_filterdata(mdata.group, totalfilter), "ZH_totalmark");
+
+            DataTable zh_basic = SortTable(get_filterdata(mdata.zh_basic, totalfilter), "totalmark");
+            DataTable zh_group = SortTable(get_filterdata(mdata.zh_group, totalfilter), "totalmark");
+
+            basic.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
+            group.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
+
+            zh_basic.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
+            zh_group.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
+
+            mdata.basic = basic;
+            mdata.group = group;
+
+            mdata.zh_basic = zh_basic;
+            mdata.zh_group = zh_group;
+
+            foreach (DataRow dr in custom_data.Rows)
+            {
                 string name = dr["name"].ToString().Trim();
                 string condition = dr["condition"].ToString().Trim();
 
                 CustomDataProcess(sdata, name, mdata, condition, config, mdata._sub_fullmark);
                 ZHCustomDataProcess(ZH_data, name, mdata, condition, config);
-                count++;
-                totalfilter += "(" + condition + ")";
-                if (count != custom_data.Rows.Count)
-                    totalfilter += " OR ";
             }
 
             CustomDataProcess(sdata, "分类整体", mdata, totalfilter, config, mdata._sub_fullmark);
@@ -527,8 +550,8 @@ namespace ExamReport
             DataTable group = get_filterdata(mdata.zh_group, filter);
             if (basic.Rows.Count == 0)
                 throw new ArgumentException("条件 " + filter + " 没有数据！");
-            basic.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
-            group.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
+            //basic.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
+            //group.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
             Partition_statistic total = new Partition_statistic(name, basic, mdata._fullmark, mdata.zh_ans, group, mdata.zh_grp, mdata._group_num);
             total._config = config;
             total.statistic_process(true);
@@ -542,16 +565,32 @@ namespace ExamReport
 
             string totalfilter = "";
             int count = 0;
+
+
+            foreach (DataRow dr in custom_data.Rows)
+            {
+                string condition = dr["condition"].ToString().Trim();
+                count++;
+                totalfilter += "(" + condition + ")";
+                if (count != custom_data.Rows.Count)
+                    totalfilter += " OR ";
+            }
+
+            DataTable basic = SortTable(get_filterdata(mdata.basic, totalfilter), "totalmark");
+            DataTable group = SortTable(get_filterdata(mdata.group, totalfilter), "totalmark");
+
+            basic.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
+            group.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
+
+            mdata.basic = basic;
+            mdata.group = group;
+
             foreach (DataRow dr in custom_data.Rows)
             {
                 string name = dr["name"].ToString().Trim();
                 string condition = dr["condition"].ToString().Trim();
 
                 CustomDataProcess(list, name, mdata, condition, config, mdata._fullmark);
-                count++;
-                totalfilter += "(" + condition + ")";
-                if (count != custom_data.Rows.Count)
-                    totalfilter += " OR ";
             }
 
             CustomDataProcess(list, "分类整体", mdata, totalfilter, config, mdata._fullmark);
@@ -566,8 +605,8 @@ namespace ExamReport
             DataTable group = get_filterdata(mdata.group, filter);
             if (basic.Rows.Count == 0)
                 throw new ArgumentException("条件 " + filter + " 没有数据！");
-            basic.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
-            group.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
+            //basic.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
+            //group.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
             //if (basic.Columns.Contains("XZ"))
             //    XZ_group_separate(basic, mdata);
             Partition_statistic total = new Partition_statistic(name, basic, fullmark, mdata.ans, group, mdata.grp, mdata._group_num);
@@ -847,7 +886,7 @@ namespace ExamReport
             DataTable XX = data.filteredtable("xxdm", new string[] { school });
             DataTable XX_group = group.filteredtable("xxdm", new string[] { school });
 
-            if (isZonghe)
+            if (!isZonghe)
             {
                 XX.SeperateGroups(mdata._grouptype, Convert.ToDecimal(groupnum), "groups");
                 XX_group.SeperateGroups(mdata._grouptype, Convert.ToDecimal(groupnum), "groups");

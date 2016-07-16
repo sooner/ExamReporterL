@@ -140,7 +140,7 @@ namespace ExamReport
                         //{  
                         dr[iCol - 1] = cellContent;
                         //}  
-                        CheckCell(iCol, cellContent);
+                        CheckCell(iCol, iRow,cellContent);
                     }
 
                     //if (iRow != 1)  
@@ -232,7 +232,7 @@ namespace ExamReport
             }
         }
 
-        public void CheckCell(int col, string value)
+        public void CheckCell(int col, int row, string value)
         {
             switch (col)
             {
@@ -248,7 +248,7 @@ namespace ExamReport
                     catch (FormatException e)
                     {
                         release();
-                        throw new ArgumentException("标准答案中满分值应该为正数");
+                        throw new ArgumentException("标准答案中第" + row.ToString() + "行满分值有问题！");
                     }
                     break;
                 //case 3:

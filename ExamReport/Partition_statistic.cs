@@ -631,7 +631,7 @@ namespace ExamReport
                 DataTable dt_temp = dv.ToTable();
                 dt_temp.Columns.Add("xz_groups", typeof(string));
                 dt_temp.SeperateGroups(_config._grouptype, _config._group_num, "xz_groups");
-                xz_group_analysis(dv.ToTable(), item.count, xz_total, xz_single, xz_total_disc);
+                xz_group_analysis(dt_temp, item.count, xz_total, xz_single, xz_total_disc);
             }
 
             for (int i = 0; i < xz_total[0].Rows.Count; i++)

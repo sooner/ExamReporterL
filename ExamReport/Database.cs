@@ -7,6 +7,7 @@ using System.Data;
 using System.Data.OleDb;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace ExamReport
 {
@@ -370,25 +371,24 @@ namespace ExamReport
             }
             newStandard = StandardAnsRecontruction(_standard_ans, name_list);
 
-            DataTable basic_data = new DataTable();
-            basic_data.Columns.Add("kh", System.Type.GetType("System.String"));
-            basic_data.Columns.Add("zkzh", System.Type.GetType("System.String"));
-            basic_data.Columns.Add("xxdm", System.Type.GetType("System.String"));
-            basic_data.Columns.Add("totalmark", typeof(decimal));
-            basic_data.Columns.Add("xb", typeof(string));
-            basic_data.Columns.Add("Groups", typeof(string));
-            basic_data.Columns.Add("qxdm", typeof(string));
+            _basic_data.Columns.Add("kh", System.Type.GetType("System.String"));
+            _basic_data.Columns.Add("zkzh", System.Type.GetType("System.String"));
+            _basic_data.Columns.Add("xxdm", System.Type.GetType("System.String"));
+            _basic_data.Columns.Add("totalmark", typeof(decimal));
+            _basic_data.Columns.Add("xb", typeof(string));
+            _basic_data.Columns.Add("Groups", typeof(string));
+            _basic_data.Columns.Add("qxdm", typeof(string));
             //if (has_xz)
-            //    basic_data.Columns.Add("X", typeof(string));
+            //    _basic_data.Columns.Add("X", typeof(string));
             for (i = 0; i < newStandard.Rows.Count; i++)
-                basic_data.Columns.Add("T" + ((string)newStandard.Rows[i]["th"]).Trim(), System.Type.GetType("System.Decimal"));
+                _basic_data.Columns.Add("T" + ((string)newStandard.Rows[i]["th"]).Trim(), System.Type.GetType("System.Decimal"));
 
             for (i = 0; i < _standard_ans.Rows.Count; i++)
                 if (!_standard_ans.Rows[i]["da"].ToString().Trim().Equals(""))
-                    basic_data.Columns.Add("D" + ((string)_standard_ans.Rows[i]["th"]).Trim(), typeof(string));
+                    _basic_data.Columns.Add("D" + ((string)_standard_ans.Rows[i]["th"]).Trim(), typeof(string));
 
             foreach (string xz in _mdata.xz)
-                basic_data.Columns.Add("X" + xz, typeof(string));
+                _basic_data.Columns.Add("X" + xz, typeof(string));
             Hashtable Multi_ans = new Hashtable(); 
             foreach (DataRow dr in newStandard.Rows)
             {
@@ -429,9 +429,10 @@ namespace ExamReport
                     throw new ArgumentException("数据库中不存在题号为" + "T" + dr["th"].ToString().Trim() + "数据");
                 
             }
+            int rowline = 0;
             foreach (DataRow dr in dt.Rows)
             {
-                DataRow newRow = basic_data.NewRow();
+                DataRow newRow = _basic_data.NewRow();
                 newRow["kh"] = dr["kh"].ToString().Trim();
                 newRow["zkzh"] = dr["zkzh"].ToString().Trim();
                 newRow["xxdm"] = dr["xxdm"].ToString().Trim();
@@ -540,13 +541,16 @@ namespace ExamReport
                
                 //if (has_xz)
                 //    newRow["X"] = dr["X"].ToString().Trim();
-                basic_data.Rows.Add(newRow);
+                _basic_data.Rows.Add(newRow);
+
+                if (rowline % 5000 == 0 && GC.GetTotalMemory(true) > 60000000)
+                    ClearMemory();
+                
+                rowline++;
             }
 
-            _basic_data = basic_data.Copy();
-            DataView dv = basic_data.DefaultView;
-            dv.Sort = "totalmark";
-            _basic_data = dv.ToTable();
+           
+            _basic_data.sort("totalmark");
             int totalsize = _basic_data.Rows.Count;
             if (_gtype.Equals(ZK_database.GroupType.population))
             {
@@ -606,6 +610,20 @@ namespace ExamReport
 
             //}
             return "";
+        }
+        [DllImport("kernel32.dll", EntryPoint = "SetProcessWorkingSetSize")]
+        public static extern int SetProcessWorkingSetSize(IntPtr process, int minSize, int maxSize);
+        /// <summary>
+        /// 释放内存
+        /// </summary>
+        public static void ClearMemory()
+        {
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+            {
+                SetProcessWorkingSetSize(System.Diagnostics.Process.GetCurrentProcess().Handle, -1, -1);
+            }
         }
         
         public char[] TransferCharArray(string[] ans_group)
@@ -697,7 +715,7 @@ namespace ExamReport
             return newtable;
         }
         public void popstack(DataTable dt, Stack<string> sk, List<List<string>> name)
-        {
+        { 
             List<string> record = new List<string>();
             string temp_th;
             DataRow dr = dt.NewRow();

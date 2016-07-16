@@ -51,7 +51,7 @@ namespace ExamReport
             string conn = @"Provider=vfpoledb;Data Source=" + path + ";Collating Sequence=machine;";
             using (OleDbConnection dbfConnection = new OleDbConnection(conn))
             {
-                OleDbDataAdapter adpt = new OleDbDataAdapter("select * from " + file + " where totalmark<>0", dbfConnection);
+                OleDbDataAdapter adpt = new OleDbDataAdapter("select * from " + file, dbfConnection);
                 DataSet mySet = new DataSet();
 
                 adpt.Fill(mySet);

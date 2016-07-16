@@ -48,6 +48,7 @@ namespace ExamReport
             gk_gridview.EditorRequired += radGridView1_EditorRequired;
 
             gk_isVisible.Checked = true;
+            zk_isVisible.Checked = true;
             hk_group_button.IsChecked = true;
             qx_combo.SelectedIndex = 0;
             xx_combo.SelectedIndex = 0;
@@ -69,9 +70,19 @@ namespace ExamReport
 
             int curryear = DateTime.Now.Year;
             for (int i = curryear - 10; i < curryear + 10; i++)
+            {
                 year_list.Items.Add(i);
+                zk_yearlist.Items.Add(i);
+            }
+
+            //for (int j = 1; j <= 12; j++)
+            //    zk_currmonth.Items.Add(j.ToString() + "月");
             year_list.SelectedItem = curryear;
+            zk_yearlist.SelectedItem = curryear;
             currmonth.SelectedItem = DateTime.Now.Month.ToString() + "月";
+            zk_currmonth.SelectedItem = DateTime.Now.Month.ToString() + "月";
+
+            
 
             Cust_data.Columns.Add("name", typeof(string));
             Cust_data.Columns.Add("condition", typeof(string));
@@ -677,6 +688,8 @@ namespace ExamReport
             analysis.qx_addr = qx_addr.Text.Trim();
             analysis.cj_addr = cj_addr.Text.Trim();
             analysis.qx_code = QX_code;
+            analysis.curryear = zk_yearlist.SelectedItem.ToString().Trim();
+            analysis.currmonth = zk_currmonth.SelectedItem.ToString().Trim();
 
             Thread thread = new Thread(new ThreadStart(analysis.zk_qx_start));
             thread.IsBackground = true;
@@ -789,6 +802,8 @@ namespace ExamReport
             analysis.CurrentDirectory = currentdic;
             analysis.save_address = save_address.Text;
             analysis.isVisible = zk_isVisible.Checked;
+            analysis.curryear = zk_yearlist.SelectedItem.ToString().Trim();
+            analysis.currmonth = zk_currmonth.SelectedItem.ToString().Trim();
             Thread thread = new Thread(new ThreadStart(analysis.zk_zt_start));
             thread.IsBackground = true;
             thread.SetApartmentState(ApartmentState.STA);
