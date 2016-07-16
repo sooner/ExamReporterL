@@ -232,7 +232,6 @@
             this.radLabel13 = new Telerik.WinControls.UI.RadLabel();
             this.GKTreeView = new Telerik.WinControls.UI.RadTreeView();
             this.gk_gridview = new Telerik.WinControls.UI.RadGridView();
-<<<<<<< HEAD
             this.gk_xz_panel = new Telerik.WinControls.UI.RadPanel();
             this.first_level = new System.Windows.Forms.NumericUpDown();
             this.radLabel23 = new Telerik.WinControls.UI.RadLabel();
@@ -247,12 +246,10 @@
             this.gk_xz_cancel = new Telerik.WinControls.UI.RadButton();
             this.gk_xz_start = new Telerik.WinControls.UI.RadButton();
             this.gk_xz_progresslabel = new Telerik.WinControls.UI.RadLabel();
-=======
             this.zk_currmonth = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.zk_yearlist = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
->>>>>>> bugfix
             ((System.ComponentModel.ISupportInitialize)(this.wholepage)).BeginInit();
             this.wholepage.SuspendLayout();
             this.ZKPageView.SuspendLayout();
@@ -1376,22 +1373,16 @@
             // 
             // GKPageView
             // 
-<<<<<<< HEAD
             this.GKPageView.Controls.Add(this.gk_cj_panel);
             this.GKPageView.Controls.Add(this.gk_xz_panel);
-=======
             this.GKPageView.Controls.Add(this.gk_data_pre_panel);
             this.GKPageView.Controls.Add(this.gk_docGroupBox);
->>>>>>> bugfix
             this.GKPageView.Controls.Add(this.gk_zt_panel);
             this.GKPageView.Controls.Add(this.gk_data_pre_panel);
             this.GKPageView.Controls.Add(this.gk_xx_panel);
             this.GKPageView.Controls.Add(this.gk_sf_panel);
-<<<<<<< HEAD
             this.GKPageView.Controls.Add(this.gk_docGroupBox);
-=======
             this.GKPageView.Controls.Add(this.gk_cj_panel);
->>>>>>> bugfix
             this.GKPageView.Controls.Add(this.gk_qx_panel);
             this.GKPageView.Controls.Add(this.custom_panel);
             this.GKPageView.Controls.Add(this.GKTreeView);
@@ -2327,7 +2318,6 @@
             this.gk_gridview.TabIndex = 0;
             this.gk_gridview.Text = "radGridView2";
             // 
-<<<<<<< HEAD
             // gk_xz_panel
             // 
             this.gk_xz_panel.Controls.Add(this.gk_xz_progresslabel);
@@ -2455,7 +2445,6 @@
             this.gk_xz_progresslabel.Name = "gk_xz_progresslabel";
             this.gk_xz_progresslabel.Size = new System.Drawing.Size(2, 2);
             this.gk_xz_progresslabel.TabIndex = 91;
-=======
             // zk_currmonth
             // 
             this.zk_currmonth.FormattingEnabled = true;
@@ -2502,7 +2491,6 @@
             this.label2.Size = new System.Drawing.Size(43, 13);
             this.label2.TabIndex = 81;
             this.label2.Text = "年份：";
->>>>>>> bugfix
             // 
             // mainform
             // 
