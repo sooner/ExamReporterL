@@ -818,22 +818,25 @@ namespace ExamReport
             foreach (string th in org_char)
             {
 
-                if (System.Text.RegularExpressions.Regex.IsMatch(th, spattern))
-                //if(th.Contains('~'))
+                if (!th.Equals(""))
                 {
-                    string[] num = th.Split('~');
-                    int j;
-                    int size = Convert.ToInt32(num[0]) < Convert.ToInt32(num[1]) ? Convert.ToInt32(num[1]) : Convert.ToInt32(num[0]);
-                    int start = Convert.ToInt32(num[0]) > Convert.ToInt32(num[1]) ? Convert.ToInt32(num[1]) : Convert.ToInt32(num[0]);
-                    //此处需判断size和start的边界问题
-                    for (j = start; j < size + 1; j++)
+                    if (System.Text.RegularExpressions.Regex.IsMatch(th, spattern))
+                    //if(th.Contains('~'))
                     {
-                        tz.Add(j.ToString().Trim());
-                    }
+                        string[] num = th.Split('~');
+                        int j;
+                        int size = Convert.ToInt32(num[0]) < Convert.ToInt32(num[1]) ? Convert.ToInt32(num[1]) : Convert.ToInt32(num[0]);
+                        int start = Convert.ToInt32(num[0]) > Convert.ToInt32(num[1]) ? Convert.ToInt32(num[1]) : Convert.ToInt32(num[0]);
+                        //此处需判断size和start的边界问题
+                        for (j = start; j < size + 1; j++)
+                        {
+                            tz.Add(j.ToString().Trim());
+                        }
 
+                    }
+                    else
+                        tz.Add(th);
                 }
-                else
-                    tz.Add(th);
             }
         }
     }

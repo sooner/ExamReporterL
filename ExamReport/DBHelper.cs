@@ -115,7 +115,7 @@ namespace ExamReport
                 MySqlHelper.ExecuteNonQuery(trans, CommandType.Text, "drop table " + Utils.get_ans_tablename(year, _exam, _sub), null);
                 MySqlHelper.ExecuteNonQuery(trans, CommandType.Text, "drop table " + Utils.get_fz_tablename(year, _exam, _sub), null);
 
-                if (Utils.language_trans(_sub).Contains("理综") || Utils.language_trans(_sub).Contains("文综"))
+                if (_exam.Equals("gk") && (Utils.language_trans(_sub).Contains("理综") || Utils.language_trans(_sub).Contains("文综")))
                 {
                     MySqlHelper.ExecuteNonQuery(trans, CommandType.Text, "drop table " + "zh_" + Utils.get_basic_tablename(year, _exam, _sub), null);
                     MySqlHelper.ExecuteNonQuery(trans, CommandType.Text, "drop table " + "zh_" + Utils.get_group_tablename(year, _exam, _sub), null);
@@ -144,7 +144,7 @@ namespace ExamReport
             {
                 objectdata.Append("\t" + dc.ColumnName + " ");
                 if (dc.DataType.ToString().Equals("System.String"))
-                    objectdata.Append("varchar(" + charsize + ")");
+                    objectdata.Append("text");
                 else if (dc.DataType.ToString().Equals("System.Decimal"))
                     objectdata.Append("decimal(4,1)");
                 else
