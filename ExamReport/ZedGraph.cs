@@ -635,26 +635,41 @@ namespace ExamReport
 
             //添加一条线
             double Xmax = myPane.XAxis.Scale.Max;
-            LineObj line1 = new LineObj(0, Convert.ToDouble(diff[0]), Xmax, Convert.ToDouble(diff[0]));
-            line1.Line.Style = System.Drawing.Drawing2D.DashStyle.Custom;
-            line1.Line.DashOn = 10f;
-            line1.Line.DashOff = 8f;
+            LineObj line1 = new LineObj(0, Convert.ToDouble(diff[0]), 18, Convert.ToDouble(diff[0]));
+            line1.Line.Style = System.Drawing.Drawing2D.DashStyle.Solid;
+            line1.Line.Color = Color.Red;
+            line1.Line.Width = 2;
             line1.IsClippedToChartRect = true;
-            line1.Line.Color = Color.LightSteelBlue;
-            line1.ZOrder = ZOrder.F_BehindGrid;
+            line1.ZOrder = ZOrder.A_InFront;
             line1.Location.AlignH = AlignH.Left;
             line1.Location.AlignV = AlignV.Top;
             line1.Location.CoordinateFrame = CoordType.AxisXYScale;
-
+            line1.Tag = "总体";
             myPane.GraphObjList.Add(line1);
 
-            LineObj line2 = new LineObj(0, Convert.ToDouble(diff[1]), Xmax, Convert.ToDouble(diff[1]));
+            LineObj line2 = new LineObj(0, Convert.ToDouble(diff[1]), 18, Convert.ToDouble(diff[1]));
+            line2.Line.Style = System.Drawing.Drawing2D.DashStyle.Solid;
+            line2.Line.Color = Color.Blue;
+            line2.Line.Width = 2;
+            line2.IsClippedToChartRect = true;
+            line2.ZOrder = ZOrder.A_InFront;
+            line2.Location.AlignH = AlignH.Left;
+            line2.Location.AlignV = AlignV.Top;
+            line2.Location.CoordinateFrame = CoordType.AxisXYScale;
             myPane.GraphObjList.Add(line2);
 
             LineObj line3 = new LineObj(0, Convert.ToDouble(diff[2]), Xmax, Convert.ToDouble(diff[2]));
+            line3.Line.Style = System.Drawing.Drawing2D.DashStyle.Solid;
+            line3.Line.Color = Color.Green;
+            line3.Line.Width = 2;
+            line3.IsClippedToChartRect = true;
+            line3.ZOrder = ZOrder.A_InFront;
+            line3.Location.AlignH = AlignH.Left;
+            line3.Location.AlignV = AlignV.Top;
+            line3.Location.CoordinateFrame = CoordType.AxisXYScale;
             myPane.GraphObjList.Add(line3);
 
-            myPane.Legend.IsVisible = false;
+            myPane.Legend.IsVisible = true;
             myPane.Title.IsVisible = true;
 
             string[] xlabels = new string[17];

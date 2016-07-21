@@ -92,8 +92,8 @@ namespace ExamReport
                     string log = year + "年" + Utils.language_trans(exam) + row.Cells["sub"].Value.ToString().Trim();
                     _form.ShowPro(exam_type, 1, log + "数据读取...");
                     MetaData mdata = new MetaData(year, exam, sub);
-                    try
-                    {
+                    //try
+                    //{
                         mdata.get_meta_data();
                         _fullmark = mdata._fullmark;
 
@@ -266,14 +266,14 @@ namespace ExamReport
                             }
 
                         }
-                    }
-                    catch (System.Threading.ThreadAbortException e)
-                    {
-                    }
-                    catch (Exception e)
-                    {
-                        _form.ErrorM(exam_type, e.Message);
-                    }
+                    //}
+                    //catch (System.Threading.ThreadAbortException e)
+                    //{
+                    //}
+                    //catch (Exception e)
+                    //{
+                    //    _form.ErrorM(exam_type, e.Message);
+                    //}
 
                 }
             }
