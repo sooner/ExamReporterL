@@ -92,8 +92,8 @@ namespace ExamReport
                     string log = year + "年" + Utils.language_trans(exam) + row.Cells["sub"].Value.ToString().Trim();
                     _form.ShowPro(exam_type, 1, log + "数据读取...");
                     MetaData mdata = new MetaData(year, exam, sub);
-                    //try
-                    //{
+                    try
+                    {
                         mdata.get_meta_data();
                         _fullmark = mdata._fullmark;
 
@@ -266,14 +266,14 @@ namespace ExamReport
                             }
 
                         }
-                    //}
-                    //catch (System.Threading.ThreadAbortException e)
-                    //{
-                    //}
-                    //catch (Exception e)
-                    //{
-                    //    _form.ErrorM(exam_type, e.Message);
-                    //}
+                    }
+                    catch (System.Threading.ThreadAbortException e)
+                    {
+                    }
+                    catch (Exception e)
+                    {
+                        _form.ErrorM(exam_type, e.Message);
+                    }
 
                 }
             }
@@ -840,8 +840,8 @@ namespace ExamReport
                 PartitionXX(config, mdata, t_single, mdata.basic, mdata.group, mdata._group_num, school_code, mdata.ans, mdata.grp, mdata._sub_fullmark);
                 t_total.AddRange(total);
                 t_single.AddRange(single);
-                WordData temp_total = TotalSchoolCal(config, mdata, mdata.zh_basic, mdata.zh_group, mdata._group_num, school_code, mdata.zh_ans, mdata.zh_grp, true, mdata._fullmark);
-                WordData temp_single = TotalSchoolCal(config, mdata, mdata.basic, mdata.group, mdata._group_num, school_code, mdata.ans, mdata.grp, false, mdata._sub_fullmark);
+                WordData temp_total = TotalSchoolCal(config, mdata, mdata.zh_basic, mdata.zh_group, mdata._group_num, school_code, mdata.zh_ans, mdata.zh_grp, false, mdata._fullmark);
+                WordData temp_single = TotalSchoolCal(config, mdata, mdata.basic, mdata.group, mdata._group_num, school_code, mdata.ans, mdata.grp, true, mdata._sub_fullmark);
                 _form.ShowPro("gk_xx", 1, mdata.log_name + "报告生成中...");
                 SchoolWordCreator swc = new SchoolWordCreator(temp_single, t_single, mdata.grp, school_name, mdata.groups_group);
                 swc.SetUpZHparam(temp_total, t_total, mdata.zh_grp, mdata.zh_groups_group);

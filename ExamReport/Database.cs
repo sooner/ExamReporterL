@@ -550,7 +550,8 @@ namespace ExamReport
             }
 
            
-            _basic_data.sort("totalmark");
+            _basic_data.DefaultView.Sort = "totalmark asc";
+            _basic_data = _basic_data.DefaultView.ToTable();
             int totalsize = _basic_data.Rows.Count;
             if (_gtype.Equals(ZK_database.GroupType.population))
             {

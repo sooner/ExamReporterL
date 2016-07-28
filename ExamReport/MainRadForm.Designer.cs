@@ -440,7 +440,7 @@
             this.wholepage.Controls.Add(this.GKPageView);
             this.wholepage.Location = new System.Drawing.Point(2, -1);
             this.wholepage.Name = "wholepage";
-            this.wholepage.SelectedPage = this.ZKPageView;
+            this.wholepage.SelectedPage = this.GKPageView;
             this.wholepage.Size = new System.Drawing.Size(876, 628);
             this.wholepage.TabIndex = 0;
             this.wholepage.Text = "radPageView1";
@@ -1420,9 +1420,9 @@
             // 
             // GKPageView
             // 
+            this.GKPageView.Controls.Add(this.gk_data_pre_panel);
             this.GKPageView.Controls.Add(this.gk_xz_panel);
             this.GKPageView.Controls.Add(this.gk_zt_panel);
-            this.GKPageView.Controls.Add(this.gk_data_pre_panel);
             this.GKPageView.Controls.Add(this.gk_xx_panel);
             this.GKPageView.Controls.Add(this.gk_sf_panel);
             this.GKPageView.Controls.Add(this.gk_docGroupBox);
