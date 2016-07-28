@@ -840,8 +840,8 @@ namespace ExamReport
                 PartitionXX(config, mdata, t_single, mdata.basic, mdata.group, mdata._group_num, school_code, mdata.ans, mdata.grp, mdata._sub_fullmark);
                 t_total.AddRange(total);
                 t_single.AddRange(single);
-                WordData temp_total = TotalSchoolCal(config, mdata, mdata.zh_basic, mdata.zh_group, mdata._group_num, school_code, mdata.zh_ans, mdata.zh_grp, false, mdata._fullmark);
-                WordData temp_single = TotalSchoolCal(config, mdata, mdata.basic, mdata.group, mdata._group_num, school_code, mdata.ans, mdata.grp, true, mdata._sub_fullmark);
+                WordData temp_total = TotalSchoolCal(config, mdata, mdata.zh_basic, mdata.zh_group, mdata._group_num, school_code, mdata.zh_ans, mdata.zh_grp, true, mdata._fullmark, "totalmark");
+                WordData temp_single = TotalSchoolCal(config, mdata, mdata.basic, mdata.group, mdata._group_num, school_code, mdata.ans, mdata.grp, false, mdata._sub_fullmark, "ZH_totalmark");
                 _form.ShowPro("gk_xx", 1, mdata.log_name + "报告生成中...");
                 SchoolWordCreator swc = new SchoolWordCreator(temp_single, t_single, mdata.grp, school_name, mdata.groups_group);
                 swc.SetUpZHparam(temp_total, t_total, mdata.zh_grp, mdata.zh_groups_group);
@@ -875,30 +875,23 @@ namespace ExamReport
             List<WSLG_partitiondata> temp_list = new List<WSLG_partitiondata>();
             PartitionXX(config, mdata, temp_list, mdata.basic, mdata.group, mdata._group_num, school_code, mdata.ans, mdata.grp, mdata._fullmark);
             temp_list.AddRange(total);
-            WordData temp = TotalSchoolCal(config, mdata, mdata.basic, mdata.group, mdata._group_num, school_code, mdata.ans, mdata.grp, false, mdata._fullmark);
+            WordData temp = TotalSchoolCal(config, mdata, mdata.basic, mdata.group, mdata._group_num, school_code, mdata.ans, mdata.grp, false, mdata._fullmark, "totalmark");
             _form.ShowPro("gk_xx", 1, mdata.log_name + "报告生成中...");
             SchoolWordCreator swc = new SchoolWordCreator(temp, temp_list, mdata.grp, school_name, mdata.groups_group);
             swc._config = config;
             swc.creating_word();
         }
-        WordData TotalSchoolCal(Configuration config, MetaData mdata, DataTable data, DataTable group, int groupnum, string school, DataTable my_ans, DataTable my_group, bool isZonghe, decimal my_mark)
+        WordData TotalSchoolCal(Configuration config, MetaData mdata, DataTable data, DataTable group, int groupnum, string school, DataTable my_ans, DataTable my_group, bool isZonghe, decimal my_mark, string totalmark)
         {
             DataTable XX = data.filteredtable("xxdm", new string[] { school });
             DataTable XX_group = group.filteredtable("xxdm", new string[] { school });
 
-            if (!isZonghe)
-            {
-                XX.SeperateGroups(mdata._grouptype, Convert.ToDecimal(groupnum), "groups");
-                XX_group.SeperateGroups(mdata._grouptype, Convert.ToDecimal(groupnum), "groups");
-            }
-            else
-            {
-                XX = SortTable(XX, "ZH_totalmark");
-                XX_group = SortTable(XX_group, "ZH_totalmark");
+                XX = SortTable(XX, totalmark);
+                XX_group = SortTable(XX_group, totalmark);
 
-                XX.SeperateGroupsByColumnName(mdata._grouptype, Convert.ToDecimal(groupnum), "ZH_totalmark");
-                XX_group.SeperateGroupsByColumnName(mdata._grouptype, Convert.ToDecimal(groupnum), "ZH_totalmark");
-            }
+                XX.SeperateGroupsByColumnName(mdata._grouptype, Convert.ToDecimal(groupnum), totalmark);
+                XX_group.SeperateGroupsByColumnName(mdata._grouptype, Convert.ToDecimal(groupnum), totalmark);
+           
             WordData result = new WordData(mdata.groups_group);
             Total_statistic stat = new Total_statistic(result, XX, my_mark, my_ans, XX_group, my_group, groupnum);
             stat._config = config;
