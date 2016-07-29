@@ -81,6 +81,11 @@ namespace ExamReport
                 WriteIntoDocument(oDoc, "QX", "全市");
                 WriteIntoDocument(oDoc, "QX_subject", config.subject);
             }
+            else if (config.report_style.Equals("学校"))
+            {
+                WriteIntoDocument(oDoc, "QX", config.school);
+                WriteIntoDocument(oDoc, "QX_subject", config.subject);
+            }
         }
 
         public static void WriteFrontPage(Configuration config, Microsoft.Office.Interop.Word._Document oDoc, string school)

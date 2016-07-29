@@ -854,6 +854,7 @@ namespace ExamReport
         {
             Configuration config = initConfig(mdata._sub, "学校", "高考");
             config.WSLG = true;
+            config.school = school_name;
             ArrayList WSLG = new ArrayList();
             _form.ShowPro("gk_xx", 1, mdata.log_name + "文理数据分析中...");
             DataTable XX_data = mdata.basic.filteredtable("xxdm", new string[] { school_code });
