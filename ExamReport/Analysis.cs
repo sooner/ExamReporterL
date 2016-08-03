@@ -1569,7 +1569,7 @@ namespace ExamReport
                 DataTable CQ_data = mdata.basic.filteredtable("qxdm", CQ_code);
                 DataTable CQ_groups_data = mdata.group.filteredtable("qxdm", CQ_code);
 
-                Partition_statistic CQ = new Partition_statistic(mdata.CJ_list[mark][0].ToString().Trim(), CQ_data, mdata._fullmark, mdata.ans, CQ_groups_data, mdata.group, mdata._group_num);
+                Partition_statistic CQ = new Partition_statistic(mdata.CJ_list[mark][0].ToString().Trim(), CQ_data, mdata._fullmark, mdata.ans, CQ_groups_data, mdata.grp, mdata._group_num);
                 CQ._config = config;
                 CQ.statistic_process(false);
                 if (mdata.xz.Count > 0)
@@ -1580,7 +1580,7 @@ namespace ExamReport
             DataTable QX_total_data = mdata.basic.filteredtable("qxdm", QXTransfer(qx_code));
             DataTable QX_groups_data = mdata.group.filteredtable("qxdm", QXTransfer(qx_code));
 
-            Partition_statistic QX_total = new Partition_statistic("区整体", QX_total_data, mdata._fullmark, mdata.ans, QX_groups_data, mdata.group, mdata._group_num);
+            Partition_statistic QX_total = new Partition_statistic("区整体", QX_total_data, mdata._fullmark, mdata.ans, QX_groups_data, mdata.grp, mdata._group_num);
             QX_total._config = config;
             QX_total.statistic_process(false);
             if (mdata.xz.Count > 0)
@@ -1589,7 +1589,7 @@ namespace ExamReport
 
             CalculateClassTotal(config, QX_total_data, QX_groups_data, totaldata, sdata, mdata);
             _form.ShowPro(exam_type, 1, mdata.log_name + "报告生成中...");
-            Partition_wordcreator create = new Partition_wordcreator(totaldata, sdata, mdata.group, mdata.groups_group);
+            Partition_wordcreator create = new Partition_wordcreator(totaldata, sdata, mdata.grp, mdata.groups_group);
             create.SetConfig(config);
             create.creating_word();
         }
@@ -1631,7 +1631,7 @@ namespace ExamReport
             ClassGroupTotal_data.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
             //if (ClassTotal_data.Columns.Contains("XZ"))
             //    XZ_group_separate(ClassTotal_data, mdata);
-            Partition_statistic ClassTotal = new Partition_statistic("分类整体", ClassTotal_data, mdata._fullmark, mdata.ans, ClassGroupTotal_data, mdata.group, mdata._group_num);
+            Partition_statistic ClassTotal = new Partition_statistic("分类整体", ClassTotal_data, mdata._fullmark, mdata.ans, ClassGroupTotal_data, mdata.grp, mdata._group_num);
             ClassTotal._config = config;
             ClassTotal.statistic_process(false);
             if (mdata.xz.Count > 0)
@@ -1647,7 +1647,7 @@ namespace ExamReport
                 DataTable xx_data = ClassTotal_data.filteredtable("xxdm", xx_code);
                 DataTable xx_group_data = ClassGroupTotal_data.filteredtable("xxdm", xx_code);
 
-                Partition_statistic XXTotal = new Partition_statistic(temp[0].ToString().Trim(), xx_data, mdata._fullmark, mdata.ans, xx_group_data, mdata.group, mdata._group_num);
+                Partition_statistic XXTotal = new Partition_statistic(temp[0].ToString().Trim(), xx_data, mdata._fullmark, mdata.ans, xx_group_data, mdata.grp, mdata._group_num);
                 XXTotal._config = config;
                 XXTotal.statistic_process(false);
                 if (mdata.xz.Count > 0)

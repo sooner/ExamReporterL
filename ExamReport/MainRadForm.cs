@@ -690,6 +690,9 @@ namespace ExamReport
             analysis.qx_code = QX_code;
             analysis.curryear = zk_yearlist.SelectedItem.ToString().Trim();
             analysis.currmonth = zk_currmonth.SelectedItem.ToString().Trim();
+            analysis.CurrentDirectory = currentdic;
+            analysis.save_address = save_address.Text;
+            analysis.isVisible = zk_isVisible.Checked;
 
             Thread thread = new Thread(new ThreadStart(analysis.zk_qx_start));
             thread.IsBackground = true;

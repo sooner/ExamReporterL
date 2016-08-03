@@ -154,6 +154,9 @@
             this.HKTreeView = new Telerik.WinControls.UI.RadTreeView();
             this.HKGridView = new Telerik.WinControls.UI.RadGridView();
             this.GKPageView = new Telerik.WinControls.UI.RadPageViewPage();
+            this.gk_data_pre_panel = new Telerik.WinControls.UI.RadPanel();
+            this.gk_data_delete = new System.Windows.Forms.Button();
+            this.gk_data_import = new System.Windows.Forms.Button();
             this.gk_xz_panel = new Telerik.WinControls.UI.RadPanel();
             this.gk_xz_progresslabel = new Telerik.WinControls.UI.RadLabel();
             this.radButton14 = new Telerik.WinControls.UI.RadButton();
@@ -173,9 +176,6 @@
             this.gk_zt_waitingbar = new Telerik.WinControls.UI.RadWaitingBar();
             this.gk_zt_cancel = new Telerik.WinControls.UI.RadButton();
             this.gk_zt_start = new Telerik.WinControls.UI.RadButton();
-            this.gk_data_pre_panel = new Telerik.WinControls.UI.RadPanel();
-            this.gk_data_delete = new System.Windows.Forms.Button();
-            this.gk_data_import = new System.Windows.Forms.Button();
             this.gk_xx_panel = new Telerik.WinControls.UI.RadPanel();
             this.gk_xx_progresslabel = new Telerik.WinControls.UI.RadLabel();
             this.radButton8 = new Telerik.WinControls.UI.RadButton();
@@ -329,6 +329,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.HKGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.HKGridView.MasterTemplate)).BeginInit();
             this.GKPageView.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.gk_data_pre_panel)).BeginInit();
+            this.gk_data_pre_panel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gk_xz_panel)).BeginInit();
             this.gk_xz_panel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gk_xz_progresslabel)).BeginInit();
@@ -350,8 +352,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.gk_zt_waitingbar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gk_zt_cancel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gk_zt_start)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gk_data_pre_panel)).BeginInit();
-            this.gk_data_pre_panel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gk_xx_panel)).BeginInit();
             this.gk_xx_panel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gk_xx_progresslabel)).BeginInit();
@@ -440,7 +440,7 @@
             this.wholepage.Controls.Add(this.GKPageView);
             this.wholepage.Location = new System.Drawing.Point(2, -1);
             this.wholepage.Name = "wholepage";
-            this.wholepage.SelectedPage = this.GKPageView;
+            this.wholepage.SelectedPage = this.ZKPageView;
             this.wholepage.Size = new System.Drawing.Size(876, 628);
             this.wholepage.TabIndex = 0;
             this.wholepage.Text = "radPageView1";
@@ -448,8 +448,8 @@
             // ZKPageView
             // 
             this.ZKPageView.Controls.Add(this.DataPrePanel);
-            this.ZKPageView.Controls.Add(this.DocGroupBox);
             this.ZKPageView.Controls.Add(this.zk_zt_panel);
+            this.ZKPageView.Controls.Add(this.DocGroupBox);
             this.ZKPageView.Controls.Add(this.zk_qx_panel);
             this.ZKPageView.Controls.Add(this.zk_gridview);
             this.ZKPageView.Controls.Add(this.ZKTreeView);
@@ -1436,6 +1436,37 @@
             this.GKPageView.Size = new System.Drawing.Size(855, 580);
             this.GKPageView.Text = "高考";
             // 
+            // gk_data_pre_panel
+            // 
+            this.gk_data_pre_panel.Controls.Add(this.gk_data_delete);
+            this.gk_data_pre_panel.Controls.Add(this.gk_data_import);
+            this.gk_data_pre_panel.Location = new System.Drawing.Point(140, 234);
+            this.gk_data_pre_panel.Name = "gk_data_pre_panel";
+            this.gk_data_pre_panel.Size = new System.Drawing.Size(712, 337);
+            this.gk_data_pre_panel.TabIndex = 7;
+            this.gk_data_pre_panel.Text = "数据导入";
+            this.gk_data_pre_panel.TextAlignment = System.Drawing.ContentAlignment.TopLeft;
+            // 
+            // gk_data_delete
+            // 
+            this.gk_data_delete.BackgroundImage = global::ExamReport.Properties.Resources.delete_item;
+            this.gk_data_delete.Location = new System.Drawing.Point(59, 35);
+            this.gk_data_delete.Name = "gk_data_delete";
+            this.gk_data_delete.Size = new System.Drawing.Size(32, 33);
+            this.gk_data_delete.TabIndex = 9;
+            this.gk_data_delete.UseVisualStyleBackColor = true;
+            this.gk_data_delete.Click += new System.EventHandler(this.gk_data_delete_Click);
+            // 
+            // gk_data_import
+            // 
+            this.gk_data_import.BackgroundImage = global::ExamReport.Properties.Resources.add_item;
+            this.gk_data_import.Location = new System.Drawing.Point(22, 35);
+            this.gk_data_import.Name = "gk_data_import";
+            this.gk_data_import.Size = new System.Drawing.Size(33, 33);
+            this.gk_data_import.TabIndex = 8;
+            this.gk_data_import.UseVisualStyleBackColor = true;
+            this.gk_data_import.Click += new System.EventHandler(this.gk_data_import_Click);
+            // 
             // gk_xz_panel
             // 
             this.gk_xz_panel.Controls.Add(this.gk_xz_progresslabel);
@@ -1625,37 +1656,6 @@
             this.gk_zt_start.TabIndex = 76;
             this.gk_zt_start.Text = "文档生成";
             this.gk_zt_start.Click += new System.EventHandler(this.gk_zt_start_Click);
-            // 
-            // gk_data_pre_panel
-            // 
-            this.gk_data_pre_panel.Controls.Add(this.gk_data_delete);
-            this.gk_data_pre_panel.Controls.Add(this.gk_data_import);
-            this.gk_data_pre_panel.Location = new System.Drawing.Point(140, 234);
-            this.gk_data_pre_panel.Name = "gk_data_pre_panel";
-            this.gk_data_pre_panel.Size = new System.Drawing.Size(712, 337);
-            this.gk_data_pre_panel.TabIndex = 7;
-            this.gk_data_pre_panel.Text = "数据导入";
-            this.gk_data_pre_panel.TextAlignment = System.Drawing.ContentAlignment.TopLeft;
-            // 
-            // gk_data_delete
-            // 
-            this.gk_data_delete.BackgroundImage = global::ExamReport.Properties.Resources.delete_item;
-            this.gk_data_delete.Location = new System.Drawing.Point(59, 35);
-            this.gk_data_delete.Name = "gk_data_delete";
-            this.gk_data_delete.Size = new System.Drawing.Size(32, 33);
-            this.gk_data_delete.TabIndex = 9;
-            this.gk_data_delete.UseVisualStyleBackColor = true;
-            this.gk_data_delete.Click += new System.EventHandler(this.gk_data_delete_Click);
-            // 
-            // gk_data_import
-            // 
-            this.gk_data_import.BackgroundImage = global::ExamReport.Properties.Resources.add_item;
-            this.gk_data_import.Location = new System.Drawing.Point(22, 35);
-            this.gk_data_import.Name = "gk_data_import";
-            this.gk_data_import.Size = new System.Drawing.Size(33, 33);
-            this.gk_data_import.TabIndex = 8;
-            this.gk_data_import.UseVisualStyleBackColor = true;
-            this.gk_data_import.Click += new System.EventHandler(this.gk_data_import_Click);
             // 
             // gk_xx_panel
             // 
@@ -2607,6 +2607,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.HKGridView.MasterTemplate)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.HKGridView)).EndInit();
             this.GKPageView.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.gk_data_pre_panel)).EndInit();
+            this.gk_data_pre_panel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.gk_xz_panel)).EndInit();
             this.gk_xz_panel.ResumeLayout(false);
             this.gk_xz_panel.PerformLayout();
@@ -2630,8 +2632,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.gk_zt_waitingbar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gk_zt_cancel)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gk_zt_start)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gk_data_pre_panel)).EndInit();
-            this.gk_data_pre_panel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.gk_xx_panel)).EndInit();
             this.gk_xx_panel.ResumeLayout(false);
             this.gk_xx_panel.PerformLayout();
