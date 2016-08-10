@@ -144,12 +144,12 @@ namespace ExamReport
         {
             total_statistic(data, result.total);
 
-            for (int i = 0; i < _fullmark; i = i + 10)
+            for (int i = 0; i < _fullmark; i = i + 25)
             {
                 DataRow dr = result.total_dist.NewRow();
                 int min = i;
-                int max = i + 10;
-                dr["mark"] = i + 5;
+                int max = i + 25;
+                dr["mark"] = i + 13;
                 if (max != _fullmark)
                 {
 

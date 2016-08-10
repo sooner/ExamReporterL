@@ -1,0 +1,12 @@
+System.Exception: 数据库文件被占用，请关闭！
+   在 ExamReport.mainform.TreeLoadData() 位置 D:\work\huyan\ExamReporterL\ExamReport\MainRadForm.cs:行号 353
+   在 ExamReport.mainform..ctor() 位置 D:\work\huyan\ExamReporterL\ExamReport\MainRadForm.cs:行号 43
+   在 ExamReport.Program.Main() 位置 D:\work\huyan\ExamReporterL\ExamReport\Program.cs:行号 21
+   在 System.AppDomain._nExecuteAssembly(RuntimeAssembly assembly, String[] args)
+   在 System.AppDomain.ExecuteAssembly(String assemblyFile, Evidence assemblySecurity, String[] args)
+   在 Microsoft.VisualStudio.HostingProcess.HostProc.RunUsersAssembly()
+   在 System.Threading.ThreadHelper.ThreadStart_Context(Object state)
+   在 System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   在 System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   在 System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+   在 System.Threading.ThreadHelper.ThreadStart()

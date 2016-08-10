@@ -11,7 +11,8 @@
     <RootNamespace>ExamReport</RootNamespace>
     <AssemblyName>ExamReport</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
@@ -54,6 +55,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\Debug\CheckBoxComboBox.dll</HintPath>
     </Reference>
+    <Reference Include="dotnetCHARTING">
+      <HintPath>..\..\dotnetCHARTING.dll</HintPath>
+    </Reference>
+    <Reference Include="dotnetCharting.WinForms">
+      <HintPath>..\..\dotnetCharting.WinForms.dll</HintPath>
+    </Reference>
     <Reference Include="Ionic.Zip">
       <HintPath>G:\project\EduTranscripts\EduTranscripts\WindowsFormsApplication1\WindowsFormsApplication1\bin\Debug\Ionic.Zip.dll</HintPath>
     </Reference>
@@ -68,10 +75,10 @@
     </Reference>
     <Reference Include="Microsoft.Office.Tools.Word.v9.0, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common">
-      <HintPath>D:\项目\王卅-zedGraph画图\所需dll\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
+      <HintPath>bin\Debug\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.ObjectBuilder">
-      <HintPath>D:\项目\王卅-zedGraph画图\所需dll\Microsoft.Practices.ObjectBuilder.dll</HintPath>
+      <HintPath>bin\Debug\Microsoft.Practices.ObjectBuilder.dll</HintPath>
     </Reference>
     <Reference Include="MySql.Data">
       <HintPath>C:\Users\123\Desktop\ExamReporter－20160701\MySql.Data.dll</HintPath>
@@ -114,6 +121,7 @@
     <Compile Include="Database.cs" />
     <Compile Include="DataTableExtension.cs" />
     <Compile Include="DBHelper.cs" />
+    <Compile Include="DotNetCharting.cs" />
     <Compile Include="GK_database.cs" />
     <Compile Include="HKScriptCalculate.cs" />
     <Compile Include="HKScriptWordCreator.cs" />

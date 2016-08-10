@@ -51,9 +51,9 @@ namespace ExamReport
             insertText(ExamTitle0, "北京市整体");
             insertText(ExamTitle1, "总体");
             insertTotalTable_final("    试卷总分分析表", "文科", w_data.total, "理科", l_data.total);
-            insertChart("    文科总分分数分布图", w_data.total_dist, "总分", "人数", 750);
+            insertChart("    文科总分分数分布图", w_data);
             insertFreqTable_single("    文科总分频数分布表", w_data.total_freq);
-            insertChart("    理科总分分数分布图", l_data.total_dist, "总分", "人数", 750);
+            insertChart("    理科总分分数分布图", l_data);
             insertFreqTable_single("    理科总分频数分布表", l_data.total_freq);
             insertGKLineTable("", w_data.total_level, l_data.total_level);
             insertText(ExamTitle1, "文科");
@@ -236,16 +236,17 @@ namespace ExamReport
         }
         public void insertMultiHistGraph(string title, DataTable urban, DataTable country)
         {
-            List<DataTable> data_list = new List<DataTable>();
-            data_list.Add(urban);
-            data_list.Add(country);
+            Dictionary<string, DataTable> data_list = new Dictionary<string, DataTable>();
+            data_list.Add("城区", urban);
+            data_list.Add("郊区", country);
 
-            ZedGraph.createSubDiffBar(data_list);
+            //ZedGraph.createSubDiffBar(data_list);
+            DotNetCharting.CreateMutipleColumn(data_list);
 
             Word.Range dist_rng = oDoc.Bookmarks.get_Item(oEndOfDoc).Range;
             dist_rng.Paste();
             Utils.mutex_clipboard.ReleaseMutex();
-            dist_rng.InsertCaption(oWord.CaptionLabels["图"], title, oMissing, Word.WdCaptionPosition.wdCaptionPositionAbove, oMissing);
+            dist_rng.InsertCaption(oWord.CaptionLabels["图"], title, oMissing, Word.WdCaptionPosition.wdCaptionPositionBelow, oMissing);
             dist_rng.MoveEnd(Word.WdUnits.wdParagraph, 1);
             dist_rng.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
             dist_rng = oDoc.Bookmarks.get_Item(oEndOfDoc).Range;
@@ -259,12 +260,13 @@ namespace ExamReport
             List<DataTable> data_list = new List<DataTable>();
             data_list.Add(data);
 
-            ZedGraph.createSubDiffBar(data_list);
+            DotNetCharting.CreateColumn(data);
+            //ZedGraph.createSubDiffBar(data_list);
 
             Word.Range dist_rng = oDoc.Bookmarks.get_Item(oEndOfDoc).Range;
             dist_rng.Paste();
             Utils.mutex_clipboard.ReleaseMutex();
-            dist_rng.InsertCaption(oWord.CaptionLabels["图"], title, oMissing, Word.WdCaptionPosition.wdCaptionPositionAbove, oMissing);
+            dist_rng.InsertCaption(oWord.CaptionLabels["图"], title, oMissing, Word.WdCaptionPosition.wdCaptionPositionBelow, oMissing);
             dist_rng.MoveEnd(Word.WdUnits.wdParagraph, 1);
             dist_rng.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
             dist_rng = oDoc.Bookmarks.get_Item(oEndOfDoc).Range;
@@ -497,17 +499,22 @@ namespace ExamReport
             range.InsertParagraphAfter();
         }
 
-        public void insertChart(string title, DataTable dt, string x_axis, string y_axis, double fullmark)
+        public void insertChart(string title, Admin_WordData sdata)
         {
+            DataTable dt = sdata.total_dist;
             double[][] data = new double[dt.Rows.Count][];
             for (int i = 0; i < dt.Rows.Count; i++)
             {
                 data[i] = new double[2];
-                data[i][0] = Convert.ToDouble(dt.Rows[i][0]);
-                data[i][1] = Convert.ToDouble(dt.Rows[i][1]);
+                data[i][0] = Convert.ToDouble((int)dt.Rows[i][0]);
+                data[i][1] = Convert.ToDouble((int)dt.Rows[i][1]);
 
             }
-            ZedGraph.createCuve(_config, x_axis, y_axis, data, 0, fullmark, Convert.ToDouble(dt.Compute("Max([" + dt.Columns[1].ColumnName + "])", "")));
+            double[] cuvedata = new double[2];
+            cuvedata[0] = Convert.ToDouble(sdata.total.avg);
+            cuvedata[1] = Convert.ToDouble(sdata.total.stDev);
+            ZedGraph.createCuveAndBar(_config, cuvedata, data, Convert.ToDouble(sdata.total.max));
+            
 
 
             Word.Range dist_rng = oDoc.Bookmarks.get_Item(oEndOfDoc).Range;
