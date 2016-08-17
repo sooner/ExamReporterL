@@ -56,8 +56,8 @@ namespace ExamReport
             DataTable w_data = _data.equalfilter("type", "w");
             DataTable l_data = _data.equalfilter("type", "l");
 
-            single_process(w_data, w_result);
-            single_process(l_data, l_result);
+            single_process(w_data, w_result, _config.wen_first_level, _config.wen_second_level, _config.wen_third_level);
+            single_process(l_data, l_result, _config.li_first_level, _config.li_second_level, _config.li_third_level);
 
             wen_process(w_data, w_result);
             li_process(l_data, l_result);
@@ -140,7 +140,7 @@ namespace ExamReport
             InsertSubDiff("政治", "hx_zz", 100, data, sub);
         }
 
-        public void single_process(DataTable data, Admin_WordData result)
+        public void single_process(DataTable data, Admin_WordData result, int first, int second, int third)
         {
             total_statistic(data, result.total);
 
@@ -176,9 +176,9 @@ namespace ExamReport
                 DataRow dr = result.total_freq.NewRow();
                 dr["totalmark"] = (min + 1).ToString() + "～" + max.ToString();
                 dr["frequency"] = count;
-                dr["rate"] = count / Convert.ToDecimal(result.total.totalnum);
+                dr["rate"] = count / Convert.ToDecimal(result.total.totalnum) * 100;
                 dr["accumulateFreq"] = count + acct_count;
-                dr["accumulateRate"] = (count + acct_count) / Convert.ToDecimal(result.total.totalnum);
+                dr["accumulateRate"] = (count + acct_count) / Convert.ToDecimal(result.total.totalnum) * 100;
 
                 if (count == 0)
                     continue;
@@ -186,11 +186,11 @@ namespace ExamReport
                 acct_count += count;
 
             }
-
+            InsertTotalLevel("650以上", Convert.ToInt32(_fullmark), 650, data, result);
             InsertTotalLevel("600以上", Convert.ToInt32(_fullmark), 600, data, result);
-            InsertTotalLevel("一本",  Convert.ToInt32(_fullmark), _config.first_level, data, result);
-            InsertTotalLevel("二本", _config.first_level, _config.second_level, data, result);
-            InsertTotalLevel("三本", _config.second_level, _config.third_level, data, result);
+            InsertTotalLevel("一本",  Convert.ToInt32(_fullmark), first, data, result);
+            InsertTotalLevel("二本", first, second, data, result);
+            InsertTotalLevel("三本", second, third, data, result);
 
             
 
@@ -229,7 +229,7 @@ namespace ExamReport
             int totalnum = data.Rows.Count;
 
             int count;
-            if(level_str.Equals("600以上"))
+            if(level_str.Contains("以上"))
                 count = data.AsEnumerable().Where(c => (c.Field<decimal>("zf") >= min && c.Field<decimal>("zf") <= max)).Count();
             else
                 count = data.AsEnumerable().Where(c => (c.Field<decimal>("zf") >= min && c.Field<decimal>("zf") < max)).Count();

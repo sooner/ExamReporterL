@@ -310,7 +310,7 @@ namespace ExamReport
         {
             Word.Table table;
             Word.Range range = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-            table = oDoc.Tables.Add(range, 6, 7, ref oMissing, oTrue);
+            table = oDoc.Tables.Add(range, 7, 7, ref oMissing, oTrue);
 
             table.Range.InsertCaption(oWord.CaptionLabels["表"], title, oMissing, Word.WdCaptionPosition.wdCaptionPositionAbove, oMissing);
             range.MoveEnd(Word.WdUnits.wdParagraph, 1);
@@ -327,10 +327,10 @@ namespace ExamReport
             //table.Cell(2, 1).Range.Text = "类别";
             table.Cell(2, 2).Range.Text = "分数线";
             table.Cell(2, 3).Range.Text = "人数";
-            table.Cell(2, 4).Range.Text = "比率";
+            table.Cell(2, 4).Range.Text = "比率(%)";
             table.Cell(2, 5).Range.Text = "分数线";
             table.Cell(2, 6).Range.Text = "人数";
-            table.Cell(2, 7).Range.Text = "比率";
+            table.Cell(2, 7).Range.Text = "比率(%)";
 
             for (int i = 0; i < w_data.Rows.Count; i++)
             {
@@ -344,7 +344,19 @@ namespace ExamReport
                 table.Cell(i + 3, 7).Range.Text = string.Format("{0:F1}",l_data.Rows[i]["rate"]);
             }
 
-            table.Rows[1].HeadingFormat = -1;
+            
+            table.Cell(1, 1).Merge(table.Cell(2, 1));
+            table.Cell(1, 1).Range.Text = "类别";
+            table.Cell(1, 1).Select();
+            oWord.Selection.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;    // 水平居中显示
+            table.Cell(1, 1).VerticalAlignment = Word.WdCellVerticalAlignment.wdCellAlignVerticalCenter; // 垂直居中
+            
+            table.Cell(1, 2).Merge(table.Cell(1, 3));
+            table.Cell(1, 2).Merge(table.Cell(1, 3));
+            table.Cell(1, 2).Range.Text = "文科";
+            table.Cell(1, 3).Merge(table.Cell(1, 4));
+            table.Cell(1, 3).Merge(table.Cell(1, 4));
+            table.Cell(1, 3).Range.Text = "理科";
 
 
             table.Borders.OutsideLineStyle = Word.WdLineStyle.wdLineStyleSingle;
@@ -353,14 +365,7 @@ namespace ExamReport
             table.Select();
             oWord.Selection.set_Style(ref TableContent2);
 
-            table.Cell(1, 1).Merge(table.Cell(2, 1));
-            table.Cell(1, 1).Range.Text = "类别";
-            table.Cell(1, 2).Merge(table.Cell(1, 3));
-            table.Cell(1, 2).Merge(table.Cell(1, 3));
-            table.Cell(1, 2).Range.Text = "文科";
-            table.Cell(1, 3).Merge(table.Cell(1, 4));
-            table.Cell(1, 3).Merge(table.Cell(1, 4));
-            table.Cell(1, 3).Range.Text = "理科";
+            
 
 
             range = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;

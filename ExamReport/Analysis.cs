@@ -65,9 +65,13 @@ namespace ExamReport
         public string xx_name;
         public string date;
 
-        public int first_level;
-        public int second_level;
-        public int third_level;
+        public int wen_first_level;
+        public int wen_second_level;
+        public int wen_third_level;
+
+        public int li_first_level;
+        public int li_second_level;
+        public int li_third_level;
 
         public Analysis(mainform form)
         {
@@ -290,9 +294,13 @@ namespace ExamReport
         public void gk_xz_process(MetaData mdata)
         {
             Configuration config = initConfig(mdata._sub, "行政", "高考");
-            config.first_level = first_level;
-            config.second_level = second_level;
-            config.third_level = third_level;
+            config.wen_first_level = wen_first_level;
+            config.wen_second_level = wen_second_level;
+            config.wen_third_level = wen_third_level;
+
+            config.li_first_level = li_first_level;
+            config.li_second_level = li_second_level;
+            config.li_third_level = li_third_level;
 
             int urban = mdata.CJ_list[0][0].Equals("城区") ? 0 : 1;
             int country = mdata.CJ_list[0][1].Equals("郊区") ? 0 : 1;

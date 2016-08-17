@@ -131,6 +131,7 @@ namespace ExamReport
             try
             { 
                 Series s = new Series();
+                
                 s.Name = name;
                 s.Palette = new Color[] {my_color};
                 for (int i = 0; i < dt.Rows.Count; i++)

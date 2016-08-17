@@ -1610,17 +1610,17 @@ namespace ExamReport
                 return;
             }
 
-            if (first_level.Value == 0 || second_level.Value == 0 || third_level.Value == 0)
+            if (wen_first_level.Value == 0 || wen_second_level.Value == 0 || wen_third_level.Value == 0)
             {
                 Error("重点线不能为零！");
                 return;
             }
-            if (first_level.Value < second_level.Value)
+            if (wen_first_level.Value < wen_second_level.Value)
             {
                 Error("一本线不应该低于二本线吧？");
                 return;
             }
-            if (second_level.Value < third_level.Value)
+            if (wen_second_level.Value < wen_third_level.Value)
             {
                 Error("二本线不应该低于三本线吧？");
                 return;
@@ -1638,9 +1638,13 @@ namespace ExamReport
             analysis.curryear = year_list.SelectedItem.ToString().Trim();
             analysis.currmonth = currmonth.SelectedItem.ToString().Trim();
 
-            analysis.first_level = Convert.ToInt32(first_level.Value);
-            analysis.second_level = Convert.ToInt32(second_level.Value);
-            analysis.third_level = Convert.ToInt32(third_level.Value);
+            analysis.wen_first_level = Convert.ToInt32(wen_first_level.Value);
+            analysis.wen_second_level = Convert.ToInt32(wen_second_level.Value);
+            analysis.wen_third_level = Convert.ToInt32(wen_third_level.Value);
+
+            analysis.li_first_level = Convert.ToInt32(li_first_level.Value);
+            analysis.li_second_level = Convert.ToInt32(li_second_level.Value);
+            analysis.li_third_level = Convert.ToInt32(li_third_level.Value);
 
             Thread thread = new Thread(new ThreadStart(analysis.gk_xz_start));
             thread.IsBackground = true;

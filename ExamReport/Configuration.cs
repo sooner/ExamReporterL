@@ -39,9 +39,13 @@ namespace ExamReport
         public ZK_database.GroupType _grouptype;
         public int _group_num = 0;
 
-        public int first_level;
-        public int second_level;
-        public int third_level;
+        public int wen_first_level;
+        public int wen_second_level;
+        public int wen_third_level;
+
+        public int li_first_level;
+        public int li_second_level;
+        public int li_third_level;
 
         public string[] urban_code;
         public string[] country_code;
