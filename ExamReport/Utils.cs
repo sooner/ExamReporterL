@@ -64,6 +64,8 @@ namespace ExamReport
         public static string GK_title_2 = "实测数据统计分析报告";
         public static string GK_ZF_title_1 = "年北京市普通高考";
         public static string GK_ZF_title_2 = "试卷总分统计分析报告";
+        public static string GK_ZF_title_xz_1 = "年高考数据分析报告";
+        public static string GK_ZF_title_xz_2 = "(行政版)";
         public static string GK_WSLG_title_2 = "文史、理工类数据统计分析报告";
         public static string XX_title = "学校数据统计分析报告";
 
@@ -160,6 +162,13 @@ namespace ExamReport
                         else if (config.report_style.Equals("总体"))
                             WriteIntoDocument(oDoc, "subject", "全市");
                         
+                    }
+                    else if (config.subject.Equals("总分-行政版"))
+                    {
+                        WriteIntoDocument(oDoc, "title_1", "");
+                        WriteIntoDocument(oDoc, "title_2", config.year + GK_ZF_title_xz_1);
+                        WriteIntoDocument(oDoc, "subject", GK_ZF_title_xz_2);
+                        WriteIntoDocument(oDoc, "company", "北京教育考试院科研办");
                     }
                     else
                     {
@@ -311,7 +320,8 @@ namespace ExamReport
         }
         public static void Save(Configuration config, Microsoft.Office.Interop.Word._Document oDoc, Microsoft.Office.Interop.Word._Application oWord)
         {
-            insertAddons(config, oDoc, oWord);
+            if(!config.subject.Equals("总分-行政版"))
+                insertAddons(config, oDoc, oWord);
             object oMissing = System.Reflection.Missing.Value;
             string addr = config.save_address + @"\";
             string final = "a.docx";
@@ -343,6 +353,10 @@ namespace ExamReport
                     else if (config.report_style.Equals("总体"))
                         final = config.year + "年北京市普通高考试卷总分统计分析报告(全市).docx";
                     
+                }
+                if(config.subject.Equals("总分-行政版"))
+                {
+                    final = config.year + "年北京市普通高考试卷行政版分析报告.docx";
                 }
                 else
                 {

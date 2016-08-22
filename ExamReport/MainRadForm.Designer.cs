@@ -1549,6 +1549,7 @@
             this.gk_xz_cancel.Size = new System.Drawing.Size(110, 24);
             this.gk_xz_cancel.TabIndex = 86;
             this.gk_xz_cancel.Text = "取消";
+            this.gk_xz_cancel.Click += new System.EventHandler(this.gk_xz_cancel_Click);
             // 
             // gk_xz_start
             // 

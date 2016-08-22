@@ -79,6 +79,7 @@ namespace ExamReport
             qx_process("sw_ls", 100, data, result.districts);
             qx_process("wl_dl", 100, data, result.districts);
             qx_process("hx_zz", 100, data, result.districts);
+            qx_process("zh", 300, data, result.districts);
 
         }
 
@@ -97,6 +98,7 @@ namespace ExamReport
             qx_process("wl_dl", 120, data, result.districts);
             qx_process("hx_zz", 100, data, result.districts);
             qx_process("sw_ls", 80, data, result.districts);
+            qx_process("zh", 300, data, result.districts);
 
         }
         public void li_sub(DataTable data, DataTable sub)
@@ -107,26 +109,46 @@ namespace ExamReport
             InsertSubDiff("物理", "wl_dl", 120, data, sub);
             InsertSubDiff("化学", "hx_zz", 100, data, sub);
             InsertSubDiff("生物", "sw_ls", 80, data, sub);
+            InsertSubDiff("理综", "zh", 300, data, sub);
         }
         public void qx_process(string sub, decimal fullmark, DataTable data, DataTable districts)
         {
             DataRow avg = districts.NewRow();
             DataRow diff = districts.NewRow();
-            avg["total"] = data.AsEnumerable().Average(c => c.Field<decimal>(sub));
-            diff["total"] = Convert.ToDecimal(avg["total"]) / fullmark;
-
-            avg["urban"] = data.filteredtable("qxdm", _config.urban_code).AsEnumerable().Average(c => c.Field<decimal>(sub));
-            diff["urban"] = Convert.ToDecimal(avg["urban"]) / fullmark;
-
-            avg["country"] = data.filteredtable("qxdm", _config.country_code).AsEnumerable().Average(c => c.Field<decimal>(sub));
-            diff["country"] = Convert.ToDecimal(avg["country"]) / fullmark;
-
-            for (int i = 0; i < qx_code.Count; i++)
+            if (sub.Equals("zh"))
             {
-                avg[i + 3] = data.filteredtable("qxdm", qx_code[i]).AsEnumerable().Average(c => c.Field<decimal>(sub));
-                diff[i + 3] = Convert.ToDecimal(avg[i + 3]) / fullmark;
-            }
+                avg["total"] = data.AsEnumerable().Average(c => (c.Field<decimal>("sw_ls") + c.Field<decimal>("hx_zz") + c.Field<decimal>("wl_dl")));
+                diff["total"] = Convert.ToDecimal(avg["total"]) / fullmark;
 
+                avg["urban"] = data.filteredtable("qxdm", _config.urban_code).AsEnumerable().Average(c => (c.Field<decimal>("sw_ls") + c.Field<decimal>("hx_zz") + c.Field<decimal>("wl_dl")));
+                diff["urban"] = Convert.ToDecimal(avg["urban"]) / fullmark;
+
+                avg["country"] = data.filteredtable("qxdm", _config.country_code).AsEnumerable().Average(c => (c.Field<decimal>("sw_ls") + c.Field<decimal>("hx_zz") + c.Field<decimal>("wl_dl")));
+                diff["country"] = Convert.ToDecimal(avg["country"]) / fullmark;
+
+                for (int i = 0; i < qx_code.Count; i++)
+                {
+                    avg[i + 3] = data.filteredtable("qxdm", qx_code[i]).AsEnumerable().Average(c => (c.Field<decimal>("sw_ls") + c.Field<decimal>("hx_zz") + c.Field<decimal>("wl_dl")));
+                    diff[i + 3] = Convert.ToDecimal(avg[i + 3]) / fullmark;
+                }
+            }
+            else
+            {
+                avg["total"] = data.AsEnumerable().Average(c => c.Field<decimal>(sub));
+                diff["total"] = Convert.ToDecimal(avg["total"]) / fullmark;
+
+                avg["urban"] = data.filteredtable("qxdm", _config.urban_code).AsEnumerable().Average(c => c.Field<decimal>(sub));
+                diff["urban"] = Convert.ToDecimal(avg["urban"]) / fullmark;
+
+                avg["country"] = data.filteredtable("qxdm", _config.country_code).AsEnumerable().Average(c => c.Field<decimal>(sub));
+                diff["country"] = Convert.ToDecimal(avg["country"]) / fullmark;
+
+                for (int i = 0; i < qx_code.Count; i++)
+                {
+                    avg[i + 3] = data.filteredtable("qxdm", qx_code[i]).AsEnumerable().Average(c => c.Field<decimal>(sub));
+                    diff[i + 3] = Convert.ToDecimal(avg[i + 3]) / fullmark;
+                }
+            }
             districts.Rows.Add(avg);
             districts.Rows.Add(diff);
         }
@@ -138,6 +160,7 @@ namespace ExamReport
             InsertSubDiff("历史", "sw_ls", 100, data, sub);
             InsertSubDiff("地理", "wl_dl", 100, data, sub);
             InsertSubDiff("政治", "hx_zz", 100, data, sub);
+            InsertSubDiff("文综", "zh", 300, data, sub);
         }
 
         public void single_process(DataTable data, Admin_WordData result, int first, int second, int third)
@@ -220,7 +243,10 @@ namespace ExamReport
         {
             DataRow dr = sub_dt.NewRow();
             dr["sub"] = sub_str;
-            dr["diff"] = Convert.ToDecimal(data.AsEnumerable().Average(c => c.Field<decimal>(sub))) / sub_full;
+            if (sub.Equals("zh"))
+                dr["diff"] = Convert.ToDecimal(data.AsEnumerable().Average(c => (c.Field<decimal>("sw_ls") + c.Field<decimal>("wl_dl") + c.Field<decimal>("hx_zz")))) / sub_full;
+            else
+                dr["diff"] = Convert.ToDecimal(data.AsEnumerable().Average(c => c.Field<decimal>(sub))) / sub_full;
             sub_dt.Rows.Add(dr);
         }
 

@@ -98,28 +98,34 @@ namespace ExamReport
             insertText(ExamTitle2, "政治"); 
             insertQXtable("    政治学科得分率表", w_data.districts.Rows[12], w_data.districts.Rows[13]);
             insertQXchart("    政治学科得分率图", w_data.districts.Rows[13]);
+            insertText(ExamTitle2, "文综");
+            insertQXtable("    政治学科得分率表", w_data.districts.Rows[14], w_data.districts.Rows[13]);
+            insertQXchart("    政治学科得分率图", w_data.districts.Rows[15]);
 
             insertText(ExamTitle1, "理科");
             insertText(ExamTitle2, "总分"); 
             insertQXtable("    各区理科总分分析表", l_data.districts.Rows[0], l_data.districts.Rows[1]);
             insertText(ExamTitle2, "语文"); 
             insertQXtable("    语文学科得分率表", l_data.districts.Rows[2], l_data.districts.Rows[3]);
-            insertQXchart("    语文学科得分率图", w_data.districts.Rows[3]);
+            insertQXchart("    语文学科得分率图", l_data.districts.Rows[3]);
             insertText(ExamTitle2, "数学（理）"); 
             insertQXtable("    数学（理）学科得分率表", l_data.districts.Rows[4], l_data.districts.Rows[5]);
             insertQXchart("    数学（理）学科得分率图", w_data.districts.Rows[5]);
             insertText(ExamTitle2, "英语"); 
             insertQXtable("    英语学科得分率表", l_data.districts.Rows[6], l_data.districts.Rows[7]);
-            insertQXchart("    英语学科得分率图", w_data.districts.Rows[7]);
+            insertQXchart("    英语学科得分率图", l_data.districts.Rows[7]);
             insertText(ExamTitle2, "物理"); 
             insertQXtable("    物理学科得分率表", l_data.districts.Rows[8], l_data.districts.Rows[9]);
-            insertQXchart("    物理学科得分率图", w_data.districts.Rows[9]);
+            insertQXchart("    物理学科得分率图", l_data.districts.Rows[9]);
             insertText(ExamTitle2, "化学"); 
             insertQXtable("    化学学科得分率表", l_data.districts.Rows[10], l_data.districts.Rows[11]);
-            insertQXchart("    化学学科得分率图", w_data.districts.Rows[11]);
+            insertQXchart("    化学学科得分率图", l_data.districts.Rows[11]);
             insertText(ExamTitle2, "生物"); 
             insertQXtable("    生物学科得分率表", l_data.districts.Rows[12], l_data.districts.Rows[13]);
-            insertQXchart("    生物学科得分率图", w_data.districts.Rows[13]);
+            insertQXchart("    生物学科得分率图", l_data.districts.Rows[13]);
+            insertText(ExamTitle2, "理综");
+            insertQXtable("    生物学科得分率表", l_data.districts.Rows[14], l_data.districts.Rows[13]);
+            insertQXchart("    生物学科得分率图", l_data.districts.Rows[15]);
 
             foreach (Word.TableOfContents table in oDoc.TablesOfContents)
                 table.Update();

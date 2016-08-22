@@ -605,7 +605,7 @@ namespace ExamReport
             ZedGraphControl zgc = new ZedGraphControl();
             //图大小设置
             zgc.Width = 531;
-            zgc.Height = 271;
+            zgc.Height = 301;
 
 
             GraphPane myPane = zgc.GraphPane;
@@ -616,6 +616,10 @@ namespace ExamReport
             //缓存清空
             myPane.CurveList.Clear();
             myPane.GraphObjList.Clear();
+
+            addLine(myPane, Convert.ToDouble(diff[0]), "总体", Color.Red, System.Drawing.Drawing2D.DashStyle.DashDot);
+            addLine(myPane, Convert.ToDouble(diff[1]), "城区", Color.Blue, System.Drawing.Drawing2D.DashStyle.Dash);
+            addLine(myPane, Convert.ToDouble(diff[2]), "郊区", Color.Blue, System.Drawing.Drawing2D.DashStyle.DashDotDot);
 
             double[] barX = new double[17];
             double[] barY = new double[17];
@@ -634,43 +638,54 @@ namespace ExamReport
             myCurve1.Bar.Fill = new Fill(Color.FromArgb(0, 255, 255), Color.FromArgb(0, 255, 255));
 
             //添加一条线
-            double Xmax = myPane.XAxis.Scale.Max;
-            LineObj line1 = new LineObj(0, Convert.ToDouble(diff[0]), 18, Convert.ToDouble(diff[0]));
-            line1.Line.Style = System.Drawing.Drawing2D.DashStyle.Solid;
-            line1.Line.Color = Color.Red;
-            line1.Line.Width = 2;
-            line1.IsClippedToChartRect = true;
-            line1.ZOrder = ZOrder.A_InFront;
-            line1.Location.AlignH = AlignH.Left;
-            line1.Location.AlignV = AlignV.Top;
-            line1.Location.CoordinateFrame = CoordType.AxisXYScale;
-            line1.Tag = "总体";
-            myPane.GraphObjList.Add(line1);
+            //myPane.XAxis.Scale.
+            //myPane.XAxis.Scale.MajorStep = 1;
+            myPane.X2Axis.Scale.Max = 17;
+            
+            
+            
+            //LineObj line1 = new LineObj(0, Convert.ToDouble(diff[0]), 18, Convert.ToDouble(diff[0]));
+            //line1.Line.Style = System.Drawing.Drawing2D.DashStyle.DashDot;
+            //line1.Line.Color = Color.Red;
+            //line1.Line.Width = 2;
+            //line1.IsClippedToChartRect = true;
+            //line1.ZOrder = ZOrder.A_InFront;
+            //line1.Location.AlignH = AlignH.Left;
+            //line1.Location.AlignV = AlignV.Top;
+            //line1.Location.CoordinateFrame = CoordType.AxisXYScale;
+            //line1.Tag = "";
+            
+            //myPane.GraphObjList.Add(line1);
+            
 
-            LineObj line2 = new LineObj(0, Convert.ToDouble(diff[1]), 18, Convert.ToDouble(diff[1]));
-            line2.Line.Style = System.Drawing.Drawing2D.DashStyle.Solid;
-            line2.Line.Color = Color.Blue;
-            line2.Line.Width = 2;
-            line2.IsClippedToChartRect = true;
-            line2.ZOrder = ZOrder.A_InFront;
-            line2.Location.AlignH = AlignH.Left;
-            line2.Location.AlignV = AlignV.Top;
-            line2.Location.CoordinateFrame = CoordType.AxisXYScale;
-            myPane.GraphObjList.Add(line2);
+            //LineObj line2 = new LineObj(0, Convert.ToDouble(diff[1]), 18, Convert.ToDouble(diff[1]));
+            //line2.Line.Style = System.Drawing.Drawing2D.DashStyle.Dash;
+            //line2.Line.Color = Color.Blue;
+            //line2.Line.Width = 2;
+            //line2.IsClippedToChartRect = true;
+            //line2.ZOrder = ZOrder.A_InFront;
+            //line2.Location.AlignH = AlignH.Left;
+            //line2.Location.AlignV = AlignV.Top;
+            //line2.Location.CoordinateFrame = CoordType.AxisXYScale;
+            //line2.Tag = "城区";
+            //myPane.GraphObjList.Add(line2);
 
-            LineObj line3 = new LineObj(0, Convert.ToDouble(diff[2]), Xmax, Convert.ToDouble(diff[2]));
-            line3.Line.Style = System.Drawing.Drawing2D.DashStyle.Solid;
-            line3.Line.Color = Color.Green;
-            line3.Line.Width = 2;
-            line3.IsClippedToChartRect = true;
-            line3.ZOrder = ZOrder.A_InFront;
-            line3.Location.AlignH = AlignH.Left;
-            line3.Location.AlignV = AlignV.Top;
-            line3.Location.CoordinateFrame = CoordType.AxisXYScale;
-            myPane.GraphObjList.Add(line3);
+            //LineObj line3 = new LineObj(0, Convert.ToDouble(diff[2]), 18, Convert.ToDouble(diff[2]));
+            //line3.Line.Style = System.Drawing.Drawing2D.DashStyle.DashDotDot;
+            //line3.Line.Color = Color.Green;
+            //line3.Line.Width = 2;
+            //line3.IsClippedToChartRect = true;
+            //line3.ZOrder = ZOrder.A_InFront;
+            //line3.Location.AlignH = AlignH.Left;
+            //line3.Location.AlignV = AlignV.Top;
+            //line3.Location.CoordinateFrame = CoordType.AxisXYScale;
+            //line3.Tag = "郊区";
+            //myPane.GraphObjList.Add(line3);
+            
 
             myPane.Legend.IsVisible = true;
-            myPane.Title.IsVisible = true;
+            myPane.Legend.Position = LegendPos.BottomCenter;
+            //myPane.Title.IsVisible = true;
 
             string[] xlabels = new string[17];
             for (int i = 0; i < 17; i++)
@@ -678,6 +693,11 @@ namespace ExamReport
 
             myPane.XAxis.Scale.TextLabels = xlabels;
             myPane.XAxis.Type = AxisType.Text;
+            double max = barY.AsEnumerable().Max();
+            myPane.YAxis.Scale.Min = 0.4;
+            myPane.YAxis.Scale.Max =  0.05 * Math.Ceiling(max / 0.05);
+            myPane.YAxis.Scale.MajorStep = 0.05;
+            //myPane.YAxis.Scale.MinorStep = 0.05;
 
             myPane.XAxis.Scale.Align = AlignP.Inside;
             myPane.YAxis.MinorTic.IsAllTics = false;
@@ -692,6 +712,9 @@ namespace ExamReport
             myPane.YAxis.Title.FontSpec.Family = "宋体";
             myPane.YAxis.Scale.MagAuto = false;
 
+            myPane.Legend.FontSpec.Size = 18;
+            myPane.Legend.FontSpec.Family = "宋体";
+
             zgc.AxisChange();
             zgc.Refresh();
 
@@ -702,6 +725,33 @@ namespace ExamReport
             Clipboard.Clear();
             Clipboard.SetImage(sourceBitmap);
 
+        }
+
+        public static void addLine(GraphPane myPane, double diff, string name, Color color, myStyle style)
+        {
+            double[] lineX = new double[18];
+            double[] lineY = new double[18];
+
+            for (int i = 0; i < 18; i++)
+            {
+                lineX[i] = i;
+                lineY[i] = diff;
+            }
+            //double[] lineX = new double[2];
+            //double[] lineY = new double[2];
+            //lineX[0] = 0;
+            //lineX[1] = 18;
+            //lineY[0] = Convert.ToDouble(diff[0]);
+            //lineY[1] = Convert.ToDouble(diff[0]);
+            PointPairList ppline = new PointPairList(lineX, lineY);
+            //myPane.AddCurve("总体", ppline, Color.Red);
+            LineItem line1 = myPane.AddCurve(name, ppline, color);
+            line1.Line.Style = style;
+            line1.Symbol.Type = SymbolType.None;
+            line1.Line.Width = 2;
+            
+            line1.IsX2Axis = true;
+            line1.IsVisible = true;
         }
         public static void createSubDiffBar(List<DataTable> data)
         {

@@ -71,7 +71,10 @@ namespace ExamReport
                 chart.YAxis.Label.Text = "";
                 chart.YAxis.Label.Font = new Font("Microsoft Sans Serif", 9F, FontStyle.Bold, GraphicsUnit.Point, 134); ;
                 //设置Y轴刻度值说明字体
-                chart.YAxis.DefaultTick.Label.Font = new Font("Microsoft Sans Serif", 9F, FontStyle.Bold, GraphicsUnit.Point, 134); ;
+                chart.YAxis.DefaultTick.Label.Font = new Font("Microsoft Sans Serif", 9F, FontStyle.Bold, GraphicsUnit.Point, 134);
+
+                chart.YAxis.Minimum = 0.4;
+                chart.YAxis.MinimumInterval = 0.05;
 
                 //Y轴箭头标示
                 chart.XAxis.Name = "";
@@ -114,7 +117,8 @@ namespace ExamReport
                 chart.ShadingEffect = true;
                 chart.Use3D = true;
                 chart.Series.DefaultElement.ShowValue = true;
-                chart.SeriesCollection.Add(GetArrayData(dt, "", color[0]));
+                SeriesCollection sc = new SeriesCollection();
+                chart.SeriesCollection.Add(GetArrayData(dt, sc, "", color[0]));
                 Bitmap sourceBitmap = new Bitmap(chart.Width, chart.Height);
                 chart.DrawToBitmap(sourceBitmap, new Rectangle(0, 0, chart.Width, chart.Height));
                 //Thread.CurrentThread.SetApartmentState(ApartmentState.STA);
@@ -125,15 +129,15 @@ namespace ExamReport
             
         }
 
-        private static SeriesCollection GetArrayData(DataTable dt, string name, Color my_color)
+        private static SeriesCollection GetArrayData(DataTable dt, SeriesCollection sc, string name, Color my_color)
         {
-            SeriesCollection sc = new SeriesCollection();
+            
             try
             { 
                 Series s = new Series();
                 
                 s.Name = name;
-                s.Palette = new Color[] {my_color};
+                s.Element.Color = my_color;
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
                     
@@ -142,12 +146,13 @@ namespace ExamReport
                     // 每元素的名称
                     e.Name = dt.Rows[i][0].ToString();
                     //设置柱状图值的字体
-                    e.SmartLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 134);
+                    e.SmartLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 134);
+                    e.SmartLabel.DynamicPosition = true;
                     //e.SmartLabel.DynamicDisplay = true;
                     //e.SmartLabel.AutoWrap = true;
                     // 每元素的大小数值
                     e.YValue = Convert.ToDouble(dt.Rows[i][1].ToString());
-                    //调整柱子颜色
+                    //调整柱子颜色 
                     //s.PaletteName = Palette.Three;
                     
                     //s.Palette = new Color[] { Color.FromArgb(16, 109, 156), Color.FromArgb(90, 146, 173), Color.FromArgb(0, 162, 222), Color.FromArgb(8, 186, 255), };
@@ -225,6 +230,11 @@ namespace ExamReport
 
             //Y轴箭头标示
             chart.XAxis.Name = "";
+
+            chart.YAxis.Minimum = 0.4;
+            chart.YAxis.MinimumInterval = 0.05;
+            //chart.YAxis.MinorInterval = 0.05;
+            
             if (chart.Type == ChartType.ComboHorizontal)
             {
                 chart.XAxis.TickLabelPadding = 10;
@@ -260,17 +270,22 @@ namespace ExamReport
             //chart.TitleBox.Label.Alignment = StringAlignment.Center;
             //chart.LegendBox.Position = LegendBoxPosition.None; //不显示图例,指不在右侧显示，对上面一行的属性设置并没有影响
             chart.LegendBox.Visible = true;
+            chart.LegendBox.Position = LegendBoxPosition.BottomMiddle;
+            chart.LegendBox.HeaderLabel.Text = "";
+            chart.LegendBox.LabelStyle.Text = "";
             chart.DefaultSeries.DefaultElement.ShowValue = true;
             chart.ShadingEffect = true;
             chart.Use3D = true;
-            chart.Series.DefaultElement.ShowValue = true;
+            //chart.Series.DefaultElement.ShowValue = true;
             int count = 0;
+            SeriesCollection sc = new SeriesCollection();
             foreach (var kv in dts)
             {
-                chart.SeriesCollection.Add(GetArrayData(kv.Value, kv.Key, color[count % 5]));
+                GetArrayData(kv.Value, sc, kv.Key, color[count % 5]);
+                
                 count++;
             }
-            
+            chart.SeriesCollection.Add(sc);
             Bitmap sourceBitmap = new Bitmap(chart.Width, chart.Height);
             chart.DrawToBitmap(sourceBitmap, new Rectangle(0, 0, chart.Width, chart.Height));
             //Thread.CurrentThread.SetApartmentState(ApartmentState.STA);

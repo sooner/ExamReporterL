@@ -1653,6 +1653,20 @@ namespace ExamReport
             thread.Start();
         }
 
+        private void gk_xz_cancel_Click(object sender, EventArgs e)
+        {
+            if (thread_store.ContainsKey("gk_xz"))
+            {
+                Thread thread = thread_store["gk_xz"];
+                if (thread.IsAlive)
+                {
+                    thread.Abort();
+                    thread_store.Remove("gk_xz");
+                    ShowPro("gk_xz", 2, "");
+                }
+            }
+        }
+
        
     }
 }
