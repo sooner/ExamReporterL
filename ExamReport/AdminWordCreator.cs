@@ -55,7 +55,7 @@ namespace ExamReport
             insertFreqTable_single("    文科总分频数分布表", w_data.total_freq);
             insertChart("    理科总分分数分布图", l_data);
             insertFreqTable_single("    理科总分频数分布表", l_data.total_freq);
-            insertGKLineTable("", w_data.total_level, l_data.total_level);
+            insertGKLineTable("高考上线人数比率表", w_data.total_level, l_data.total_level);
             insertText(ExamTitle1, "文科");
             insertSubDiffTable("    文科各学科得分率表", w_data.sub_diff);
             insertHistGraph("    文科各学科得分率图", w_data.sub_diff);
@@ -80,10 +80,10 @@ namespace ExamReport
             insertText(ExamTitle2, "总分");
 
             insertQXtable("    各区文科总分分析表", w_data.districts.Rows[0], w_data.districts.Rows[1]);
-            insertText(ExamTitle2, "语文学科"); 
+            insertText(ExamTitle2, "语文"); 
             insertQXtable("    语文学科得分率表", w_data.districts.Rows[2], w_data.districts.Rows[3]);
             insertQXchart("    语文学科得分率图", w_data.districts.Rows[3]);
-            insertText(ExamTitle2, "数学（文）学科"); 
+            insertText(ExamTitle2, "数学（文）"); 
             insertQXtable("    数学（文）学科得分率表", w_data.districts.Rows[4], w_data.districts.Rows[5]);
             insertQXchart("    数学（文）学科得分率图", w_data.districts.Rows[5]);
             insertText(ExamTitle2, "英语"); 
@@ -99,8 +99,8 @@ namespace ExamReport
             insertQXtable("    政治学科得分率表", w_data.districts.Rows[12], w_data.districts.Rows[13]);
             insertQXchart("    政治学科得分率图", w_data.districts.Rows[13]);
             insertText(ExamTitle2, "文综");
-            insertQXtable("    政治学科得分率表", w_data.districts.Rows[14], w_data.districts.Rows[13]);
-            insertQXchart("    政治学科得分率图", w_data.districts.Rows[15]);
+            insertQXtable("    文综学科得分率表", w_data.districts.Rows[14], w_data.districts.Rows[13]);
+            insertQXchart("    文综学科得分率图", w_data.districts.Rows[15]);
 
             insertText(ExamTitle1, "理科");
             insertText(ExamTitle2, "总分"); 
@@ -124,8 +124,8 @@ namespace ExamReport
             insertQXtable("    生物学科得分率表", l_data.districts.Rows[12], l_data.districts.Rows[13]);
             insertQXchart("    生物学科得分率图", l_data.districts.Rows[13]);
             insertText(ExamTitle2, "理综");
-            insertQXtable("    生物学科得分率表", l_data.districts.Rows[14], l_data.districts.Rows[13]);
-            insertQXchart("    生物学科得分率图", l_data.districts.Rows[15]);
+            insertQXtable("    理综学科得分率表", l_data.districts.Rows[14], l_data.districts.Rows[13]);
+            insertQXchart("    理综学科得分率图", l_data.districts.Rows[15]);
 
             foreach (Word.TableOfContents table in oDoc.TablesOfContents)
                 table.Update();
@@ -138,7 +138,7 @@ namespace ExamReport
             Word.Range dist_rng = oDoc.Bookmarks.get_Item(oEndOfDoc).Range;
             dist_rng.Paste();
             Utils.mutex_clipboard.ReleaseMutex();
-            dist_rng.InsertCaption(oWord.CaptionLabels["图"], title, oMissing, Word.WdCaptionPosition.wdCaptionPositionAbove, oMissing);
+            dist_rng.InsertCaption(oWord.CaptionLabels["图"], title, oMissing, Word.WdCaptionPosition.wdCaptionPositionBelow, oMissing);
             dist_rng.MoveEnd(Word.WdUnits.wdParagraph, 1);
             dist_rng.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
             dist_rng = oDoc.Bookmarks.get_Item(oEndOfDoc).Range;
