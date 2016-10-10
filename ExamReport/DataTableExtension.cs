@@ -8,6 +8,14 @@ namespace ExamReport
 {
     public static class DataTableExtension
     {
+        public static decimal Skewness(this DataTable dt, string col)
+        {
+            decimal avg = Avg(dt, col);
+            double stdev_pow_3 = Math.Pow(Convert.ToDouble(StDev(dt, col)), 3);
+            double e_pow_3 = dt.AsEnumerable().Select(
+                c => Math.Pow((Convert.ToDouble(c.Field<decimal>(col)) - Convert.ToDouble(avg)), 3)).Average();
+            return Convert.ToDecimal(e_pow_3 / stdev_pow_3);
+        }
         public static decimal StDev(this DataTable dt, string col)
         {
             decimal avg = Avg(dt, col);

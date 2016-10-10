@@ -237,16 +237,32 @@ namespace ExamReport
             stat.stDev = data.StDev("zf");
             stat.Dfactor = stat.stDev / stat.avg;
             stat.difficulty = stat.avg / _fullmark;
+            stat.skewness = data.Skewness("zf");
         }
+        
 
         public void InsertSubDiff(string sub_str, string sub, decimal sub_full, DataTable data, DataTable sub_dt)
         {
             DataRow dr = sub_dt.NewRow();
             dr["sub"] = sub_str;
-            if (sub.Equals("zh"))
-                dr["diff"] = Convert.ToDecimal(data.AsEnumerable().Average(c => (c.Field<decimal>("sw_ls") + c.Field<decimal>("wl_dl") + c.Field<decimal>("hx_zz")))) / sub_full;
+            if (sub_dt.Columns.Contains("total"))
+            {
+                dr["total"] = sub_full;
+                if (sub.Equals("zh"))
+                    dr["avg"] = Convert.ToDecimal(data.AsEnumerable().Average(c => (c.Field<decimal>("sw_ls") + c.Field<decimal>("wl_dl") + c.Field<decimal>("hx_zz"))));
+                else
+                    dr["avg"] = Convert.ToDecimal(data.AsEnumerable().Average(c => c.Field<decimal>(sub)));
+
+                dr["diff"] = (decimal)dr["avg"] / sub_full;
+            }
             else
-                dr["diff"] = Convert.ToDecimal(data.AsEnumerable().Average(c => c.Field<decimal>(sub))) / sub_full;
+            {
+                if (sub.Equals("zh"))
+                    dr["diff"] = Convert.ToDecimal(data.AsEnumerable().Average(c => (c.Field<decimal>("sw_ls") + c.Field<decimal>("wl_dl") + c.Field<decimal>("hx_zz")))) / sub_full;
+                else
+                    dr["diff"] = Convert.ToDecimal(data.AsEnumerable().Average(c => c.Field<decimal>(sub))) / sub_full;
+
+            }
             sub_dt.Rows.Add(dr);
         }
 

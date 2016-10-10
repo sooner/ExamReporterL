@@ -44,6 +44,7 @@ namespace ExamReport
             oWord = new Word.Application();
 
             oWord.Visible = _config.isVisible;
+            object oPagebreak = Microsoft.Office.Interop.Word.WdBreakType.wdPageBreak;
             oDoc = oWord.Documents.Add(ref filepath, ref oMissing,
             ref oMissing, ref oMissing);
             Utils.WriteFrontPage(_config, oDoc);
@@ -61,25 +62,26 @@ namespace ExamReport
             insertHistGraph("    文科各学科得分率图", w_data.sub_diff);
             insertSubDiffTable("    理科各学科得分率表", l_data.sub_diff);
             insertHistGraph("    理科各学科得分率图", l_data.sub_diff);
-
+            oDoc.Characters.Last.InsertBreak(oPagebreak);
             insertText(ExamTitle0, "城区、郊区");
             insertText(ExamTitle1, "文科");
 
             insertTotalTable_final("    城区、郊区总分分析表", "城区", w_data.urban, "郊区", w_data.country);
             insertUrbCntTable("    城区、郊区文科各学科得分率分析表", w_data.urban_sub, w_data.country_sub);
             insertMultiHistGraph("    城区、郊区文科各学科得分率分析图", w_data.urban_sub, w_data.country_sub);
-
+            oDoc.Characters.Last.InsertBreak(oPagebreak);
             insertText(ExamTitle1, "理科");
 
             insertTotalTable_final("    城区、郊区总分分析表", "城区", l_data.urban, "郊区", l_data.country);
             insertUrbCntTable("    城区、郊区文科各学科得分率分析表", l_data.urban_sub, l_data.country_sub);
             insertMultiHistGraph("    城区、郊区文科各学科得分率分析图", l_data.urban_sub, l_data.country_sub);
-
+            oDoc.Characters.Last.InsertBreak(oPagebreak);
             insertText(ExamTitle0, "区县分析");
             insertText(ExamTitle1, "文科");
             insertText(ExamTitle2, "总分");
 
             insertQXtable("    各区文科总分分析表", w_data.districts.Rows[0], w_data.districts.Rows[1]);
+            insertQXchart("    各区文科总分得分率图", w_data.districts.Rows[1]);
             insertText(ExamTitle2, "语文"); 
             insertQXtable("    语文学科得分率表", w_data.districts.Rows[2], w_data.districts.Rows[3]);
             insertQXchart("    语文学科得分率图", w_data.districts.Rows[3]);
@@ -105,6 +107,7 @@ namespace ExamReport
             insertText(ExamTitle1, "理科");
             insertText(ExamTitle2, "总分"); 
             insertQXtable("    各区理科总分分析表", l_data.districts.Rows[0], l_data.districts.Rows[1]);
+            insertQXchart("    各区理科总分得分率图", l_data.districts.Rows[1]);
             insertText(ExamTitle2, "语文"); 
             insertQXtable("    语文学科得分率表", l_data.districts.Rows[2], l_data.districts.Rows[3]);
             insertQXchart("    语文学科得分率图", l_data.districts.Rows[3]);
@@ -285,19 +288,23 @@ namespace ExamReport
         {
             Word.Table table;
             Word.Range range = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-            table = oDoc.Tables.Add(range, 2, data.Rows.Count + 1, ref oMissing, oTrue);
+            table = oDoc.Tables.Add(range, 4, data.Rows.Count + 1, ref oMissing, oTrue);
 
             table.Range.InsertCaption(oWord.CaptionLabels["表"], title, oMissing, Word.WdCaptionPosition.wdCaptionPositionAbove, oMissing);
             range.MoveEnd(Word.WdUnits.wdParagraph, 1);
             range.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
 
             table.Cell(1, 1).Range.Text = "学科";
-            table.Cell(2, 1).Range.Text = "得分率";
+            table.Cell(2, 1).Range.Text = "总分";
+            table.Cell(3, 1).Range.Text = "平均分";
+            table.Cell(4, 1).Range.Text = "得分率";
 
             for (int col = 2; col <= data.Rows.Count + 1; col++)
             {
                 table.Cell(1, col).Range.Text = data.Rows[col - 2]["sub"].ToString().Trim();
-                table.Cell(2, col).Range.Text = string.Format("{0:F2}", data.Rows[col - 2]["diff"]);
+                table.Cell(2, col).Range.Text = Convert.ToInt32(data.Rows[col - 2]["total"]).ToString();
+                table.Cell(3, col).Range.Text = string.Format("{0:F1}", data.Rows[col - 2]["avg"]);
+                table.Cell(4, col).Range.Text = string.Format("{0:F2}", data.Rows[col - 2]["diff"]);
             }
 
             table.Rows[1].HeadingFormat = -1;
@@ -460,7 +467,7 @@ namespace ExamReport
             Word.Table table;
             Word.Range range = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
 
-            table = oDoc.Tables.Add(range, 3, 9, ref oMissing, oTrue);
+            table = oDoc.Tables.Add(range, 3, 10, ref oMissing, oTrue);
             table.Range.InsertCaption(oWord.CaptionLabels["表"], title, oMissing, Word.WdCaptionPosition.wdCaptionPositionAbove, oMissing);
             //range.MoveEnd(Word.WdUnits.wdParagraph, 1);
             range.Select();
@@ -482,6 +489,7 @@ namespace ExamReport
             table.Cell(1, 7).Range.Text = "标准差";
             table.Cell(1, 8).Range.Text = "差异系数";
             table.Cell(1, 9).Range.Text = "得分率";
+            table.Cell(1, 10).Range.Text = "偏度";
 
             table.Cell(2, 1).Range.Text = w_title;
             table.Cell(2, 2).Range.Text = w_data.totalnum.ToString();
@@ -492,6 +500,7 @@ namespace ExamReport
             table.Cell(2, 7).Range.Text = string.Format("{0:F2}", w_data.stDev);
             table.Cell(2, 8).Range.Text = string.Format("{0:F2}", w_data.Dfactor);
             table.Cell(2, 9).Range.Text = string.Format("{0:F2}", w_data.difficulty);
+            table.Cell(2, 10).Range.Text = string.Format("{0:F2}", w_data.skewness);
 
             table.Cell(3, 1).Range.Text = l_title;
             table.Cell(3, 2).Range.Text = l_data.totalnum.ToString();
@@ -502,6 +511,7 @@ namespace ExamReport
             table.Cell(3, 7).Range.Text = string.Format("{0:F2}", l_data.stDev);
             table.Cell(3, 8).Range.Text = string.Format("{0:F2}", l_data.Dfactor);
             table.Cell(3, 9).Range.Text = string.Format("{0:F2}", l_data.difficulty);
+            table.Cell(3, 10).Range.Text = string.Format("{0:F2}", l_data.skewness);
 
             table.Select();
             oWord.Selection.set_Style(ref TableContent2);

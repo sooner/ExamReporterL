@@ -15,7 +15,7 @@ namespace ExamReport
 {
     public static class DotNetCharting
     {
-        public static Color[] color = new Color[] { Color.FromArgb(0, 156, 255), Color.FromArgb(255, 99, 49), Color.FromArgb(49, 255, 49), Color.FromArgb(255, 255, 0), };
+        public static Color[] color = new Color[] { Color.FromArgb(255, 255, 0), Color.FromArgb(0, 156, 255), Color.FromArgb(255, 99, 49), Color.FromArgb(49, 255, 49) };
 
         public static void CreateColumn( DataTable dt)
         {
@@ -152,6 +152,7 @@ namespace ExamReport
                     //e.SmartLabel.AutoWrap = true;
                     // 每元素的大小数值
                     e.YValue = Convert.ToDouble(dt.Rows[i][1].ToString());
+                    e.Color = my_color;
                     //调整柱子颜色 
                     //s.PaletteName = Palette.Three;
                     
@@ -257,7 +258,7 @@ namespace ExamReport
             //图片存放路径
             //chart.TempDirectory = System.Environment.CurrentDirectory + "\\";
             //图表宽度
-            chart.Width = 460;
+            chart.Width = 590;
             //图表高度
             chart.Height = 291;
             chart.Series.Name = "";

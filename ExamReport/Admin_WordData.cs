@@ -18,6 +18,7 @@ namespace ExamReport
             public decimal stDev;
             public decimal Dfactor;
             public decimal difficulty;
+            public decimal skewness;
         }
         
         public basic_stat total;
@@ -66,6 +67,8 @@ namespace ExamReport
 
             sub_diff.Columns.Add("sub", typeof(string));
             sub_diff.Columns.Add("diff", typeof(decimal));
+            sub_diff.Columns.Add("total", typeof(decimal));
+            sub_diff.Columns.Add("avg", typeof(decimal));
 
             urban_sub.Columns.Add("sub", typeof(string));
             urban_sub.Columns.Add("diff", typeof(decimal));

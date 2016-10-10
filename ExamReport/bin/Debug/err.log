@@ -1,12 +1,11 @@
-System.Exception: 数据库文件被占用，请关闭！
-   在 ExamReport.mainform.TreeLoadData() 位置 D:\work\huyan\ExamReporterL\ExamReport\MainRadForm.cs:行号 353
-   在 ExamReport.mainform..ctor() 位置 D:\work\huyan\ExamReporterL\ExamReport\MainRadForm.cs:行号 43
-   在 ExamReport.Program.Main() 位置 D:\work\huyan\ExamReporterL\ExamReport\Program.cs:行号 21
-   在 System.AppDomain._nExecuteAssembly(RuntimeAssembly assembly, String[] args)
-   在 System.AppDomain.ExecuteAssembly(String assemblyFile, Evidence assemblySecurity, String[] args)
-   在 Microsoft.VisualStudio.HostingProcess.HostProc.RunUsersAssembly()
-   在 System.Threading.ThreadHelper.ThreadStart_Context(Object state)
-   在 System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
-   在 System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
-   在 System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
-   在 System.Threading.ThreadHelper.ThreadStart()
+System.Threading.ThreadAbortException: 正在中止线程。
+   在 dotnetCHARTING.WinForms.Chart.OnPaint(PaintEventArgs e)
+   在 System.Windows.Forms.Control.PaintWithErrorHandling(PaintEventArgs e, Int16 layer)
+   在 System.Windows.Forms.Control.OnPrint(PaintEventArgs e)
+   在 System.Windows.Forms.Control.WmPrintClient(Message& m)
+   在 System.Windows.Forms.Control.WndProc(Message& m)
+   在 System.Windows.Forms.ScrollableControl.WndProc(Message& m)
+   在 System.Windows.Forms.UserControl.WndProc(Message& m)
+   在 System.Windows.Forms.Control.ControlNativeWindow.OnMessage(Message& m)
+   在 System.Windows.Forms.Control.ControlNativeWindow.WndProc(Message& m)
+   在 System.Windows.Forms.NativeWindow.DebuggableCallback(IntPtr hWnd, Int32 msg, IntPtr wparam, IntPtr lparam)
