@@ -39,7 +39,7 @@ namespace ExamReport
 
         public void start_process()
         {
-            if (!(sub.Equals("总分") || sub.Equals("总分-行政版")))
+            if (!(sub.Equals("总分") || sub.Contains("行政版")))
             {
                 ans = new excel_process(ans_str);
                 ans.run(true);
@@ -62,7 +62,7 @@ namespace ExamReport
             md.fullmark_iszero = fullmark_iszero;
             md.sub_iszero = sub_iszero;
             md.PartialRight = PartialRight;
-            if (!(sub.Equals("总分")  || sub.Equals("总分-行政版")))
+            if (!(sub.Equals("总分")  || sub.Contains("行政版")))
             {
                 md.xz = ans.xz_th;
             }
@@ -74,7 +74,7 @@ namespace ExamReport
             else
                 md._sub_fullmark = 0;
             md._fullmark = fullmark;
-            if (!(sub.Equals("总分") || sub.Equals("总分-行政版")))
+            if (!(sub.Equals("总分") || sub.Contains("行政版")))
             {
                 md._grouptype = grouptype;
                 md._group_num = Convert.ToInt32(divider);
@@ -121,23 +121,35 @@ namespace ExamReport
 
         public void zk_database_process(MetaData mdata)
         {
-            
+            if (sub.Equals("中考行政版"))
+            {
+                Database db = new Database();
+                db.ZF_data_process(database_str);
 
-            Database db = new Database(mdata, ans.dt, groups.dt, grouptype, divider);
-            db.DBF_data_process(database_str);
+                basic_data = db._basic_data;
 
-            //if (db._basic_data.Columns.Contains("XZ"))
-            //{
-            //    XZ_group_separate(db._basic_data);
-            //}
-            basic_data = db._basic_data;
-            group_data = db._group_data;
+                DBHelper.create_mysql_table(basic_data, Utils.get_zt_tablename(year, Utils.language_trans(sub)));
+                
+            }
+            else
+            {
 
-            
-            DBHelper.create_mysql_table(basic_data, Utils.get_basic_tablename(year, Utils.language_trans(exam), Utils.language_trans(sub)));
-            DBHelper.create_mysql_table(group_data, Utils.get_group_tablename(year, Utils.language_trans(exam), Utils.language_trans(sub)));
-            DBHelper.create_ans_table(Utils.get_tablename(year, Utils.language_trans(exam), Utils.language_trans(sub)), db.newStandard, ans.xz_th);
-            DBHelper.create_fz_table(Utils.get_tablename(year, Utils.language_trans(exam), Utils.language_trans(sub)), groups.dt, groups.groups_group);
+                Database db = new Database(mdata, ans.dt, groups.dt, grouptype, divider);
+                db.DBF_data_process(database_str);
+
+                //if (db._basic_data.Columns.Contains("XZ"))
+                //{
+                //    XZ_group_separate(db._basic_data);
+                //}
+                basic_data = db._basic_data;
+                group_data = db._group_data;
+
+
+                DBHelper.create_mysql_table(basic_data, Utils.get_basic_tablename(year, Utils.language_trans(exam), Utils.language_trans(sub)));
+                DBHelper.create_mysql_table(group_data, Utils.get_group_tablename(year, Utils.language_trans(exam), Utils.language_trans(sub)));
+                DBHelper.create_ans_table(Utils.get_tablename(year, Utils.language_trans(exam), Utils.language_trans(sub)), db.newStandard, ans.xz_th);
+                DBHelper.create_fz_table(Utils.get_tablename(year, Utils.language_trans(exam), Utils.language_trans(sub)), groups.dt, groups.groups_group);
+            }
             wizard.ShowPro(100, 3);
 
         }
@@ -160,7 +172,7 @@ namespace ExamReport
         public void gk_database_process(MetaData mdata)
         {
 
-            if (sub.Equals("总分") || sub.Equals("总分-行政版"))
+            if (sub.Equals("总分") || sub.Equals("高考行政版"))
             {
                 GK_database db = new GK_database();
                 db.ZF_data_process(database_str);

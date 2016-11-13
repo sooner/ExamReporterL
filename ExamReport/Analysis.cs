@@ -73,6 +73,9 @@ namespace ExamReport
         public int li_second_level;
         public int li_third_level;
 
+        public int zk_first_level;
+        public int zk_second_level;
+
         public Analysis(mainform form)
         {
             _form = form;
@@ -91,7 +94,7 @@ namespace ExamReport
                     string chi_sub = row.Cells["sub"].Value.ToString().Trim();
                     string sub = Utils.language_trans(chi_sub);
 
-                    if (exam_type.Equals("gk_xz") && !sub.Equals("zf_xz"))
+                    if (exam_type.Equals("gk_xz") && !sub.EndsWith("xz"))
                         continue;
                     string log = year + "年" + Utils.language_trans(exam) + row.Cells["sub"].Value.ToString().Trim();
                     _form.ShowPro(exam_type, 1, log + "数据读取...");
@@ -108,7 +111,7 @@ namespace ExamReport
                             mdata.ywyy_choice = row.Cells["SpecChoice"].Value.ToString().Trim();
 
                         mdata.log_name = log;
-                        if (sub.Equals("zf") || sub.Equals("zf_xz"))
+                        if (sub.Equals("zf") || sub.EndsWith("xz"))
                         {
                             mdata.get_zf_data();
                         }
@@ -230,6 +233,10 @@ namespace ExamReport
                                     mdata.get_QXSF_data(qx_addr);
                                     zk_qx_process(mdata);
                                     break;
+                                case "zk_xz":
+                                    mdata.get_CJ_data(cj_addr);
+                                    zk_xz_process(mdata);
+                                    break;
                                 case "hk_zt":
                                     hk_zt_process(mdata);
                                     break;
@@ -283,7 +290,38 @@ namespace ExamReport
             }
             _form.ShowPro(exam_type, 2, "完成！");
         }
+        public void zk_xz_start()
+        {
+            exam_type = "zk_xz";
+            _exam = "zk";
+            start();
+        }
+        public void zk_xz_process(MetaData mdata)
+        {
+            Configuration config = initConfig(mdata._sub, "行政", "中考");
+            config.zk_first_level = zk_first_level;
+            config.zk_second_level = zk_second_level;
 
+            int urban = mdata.CJ_list[0][0].Equals("城区") ? 0 : 1;
+            int country = mdata.CJ_list[0][1].Equals("郊区") ? 0 : 1;
+
+            config.urban_code = new string[mdata.CJ_list[urban].Count];
+            config.country_code = new string[mdata.CJ_list[country].Count];
+
+            for (int j = 1; j < mdata.CJ_list[urban].Count; j++)
+                config.urban_code[j - 1] = mdata.CJ_list[urban][j].ToString().Trim();
+
+            for (int j = 1; j < mdata.CJ_list[country].Count; j++)
+                config.country_code[j - 1] = mdata.CJ_list[country][j].ToString().Trim();
+
+            _form.ShowPro("zk_xz", 1, mdata.log_name + "数据分析中...");
+            AdminCal xzCal = new AdminCal(config, mdata.basic, mdata._fullmark, true);
+            xzCal.zk_Calculate();
+
+            _form.ShowPro("zk_xz", 1, mdata.log_name + "报告生成中...");
+            ZK_Admin_WordCreator xzWordCreator = new ZK_Admin_WordCreator(config);
+            xzWordCreator.creating_word(xzCal.final_result);
+        }
         public void gk_xz_start()
         {
             exam_type = "gk_xz";

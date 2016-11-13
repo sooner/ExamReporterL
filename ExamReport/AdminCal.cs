@@ -16,6 +16,8 @@ namespace ExamReport
         public Admin_WordData w_result;
         public Admin_WordData l_result;
 
+        public Admin_WordData final_result;
+
         public Configuration _config;
 
         public AdminCal(Configuration config, DataTable data, decimal fullmark)
@@ -30,6 +32,19 @@ namespace ExamReport
 
             qx_init();
         }
+
+        public AdminCal(Configuration config, DataTable data, decimal fullmark, bool isZK)
+        {
+            _data = data;
+            _fullmark = fullmark;
+
+            final_result = new Admin_WordData();
+
+            _config = config;
+
+            qx_init();
+        }
+    
 
         public void qx_init()
         {
@@ -50,6 +65,11 @@ namespace ExamReport
             qx_code.Add(new string[1] { "17" });
             qx_code.Add(new string[1] { "28" });
             qx_code.Add(new string[1] { "29" });
+        }
+        public void zk_Calculate()
+        {
+            single_process(_data, final_result, _config.zk_first_level, _config.zk_second_level, -1);
+            zk_process(_data, final_result);
         }
         public void Calculate()
         {
@@ -82,7 +102,30 @@ namespace ExamReport
             qx_process("zh", 300, data, result.districts);
 
         }
+        public void zk_process(DataTable data, Admin_WordData result)
+        {
+            zk_sub(data, result.sub_diff);
 
+            DataTable urban = data.filteredtable("qxdm", _config.urban_code);
+            DataTable country = data.filteredtable("qxdm", _config.country_code);
+            zk_sub(urban, result.urban_sub);
+            zk_sub(country, result.country_sub);
+
+            qx_process("zf", 560, data, result.districts);
+            qx_process("yw", 120, data, result.districts);
+            qx_process("sx", 120, data, result.districts);
+            qx_process("yy", 120, data, result.districts);
+            qx_process("wl", 100, data, result.districts);
+            qx_process("hx", 100, data, result.districts);
+        }
+        public void zk_sub(DataTable data, DataTable sub)
+        {
+            InsertSubDiff("语文", "yw", 120, data, sub);
+            InsertSubDiff("数学", "sx", 120, data, sub);
+            InsertSubDiff("英语", "yy", 120, data, sub);
+            InsertSubDiff("物理", "wl", 100, data, sub);
+            InsertSubDiff("化学", "hx", 190, data, sub);
+        }
         public void li_process(DataTable data, Admin_WordData result)
         {
             li_sub(data, result.sub_diff);
@@ -209,11 +252,19 @@ namespace ExamReport
                 acct_count += count;
 
             }
-            InsertTotalLevel("650以上", Convert.ToInt32(_fullmark), 650, data, result);
-            InsertTotalLevel("600以上", Convert.ToInt32(_fullmark), 600, data, result);
-            InsertTotalLevel("一本",  Convert.ToInt32(_fullmark), first, data, result);
-            InsertTotalLevel("二本", first, second, data, result);
-            InsertTotalLevel("三本", second, third, data, result);
+            if (third != -1)
+            {
+                InsertTotalLevel("650以上", Convert.ToInt32(_fullmark), 650, data, result);
+                InsertTotalLevel("600以上", Convert.ToInt32(_fullmark), 600, data, result);
+                InsertTotalLevel("一本", Convert.ToInt32(_fullmark), first, data, result);
+                InsertTotalLevel("二本", first, second, data, result);
+                InsertTotalLevel("三本", second, third, data, result);
+            }
+            else
+            {
+                InsertTotalLevel("重点", Convert.ToInt32(_fullmark), first, data, result);
+                InsertTotalLevel("普通", first, second, data, result);
+            }
 
             
 

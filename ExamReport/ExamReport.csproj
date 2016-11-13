@@ -151,6 +151,7 @@
     <Compile Include="ZF_statistic.cs" />
     <Compile Include="ZF_wordcreator.cs" />
     <Compile Include="ZF_worddata.cs" />
+    <Compile Include="ZK_Admin_WordCreator.cs" />
     <Compile Include="ZK_database.cs" />
     <Compile Include="excel_process.cs" />
     <Compile Include="ExecuteMethod.cs" />

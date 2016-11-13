@@ -171,7 +171,7 @@ namespace ExamReport
             string table_name = Utils.get_basic_tablename(_year, _exam, Utils.language_trans(_sub));
             if (_sub.Contains("理综") || _sub.Contains("文综"))
                 table_name = table_name;//留个地方
-            else if (_sub.Equals("总分") || _sub.Equals("总分-行政版"))
+            else if (_sub.Equals("总分") || _sub.Contains("行政版"))
                 table_name = Utils.get_zt_tablename(_year, Utils.language_trans(_sub));
             reader = MySqlHelper.ExecuteReader(MySqlHelper.Conn, CommandType.Text, "select COLUMN_NAME from information_schema.COLUMNS where table_name = '" + table_name + "'", null);
             List<string> name = new List<string>();
@@ -194,7 +194,7 @@ namespace ExamReport
             string table_name = Utils.get_basic_tablename(_year, _exam, Utils.language_trans(_sub));
             if (_sub.Contains("理综") || _sub.Contains("文综"))
                 table_name = table_name;//留个地方
-            else if (_sub.Equals("总分") || _sub.Equals("总分-行政版"))
+            else if (_sub.Equals("总分") || _sub.Contains("行政版"))
                 table_name = Utils.get_zt_tablename(_year, Utils.language_trans(_sub));
             reader = MySqlHelper.ExecuteReader(MySqlHelper.Conn, CommandType.Text, "describe " + table_name + " " + column_name, null);
 

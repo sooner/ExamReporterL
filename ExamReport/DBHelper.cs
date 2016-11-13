@@ -104,7 +104,7 @@ namespace ExamReport
                 + year + "' and exam='"
                 + _exam + "' and sub='"
                 + _sub + "'", null);
-            if (_sub.Equals("zf") || _sub.Equals("zf_xz"))
+            if (_sub.Equals("zf") || _sub.EndsWith("xz"))
             {
                 MySqlHelper.ExecuteNonQuery(trans, CommandType.Text, "drop table " + Utils.get_zt_tablename(year, _sub), null);
             }

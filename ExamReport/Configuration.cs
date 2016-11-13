@@ -47,6 +47,9 @@ namespace ExamReport
         public int li_second_level;
         public int li_third_level;
 
+        public int zk_first_level;
+        public int zk_second_level;
+
         public string[] urban_code;
         public string[] country_code;
         

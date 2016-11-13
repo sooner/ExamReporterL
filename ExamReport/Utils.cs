@@ -66,6 +66,8 @@ namespace ExamReport
         public static string GK_ZF_title_2 = "试卷总分统计分析报告";
         public static string GK_ZF_title_xz_1 = "年高考数据分析报告";
         public static string GK_ZF_title_xz_2 = "(行政版)";
+        public static string ZK_ZF_title_xz_1 = "年中考数据分析报告";
+        public static string ZK_ZF_title_xz_2 = "（行政版）";
         public static string GK_WSLG_title_2 = "文史、理工类数据统计分析报告";
         public static string XX_title = "学校数据统计分析报告";
 
@@ -141,6 +143,13 @@ namespace ExamReport
                         WriteIntoDocument(oDoc, "QX", config.QX);
                         WriteIntoDocument(oDoc, "QX_subject", config.subject);
                     }
+                    else if (config.subject.Equals("中考行政版"))
+                    {
+                        WriteIntoDocument(oDoc, "title_1", "");
+                        WriteIntoDocument(oDoc, "title_2", config.year + ZK_ZF_title_xz_1);
+                        WriteIntoDocument(oDoc, "subject", ZK_ZF_title_xz_2);
+                        WriteIntoDocument(oDoc, "company", "北京教育考试院科研办");
+                    }
                 }
             else if (config.exam.Equals("会考"))
                 {
@@ -163,7 +172,7 @@ namespace ExamReport
                             WriteIntoDocument(oDoc, "subject", "全市");
                         
                     }
-                    else if (config.subject.Equals("总分-行政版"))
+                    else if (config.subject.Equals("高考行政版"))
                     {
                         WriteIntoDocument(oDoc, "title_1", "");
                         WriteIntoDocument(oDoc, "title_2", config.year + GK_ZF_title_xz_1);
@@ -320,7 +329,7 @@ namespace ExamReport
         }
         public static void Save(Configuration config, Microsoft.Office.Interop.Word._Document oDoc, Microsoft.Office.Interop.Word._Application oWord)
         {
-            if(!config.subject.Equals("总分-行政版"))
+            if(!config.subject.Contains("行政版"))
                 insertAddons(config, oDoc, oWord);
             object oMissing = System.Reflection.Missing.Value;
             string addr = config.save_address + @"\";
@@ -334,6 +343,10 @@ namespace ExamReport
                 else if (config.report_style.Equals("区县"))
                 {
                     final = config.year + "年" + config.QX + config.subject.ToString() + "分类校数据统计分析报告.docx";
+                }
+                else if (config.subject.Equals("中考行政版"))
+                {
+                    final = config.year + "年北京市中考试卷行政版分析报告.docx";
                 }
             }
             else if (config.exam.Equals("会考"))
@@ -354,7 +367,7 @@ namespace ExamReport
                         final = config.year + "年北京市普通高考试卷总分统计分析报告(全市).docx";
                     
                 }
-                if(config.subject.Equals("总分-行政版"))
+                if(config.subject.Equals("高考行政版"))
                 {
                     final = config.year + "年北京市普通高考试卷行政版分析报告.docx";
                 }
@@ -597,6 +610,10 @@ namespace ExamReport
                     return "sxw";
                 case "总分":
                     return "zf";
+                case "高考行政版":
+                    return "gk_xz";
+                case "中考行政版":
+                    return "zk_xz";
                 case "yw":
                     return "语文";
                 case "sx":
@@ -621,6 +638,10 @@ namespace ExamReport
                     return "数学文"; 
                 case "zf":
                     return "总分";
+                case "gk_xz":
+                    return "高考行政版";
+                case "zk_xz":
+                    return "中考行政版";
                 default:
                     return "";
             }
@@ -665,8 +686,10 @@ namespace ExamReport
                     return "sxw";
                 case "总分":
                     return "zf";
-                case "总分-行政版":
-                    return "zf_xz";
+                case "高考行政版":
+                    return "gk_xz";
+                case "中考行政版":
+                    return "zk_xz";
 
                 case "yw":
                     return "语文";
@@ -692,8 +715,10 @@ namespace ExamReport
                     return "数学文";
                 case "zf":
                     return "总分";
-                case "zf_xz":
-                    return "总分-行政版";
+                case "gk_xz":
+                    return "高考行政版";
+                case "zk_xz":
+                    return "中考行政版";
                 default:
                     return "";
             }

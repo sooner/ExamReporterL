@@ -122,6 +122,7 @@ namespace ExamReport
             progress_label.Add("gk_cus", gk_cus_progresslabel);
             progress_label.Add("hk_script", hk_script_progresslabel);
             progress_label.Add("gk_xz", gk_xz_progresslabel);
+            progress_label.Add("zk_xz", zk_xz_progresslabel);
 
             run_button.Add("zk_zt", zk_zt_start);
             run_button.Add("zk_qx", zk_qx_start);
@@ -134,6 +135,7 @@ namespace ExamReport
             run_button.Add("gk_cus", gk_cus_start);
             run_button.Add("hk_script", hk_script_start);
             run_button.Add("gk_xz", gk_xz_start);
+            run_button.Add("zk_xz", zk_xz_start);
 
             cancel_button.Add("zk_zt", zk_zt_cancel);
             cancel_button.Add("zk_qx", zk_qx_cancel);
@@ -146,6 +148,7 @@ namespace ExamReport
             cancel_button.Add("gk_cus", gk_cus_cancel);
             cancel_button.Add("hk_script", hk_script_cancel);
             cancel_button.Add("gk_xz", gk_xz_cancel);
+            cancel_button.Add("zk_xz", zk_xz_cancel);
 
 
             waiting_bar.Add("zk_zt", zk_zt_waitingbar);
@@ -159,6 +162,7 @@ namespace ExamReport
             waiting_bar.Add("gk_cus", gk_cus_waitingbar);
             waiting_bar.Add("hk_script", hk_script_progressbar);
             waiting_bar.Add("gk_xz", gk_xz_waitingbar);
+            waiting_bar.Add("zk_xz", zk_xz_waitingbar);
 
             
         }
@@ -315,10 +319,10 @@ namespace ExamReport
             //ZKTreeView.Nodes.Add(new RadTreeNode("中考"));
             ZKTreeView.Nodes.Clear();
             ZKTreeView.Nodes.Add(new RadTreeNode("数据录入"));
-
             ZKTreeView.Nodes.Add(new RadTreeNode("总体"));
-
             ZKTreeView.Nodes.Add(new RadTreeNode("区县"));
+            ZKTreeView.Nodes.Add(new RadTreeNode("行政版"));
+
             GKTreeView.Nodes.Clear();
 
             GKTreeView.Nodes.Add(new RadTreeNode("数据录入"));
@@ -595,6 +599,7 @@ namespace ExamReport
                 zk_zt_panel.Show();
                 zk_qx_panel.Hide();
                 DataPrePanel.Hide();
+                zk_xz_panel.Hide();
             }
             else if (element.SelectedNode.Text.Trim().Equals("区县") || (element.SelectedNode.Parent != null && element.SelectedNode.Parent.Text.Trim().Equals("区县")))
             {
@@ -602,6 +607,7 @@ namespace ExamReport
                 zk_qx_panel.Show();
                 zk_zt_panel.Hide();
                 DataPrePanel.Hide();
+                zk_xz_panel.Hide();
             }
             else if (element.SelectedNode.Text.Trim().Equals("数据录入"))
             {
@@ -609,6 +615,15 @@ namespace ExamReport
                 zk_qx_panel.Hide();
                 zk_zt_panel.Hide();
                 DataPrePanel.Show();
+                zk_xz_panel.Hide();
+            }
+            else if (element.SelectedNode.Text.Trim().Equals("行政版"))
+            {
+                DocGroupBox.Show();
+                zk_qx_panel.Hide();
+                zk_zt_panel.Hide();
+                DataPrePanel.Hide();
+                zk_xz_panel.Show();
             }
         }
 
@@ -1665,6 +1680,71 @@ namespace ExamReport
                     ShowPro("gk_xz", 2, "");
                 }
             }
+        }
+
+        private void zk_xz_start_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(zk_xz_qx_addr.Text.Trim()))
+            {
+                Error("请输入城郊分类文件地址！");
+                return;
+            }
+
+            if (zk_first_level.Value == 0 || zk_second_level.Value == 0)
+            {
+                Error("重点线不能为零！");
+                return;
+            }
+            if (zk_first_level.Value < zk_second_level.Value)
+            {
+                Error("重点线不应该低于普通线吧？");
+                return;
+            }
+            
+
+            if (CheckGridView(zk_gridview))
+                return;
+
+            Analysis analysis = new Analysis(this);
+            analysis._gridview = zk_gridview;
+            analysis.save_address = save_address.Text;
+            analysis.isVisible = zk_isVisible.Checked;
+            analysis.CurrentDirectory = currentdic;
+            analysis.cj_addr = zk_xz_qx_addr.Text.ToString().Trim();
+            analysis.curryear = zk_yearlist.SelectedItem.ToString().Trim();
+            analysis.currmonth = zk_currmonth.SelectedItem.ToString().Trim();
+
+            analysis.zk_first_level = Convert.ToInt32(zk_first_level.Value);
+            analysis.zk_second_level = Convert.ToInt32(zk_second_level.Value);
+
+            Thread thread = new Thread(new ThreadStart(analysis.zk_xz_start));
+            thread.IsBackground = true;
+            thread.SetApartmentState(ApartmentState.STA);
+            thread_store.Add("zk_xz", thread);
+            thread.Start();
+        }
+
+        private void zk_xz_cancel_Click(object sender, EventArgs e)
+        {
+            if (thread_store.ContainsKey("zk_xz"))
+            {
+                Thread thread = thread_store["zk_xz"];
+                if (thread.IsAlive)
+                {
+                    thread.Abort();
+                    thread_store.Remove("zk_xz");
+                    ShowPro("zk_xz", 2, "");
+                }
+            }
+        }
+
+        private void radButton15_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog openFolder = new FolderBrowserDialog();
+            openFolder.ShowNewFolderButton = true;
+            openFolder.Description = "保存至";
+            if (openFolder.ShowDialog() == DialogResult.OK)
+                zk_xz_qx_addr.Text = openFolder.SelectedPath;
         }
 
        
