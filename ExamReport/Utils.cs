@@ -130,15 +130,16 @@ namespace ExamReport
 
             if (config.exam.Equals("中考"))
                 {
-                    WriteIntoDocument(oDoc, "title_1", ZK_title_1);
+                    
                     if (config.report_style.Equals("总体"))
                     {
-
+                        WriteIntoDocument(oDoc, "title_1", ZK_title_1);
                         WriteIntoDocument(oDoc, "title_2", ZK_title_2);
                         WriteIntoDocument(oDoc, "subject", config.subject);
                     }
                     else if (config.report_style.Equals("区县"))
                     {
+                        WriteIntoDocument(oDoc, "title_1", ZK_title_1);
                         WriteIntoDocument(oDoc, "title_2", ZK_QX_title_2);
                         WriteIntoDocument(oDoc, "QX", config.QX);
                         WriteIntoDocument(oDoc, "QX_subject", config.subject);

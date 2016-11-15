@@ -54,7 +54,7 @@ namespace ExamReport
             insertTotalTable_final("    试卷总分分析表", "总体", data.total);
             insertChart("    总分分数分布图", data);
             insertFreqTable_single("    总分频数分布表", data.total_freq);
-            insertGKLineTable("高考上线人数比率表", data.total_level);
+            insertGKLineTable("上线人数比率表", data.total_level);
             insertText(ExamTitle1, "各学科分析");
             insertSubDiffTable("    各学科得分率表", data.sub_diff);
             insertHistGraph("    各学科得分率图", data.sub_diff);
@@ -109,7 +109,7 @@ namespace ExamReport
             Word.Table table;
             Word.Range range = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
 
-            table = oDoc.Tables.Add(range, 3, 10, ref oMissing, oTrue);
+            table = oDoc.Tables.Add(range, 2, 10, ref oMissing, oTrue);
             table.Range.InsertCaption(oWord.CaptionLabels["表"], title, oMissing, Word.WdCaptionPosition.wdCaptionPositionAbove, oMissing);
             //range.MoveEnd(Word.WdUnits.wdParagraph, 1);
             range.Select();
@@ -225,7 +225,7 @@ namespace ExamReport
         {
             Word.Table table;
             Word.Range range = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-            table = oDoc.Tables.Add(range, 7, 4, ref oMissing, oTrue);
+            table = oDoc.Tables.Add(range, 3, 4, ref oMissing, oTrue);
 
             table.Range.InsertCaption(oWord.CaptionLabels["表"], title, oMissing, Word.WdCaptionPosition.wdCaptionPositionAbove, oMissing);
             range.MoveEnd(Word.WdUnits.wdParagraph, 1);

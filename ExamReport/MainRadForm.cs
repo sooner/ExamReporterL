@@ -108,6 +108,8 @@ namespace ExamReport
             gk_xx_sf_addr.Text = currentdic + sf_addr;
 
             gk_xz_cj_addr.Text = currentdic + cj_addr;
+
+            zk_xz_qx_addr.Text = currentdic + cj_addr;
         }
         void init_dictionary()
         {
@@ -1740,11 +1742,13 @@ namespace ExamReport
 
         private void radButton15_Click(object sender, EventArgs e)
         {
-            FolderBrowserDialog openFolder = new FolderBrowserDialog();
-            openFolder.ShowNewFolderButton = true;
-            openFolder.Description = "保存至";
-            if (openFolder.ShowDialog() == DialogResult.OK)
-                zk_xz_qx_addr.Text = openFolder.SelectedPath;
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+            openFileDialog1.InitialDirectory = "C://";
+            openFileDialog1.Filter = "Excel files (*.xls,*.xlsx)|*.xls;*.xlsx|All files (*.*)|*.*";
+            openFileDialog1.FilterIndex = 1;
+            openFileDialog1.RestoreDirectory = true;
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+                zk_xz_qx_addr.Text = openFileDialog1.FileName;
         }
 
        

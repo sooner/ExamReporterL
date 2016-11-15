@@ -1,11 +1,13 @@
-System.Threading.ThreadAbortException: 正在中止线程。
-   在 dotnetCHARTING.WinForms.Chart.OnPaint(PaintEventArgs e)
-   在 System.Windows.Forms.Control.PaintWithErrorHandling(PaintEventArgs e, Int16 layer)
-   在 System.Windows.Forms.Control.OnPrint(PaintEventArgs e)
-   在 System.Windows.Forms.Control.WmPrintClient(Message& m)
-   在 System.Windows.Forms.Control.WndProc(Message& m)
-   在 System.Windows.Forms.ScrollableControl.WndProc(Message& m)
-   在 System.Windows.Forms.UserControl.WndProc(Message& m)
-   在 System.Windows.Forms.Control.ControlNativeWindow.OnMessage(Message& m)
-   在 System.Windows.Forms.Control.ControlNativeWindow.WndProc(Message& m)
-   在 System.Windows.Forms.NativeWindow.DebuggableCallback(IntPtr hWnd, Int32 msg, IntPtr wparam, IntPtr lparam)
+System.Runtime.InteropServices.COMException (0x800A1735): 集合所要求的成员不存在。
+   at Microsoft.Office.Interop.Word.Bookmarks.get_Item(Object& Index)
+   at ExamReport.Utils.WriteIntoDocument(_Document oDoc, String BookmarkName, String FillName) in G:\wangsa\ExamReporterL\ExamReport\Utils.cs:line 291
+   at ExamReport.Utils.WriteFrontPage(Configuration config, _Document oDoc) in G:\wangsa\ExamReporterL\ExamReport\Utils.cs:line 148
+   at ExamReport.ZK_Admin_WordCreator.creating_word(Admin_WordData data) in G:\wangsa\ExamReporterL\ExamReport\ZK_Admin_WordCreator.cs:line 50
+   at ExamReport.Analysis.zk_xz_process(MetaData mdata) in G:\wangsa\ExamReporterL\ExamReport\Analysis.cs:line 323
+   at ExamReport.Analysis.start() in G:\wangsa\ExamReporterL\ExamReport\Analysis.cs:line 238
+   at ExamReport.Analysis.zk_xz_start() in G:\wangsa\ExamReporterL\ExamReport\Analysis.cs:line 297
+   at System.Threading.ThreadHelper.ThreadStart_Context(Object state)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.ThreadHelper.ThreadStart()

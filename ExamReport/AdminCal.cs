@@ -111,12 +111,12 @@ namespace ExamReport
             zk_sub(urban, result.urban_sub);
             zk_sub(country, result.country_sub);
 
-            qx_process("zf", 560, data, result.districts);
+            qx_process("zf", 540, data, result.districts);
             qx_process("yw", 120, data, result.districts);
             qx_process("sx", 120, data, result.districts);
             qx_process("yy", 120, data, result.districts);
             qx_process("wl", 100, data, result.districts);
-            qx_process("hx", 100, data, result.districts);
+            qx_process("hx", 80, data, result.districts);
         }
         public void zk_sub(DataTable data, DataTable sub)
         {
@@ -124,7 +124,7 @@ namespace ExamReport
             InsertSubDiff("数学", "sx", 120, data, sub);
             InsertSubDiff("英语", "yy", 120, data, sub);
             InsertSubDiff("物理", "wl", 100, data, sub);
-            InsertSubDiff("化学", "hx", 190, data, sub);
+            InsertSubDiff("化学", "hx", 80, data, sub);
         }
         public void li_process(DataTable data, Admin_WordData result)
         {
