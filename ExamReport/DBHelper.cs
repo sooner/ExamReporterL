@@ -29,7 +29,7 @@ namespace ExamReport
                     count++;
                 }
             }
-            create_mysql_table(copy, name, "100");
+            create_mysql_table(copy, name, "100", "decimal(4,1)");
         }
 
         public static void create_ans_table(string name, DataTable dt, List<string> xz)
@@ -131,7 +131,7 @@ namespace ExamReport
             //    throw new ArgumentException("数据库不一致，该条数据不存在");
             return true;
         }
-        public static void create_mysql_table(DataTable groups_data, string filename, string charsize)
+        public static void create_mysql_table(DataTable groups_data, string filename, string charsize, string datastype)
         {
             MySqlHelper.ExecuteNonQuery(MySqlHelper.Conn, CommandType.Text, "drop table if exists " + filename, null);
             StringBuilder objectdata = new StringBuilder();
@@ -146,7 +146,7 @@ namespace ExamReport
                 if (dc.DataType.ToString().Equals("System.String"))
                     objectdata.Append("text");
                 else if (dc.DataType.ToString().Equals("System.Decimal"))
-                    objectdata.Append("decimal(4,1)");
+                    objectdata.Append(datastype);
                 else
                     i++;
                 count++;
@@ -203,10 +203,16 @@ namespace ExamReport
             
 
             string charsize = ConfigurationManager.AppSettings["charsize"].ToString().Trim();
-            create_mysql_table(groups_data, filename, charsize);
+            create_mysql_table(groups_data, filename, charsize, "decimal(4,1)");
 
             
 
+        }
+
+        public static void create_mysql_table_datastyle(DataTable groups_data, string filename)
+        {
+            string charsize = ConfigurationManager.AppSettings["charsize"].ToString().Trim();
+            create_mysql_table(groups_data, filename, charsize, "decimal(4,2)");
         }
     }
 }
