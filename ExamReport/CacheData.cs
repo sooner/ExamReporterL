@@ -39,7 +39,7 @@ namespace ExamReport
             //DBHelper.create_mysql_table_datastyle(pdata.totalmark_dist, basic + "_totalmark_dist");
         }
 
-        public void load_totaldata(string year, string exam, string sub, PartitionData pdata)
+        public void load_partitiondata(string year, string exam, string sub, PartitionData pdata)
         {
             string tablename = "total_statistic";
             string basic = year + "_" + exam + "_" + sub;

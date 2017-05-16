@@ -11,7 +11,7 @@ namespace ExamReport
     public class Comparison
     {
 
-        string[] subs = {"yw","sxw","sxl", "yy", "wl","hx","sw","zz","dl","ls" };
+        string[] subs = {"yw","sxw","sxl", "yy", "lz", "wl","hx","sw", "wz", "zz","dl","ls" };
         string[] subs_total = { "yww", "yyw", "wz", "ywl", "sxl", "yyl", "lz" };
 
         string[] sum_wk = { "yww", "sxw", "yyw", "wz", "ls", "dl", "zz" };
@@ -33,9 +33,7 @@ namespace ExamReport
             summary.Columns.Add("stDev", typeof(decimal));
             summary.Columns.Add("Dfactor", typeof(decimal));
             summary.Columns.Add("difficulty", typeof(decimal));
-
-            summary.PrimaryKey = new DataColumn[] { summary.Columns["sub"] };
-
+            summary.Columns.Add("diff", typeof(decimal));
             
         }
 
@@ -80,31 +78,68 @@ namespace ExamReport
                 year1_data.Add(sub, sub_data1);
                 year2_data.Add(sub, sub_data2);
 
-                insert_sub_to_summary(sub, year1, sub_data1);
-                insert_sub_to_summary(sub, year2, sub_data2);
+                //insert_sub_to_summary(sub, year1, sub_data1);
+                //insert_sub_to_summary(sub, year2, sub_data2);
 
             }
 
-
-            insert_zf_to_summary("wk", year1, year1_w_data);
-            insert_zf_to_summary("wk", year2, year2_w_data);
+            decimal diff = year2_w_data.difficulty - year1_w_data.difficulty; 
+            insert_zf_to_summary("wk", year1, year1_w_data, diff);
+            insert_zf_to_summary("wk", year2, year2_w_data, diff);
 
             foreach (string sub in sum_wk)
             {
+                decimal temp_diff;
                 if (!year1_data.Keys.Contains(sub))
                 {
-                    Part
+                    PartitionData pdata1 = new PartitionData("");
+                    cachedata.load_partitiondata(year1, exam, sub, pdata1);
+                    PartitionData pdata2 = new PartitionData("");
+                    cachedata.load_partitiondata(year2, exam, sub, pdata2);
+
+                    temp_diff = pdata2.difficulty - pdata1.difficulty;
+
+                    insert_pt_to_summary(sub, year1, pdata1, temp_diff);
+                    insert_pt_to_summary(sub, year2, pdata2, temp_diff);
                 }
-                insert_sub_to_summary(sub, year1, year1_data[sub]);
+                else
+                {
+                    temp_diff = year2_data[sub].difficulty - year1_data[sub].difficulty;
+                    insert_sub_to_summary(sub, year1, year1_data[sub], temp_diff);
+                    insert_sub_to_summary(sub, year2, year2_data[sub], temp_diff);
+                }
             }
-            insert_zf_to_summary("lk", year1, year1_l_data);
-            insert_zf_to_summary("lk", year2, year2_l_data);
 
+            decimal l_diff = year2_l_data.difficulty - year1_l_data.difficulty;
+            insert_zf_to_summary("lk", year1, year1_l_data, l_diff);
+            insert_zf_to_summary("lk", year2, year2_l_data, l_diff);
 
+            foreach (string sub in sum_lk)
+            {
+                decimal temp_diff;
+                if (!year1_data.Keys.Contains(sub))
+                {
+                    PartitionData pdata1 = new PartitionData("");
+                    cachedata.load_partitiondata(year1, exam, sub, pdata1);
+                    PartitionData pdata2 = new PartitionData("");
+                    cachedata.load_partitiondata(year2, exam, sub, pdata2);
+
+                    temp_diff = pdata2.difficulty - pdata1.difficulty;
+                    insert_pt_to_summary(sub, year1, pdata1, temp_diff);
+                    insert_pt_to_summary(sub, year2, pdata2, temp_diff);
+                }
+                else
+                {
+                    temp_diff = year2_data[sub].difficulty - year1_data[sub].difficulty;
+                    insert_sub_to_summary(sub, year1, year1_data[sub], temp_diff);
+                    insert_sub_to_summary(sub, year2, year2_data[sub], temp_diff);
+                }
+            }
 
         }
 
-        public void insert_zf_to_summary(string name, string year, ZF_worddata data)
+
+        public void insert_pt_to_summary(string name, string year, PartitionData data, decimal diff)
         {
             DataRow dr = summary.NewRow();
 
@@ -118,11 +153,12 @@ namespace ExamReport
             dr["stDev"] = data.stDev;
             dr["Dfactor"] = data.Dfactor;
             dr["difficulty"] = data.difficulty;
+            dr["diff"] = diff;
 
             summary.Rows.Add(dr);
         }
 
-        public void insert_sub_to_summary(string name, string year, WordData data)
+        public void insert_zf_to_summary(string name, string year, ZF_worddata data, decimal diff)
         {
             DataRow dr = summary.NewRow();
 
@@ -136,6 +172,26 @@ namespace ExamReport
             dr["stDev"] = data.stDev;
             dr["Dfactor"] = data.Dfactor;
             dr["difficulty"] = data.difficulty;
+            dr["diff"] = diff;
+
+            summary.Rows.Add(dr);
+        }
+
+        public void insert_sub_to_summary(string name, string year, WordData data, decimal diff)
+        {
+            DataRow dr = summary.NewRow();
+
+            dr["sub"] = name;
+            dr["year"] = year;
+            dr["total_num"] = data.total_num;
+            dr["fullmark"] = data.fullmark;
+            dr["max"] = data.max;
+            dr["min"] = data.min;
+            dr["avg"] = data.avg;
+            dr["stDev"] = data.stDev;
+            dr["Dfactor"] = data.Dfactor;
+            dr["difficulty"] = data.difficulty;
+            dr["diff"] = diff;
 
             summary.Rows.Add(dr);
         }

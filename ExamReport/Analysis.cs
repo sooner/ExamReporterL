@@ -850,10 +850,14 @@ namespace ExamReport
         public void gk_zf_zt_process(MetaData mdata)
         {
             Configuration config = initConfig(mdata._sub, "总体", "高考");
+            CacheData cdata = new CacheData();
             _form.ShowPro(exam_type, 1, mdata.log_name + "数据分析中...");
             ZF_statistic stat = new ZF_statistic(config, mdata.basic, mdata._fullmark, "总体");
 
             stat.partition_process();
+            cdata.save_zf_data(mdata._year, mdata._exam, "wk", stat.w_result);
+            cdata.save_zf_data(mdata._year, mdata._exam, "lk", stat.l_result);
+
             _form.ShowPro(exam_type, 1, mdata.log_name + "报告生成中...");
             ZF_wordcreator create = new ZF_wordcreator(config);
             create.total_create(stat);
@@ -1491,7 +1495,8 @@ namespace ExamReport
         public void gk_zt_process(MetaData mdata)
         {
             Configuration config = initConfig(mdata._sub, "总体", "高考");
-            
+            CacheData cdata = new CacheData();
+
             WordData data = new WordData(mdata.groups_group);
             _form.ShowPro("gk_zt", 1, mdata.log_name + "数据分析中...");
             
@@ -1500,6 +1505,9 @@ namespace ExamReport
             stat.statistic_process(false);
             if (mdata.xz.Count > 0)
                 stat.xz_postprocess(mdata.xz);
+
+            cdata.save_totaldata(mdata._year, mdata._exam, mdata.get_sub(), data);
+
             _form.ShowPro("gk_zt", 1, mdata.log_name + "报告生成中...");
             WordCreator create = new WordCreator(data, config);
             create.creating_word();
@@ -1509,6 +1517,10 @@ namespace ExamReport
             Configuration config = initConfig(mdata._sub, "总体", "高考");
             config.WSLG = true;
             ArrayList WSLG = new ArrayList();
+
+            CacheData cdata = new CacheData();
+            string subname = mdata.get_sub();
+
             _form.ShowPro("gk_zt", 1, mdata.log_name + "文理数据分析中...");
 
             DataTable W_data = mdata.basic.Likefilter("zkzh", "'1*'");
@@ -1521,6 +1533,8 @@ namespace ExamReport
                 w_stat.xz_postprocess(mdata.xz);
             WSLG.Add(w_stat.result);
 
+            cdata.save_partitiondata(mdata._year, mdata._exam, subname + "w", w_stat.result);
+
             DataTable l_data = mdata.basic.Likefilter("zkzh", "'5*'");
             DataTable l_group = mdata.group.Likefilter("zkzh", "'5*'");
 
@@ -1530,6 +1544,8 @@ namespace ExamReport
             if (mdata.xz.Count > 0)
                 l_stat.xz_postprocess(mdata.xz);
             WSLG.Add(l_stat.result);
+
+            cdata.save_partitiondata(mdata._year, mdata._exam, subname + "l", l_stat.result);
 
             Partition_statistic total_stat = new Partition_statistic("分类整体", mdata.basic, mdata._fullmark, mdata.ans, mdata.group, mdata.grp, mdata._group_num);
             total_stat._config = config;
@@ -1546,16 +1562,22 @@ namespace ExamReport
         {
             Configuration config = initConfig(mdata._sub, "总体", "高考");
             _form.ShowPro("gk_zt", 1, mdata.log_name + "数据分析中...");
+            CacheData cdata = new CacheData();
             WordData total = new WordData(mdata.zh_groups_group);
             Total_statistic total_stat = new Total_statistic(total, mdata.zh_basic, mdata._fullmark, mdata.zh_ans, mdata.zh_group, mdata.zh_grp, mdata._group_num);
             total_stat._config = config;
             total_stat.statistic_process(true);
+
+            cdata.save_totaldata(mdata._year, mdata._exam, mdata.get_zh(), total);
 
             WordData single = new WordData(mdata.groups_group);
 
             Total_statistic single_stat = new Total_statistic(single, mdata.basic, mdata._sub_fullmark, mdata.ans, mdata.group, mdata.grp, mdata._group_num);
             single_stat._config = config;
             single_stat.statistic_process(false);
+
+            cdata.save_totaldata(mdata._year, mdata._exam, mdata.get_sub(), single);
+
             _form.ShowPro("gk_zt", 1, mdata.log_name + "报告生成中...");
             WordCreator create = new WordCreator(single, total, config);
             create.creating_word();

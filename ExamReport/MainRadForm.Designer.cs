@@ -273,6 +273,15 @@
             this.radLabel13 = new Telerik.WinControls.UI.RadLabel();
             this.GKTreeView = new Telerik.WinControls.UI.RadTreeView();
             this.gk_gridview = new Telerik.WinControls.UI.RadGridView();
+            this.radPanel1 = new Telerik.WinControls.UI.RadPanel();
+            this.compare_year2 = new System.Windows.Forms.ComboBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.compare_year1 = new System.Windows.Forms.ComboBox();
+            this.radLabel29 = new Telerik.WinControls.UI.RadLabel();
+            this.radWaitingBar1 = new Telerik.WinControls.UI.RadWaitingBar();
+            this.compare_total_cancel = new Telerik.WinControls.UI.RadButton();
+            this.compare_total_start = new Telerik.WinControls.UI.RadButton();
             ((System.ComponentModel.ISupportInitialize)(this.wholepage)).BeginInit();
             this.wholepage.SuspendLayout();
             this.ZKPageView.SuspendLayout();
@@ -475,6 +484,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.GKTreeView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gk_gridview)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gk_gridview.MasterTemplate)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radPanel1)).BeginInit();
+            this.radPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.radLabel29)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radWaitingBar1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.compare_total_cancel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.compare_total_start)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
             this.SuspendLayout();
             // 
@@ -1598,12 +1613,13 @@
             // 
             // GKPageView
             // 
+            this.GKPageView.Controls.Add(this.radPanel1);
+            this.GKPageView.Controls.Add(this.gk_zt_panel);
+            this.GKPageView.Controls.Add(this.gk_docGroupBox);
             this.GKPageView.Controls.Add(this.gk_data_pre_panel);
             this.GKPageView.Controls.Add(this.gk_xz_panel);
-            this.GKPageView.Controls.Add(this.gk_zt_panel);
             this.GKPageView.Controls.Add(this.gk_xx_panel);
             this.GKPageView.Controls.Add(this.gk_sf_panel);
-            this.GKPageView.Controls.Add(this.gk_docGroupBox);
             this.GKPageView.Controls.Add(this.gk_cj_panel);
             this.GKPageView.Controls.Add(this.gk_qx_panel);
             this.GKPageView.Controls.Add(this.custom_panel);
@@ -2791,6 +2807,89 @@
             this.gk_gridview.TabIndex = 0;
             this.gk_gridview.Text = "radGridView2";
             // 
+            // radPanel1
+            // 
+            this.radPanel1.Controls.Add(this.radLabel29);
+            this.radPanel1.Controls.Add(this.radWaitingBar1);
+            this.radPanel1.Controls.Add(this.compare_total_cancel);
+            this.radPanel1.Controls.Add(this.compare_total_start);
+            this.radPanel1.Controls.Add(this.compare_year1);
+            this.radPanel1.Controls.Add(this.label4);
+            this.radPanel1.Controls.Add(this.compare_year2);
+            this.radPanel1.Controls.Add(this.label3);
+            this.radPanel1.Location = new System.Drawing.Point(140, 234);
+            this.radPanel1.Name = "radPanel1";
+            this.radPanel1.Size = new System.Drawing.Size(712, 339);
+            this.radPanel1.TabIndex = 11;
+            this.radPanel1.Text = "历年对比";
+            this.radPanel1.TextAlignment = System.Drawing.ContentAlignment.TopLeft;
+            // 
+            // compare_year2
+            // 
+            this.compare_year2.FormattingEnabled = true;
+            this.compare_year2.Location = new System.Drawing.Point(102, 32);
+            this.compare_year2.Name = "compare_year2";
+            this.compare_year2.Size = new System.Drawing.Size(67, 20);
+            this.compare_year2.TabIndex = 78;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(56, 35);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(46, 13);
+            this.label3.TabIndex = 79;
+            this.label3.Text = "年份：";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(182, 35);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(33, 13);
+            this.label4.TabIndex = 80;
+            this.label4.Text = "对比";
+            // 
+            // compare_year1
+            // 
+            this.compare_year1.FormattingEnabled = true;
+            this.compare_year1.Location = new System.Drawing.Point(221, 32);
+            this.compare_year1.Name = "compare_year1";
+            this.compare_year1.Size = new System.Drawing.Size(67, 20);
+            this.compare_year1.TabIndex = 81;
+            // 
+            // radLabel29
+            // 
+            this.radLabel29.AutoSize = true;
+            this.radLabel29.Location = new System.Drawing.Point(39, 175);
+            this.radLabel29.Name = "radLabel29";
+            this.radLabel29.Size = new System.Drawing.Size(2, 2);
+            this.radLabel29.TabIndex = 85;
+            // 
+            // radWaitingBar1
+            // 
+            this.radWaitingBar1.Location = new System.Drawing.Point(40, 75);
+            this.radWaitingBar1.Name = "radWaitingBar1";
+            this.radWaitingBar1.Size = new System.Drawing.Size(641, 17);
+            this.radWaitingBar1.TabIndex = 84;
+            this.radWaitingBar1.Text = "radWaitingBar1";
+            // 
+            // compare_total_cancel
+            // 
+            this.compare_total_cancel.Location = new System.Drawing.Point(529, 32);
+            this.compare_total_cancel.Name = "compare_total_cancel";
+            this.compare_total_cancel.Size = new System.Drawing.Size(110, 24);
+            this.compare_total_cancel.TabIndex = 83;
+            this.compare_total_cancel.Text = "取消";
+            // 
+            // compare_total_start
+            // 
+            this.compare_total_start.Location = new System.Drawing.Point(358, 32);
+            this.compare_total_start.Name = "compare_total_start";
+            this.compare_total_start.Size = new System.Drawing.Size(110, 24);
+            this.compare_total_start.TabIndex = 82;
+            this.compare_total_start.Text = "文档生成";
+            // 
             // mainform
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -3028,6 +3127,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.GKTreeView)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gk_gridview.MasterTemplate)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gk_gridview)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radPanel1)).EndInit();
+            this.radPanel1.ResumeLayout(false);
+            this.radPanel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.radLabel29)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radWaitingBar1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.compare_total_cancel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.compare_total_start)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
             this.ResumeLayout(false);
 
@@ -3240,6 +3346,15 @@
         private Telerik.WinControls.UI.RadLabel zk_xz_progresslabel;
         private Telerik.WinControls.UI.RadWaitingBar zk_xz_waitingbar;
         private System.Windows.Forms.Button sync_button;
+        private Telerik.WinControls.UI.RadPanel radPanel1;
+        private Telerik.WinControls.UI.RadLabel radLabel29;
+        private Telerik.WinControls.UI.RadWaitingBar radWaitingBar1;
+        private Telerik.WinControls.UI.RadButton compare_total_cancel;
+        private Telerik.WinControls.UI.RadButton compare_total_start;
+        private System.Windows.Forms.ComboBox compare_year1;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.ComboBox compare_year2;
+        private System.Windows.Forms.Label label3;
 
     }
 }

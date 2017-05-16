@@ -227,6 +227,47 @@ namespace ExamReport
                     return ZK_database.GroupType.population;
             }
         }
+        public string get_zh()
+        {
+            switch (_sub)
+            {
+                case "理综-化学":
+                case "化学":
+                case "理综-物理":
+                case "物理":
+                case "理综-生物":
+                case "生物":
+                    return "lz";
+                case "文综-政治":
+                case "政治":
+                case "文综-地理":
+                case "地理":
+                case "文综-历史":
+                case "历史":
+                    return "wz";
+                default:
+                    return "unkown";
+            }
+        }
+        public string get_cn_sub()
+        {
+            return _sub;
+        }
+        public string get_sub()
+        {
+            string sub;
+            if (_exam.Equals("gk"))
+                sub = Utils.language_trans(_sub);
+            else if (_exam.Equals("hk"))
+                sub = Utils.hk_lang_trans(_sub);
+            else if (_exam.Equals("zk"))
+                sub = Utils.hk_lang_trans(_sub);
+            else
+                sub = Utils.language_trans(_sub);
+
+            return sub;
+
+        }
         public void get_SF_data(string addr)
         {
             SF_list = get_excel_data(addr);
