@@ -43,6 +43,7 @@ namespace ExamReport
         public string school_name;
         public string school_code;
 
+
         public HK_hierarchy hk_hierarchy;
         public class HK_hierarchy
         {
@@ -76,6 +77,12 @@ namespace ExamReport
         public int zk_first_level;
         public int zk_second_level;
 
+        public string compare_year1;
+        public string compare_year2;
+
+        public bool compare_cj_is_wk;
+        public string cj_comp_year;
+
         public Analysis(mainform form)
         {
             _form = form;
@@ -87,8 +94,6 @@ namespace ExamReport
             {
                 if (row.Cells["checkbox"].Value != null && (bool)row.Cells["checkbox"].Value == true)
                 {
-                    
-
                     string year = row.Cells["year"].Value.ToString().Trim();
                     string exam = _exam;
                     string chi_sub = row.Cells["sub"].Value.ToString().Trim();
@@ -289,6 +294,58 @@ namespace ExamReport
                 }
             }
             _form.ShowPro(exam_type, 2, "完成！");
+        }
+        public void gk_cj_comp_start()
+        {
+            _form.ShowPro("gk_cj_cp", 0, "对比开始处理...");
+            MetaData mdata = new MetaData(cj_comp_year, "gk", "gk_xz");
+            mdata.get_zf_data();
+            mdata.get_CJ_data(Utils.CurrentDirectory + @"\config\gk_cj.xlsx");
+
+            string[] urban_code = new string[mdata.CJ_list[0].Count - 1];
+            for (int j = 1; j < mdata.CJ_list[0].Count; j++)
+                urban_code[j - 1] = mdata.CJ_list[0][j].ToString().Trim();
+
+            string[] country_code = new string[mdata.CJ_list[1].Count - 1];
+            for (int j = 1; j < mdata.CJ_list[1].Count; j++)
+                country_code[j - 1] = mdata.CJ_list[1][j].ToString().Trim();
+
+            DataTable urban = mdata.basic.filteredtable("qxdm", urban_code);
+            DataTable country = mdata.basic.filteredtable("qxdm", country_code);
+
+            DataTable total;
+            if (compare_cj_is_wk)
+                total = mdata.basic.equalfilter("type", "w");
+            else
+                total = mdata.basic.equalfilter("type", "l");
+            
+            GKCompWordCreator wc = new GKCompWordCreator();
+            wc.is_wk = compare_cj_is_wk;
+            wc.year = cj_comp_year;
+            wc.pre_process(total, urban, country);
+            wc.creating_word();
+            _form.ShowPro("gk_cj_cp", 2, "完成！");
+        }
+        public void gk_comp_start()
+        {
+            try
+            {
+                _form.ShowPro("gk_cp", 0, "历年对比开始处理...");
+                Comparison comp = new Comparison();
+                comp.start(compare_year1, compare_year2, "gk");
+                Compare_wordcreator comp_wc = new Compare_wordcreator();
+                comp_wc.year1_comb = comp.year1_comb;
+                comp_wc.year2_comb = comp.year2_comb;
+                comp_wc.year1_data = comp.year1_data;
+                comp_wc.year2_data = comp.year2_data;
+                comp_wc.creating_word();
+                _form.ShowPro("gk_cp", 2, "完成！");
+            }
+            catch(Exception e)
+            {
+                _form.ErrorM("gk_cp", e.Message);
+            }
+            
         }
         public void zk_xz_start()
         {

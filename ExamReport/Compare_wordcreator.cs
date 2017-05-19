@@ -37,8 +37,8 @@ namespace ExamReport
 
         public string year1;
         public string year2;
-        Dictionary<string, WordData> year1_data = new Dictionary<string, WordData>();
-        Dictionary<string, WordData> year2_data = new Dictionary<string, WordData>();
+        public Dictionary<string, WordData> year1_data = new Dictionary<string, WordData>();
+        public Dictionary<string, WordData> year2_data = new Dictionary<string, WordData>();
         public Partition_wordcreator.ChartCombine year1_comb;
         public Partition_wordcreator.ChartCombine year2_comb;
         public DataTable summary;

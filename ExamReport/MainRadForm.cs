@@ -59,6 +59,9 @@ namespace ExamReport
             gk_save_address.Text = currentdic;
             hk_save_addr.Text = currentdic;
 
+            wk_radio.IsChecked = true;
+            lk_radio.IsChecked = false;
+
             excellent_high.Value = 100m;
             excellent_low.Value = 85m;
             well_high.Value = 85m;
@@ -73,6 +76,11 @@ namespace ExamReport
             {
                 year_list.Items.Add(i);
                 zk_yearlist.Items.Add(i);
+                compare_year1.Items.Add(i);
+                compare_year2.Items.Add(i);
+                qx_comp_year1.Items.Add(i);
+                qx_comp_year2.Items.Add(i);
+                cj_comp_year.Items.Add(i);
             }
 
             //for (int j = 1; j <= 12; j++)
@@ -81,6 +89,14 @@ namespace ExamReport
             zk_yearlist.SelectedItem = curryear;
             currmonth.SelectedItem = DateTime.Now.Month.ToString() + "月";
             zk_currmonth.SelectedItem = DateTime.Now.Month.ToString() + "月";
+
+            compare_year2.SelectedItem = curryear;
+            compare_year1.SelectedItem = curryear - 1;
+
+            qx_comp_year2.SelectedItem = curryear;
+            qx_comp_year1.SelectedItem = curryear - 1;
+
+            cj_comp_year.SelectedItem = curryear;
 
             
 
@@ -125,6 +141,9 @@ namespace ExamReport
             progress_label.Add("hk_script", hk_script_progresslabel);
             progress_label.Add("gk_xz", gk_xz_progresslabel);
             progress_label.Add("zk_xz", zk_xz_progresslabel);
+            progress_label.Add("gk_cp", compare_progresslabel);
+            progress_label.Add("gk_cj_cp", cj_comp_progresslabel);
+            progress_label.Add("gk_qx_cp", qx_comp_progresslabel);
 
             run_button.Add("zk_zt", zk_zt_start);
             run_button.Add("zk_qx", zk_qx_start);
@@ -138,6 +157,9 @@ namespace ExamReport
             run_button.Add("hk_script", hk_script_start);
             run_button.Add("gk_xz", gk_xz_start);
             run_button.Add("zk_xz", zk_xz_start);
+            run_button.Add("gk_cp", compare_total_start);
+            run_button.Add("gk_cj_cp", cj_comp_start);
+            run_button.Add("gk_qx_cp", qx_comp_start);
 
             cancel_button.Add("zk_zt", zk_zt_cancel);
             cancel_button.Add("zk_qx", zk_qx_cancel);
@@ -151,6 +173,9 @@ namespace ExamReport
             cancel_button.Add("hk_script", hk_script_cancel);
             cancel_button.Add("gk_xz", gk_xz_cancel);
             cancel_button.Add("zk_xz", zk_xz_cancel);
+            cancel_button.Add("gk_cp", compare_total_cancel);
+            cancel_button.Add("gk_cj_cp", cj_comp_cancel);
+            cancel_button.Add("gk_qx_cp", qx_comp_cancel);
 
 
             waiting_bar.Add("zk_zt", zk_zt_waitingbar);
@@ -165,6 +190,9 @@ namespace ExamReport
             waiting_bar.Add("hk_script", hk_script_progressbar);
             waiting_bar.Add("gk_xz", gk_xz_waitingbar);
             waiting_bar.Add("zk_xz", zk_xz_waitingbar);
+            waiting_bar.Add("gk_cp", compare_waitingbar);
+            waiting_bar.Add("gk_cj_cp", cj_comp_waitingbar);
+            waiting_bar.Add("gk_qx_cp", qx_comp_waitingbar);
 
             
         }
@@ -367,6 +395,14 @@ namespace ExamReport
                 qxmc = c.Key.ToString().Trim(),
                 code = string.Join(",", c.GroupBy(p => p.Field<string>("qxdm")).Select(p => p.Key.ToString().Trim()).ToArray())
             }).ToDataTable();
+
+            qx_comp_qx.DataSource = qxdm;
+            qx_comp_qx.DisplayMember = "qxmc";
+            qx_comp_qx.ValueMember = "code";
+            qx_comp_comp.DataSource = qxdm;
+            qx_comp_comp.DisplayMember = "qxmc";
+            qx_comp_comp.ValueMember = "code";
+
             int count = 0;
             GKTreeView.Nodes[6].CheckType = CheckType.CheckBox;
             foreach (DataRow dr in qxdm.Rows)
@@ -1749,6 +1785,61 @@ namespace ExamReport
             openFileDialog1.RestoreDirectory = true;
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
                 zk_xz_qx_addr.Text = openFileDialog1.FileName;
+        }
+
+        private void compare_total_start_Click(object sender, EventArgs e)
+        {
+            Analysis analysis = new Analysis(this);
+            analysis.compare_year1 = compare_year1.SelectedItem.ToString().Trim();
+            analysis.compare_year2 = compare_year2.SelectedItem.ToString().Trim();
+
+            Thread thread = new Thread(new ThreadStart(analysis.gk_comp_start));
+            thread.IsBackground = true;
+            thread.SetApartmentState(ApartmentState.STA);
+            thread_store.Add("gk_cp", thread);
+            thread.Start();
+
+        }
+
+        private void compare_total_cancel_Click(object sender, EventArgs e)
+        {
+            if (thread_store.ContainsKey("gk_cp"))
+            {
+                Thread thread = thread_store["gk_cp"];
+                if (thread.IsAlive)
+                {
+                    thread.Abort();
+                    thread_store.Remove("gk_cp");
+                    ShowPro("gk_cp", 2, "");
+                }
+            }
+        }
+
+        private void radButton17_Click(object sender, EventArgs e)
+        {
+            Analysis analysis = new Analysis(this);
+            analysis.compare_cj_is_wk = wk_radio.IsChecked;
+            analysis.cj_comp_year = cj_comp_year.SelectedItem.ToString().Trim();
+
+            Thread thread = new Thread(new ThreadStart(analysis.gk_cj_comp_start));
+            thread.IsBackground = true;
+            thread.SetApartmentState(ApartmentState.STA);
+            thread_store.Add("gk_cj_cp", thread);
+            thread.Start();
+        }
+
+        private void cj_comp_cancel_Click(object sender, EventArgs e)
+        {
+            if (thread_store.ContainsKey("gk_cj_cp"))
+            {
+                Thread thread = thread_store["gk_cj_cp"];
+                if (thread.IsAlive)
+                {
+                    thread.Abort();
+                    thread_store.Remove("gk_cj_cp");
+                    ShowPro("gk_cj_cp", 2, "");
+                }
+            }
         }
 
        

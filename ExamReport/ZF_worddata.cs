@@ -6,7 +6,7 @@ using System.Data;
 
 namespace ExamReport
 {
-    class ZF_worddata
+    public class ZF_worddata
     {
         public int total_num;
         public decimal fullmark;

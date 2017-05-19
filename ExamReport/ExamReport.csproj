@@ -125,6 +125,7 @@
     <Compile Include="DataTableExtension.cs" />
     <Compile Include="DBHelper.cs" />
     <Compile Include="DotNetCharting.cs" />
+    <Compile Include="GKCompWordCreator.cs" />
     <Compile Include="GK_database.cs" />
     <Compile Include="HKScriptCalculate.cs" />
     <Compile Include="HKScriptWordCreator.cs" />

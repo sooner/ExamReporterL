@@ -17,8 +17,13 @@ namespace ExamReport
         string[] sum_wk = { "yww", "sxw", "yyw", "wz", "ls", "dl", "zz" };
         string[] sum_lk = { "ywl", "sxl", "yyl", "lz", "wl", "hx", "sw" };
 
-        DataTable summary;
-
+        public DataTable summary;
+        public Partition_wordcreator.ChartCombine year1_comb = new Partition_wordcreator.ChartCombine();
+        public Partition_wordcreator.ChartCombine year2_comb = new Partition_wordcreator.ChartCombine();
+        public Dictionary<string, WordData> year1_data = new Dictionary<string, WordData>();
+        public Dictionary<string, WordData> year2_data = new Dictionary<string, WordData>();
+        
+        
         public Comparison()
         {
             summary = new DataTable();
@@ -39,8 +44,6 @@ namespace ExamReport
 
         public void start(string year1, string year2, string exam)
         {
-            Dictionary<string, WordData> year1_data = new Dictionary<string, WordData>();
-            Dictionary<string, WordData> year2_data = new Dictionary<string, WordData>();
 
             CacheData cachedata = new CacheData();
 
@@ -57,11 +60,11 @@ namespace ExamReport
             cachedata.load_zf_data(year2, "gk", "lk", year2_l_data);
 
 
-            Partition_wordcreator.ChartCombine year1_comb = new Partition_wordcreator.ChartCombine();
+            
             year1_comb.Add(year1_w_data.dist, "文科");
             year1_comb.Add(year1_l_data.dist, "理科");
 
-            Partition_wordcreator.ChartCombine year2_comb = new Partition_wordcreator.ChartCombine();
+            
             year2_comb.Add(year2_w_data.dist, "文科");
             year2_comb.Add(year2_l_data.dist, "理科");
 

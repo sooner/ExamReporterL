@@ -13,7 +13,7 @@ using System.Runtime.InteropServices;
 
 namespace ExamReport
 {
-    class Partition_wordcreator
+    public class Partition_wordcreator
     {
         private object CaptionTitle = "CaptionTitle";
         private object ExamTitle0 = "ExamTitle0";
@@ -920,7 +920,7 @@ namespace ExamReport
         {
             string previousText = table.Cell(startRowIndex++, columnIndex).Range.Text;    // 保存对比文字
             int previousRowIndex = startRowIndex - 1;    // 因刚已经+1了，所以再减回去
-            for (int i = startRowIndex; i <= table.Rows.Count; ++i) // 遍历所有行的columnIndex列，发现相同的合并，从起始行的下一行开始对比
+            for (int i = startRowIndex; i <= table.Rows.Count; i++) // 遍历所有行的columnIndex列，发现相同的合并，从起始行的下一行开始对比
             {
                 string currentText = table.Cell(i, columnIndex).Range.Text;
                 if (previousText.Equals(currentText))
