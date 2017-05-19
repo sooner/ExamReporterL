@@ -34,6 +34,7 @@ namespace ExamReport
         CustomRelation temp_cust = new CustomRelation();
         public DataTable schoolcode_table;
         public DataTable school;
+        public Dictionary<string, string> qx_kv;
         string currentdic = System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath);
         //Thread thread;
         public mainform()
@@ -363,6 +364,7 @@ namespace ExamReport
             GKTreeView.Nodes.Add(new RadTreeNode("区县"));
             GKTreeView.Nodes.Add(new RadTreeNode("学校"));
             GKTreeView.Nodes.Add(new RadTreeNode("行政版"));
+            GKTreeView.Nodes.Add(new RadTreeNode("历年对比"));
 
             HKTreeView.Nodes.Clear();
             HKTreeView.Nodes.Add(new RadTreeNode("数据录入"));
@@ -402,6 +404,12 @@ namespace ExamReport
             qx_comp_comp.DataSource = qxdm;
             qx_comp_comp.DisplayMember = "qxmc";
             qx_comp_comp.ValueMember = "code";
+
+            qx_kv = schoolcode_table.AsEnumerable().GroupBy(c => c.Field<string>("qxdm")).Select(c => new
+            {
+                qxdm = c.Key.Trim(),
+                qxmc = string.Join(",", c.GroupBy(p => p.Field<string>("qxmc")).Select(p => p.Key.ToString().Trim()).ToArray())
+            }).ToDictionary(c => c.qxdm, c => c.qxmc);
 
             int count = 0;
             GKTreeView.Nodes[6].CheckType = CheckType.CheckBox;
@@ -538,6 +546,7 @@ namespace ExamReport
                 gk_xx_panel.Hide();
                 custom_panel.Hide();
                 gk_xz_panel.Hide();
+                compare_panel.Hide();
             }
             else if (element.SelectedNode.Text.Trim().Equals("区县") || (element.SelectedNode.Parent != null && element.SelectedNode.Parent.Text.Trim().Equals("区县")))
             {
@@ -550,6 +559,7 @@ namespace ExamReport
                 gk_xx_panel.Hide();
                 custom_panel.Hide();
                 gk_xz_panel.Hide();
+                compare_panel.Hide();
             }
             else if (element.SelectedNode.Text.Trim().Equals("数据录入"))
             {
@@ -562,6 +572,7 @@ namespace ExamReport
                 gk_xx_panel.Hide();
                 custom_panel.Hide();
                 gk_xz_panel.Hide();
+                compare_panel.Hide();
             }
             else if (element.SelectedNode.Text.Trim().Equals("示范校"))
             {
@@ -574,6 +585,7 @@ namespace ExamReport
                 gk_xx_panel.Hide();
                 custom_panel.Hide();
                 gk_xz_panel.Hide();
+                compare_panel.Hide();
             }
             else if (element.SelectedNode.Text.Trim().Equals("城郊"))
             {
@@ -586,6 +598,7 @@ namespace ExamReport
                 gk_xx_panel.Hide();
                 custom_panel.Hide();
                 gk_xz_panel.Hide();
+                compare_panel.Hide();
             }
             else if (element.SelectedNode.Text.Trim().Equals("自定义"))
             {
@@ -598,6 +611,7 @@ namespace ExamReport
                 gk_xx_panel.Hide();
                 custom_panel.Show();
                 gk_xz_panel.Hide();
+                compare_panel.Hide();
             }
             else if (element.SelectedNode.Text.Trim().Equals("行政版"))
             {
@@ -610,6 +624,21 @@ namespace ExamReport
                 gk_docGroupBox.Show();
                 gk_xx_panel.Hide();
                 custom_panel.Hide();
+                compare_panel.Hide();
+            }
+            else if (element.SelectedNode.Text.Trim().Equals("历年对比"))
+            {
+                compare_panel.Show();
+                gk_xz_panel.Hide();
+                gk_zt_panel.Hide();
+                gk_sf_panel.Hide();
+                gk_cj_panel.Hide();
+                gk_qx_panel.Hide();
+                gk_data_pre_panel.Hide();
+                gk_docGroupBox.Hide();
+                gk_xx_panel.Hide();
+                custom_panel.Hide();
+                
             }
 
             else if (element.SelectedNode.Text.Trim().Equals("学校")
@@ -625,6 +654,7 @@ namespace ExamReport
                 gk_xx_panel.Show();
                 custom_panel.Hide();
                 gk_xz_panel.Hide();
+                compare_panel.Hide();
             }
         }
         private void ZKTreeNode_Selected(object sender, RadTreeViewEventArgs e)
@@ -1820,6 +1850,7 @@ namespace ExamReport
             Analysis analysis = new Analysis(this);
             analysis.compare_cj_is_wk = wk_radio.IsChecked;
             analysis.cj_comp_year = cj_comp_year.SelectedItem.ToString().Trim();
+            analysis.qx_kv = qx_kv;
 
             Thread thread = new Thread(new ThreadStart(analysis.gk_cj_comp_start));
             thread.IsBackground = true;

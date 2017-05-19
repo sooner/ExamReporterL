@@ -82,6 +82,7 @@ namespace ExamReport
 
         public bool compare_cj_is_wk;
         public string cj_comp_year;
+        public Dictionary<string, string> qx_kv;
 
         public Analysis(mainform form)
         {
@@ -319,7 +320,7 @@ namespace ExamReport
             else
                 total = mdata.basic.equalfilter("type", "l");
             
-            GKCompWordCreator wc = new GKCompWordCreator();
+            GKCompWordCreator wc = new GKCompWordCreator(qx_kv);
             wc.is_wk = compare_cj_is_wk;
             wc.year = cj_comp_year;
             wc.pre_process(total, urban, country);

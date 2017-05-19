@@ -2143,23 +2143,33 @@ namespace ExamReport
         {
 
             int total_num = dt.Rows.Count;
-            decimal avg = (decimal)dt.Compute("Avg(totalmark)", "");
-
-            newrow["totalnum"] = total_num;
-            newrow["avg"] = avg;
-            Partition_statistic.stdev total_stdev = new Partition_statistic.stdev(total_num, avg);
-            
-
-            foreach (DataRow dr in dt.Rows)
+            if (total_num != 0)
             {
-                total_stdev.add((decimal)dr["totalmark"]);
-                
+                decimal avg = (decimal)dt.Compute("Avg(totalmark)", "");
+
+                newrow["totalnum"] = total_num;
+                newrow["avg"] = avg;
+                Partition_statistic.stdev total_stdev = new Partition_statistic.stdev(total_num, avg);
+
+
+                foreach (DataRow dr in dt.Rows)
+                {
+                    total_stdev.add((decimal)dr["totalmark"]);
+
+                }
+                newrow["stDev"] = total_stdev.get_value();
+                if ((decimal)newrow["avg"] == 0)
+                    newrow["Dfactor"] = 0;
+                else
+                    newrow["Dfactor"] = (decimal)newrow["stDev"] / (decimal)newrow["avg"];
             }
-            newrow["stDev"] = total_stdev.get_value();
-            if ((decimal)newrow["avg"] == 0)
-                newrow["Dfactor"] = 0;
             else
-                newrow["Dfactor"] = (decimal)newrow["stDev"] / (decimal)newrow["avg"];
+            {
+                newrow["totalnum"] = 0;
+                newrow["avg"] = 0;
+                newrow["stDev"] = 0;
+                newrow["Dfactor"] = 0;
+            }
         }
 
         public void group_mark(DataTable dt)

@@ -458,11 +458,11 @@ namespace ExamReport
             single_total_table.Cell(1, 4).Range.Text = "不及格";
             single_total_table.Cell(1, 5).Range.Text = "全体";
 
-            single_total_table.Cell(2, 1).Range.Text = string.Format("{0:F2}", dr["outstanding"]);
-            single_total_table.Cell(2, 2).Range.Text = string.Format("{0:F2}", dr["good"]);
-            single_total_table.Cell(2, 3).Range.Text = string.Format("{0:F2}", dr["pass"]);
-            single_total_table.Cell(2, 4).Range.Text = string.Format("{0:F2}", dr["fail"]);
-            single_total_table.Cell(2, 5).Range.Text = string.Format("{0:F2}", diff);
+            single_total_table.Cell(2, 1).Range.Text = string.Format("{0:F2}", dr["outstanding"]) == "" ? "0" : string.Format("{0:F2}", dr["outstanding"]);
+            single_total_table.Cell(2, 2).Range.Text = string.Format("{0:F2}", dr["good"]) == "" ? "0" : string.Format("{0:F2}", dr["good"]);
+            single_total_table.Cell(2, 3).Range.Text = string.Format("{0:F2}", dr["pass"]) == "" ? "0" : string.Format("{0:F2}", dr["pass"]);
+            single_total_table.Cell(2, 4).Range.Text = string.Format("{0:F2}", dr["fail"]) == "" ? "0" : string.Format("{0:F2}", dr["fail"]);
+            single_total_table.Cell(2, 5).Range.Text = string.Format("{0:F2}", diff) == "" ? "0" : string.Format("{0:F2}", diff);
 
             single_total_table.Select();
             oWord.Selection.set_Style(ref TableContent2);
@@ -576,10 +576,10 @@ namespace ExamReport
             {
                 DataRow dr = data.total_topic_rank.Rows[i];
                 table.Cell(i + 2, 1).Range.Text = dr["number"].ToString();
-                table.Cell(i + 2, 2).Range.Text = string.Format("{0:F2}", dr["outstanding"]);
-                table.Cell(i + 2, 3).Range.Text = string.Format("{0:F2}", dr["good"]);
-                table.Cell(i + 2, 4).Range.Text = string.Format("{0:F2}", dr["pass"]);
-                table.Cell(i + 2, 5).Range.Text = string.Format("{0:F2}", dr["fail"]);
+                table.Cell(i + 2, 2).Range.Text = string.Format("{0:F2}", dr["outstanding"]) == "" ? "0" : string.Format("{0:F2}", dr["outstanding"]);
+                table.Cell(i + 2, 3).Range.Text = string.Format("{0:F2}", dr["good"]) == "" ? "0" : string.Format("{0:F2}", dr["good"]);
+                table.Cell(i + 2, 4).Range.Text = string.Format("{0:F2}", dr["pass"]) == "" ? "0" : string.Format("{0:F2}", dr["pass"]);
+                table.Cell(i + 2, 5).Range.Text = string.Format("{0:F2}", dr["fail"]) == "" ? "0" : string.Format("{0:F2}", dr["fail"]);
 
             }
             table.Select();

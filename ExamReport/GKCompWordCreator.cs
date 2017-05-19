@@ -14,15 +14,28 @@ namespace ExamReport
         public bool is_wk;
         public string year;
 
+        private object CaptionTitle = "CaptionTitle";
+        private object ExamTitle0 = "ExamTitle0";
+        private object ExamTitle1 = "ExamTitle1";
+        private object ExamTitle2 = "ExamTitle2";
+        private object ExamTitle3 = "ExamTitle3";
+        private object ExamBodyText = "ExamBodyText";
+        private object TableContent = "TableContent";
+        private object TableContent2 = "TableContent2";
         object oEndOfDoc = "\\endofdoc"; /* \endofdoc is a predefined bookmark */
         Word._Application oWord;
         Word._Document oDoc;
         object oMissing = System.Reflection.Missing.Value;
         Object oTrue = true;
-        private object TableContent2 = "TableContent2";
 
         decimal[,] result = new decimal[4, 6];
         DataTable qx;
+        Dictionary<string, string> qx_kv;
+
+        public GKCompWordCreator(Dictionary<string, string> qx_kv_p)
+        {
+            qx_kv = qx_kv_p;
+        }
 
         public void pre_process(DataTable datatable, DataTable cq_table, DataTable jq_table)
         {
@@ -70,17 +83,31 @@ namespace ExamReport
         {
             
             object oMissing = System.Reflection.Missing.Value;
-            object filepath = @Utils.CurrentDirectory + @"\compare_doc.docx";
+            object filepath = @Utils.CurrentDirectory + @"\template3.dotx";
             //Start Word and create a new document.
             oWord = new Word.Application();
 
             oWord.Visible = true;
-            oDoc = oWord.Documents.Add(ref oMissing, ref oMissing,
+            oDoc = oWord.Documents.Add(filepath, ref oMissing,
             ref oMissing, ref oMissing);
 
             oDoc.PageSetup.Orientation = Word.WdOrientation.wdOrientLandscape;
 
+            insertText("ExamTitle1", year + "年全市" + (is_wk ? "文科" : "理科") + "城郊对比报告");
+
             insertCJTable();
+        }
+
+        public void insertText(object type, string content)
+        {
+            Word.Range first = oDoc.Paragraphs.Add(ref oMissing).Range;
+            first.set_Style(type);
+            first.InsertBefore(content + "\n");
+
+            oDoc.Characters.Last.Select();
+            oWord.Selection.HomeKey(Word.WdUnits.wdLine, oMissing);
+            oWord.Selection.Delete(Word.WdUnits.wdCharacter, oMissing);
+            oWord.Selection.Range.set_Style(ExamBodyText);
         }
 
         public void insertCJTable()
@@ -90,7 +117,7 @@ namespace ExamReport
             Word.Range range = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
             int col = 11;
             table = oDoc.Tables.Add(range, 7 + qx.Rows.Count, 13, ref oMissing, oTrue);
-            //table.Range.InsertCaption(oWord.CaptionLabels["表"], title, oMissing, Word.WdCaptionPosition.wdCaptionPositionAbove, oMissing);
+            //table.Range.InsertCaption(oWord.CaptionLabels["表格"], year + "年全市" + (is_wk ? "文科" : "理科") + "城郊对比报告", oMissing, Word.WdCaptionPosition.wdCaptionPositionAbove, oMissing);
             range.MoveEnd(Word.WdUnits.wdParagraph, 1);
             range.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
             table.Rows[1].HeadingFormat = -1;
@@ -151,18 +178,28 @@ namespace ExamReport
 
             for (int i = 0; i < qx.Rows.Count; i++)
             {
+                table.Cell(8 + i, 1).Range.Text = qx_kv[qx.Rows[i][0].ToString().Trim()];
                 for (int j = 0; j < 6; j++)
                 {
+
                     table.Cell(8 + i, 2 + j * 2).Range.Text = string.Format("{0:F2}", qx.Rows[i][j+2]);
                     table.Cell(8 + i, 3 + j * 2).Range.Text = string.Format("{0:F2}", (decimal)qx.Rows[i][j+2] - result[0, j]);
                 }
             }
             
-            //table.Select();
-            //oWord.Selection.set_Style(ref TableContent2);
+            table.Select();
+            oWord.Selection.set_Style(ref TableContent2);
+            table.Cell(1, 1).Merge(table.Cell(2, 1));
+            table.Cell(1, 2).Merge(table.Cell(1, 13));
+            table.Cell(1, 2).Range.Text = year;   // 因为合并后并没有将单元格内容去除，需要手动修改
 
+            table.Cell(1, 2).Select();
+            oWord.Selection.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;    // 水平居中显示
+            table.Cell(1, 2).VerticalAlignment = Word.WdCellVerticalAlignment.wdCellAlignVerticalCenter; // 垂直居中
             for(int i = 2; i <= 6; i++)
                 horizonCellMerge(table, i, 2);
+
+
 
             range = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
             range.InsertParagraphAfter();
@@ -174,9 +211,10 @@ namespace ExamReport
             int previouscolumnIndex = startcolumnIndex - 1;    // 因刚已经+1了，所以再减回去
             for (int i = startcolumnIndex; i <= table.Columns.Count; ) // 遍历所有行的columnIndex列，发现相同的合并，从起始行的下一行开始对比
             {
+                if (i == 9)
+                    break;
                 string currentText = table.Cell(RowIndex, i).Range.Text;
-                if (previousText.Equals(currentText))
-                {
+                
                     table.Cell(RowIndex, previouscolumnIndex).Merge(table.Cell(RowIndex, i)); // 合并先前单元格和当前单元格
                     //table.Cell(previousRowIndex, columnIndex).Select();
                     //oWord.Selection.Text = currentText.TrimEnd('\r');
@@ -186,13 +224,11 @@ namespace ExamReport
                     table.Cell(RowIndex, previouscolumnIndex).Select();
                     oWord.Selection.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;    // 水平居中显示
                     table.Cell(RowIndex, previouscolumnIndex).VerticalAlignment = Word.WdCellVerticalAlignment.wdCellAlignVerticalCenter; // 垂直居中
-                }
-                else
-                {
+                
                     previousText = currentText; // 将对比文字替换为当前的内容
                     previouscolumnIndex = i;   // 检索到不同的内容，将当前行下标置为先前行下标，用于合并
                     i++;
-                }
+                
             }
         }
     }
