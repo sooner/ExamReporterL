@@ -123,6 +123,7 @@
     <Compile Include="CustomRelation.cs" />
     <Compile Include="Database.cs" />
     <Compile Include="DataTableExtension.cs" />
+    <Compile Include="DBFExport.cs" />
     <Compile Include="DBHelper.cs" />
     <Compile Include="DotNetCharting.cs" />
     <Compile Include="GKCompWordCreator.cs" />

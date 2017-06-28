@@ -1213,9 +1213,23 @@ namespace ExamReport
         }
         void WSLGCal(Configuration config, MetaData mdata, DataTable QX_data, DataTable QX_group, ArrayList WSLG)
         {
+            List<string> SF_code = new List<string>();
+            for (int i = 0; i < mdata.QXSF_list.Count; i++)
+                for (int j = 1; j < mdata.QXSF_list[i].Count; j++)
+                    SF_code.Add(mdata.QXSF_list[i][j].ToString().Trim());
 
-            int group = QX_data.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
-            QX_group.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
+            string[] xx_codes = new string[SF_code.Count];
+            for (int i = 0; i < xx_codes.Length; i++)
+                xx_codes[i] = SF_code[i];
+
+            DataTable flzt = QX_data.filteredtable("xxdm", xx_codes);
+            DataTable flzt_group = QX_group.filteredtable("xxdm", xx_codes);
+
+            int group = flzt.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
+            flzt_group.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
+
+            //int group = QX_data.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
+            //QX_group.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
             //if (QX_data.Columns.Contains("XZ"))
             //    XZ_group_separate(QX_data, mdata);
             DataTable W_data = QX_data.Likefilter("zkzh", "'1*'");
@@ -1238,7 +1252,7 @@ namespace ExamReport
                 l_stat.xz_postprocess(mdata.xz);
             WSLG.Add(l_stat.result);
 
-            Partition_statistic total_stat = new Partition_statistic("分类整体", QX_data, mdata._fullmark, mdata.ans, QX_group, mdata.grp, group);
+            Partition_statistic total_stat = new Partition_statistic("分类整体", flzt, mdata._fullmark, mdata.ans, flzt_group, mdata.grp, group);
             total_stat._config = config;
             total_stat.statistic_process(false);
             if (mdata.xz.Count > 0)
