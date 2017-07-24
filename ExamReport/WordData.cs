@@ -7,7 +7,7 @@ using System.Data;
 
 namespace ExamReport
 {
-    public class WordData
+    public class  WordData
     {
         public int total_num;
         public decimal fullmark;

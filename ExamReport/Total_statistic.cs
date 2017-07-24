@@ -146,9 +146,11 @@ namespace ExamReport
             decimal alfaSumY = 0.0m;
 
             decimal ZH_var = 0;
+            int colcount = 0;
             Regex oddeven = new Regex("^[Tt]\\d+$");
             foreach (DataRow dr in _basic_data.Rows)
             {
+                colcount = 0;
                 decimal odd = 0.0m;
                 decimal even = 0.0m;
                 count++;
@@ -192,12 +194,13 @@ namespace ExamReport
                             decimal temp_mark = (decimal)total_row["MultipleSum"] + Convert.ToDecimal(dr[cor_col]) * Convert.ToDecimal(dr[dc]);
                             total_row["MultipleSum"] = temp_mark;
                             temp_mark = (decimal)total_row["SquareSumX"] + Convert.ToDecimal(dr[dc]) * Convert.ToDecimal(dr[dc]);
-                            total_row["SquareSumX"] = temp_mark;
+                            total_row["SquareSumX"] = temp_mark; 
                         }
-                        if (oddeven.IsMatch(dc.ColumnName))
+                        if (oddeven.IsMatch(dc.ColumnName) || !dc.Table.Columns.Contains(get_parent(dc.ColumnName)))
                         {
-                            int topic = Convert.ToInt16(dc.ColumnName.Substring(1));
-                            if (topic % 2 != 0)
+                           // int topic = Convert.ToInt16(dc.ColumnName.Substring(1));
+                            colcount++;
+                            if (colcount % 2 != 0)
                                 odd += (decimal)dr[dc];
                             else
                                 even += (decimal)dr[dc];
@@ -2202,6 +2205,16 @@ namespace ExamReport
             {
                 _config.sub_groupMark.Add(temp.max);
             }
+        }
+
+        public string get_parent(string columnname)
+        {
+            int count = columnname.Length - 1;
+            for (; count >= 0; count--)
+                if (columnname.ElementAt(count).Equals('_'))
+                    break;
+
+            return columnname.Substring(0, count);
         }
     }
 }

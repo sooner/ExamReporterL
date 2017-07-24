@@ -192,9 +192,10 @@ namespace ExamReport
 
         public void create_init_table(string tablename)
         {
-            MySqlHelper.ExecuteNonQuery(MySqlHelper.Conn, CommandType.Text, "create table if not exists `" + tablename
-               + "(year varchar(255), exam varchar(255), sub varchar(255),total_num int,fullmark n(4,1),max n(4,1), min n(4,1), avg n(4,2), stDev n(4,2), Dfactor n(4,2), difficulty n(4,2),"
-           + "alfa n(4,2), standardErr n(4,2), mean n(4,2), mode n(4,2), skewness n(4,2), kertosis n(4,2)", null);
+            //MySqlHelper.ExecuteNonQuery(MySqlHelper.Conn, CommandType.Text, "drop table if exists " + tablename, null);
+            MySqlHelper.ExecuteNonQuery(MySqlHelper.Conn, CommandType.Text, "create table if not exists " + tablename
+               + " (year varchar(255), exam varchar(255), sub varchar(255), total_num int, fullmark decimal(4,1), max decimal(4,1), min decimal(4,1), avg decimal(4,2), stDev decimal(4,2), Dfactor decimal(4,2), difficulty decimal(4,2),"
+           + "alfa decimal(4,2), standardErr decimal(4,2), mean decimal(4,2), mode decimal(4,2), skewness decimal(4,2), kertosis decimal(4,2))", null);
 
 
         }

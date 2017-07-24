@@ -331,5 +331,17 @@ namespace ExamReport
         {
             return MySqlHelper.GetDataSet(MySqlHelper.Conn, CommandType.Text, "select * from " + name, null).Tables[0];
         }
+        public string get_basic_table_name()
+        {
+            return Utils.get_basic_tablename(_year, _exam, Utils.language_trans(_sub));
+        }
+        public string get_group_table_name()
+        {
+            return Utils.get_group_tablename(_year, _exam, Utils.language_trans(_sub));
+        }
+        public string get_dbf_table_name()
+        {
+            return _year + "_" + _exam + "_" + Utils.language_trans(_sub) + ".dbf";
+        }
     }
 }

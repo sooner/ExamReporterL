@@ -127,6 +127,10 @@ namespace ExamReport
             gk_xz_cj_addr.Text = currentdic + cj_addr;
 
             zk_xz_qx_addr.Text = currentdic + cj_addr;
+
+            export_sf_addr.Text = currentdic + sf_addr;
+            export_cj_addr.Text = currentdic + cj_addr;
+            export_addr.Text = currentdic;
         }
         void init_dictionary()
         {
@@ -145,6 +149,7 @@ namespace ExamReport
             progress_label.Add("gk_cp", compare_progresslabel);
             progress_label.Add("gk_cj_cp", cj_comp_progresslabel);
             progress_label.Add("gk_qx_cp", qx_comp_progresslabel);
+            progress_label.Add("gk_export", export_progress_label);
 
             run_button.Add("zk_zt", zk_zt_start);
             run_button.Add("zk_qx", zk_qx_start);
@@ -161,6 +166,7 @@ namespace ExamReport
             run_button.Add("gk_cp", compare_total_start);
             run_button.Add("gk_cj_cp", cj_comp_start);
             run_button.Add("gk_qx_cp", qx_comp_start);
+            run_button.Add("gk_export", export_button);
 
             cancel_button.Add("zk_zt", zk_zt_cancel);
             cancel_button.Add("zk_qx", zk_qx_cancel);
@@ -177,6 +183,7 @@ namespace ExamReport
             cancel_button.Add("gk_cp", compare_total_cancel);
             cancel_button.Add("gk_cj_cp", cj_comp_cancel);
             cancel_button.Add("gk_qx_cp", qx_comp_cancel);
+            cancel_button.Add("gk_export", export_cancel_button);
 
 
             waiting_bar.Add("zk_zt", zk_zt_waitingbar);
@@ -194,7 +201,7 @@ namespace ExamReport
             waiting_bar.Add("gk_cp", compare_waitingbar);
             waiting_bar.Add("gk_cj_cp", cj_comp_waitingbar);
             waiting_bar.Add("gk_qx_cp", qx_comp_waitingbar);
-
+            waiting_bar.Add("gk_export", export_waitingbar);
             
         }
         
@@ -1869,6 +1876,68 @@ namespace ExamReport
                     thread.Abort();
                     thread_store.Remove("gk_cj_cp");
                     ShowPro("gk_cj_cp", 2, "");
+                }
+            }
+        }
+
+        private void radButton18_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+            openFileDialog1.InitialDirectory = "C://";
+            openFileDialog1.Filter = "Excel files (*.xls,*.xlsx)|*.xls;*.xlsx|All files (*.*)|*.*";
+            openFileDialog1.FilterIndex = 1;
+            openFileDialog1.RestoreDirectory = true;
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+                export_sf_addr.Text = openFileDialog1.FileName;
+        }
+
+        private void radButton17_Click_1(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+            openFileDialog1.InitialDirectory = "C://";
+            openFileDialog1.Filter = "Excel files (*.xls,*.xlsx)|*.xls;*.xlsx|All files (*.*)|*.*";
+            openFileDialog1.FilterIndex = 1;
+            openFileDialog1.RestoreDirectory = true;
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+                export_cj_addr.Text = openFileDialog1.FileName;
+        }
+
+        private void radButton16_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog openFolder = new FolderBrowserDialog();
+            openFolder.ShowNewFolderButton = true;
+            openFolder.Description = "保存至";
+
+            if (openFolder.ShowDialog() == DialogResult.OK)
+
+                export_addr.Text = openFolder.SelectedPath;
+        }
+
+        private void radButton21_Click(object sender, EventArgs e)
+        {
+            Analysis analysis = new Analysis(this);
+            analysis._gridview = gk_gridview;
+            analysis.cj_addr = export_cj_addr.Text;
+            analysis.sf_addr = export_sf_addr.Text;
+            analysis.save_address = export_addr.Text;
+
+            Thread thread = new Thread(new ThreadStart(analysis.gk_export_start));
+            thread.IsBackground = true;
+            thread.SetApartmentState(ApartmentState.STA);
+            thread_store.Add("gk_export", thread);
+            thread.Start();
+        }
+
+        private void radButton20_Click(object sender, EventArgs e)
+        {
+            if (thread_store.ContainsKey("gk_export"))
+            {
+                Thread thread = thread_store["gk_export"];
+                if (thread.IsAlive)
+                {
+                    thread.Abort();
+                    thread_store.Remove("gk_export");
+                    ShowPro("gk_export", 2, "");
                 }
             }
         }

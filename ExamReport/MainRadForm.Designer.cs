@@ -305,6 +305,20 @@
             this.radLabel13 = new Telerik.WinControls.UI.RadLabel();
             this.GKTreeView = new Telerik.WinControls.UI.RadTreeView();
             this.gk_gridview = new Telerik.WinControls.UI.RadGridView();
+            this.radButton16 = new Telerik.WinControls.UI.RadButton();
+            this.export_addr = new Telerik.WinControls.UI.RadTextBox();
+            this.radLabel34 = new Telerik.WinControls.UI.RadLabel();
+            this.radLabel35 = new Telerik.WinControls.UI.RadLabel();
+            this.radButton17 = new Telerik.WinControls.UI.RadButton();
+            this.radButton18 = new Telerik.WinControls.UI.RadButton();
+            this.export_cj_addr = new Telerik.WinControls.UI.RadTextBox();
+            this.radLabel36 = new Telerik.WinControls.UI.RadLabel();
+            this.export_sf_addr = new Telerik.WinControls.UI.RadTextBox();
+            this.radLabel37 = new Telerik.WinControls.UI.RadLabel();
+            this.export_waitingbar = new Telerik.WinControls.UI.RadWaitingBar();
+            this.export_cancel_button = new Telerik.WinControls.UI.RadButton();
+            this.export_button = new Telerik.WinControls.UI.RadButton();
+            this.export_progress_label = new Telerik.WinControls.UI.RadLabel();
             ((System.ComponentModel.ISupportInitialize)(this.wholepage)).BeginInit();
             this.wholepage.SuspendLayout();
             this.ZKPageView.SuspendLayout();
@@ -528,6 +542,20 @@
             ((System.ComponentModel.ISupportInitialize)(this.GKTreeView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gk_gridview)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gk_gridview.MasterTemplate)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radButton16)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.export_addr)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radLabel34)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radLabel35)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radButton17)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radButton18)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.export_cj_addr)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radLabel36)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.export_sf_addr)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radLabel37)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.export_waitingbar)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.export_cancel_button)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.export_button)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.export_progress_label)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
             this.SuspendLayout();
             // 
@@ -1651,15 +1679,15 @@
             // 
             // GKPageView
             // 
+            this.GKPageView.Controls.Add(this.gk_data_pre_panel);
+            this.GKPageView.Controls.Add(this.gk_docGroupBox);
+            this.GKPageView.Controls.Add(this.gk_qx_panel);
             this.GKPageView.Controls.Add(this.compare_panel);
             this.GKPageView.Controls.Add(this.gk_zt_panel);
-            this.GKPageView.Controls.Add(this.gk_docGroupBox);
-            this.GKPageView.Controls.Add(this.gk_data_pre_panel);
             this.GKPageView.Controls.Add(this.gk_xz_panel);
             this.GKPageView.Controls.Add(this.gk_xx_panel);
             this.GKPageView.Controls.Add(this.gk_sf_panel);
             this.GKPageView.Controls.Add(this.gk_cj_panel);
-            this.GKPageView.Controls.Add(this.gk_qx_panel);
             this.GKPageView.Controls.Add(this.custom_panel);
             this.GKPageView.Controls.Add(this.GKTreeView);
             this.GKPageView.Controls.Add(this.gk_gridview);
@@ -2134,7 +2162,21 @@
             // 
             // gk_data_pre_panel
             // 
+            this.gk_data_pre_panel.Controls.Add(this.export_progress_label);
+            this.gk_data_pre_panel.Controls.Add(this.radLabel35);
+            this.gk_data_pre_panel.Controls.Add(this.radButton17);
+            this.gk_data_pre_panel.Controls.Add(this.radButton18);
+            this.gk_data_pre_panel.Controls.Add(this.export_cj_addr);
+            this.gk_data_pre_panel.Controls.Add(this.radLabel36);
+            this.gk_data_pre_panel.Controls.Add(this.export_sf_addr);
+            this.gk_data_pre_panel.Controls.Add(this.radLabel37);
+            this.gk_data_pre_panel.Controls.Add(this.export_waitingbar);
+            this.gk_data_pre_panel.Controls.Add(this.export_cancel_button);
+            this.gk_data_pre_panel.Controls.Add(this.export_button);
+            this.gk_data_pre_panel.Controls.Add(this.radButton16);
             this.gk_data_pre_panel.Controls.Add(this.sync_button);
+            this.gk_data_pre_panel.Controls.Add(this.export_addr);
+            this.gk_data_pre_panel.Controls.Add(this.radLabel34);
             this.gk_data_pre_panel.Controls.Add(this.gk_data_delete);
             this.gk_data_pre_panel.Controls.Add(this.gk_data_import);
             this.gk_data_pre_panel.Location = new System.Drawing.Point(140, 234);
@@ -3158,6 +3200,126 @@
             this.gk_gridview.TabIndex = 0;
             this.gk_gridview.Text = "radGridView2";
             // 
+            // radButton16
+            // 
+            this.radButton16.Location = new System.Drawing.Point(577, 191);
+            this.radButton16.Name = "radButton16";
+            this.radButton16.Size = new System.Drawing.Size(75, 24);
+            this.radButton16.TabIndex = 6;
+            this.radButton16.Text = "另存至";
+            this.radButton16.Click += new System.EventHandler(this.radButton16_Click);
+            // 
+            // export_addr
+            // 
+            this.export_addr.Location = new System.Drawing.Point(118, 193);
+            this.export_addr.Name = "export_addr";
+            this.export_addr.Size = new System.Drawing.Size(445, 20);
+            this.export_addr.TabIndex = 5;
+            this.export_addr.TabStop = false;
+            // 
+            // radLabel34
+            // 
+            this.radLabel34.AutoSize = true;
+            this.radLabel34.Location = new System.Drawing.Point(63, 195);
+            this.radLabel34.Name = "radLabel34";
+            this.radLabel34.Size = new System.Drawing.Size(52, 18);
+            this.radLabel34.TabIndex = 4;
+            this.radLabel34.Text = "保存至：";
+            // 
+            // radLabel35
+            // 
+            this.radLabel35.AutoSize = true;
+            this.radLabel35.Location = new System.Drawing.Point(91, 227);
+            this.radLabel35.Name = "radLabel35";
+            this.radLabel35.Size = new System.Drawing.Size(2, 2);
+            this.radLabel35.TabIndex = 101;
+            // 
+            // radButton17
+            // 
+            this.radButton17.Location = new System.Drawing.Point(576, 150);
+            this.radButton17.Name = "radButton17";
+            this.radButton17.Size = new System.Drawing.Size(74, 23);
+            this.radButton17.TabIndex = 99;
+            this.radButton17.Text = "打开";
+            this.radButton17.Click += new System.EventHandler(this.radButton17_Click_1);
+            // 
+            // radButton18
+            // 
+            this.radButton18.Location = new System.Drawing.Point(576, 114);
+            this.radButton18.Name = "radButton18";
+            this.radButton18.Size = new System.Drawing.Size(74, 23);
+            this.radButton18.TabIndex = 100;
+            this.radButton18.Text = "打开";
+            this.radButton18.Click += new System.EventHandler(this.radButton18_Click);
+            // 
+            // export_cj_addr
+            // 
+            this.export_cj_addr.Location = new System.Drawing.Point(118, 152);
+            this.export_cj_addr.Name = "export_cj_addr";
+            this.export_cj_addr.Size = new System.Drawing.Size(445, 20);
+            this.export_cj_addr.TabIndex = 97;
+            this.export_cj_addr.TabStop = false;
+            // 
+            // radLabel36
+            // 
+            this.radLabel36.AutoSize = true;
+            this.radLabel36.Location = new System.Drawing.Point(52, 152);
+            this.radLabel36.Name = "radLabel36";
+            this.radLabel36.Size = new System.Drawing.Size(63, 18);
+            this.radLabel36.TabIndex = 95;
+            this.radLabel36.Text = "城郊分类：";
+            // 
+            // export_sf_addr
+            // 
+            this.export_sf_addr.Location = new System.Drawing.Point(118, 116);
+            this.export_sf_addr.Name = "export_sf_addr";
+            this.export_sf_addr.Size = new System.Drawing.Size(445, 20);
+            this.export_sf_addr.TabIndex = 98;
+            this.export_sf_addr.TabStop = false;
+            // 
+            // radLabel37
+            // 
+            this.radLabel37.AutoSize = true;
+            this.radLabel37.Location = new System.Drawing.Point(41, 116);
+            this.radLabel37.Name = "radLabel37";
+            this.radLabel37.Size = new System.Drawing.Size(75, 18);
+            this.radLabel37.TabIndex = 96;
+            this.radLabel37.Text = "示范校分类：";
+            // 
+            // export_waitingbar
+            // 
+            this.export_waitingbar.Location = new System.Drawing.Point(44, 272);
+            this.export_waitingbar.Name = "export_waitingbar";
+            this.export_waitingbar.Size = new System.Drawing.Size(641, 17);
+            this.export_waitingbar.TabIndex = 91;
+            this.export_waitingbar.Text = "radWaitingBar1";
+            // 
+            // export_cancel_button
+            // 
+            this.export_cancel_button.Location = new System.Drawing.Point(409, 233);
+            this.export_cancel_button.Name = "export_cancel_button";
+            this.export_cancel_button.Size = new System.Drawing.Size(110, 24);
+            this.export_cancel_button.TabIndex = 90;
+            this.export_cancel_button.Text = "取消";
+            this.export_cancel_button.Click += new System.EventHandler(this.radButton20_Click);
+            // 
+            // export_button
+            // 
+            this.export_button.Location = new System.Drawing.Point(169, 233);
+            this.export_button.Name = "export_button";
+            this.export_button.Size = new System.Drawing.Size(110, 24);
+            this.export_button.TabIndex = 89;
+            this.export_button.Text = "导出";
+            this.export_button.Click += new System.EventHandler(this.radButton21_Click);
+            // 
+            // export_progress_label
+            // 
+            this.export_progress_label.AutoSize = true;
+            this.export_progress_label.Location = new System.Drawing.Point(44, 295);
+            this.export_progress_label.Name = "export_progress_label";
+            this.export_progress_label.Size = new System.Drawing.Size(2, 2);
+            this.export_progress_label.TabIndex = 102;
+            // 
             // mainform
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -3316,6 +3478,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.gk_isVisible)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gk_data_pre_panel)).EndInit();
             this.gk_data_pre_panel.ResumeLayout(false);
+            this.gk_data_pre_panel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gk_xz_panel)).EndInit();
             this.gk_xz_panel.ResumeLayout(false);
             this.gk_xz_panel.PerformLayout();
@@ -3419,6 +3582,20 @@
             ((System.ComponentModel.ISupportInitialize)(this.GKTreeView)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gk_gridview.MasterTemplate)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gk_gridview)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radButton16)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.export_addr)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radLabel34)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radLabel35)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radButton17)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radButton18)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.export_cj_addr)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radLabel36)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.export_sf_addr)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radLabel37)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.export_waitingbar)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.export_cancel_button)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.export_button)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.export_progress_label)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
             this.ResumeLayout(false);
 
@@ -3663,6 +3840,20 @@
         private Telerik.WinControls.UI.RadLabel qx_comp_progresslabel;
         private System.Windows.Forms.ComboBox cj_comp_year;
         private System.Windows.Forms.Label label9;
+        private Telerik.WinControls.UI.RadLabel radLabel35;
+        private Telerik.WinControls.UI.RadButton radButton17;
+        private Telerik.WinControls.UI.RadButton radButton18;
+        private Telerik.WinControls.UI.RadTextBox export_cj_addr;
+        private Telerik.WinControls.UI.RadLabel radLabel36;
+        private Telerik.WinControls.UI.RadTextBox export_sf_addr;
+        private Telerik.WinControls.UI.RadLabel radLabel37;
+        private Telerik.WinControls.UI.RadWaitingBar export_waitingbar;
+        private Telerik.WinControls.UI.RadButton export_cancel_button;
+        private Telerik.WinControls.UI.RadButton export_button;
+        private Telerik.WinControls.UI.RadButton radButton16;
+        private Telerik.WinControls.UI.RadTextBox export_addr;
+        private Telerik.WinControls.UI.RadLabel radLabel34;
+        private Telerik.WinControls.UI.RadLabel export_progress_label;
 
     }
 }

@@ -105,8 +105,8 @@ namespace ExamReport
                     string log = year + "年" + Utils.language_trans(exam) + row.Cells["sub"].Value.ToString().Trim();
                     _form.ShowPro(exam_type, 1, log + "数据读取...");
                     MetaData mdata = new MetaData(year, exam, sub);
-                    //try
-                    //{
+                    try
+                    {
                         mdata.get_meta_data();
                         _fullmark = mdata._fullmark;
 
@@ -139,6 +139,11 @@ namespace ExamReport
                             mdata.group = SortTable(mdata.group, "ZH_totalmark");
                             mdata.basic.SeperateGroupsByColumnName(mdata._grouptype, mdata._group_num, "ZH_totalmark");
                             mdata.group.SeperateGroupsByColumnName(mdata._grouptype, mdata._group_num, "ZH_totalmark");
+
+                            //mdata.zh_basic = SortTable(mdata.zh_basic, "totalmark");
+                            //mdata.zh_group = SortTable(mdata.zh_group, "totalmark");
+                            //mdata.zh_basic.SeperateGroupsByColumnName(mdata._grouptype, mdata._group_num, "totalmark");
+                            //mdata.zh_group.SeperateGroupsByColumnName(mdata._grouptype, mdata._group_num, "totalmark");
 
                             if (row.Cells["SpecChoice"].Value.ToString().Trim().Equals("科目总分相关"))
                             {
@@ -189,6 +194,11 @@ namespace ExamReport
                                     break;
                                 case "gk_cus":
                                     gk_zh_cus_process(mdata);
+                                    break;
+                                case "gk_export":
+                                    mdata.get_CJ_data(cj_addr);
+                                    mdata.get_SF_data(sf_addr);
+                                    gk_zh_export_process(mdata);
                                     break;
                                 default:
                                     break;
@@ -278,24 +288,69 @@ namespace ExamReport
                                     mdata.get_CJ_data(cj_addr);
                                     gk_xz_process(mdata);
                                     break;
+                                case "gk_export":
+                                    mdata.get_CJ_data(cj_addr);
+                                    mdata.get_SF_data(sf_addr);
+                                    gk_export_process(mdata);
+                                    break;
                                 default:
                                     break;
                             }
 
                         }
-                    //}
-                    //catch (System.Threading.ThreadAbortException e)
-                    //{
-                    //}
-                    //catch (Exception e)
-                    //{
-                    //    _form.ErrorM(exam_type, e.Message);
-                    //}
+                    }
+                    catch (System.Threading.ThreadAbortException e)
+                    {
+                    }
+                    catch (Exception e)
+                    {
+                        _form.ErrorM(exam_type, e.Message);
+                    }
 
                 }
             }
             _form.ShowPro(exam_type, 2, "完成！");
         }
+        public void gk_export_start()
+        {
+            exam_type = "gk_export";
+            _exam = "gk";
+            start();
+
+        }
+        public void gk_zh_export_process(MetaData mdata)
+        {
+            _form.ShowPro("gk_export", 0, "开始导出...");
+            string table = save_address + @"\" + mdata.get_dbf_table_name();
+            string sub = Utils.language_trans(mdata._sub);
+            mdata.basic.Columns.Add(sub + "_groups",typeof(string));
+            foreach (DataRow dr in mdata.basic.Rows)
+                dr[sub + "_groups"] = dr["groups"];
+            mdata.basic = SortTable(mdata.basic, "totalmark");
+            mdata.basic.SeperateGroupsByColumnName(mdata._grouptype, mdata._group_num, "totalmark");
+
+            DBFExport export = new DBFExport(mdata.basic, mdata.group);
+            export.join_cj(mdata.CJ_list);
+            export.join_sf(mdata.SF_list);
+            export.do_zh_export(save_address, table, sub);
+
+            //string zh_table = save_address + @"\zh_" + mdata.get_dbf_table_name();
+            //DBFExport zh_export = new DBFExport(mdata.basic, mdata.group);
+            //zh_export.join_cj(mdata.CJ_list);
+            //zh_export.join_sf(mdata.SF_list);
+            //zh_export.do_export(save_address, zh_table);
+        }
+
+        public void gk_export_process(MetaData mdata)
+        {
+            _form.ShowPro("gk_export", 0, "开始导出...");
+            string table = save_address + @"\" + mdata.get_dbf_table_name();
+            DBFExport export = new DBFExport(mdata.basic, mdata.group);
+            export.join_cj(mdata.CJ_list);
+            export.join_sf(mdata.SF_list);
+            export.do_export(save_address, table);
+        }
+
         public void gk_cj_comp_start()
         {
             _form.ShowPro("gk_cj_cp", 0, "对比开始处理...");
@@ -1232,8 +1287,8 @@ namespace ExamReport
             //QX_group.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
             //if (QX_data.Columns.Contains("XZ"))
             //    XZ_group_separate(QX_data, mdata);
-            DataTable W_data = QX_data.Likefilter("zkzh", "'1*'");
-            DataTable W_group = QX_group.Likefilter("zkzh", "'1*'");
+            DataTable W_data = flzt.Likefilter("zkzh", "'1*'");
+            DataTable W_group = flzt_group.Likefilter("zkzh", "'1*'");
 
             Partition_statistic w_stat = new Partition_statistic("文科", W_data, mdata._fullmark, mdata.ans, W_group, mdata.grp, group);
             w_stat._config = config;
@@ -1242,8 +1297,8 @@ namespace ExamReport
                 w_stat.xz_postprocess(mdata.xz);
             WSLG.Add(w_stat.result);
 
-            DataTable l_data = QX_data.Likefilter("zkzh", "'5*'");
-            DataTable l_group = QX_group.Likefilter("zkzh", "'5*'");
+            DataTable l_data = flzt.Likefilter("zkzh", "'5*'");
+            DataTable l_group = flzt_group.Likefilter("zkzh", "'5*'");
 
             Partition_statistic l_stat = new Partition_statistic("理科", l_data, mdata._fullmark, mdata.ans, l_group, mdata.grp, group);
             l_stat._config = config;

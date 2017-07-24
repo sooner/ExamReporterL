@@ -147,13 +147,15 @@ namespace ExamReport
                     objectdata.Append("text");
                 else if (dc.DataType.ToString().Equals("System.Decimal"))
                     objectdata.Append(datastype);
+                else if (dc.DataType.ToString().Equals("System.Int32"))
+                    objectdata.Append("int");
                 else
                     i++;
                 count++;
                 if (count != groups_data.Columns.Count)
                     objectdata.Append(",\n");
                 else
-                    objectdata.Append(");");
+                    objectdata.Append(")");
             }
 
             MySqlHelper.ExecuteNonQuery(MySqlHelper.Conn, CommandType.Text, objectdata.ToString(), null);
@@ -175,6 +177,8 @@ namespace ExamReport
                             objectdata.Append("'" + dr[i].ToString().Trim() + "'");
                         else if (groups_data.Columns[i].DataType.ToString().Equals("System.Decimal"))
                             objectdata.Append((decimal)dr[i]);
+                        else if (groups_data.Columns[i].DataType.ToString().Equals("System.Int32"))
+                            objectdata.Append((int)dr[i]);
 
                         if (i != groups_data.Columns.Count - 1)
                             objectdata.Append(",");

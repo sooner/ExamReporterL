@@ -71,6 +71,12 @@ namespace ExamReport
             Partition_wordcreator.ChartCombine comb = new Partition_wordcreator.ChartCombine();
             decimal chart_fullmark = _xx_data[6].w_result.fullmark;
             comb.Add(_xx_data[6].w_result.dist, _xx_data[6]._name);
+            comb.Add(_xx_data[0].w_result.dist, _xx_data[0]._name);
+            comb.Add(_xx_data[1].w_result.dist, _xx_data[1]._name);
+            comb.Add(_xx_data[2].w_result.dist, _xx_data[2]._name);
+            comb.Add(_xx_data[5].w_result.dist, _xx_data[5]._name);
+            
+            
             
             insertChart("总分分布曲线图", comb.target, "分数", "人数百分比", Excel.XlChartType.xlLineMarkers, chart_fullmark);
 
@@ -84,6 +90,10 @@ namespace ExamReport
             insertText(ExamTitle1, "理科总分分布曲线图");
             comb = new Partition_wordcreator.ChartCombine();
             comb.Add(_xx_data[6].l_result.dist, _xx_data[6]._name);
+            comb.Add(_xx_data[0].w_result.dist, _xx_data[0]._name);
+            comb.Add(_xx_data[1].w_result.dist, _xx_data[1]._name);
+            comb.Add(_xx_data[2].w_result.dist, _xx_data[2]._name);
+            comb.Add(_xx_data[5].w_result.dist, _xx_data[5]._name);
             chart_fullmark = _xx_data[6].l_result.fullmark;
             insertChart("总分分布曲线图", comb.target, "分数", "人数百分比", Excel.XlChartType.xlLineMarkers, chart_fullmark);
             insertText(ExamTitle1, "理科总分分数分布表");
