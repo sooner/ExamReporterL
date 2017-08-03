@@ -29,6 +29,7 @@ namespace ExamReport
         Object oTrue = true;
 
         decimal[,] result = new decimal[4, 6];
+        DataTable qx_ooo;
         DataTable qx;
         Dictionary<string, string> qx_kv;
 
@@ -54,15 +55,15 @@ namespace ExamReport
             int i = 0;
             foreach(string key in sub_fullmark.Keys)
             {
-                result[0, i] = datatable.AsEnumerable().Select(c => c.Field<decimal>(key)).Average() / sub_fullmark[key];
-                result[1, i] = cq_table.AsEnumerable().Select(c => c.Field<decimal>(subs[i])).Average() / sub_fullmark[key];
-                result[2, i] = jq_table.AsEnumerable().Select(c => c.Field<decimal>(subs[i])).Average() / sub_fullmark[key];
+                result[0, i] = Convert.ToDecimal(ChinaRound(Convert.ToDouble(datatable.AsEnumerable().Select(c => c.Field<decimal>(key)).Average() / sub_fullmark[key]), 2));
+                result[1, i] =  Convert.ToDecimal(ChinaRound(Convert.ToDouble(cq_table.AsEnumerable().Select(c => c.Field<decimal>(subs[i])).Average() / sub_fullmark[key]), 2));
+                result[2, i] = Convert.ToDecimal(ChinaRound(Convert.ToDouble(jq_table.AsEnumerable().Select(c => c.Field<decimal>(subs[i])).Average() / sub_fullmark[key]), 2));
                 result[3, i] = result[1, i] - result[2, i];
 
                 i++;
             }
 
-            qx = datatable.AsEnumerable().GroupBy(c => c.Field<string>("qxdm")).Select(c => new
+            qx_ooo = datatable.AsEnumerable().GroupBy(c => c.Field<string>("qxdm")).Select(c => new
             {
                 qxdm = c.Key.ToString().Trim(),
                 count = c.Count(),
@@ -75,8 +76,15 @@ namespace ExamReport
 
             }).ToDataTable();
 
+            qx = qx_ooo.Clone();
+            qx_ooo.PrimaryKey = new DataColumn[] {qx_ooo.Columns["qxdm"] };
+            foreach (string qxdm in Utils.qxdm_in_order)
+            {
+                DataRow newrow = qx.NewRow();
+                newrow.ItemArray = qx_ooo.Rows.Find(qxdm).ItemArray;
+                qx.Rows.Add(newrow);
 
-
+            }
         }
 
         public void creating_word()
@@ -178,12 +186,14 @@ namespace ExamReport
 
             for (int i = 0; i < qx.Rows.Count; i++)
             {
+
                 table.Cell(8 + i, 1).Range.Text = qx_kv[qx.Rows[i][0].ToString().Trim()];
                 for (int j = 0; j < 6; j++)
                 {
-
-                    table.Cell(8 + i, 2 + j * 2).Range.Text = string.Format("{0:F2}", qx.Rows[i][j+2]);
-                    table.Cell(8 + i, 3 + j * 2).Range.Text = string.Format("{0:F2}", (decimal)qx.Rows[i][j+2] - result[0, j]);
+                    double num = ChinaRound(Convert.ToDouble(qx.Rows[i][j + 2]), 2);
+                    double cha = num - ChinaRound(Convert.ToDouble(result[0, j]), 2);
+                    table.Cell(8 + i, 2 + j * 2).Range.Text = string.Format("{0:F2}", num);
+                    table.Cell(8 + i, 3 + j * 2).Range.Text = string.Format("{0:F2}", cha);
                 }
             }
             
@@ -203,6 +213,17 @@ namespace ExamReport
 
             range = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
             range.InsertParagraphAfter();
+        }
+        double ChinaRound(double value, int decimals)
+        {
+            if (value < 0)
+            {
+                return Math.Round(value + 5 / Math.Pow(10, decimals + 1), decimals, MidpointRounding.AwayFromZero);
+            }
+            else
+            {
+                return Math.Round(value, decimals, MidpointRounding.AwayFromZero);
+            }
         }
 
         private void horizonCellMerge(Word.Table table, int RowIndex, int startcolumnIndex)

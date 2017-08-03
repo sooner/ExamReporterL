@@ -71,6 +71,8 @@ namespace ExamReport
         public static string GK_WSLG_title_2 = "文史、理工类数据统计分析报告";
         public static string XX_title = "学校数据统计分析报告";
 
+        public static string[] qx_in_order = { "东城区", "西城区", "海淀区", "朝阳区", "石景山区", "丰台区", "燕 山", "通州区", "顺义区", "昌平区", "门头沟区", "房山区", "大兴区", "怀柔区", "平谷区", "密云县", "延庆县" };
+        public static string[] qxdm_in_order = { "01", "02","08","05","07","06", "10","12", "13","14","09","11","15","16", "17", "28","29"};
         public static void WSLG_WriteFrontPage(Configuration config, Microsoft.Office.Interop.Word._Document oDoc)
         {
             WriteIntoDocument(oDoc, "title_1", GK_title_1);

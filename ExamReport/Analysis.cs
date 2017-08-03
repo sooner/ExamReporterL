@@ -366,14 +366,16 @@ namespace ExamReport
             for (int j = 1; j < mdata.CJ_list[1].Count; j++)
                 country_code[j - 1] = mdata.CJ_list[1][j].ToString().Trim();
 
-            DataTable urban = mdata.basic.filteredtable("qxdm", urban_code);
-            DataTable country = mdata.basic.filteredtable("qxdm", country_code);
+            
 
             DataTable total;
             if (compare_cj_is_wk)
                 total = mdata.basic.equalfilter("type", "w");
             else
                 total = mdata.basic.equalfilter("type", "l");
+
+            DataTable urban = total.filteredtable("qxdm", urban_code);
+            DataTable country = total.filteredtable("qxdm", country_code);
             
             GKCompWordCreator wc = new GKCompWordCreator(qx_kv);
             wc.is_wk = compare_cj_is_wk;
@@ -1023,11 +1025,47 @@ namespace ExamReport
             DataTable XX_data = mdata.basic.filteredtable("xxdm", new string[] { school_code });
             DataTable XX_group = mdata.group.filteredtable("xxdm", new string[] { school_code });
 
-            WSLGCal(config, mdata, XX_data, XX_group, WSLG);
+            xx_WSLGCal(config, mdata, XX_data, XX_group, WSLG);
             _form.ShowPro("gk_xx", 1, mdata.log_name + "文理报告生成中...");
             Partition_wordcreator create2 = new Partition_wordcreator(WSLG, mdata.grp, mdata.groups_group);
             create2.SetConfig(config);
             create2.creating_word();
+        }
+        void xx_WSLGCal(Configuration config, MetaData mdata, DataTable QX_data, DataTable QX_group, ArrayList WSLG)
+        {
+
+            int group = QX_data.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
+            QX_group.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
+            //if (QX_data.Columns.Contains("XZ"))
+            //    XZ_group_separate(QX_data, mdata);
+            DataTable W_data = QX_data.Likefilter("zkzh", "'1*'");
+            DataTable W_group = QX_group.Likefilter("zkzh", "'1*'");
+
+            Partition_statistic w_stat = new Partition_statistic("文科", W_data, mdata._fullmark, mdata.ans, W_group, mdata.grp, group);
+            w_stat._config = config;
+            w_stat.statistic_process(false);
+            if (mdata.xz.Count > 0)
+                w_stat.xz_postprocess(mdata.xz);
+            WSLG.Add(w_stat.result);
+
+            DataTable l_data = QX_data.Likefilter("zkzh", "'5*'");
+            DataTable l_group = QX_group.Likefilter("zkzh", "'5*'");
+
+            Partition_statistic l_stat = new Partition_statistic("理科", l_data, mdata._fullmark, mdata.ans, l_group, mdata.grp, group);
+            l_stat._config = config;
+            l_stat.statistic_process(false);
+            if (mdata.xz.Count > 0)
+                l_stat.xz_postprocess(mdata.xz);
+            WSLG.Add(l_stat.result);
+
+            Partition_statistic total_stat = new Partition_statistic("分类整体", QX_data, mdata._fullmark, mdata.ans, QX_group, mdata.grp, group);
+            total_stat._config = config;
+            total_stat.statistic_process(false);
+            if (mdata.xz.Count > 0)
+                total_stat.xz_postprocess(mdata.xz);
+            WSLG.Add(total_stat.result);
+
+
         }
         public void gk_xx_process(MetaData mdata)
         {

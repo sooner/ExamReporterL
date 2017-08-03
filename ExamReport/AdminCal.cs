@@ -50,16 +50,16 @@ namespace ExamReport
         {
             qx_code.Add(new string[2]{"01", "03"});
             qx_code.Add(new string[1] { "02" });
-            qx_code.Add(new string[1] { "05" });
-            qx_code.Add(new string[1] { "06" });
-            qx_code.Add(new string[1] { "07" });
             qx_code.Add(new string[1] { "08" });
-            qx_code.Add(new string[1] { "09" });
+            qx_code.Add(new string[1] { "05" });
+            qx_code.Add(new string[1] { "07" });
+            qx_code.Add(new string[1] { "06" });
             qx_code.Add(new string[1] { "10" });
-            qx_code.Add(new string[1] { "11" });
             qx_code.Add(new string[1] { "12" });
             qx_code.Add(new string[1] { "13" });
             qx_code.Add(new string[1] { "14" });
+            qx_code.Add(new string[1] { "09" });
+            qx_code.Add(new string[1] { "11" });
             qx_code.Add(new string[1] { "15" });
             qx_code.Add(new string[1] { "16" });
             qx_code.Add(new string[1] { "17" });
@@ -256,9 +256,9 @@ namespace ExamReport
             {
                 InsertTotalLevel("650以上", Convert.ToInt32(_fullmark), 650, data, result);
                 InsertTotalLevel("600以上", Convert.ToInt32(_fullmark), 600, data, result);
-                InsertTotalLevel("一本", Convert.ToInt32(_fullmark), first, data, result);
-                InsertTotalLevel("二本", first, second, data, result);
-                InsertTotalLevel("三本", second, third, data, result);
+                InsertTotalLevel("一本以上", Convert.ToInt32(_fullmark), first, data, result);
+                InsertTotalLevel("二本以上", Convert.ToInt32(_fullmark), second, data, result);
+                InsertTotalLevel("专科以上", Convert.ToInt32(_fullmark), third, data, result);
             }
             else
             {

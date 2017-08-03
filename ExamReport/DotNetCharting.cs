@@ -209,6 +209,7 @@ namespace ExamReport
             //chart.YAxis.AlternateGridBackground.Color = Color.FromArgb(255, 250, 250, 250);
 
             chart.LegendBox.HeaderLabel = new dotnetCHARTING.WinForms.Label("图表说明", new Font("Microsoft Sans Serif", 10F, FontStyle.Bold, GraphicsUnit.Point, 134));
+           
             //chart.LegendBox.HeaderLabel.Font = new Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 134);
             chart.LegendBox.Label.Font = new Font("Microsoft Sans Serif", 9F, FontStyle.Bold, GraphicsUnit.Point, 134);
             chart.Palette = new Color[] { Color.FromArgb(0, 156, 255), Color.FromArgb(255, 99, 49), Color.FromArgb(49, 255, 49), Color.FromArgb(255, 255, 0), };
@@ -274,6 +275,7 @@ namespace ExamReport
             chart.LegendBox.Position = LegendBoxPosition.BottomMiddle;
             chart.LegendBox.HeaderLabel.Text = "";
             chart.LegendBox.LabelStyle.Text = "";
+            chart.LegendBox.Template = "%Icon%Name";
             chart.DefaultSeries.DefaultElement.ShowValue = true;
             chart.ShadingEffect = true;
             chart.Use3D = true;
