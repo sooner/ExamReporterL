@@ -128,6 +128,7 @@ namespace ExamReport
 
             zk_xz_qx_addr.Text = currentdic + cj_addr;
 
+            cj_cj_addr.Text = currentdic + cj_addr;
             export_sf_addr.Text = currentdic + sf_addr;
             export_cj_addr.Text = currentdic + cj_addr;
             export_addr.Text = currentdic;
@@ -150,6 +151,7 @@ namespace ExamReport
             progress_label.Add("gk_cj_cp", cj_comp_progresslabel);
             progress_label.Add("gk_qx_cp", qx_comp_progresslabel);
             progress_label.Add("gk_export", export_progress_label);
+            progress_label.Add("zk_cj", zk_cj_progress_label);
 
             run_button.Add("zk_zt", zk_zt_start);
             run_button.Add("zk_qx", zk_qx_start);
@@ -167,6 +169,7 @@ namespace ExamReport
             run_button.Add("gk_cj_cp", cj_comp_start);
             run_button.Add("gk_qx_cp", qx_comp_start);
             run_button.Add("gk_export", export_button);
+            run_button.Add("zk_cj", zk_cj_start);
 
             cancel_button.Add("zk_zt", zk_zt_cancel);
             cancel_button.Add("zk_qx", zk_qx_cancel);
@@ -184,6 +187,7 @@ namespace ExamReport
             cancel_button.Add("gk_cj_cp", cj_comp_cancel);
             cancel_button.Add("gk_qx_cp", qx_comp_cancel);
             cancel_button.Add("gk_export", export_cancel_button);
+            cancel_button.Add("zk_cj", zk_cj_cancel);
 
 
             waiting_bar.Add("zk_zt", zk_zt_waitingbar);
@@ -202,6 +206,7 @@ namespace ExamReport
             waiting_bar.Add("gk_cj_cp", cj_comp_waitingbar);
             waiting_bar.Add("gk_qx_cp", qx_comp_waitingbar);
             waiting_bar.Add("gk_export", export_waitingbar);
+            waiting_bar.Add("zk_cj", zk_cj_waitingbar);
             
         }
         
@@ -358,6 +363,7 @@ namespace ExamReport
             ZKTreeView.Nodes.Clear();
             ZKTreeView.Nodes.Add(new RadTreeNode("数据录入"));
             ZKTreeView.Nodes.Add(new RadTreeNode("总体"));
+            ZKTreeView.Nodes.Add(new RadTreeNode("城郊"));
             ZKTreeView.Nodes.Add(new RadTreeNode("区县"));
             ZKTreeView.Nodes.Add(new RadTreeNode("行政版"));
 
@@ -423,7 +429,7 @@ namespace ExamReport
             foreach (DataRow dr in qxdm.Rows)
             {
                 //RadTreeNode node = new RadTreeNode(dr["qxmc"].ToString().Trim());
-                ZKTreeView.Nodes[2].Nodes.Add(new RadTreeNode(dr["qxmc"].ToString().Trim()));
+                ZKTreeView.Nodes[3].Nodes.Add(new RadTreeNode(dr["qxmc"].ToString().Trim()));
                 GKTreeView.Nodes[5].Nodes.Add(new RadTreeNode(dr["qxmc"].ToString().Trim()));
                 GKTreeView.Nodes[6].Nodes.Add(new RadTreeNode(dr["qxmc"].ToString().Trim()));
                 GKTreeView.Nodes[6].Nodes[count].CheckType = CheckType.CheckBox;
@@ -675,6 +681,7 @@ namespace ExamReport
                 zk_qx_panel.Hide();
                 DataPrePanel.Hide();
                 zk_xz_panel.Hide();
+                zk_cj_panel.Hide();
             }
             else if (element.SelectedNode.Text.Trim().Equals("区县") || (element.SelectedNode.Parent != null && element.SelectedNode.Parent.Text.Trim().Equals("区县")))
             {
@@ -683,6 +690,16 @@ namespace ExamReport
                 zk_zt_panel.Hide();
                 DataPrePanel.Hide();
                 zk_xz_panel.Hide();
+                zk_cj_panel.Hide();
+            }
+            else if (element.SelectedNode.Text.Trim().Equals("城郊"))
+            {
+                DocGroupBox.Show();
+                zk_qx_panel.Hide();
+                zk_zt_panel.Hide();
+                DataPrePanel.Hide();
+                zk_xz_panel.Hide();
+                zk_cj_panel.Show();
             }
             else if (element.SelectedNode.Text.Trim().Equals("数据录入"))
             {
@@ -691,6 +708,7 @@ namespace ExamReport
                 zk_zt_panel.Hide();
                 DataPrePanel.Show();
                 zk_xz_panel.Hide();
+                zk_cj_panel.Hide();
             }
             else if (element.SelectedNode.Text.Trim().Equals("行政版"))
             {
@@ -699,6 +717,7 @@ namespace ExamReport
                 zk_zt_panel.Hide();
                 DataPrePanel.Hide();
                 zk_xz_panel.Show();
+                zk_cj_panel.Hide();
             }
         }
 
@@ -730,16 +749,7 @@ namespace ExamReport
             Grid_load();
         }
 
-        private void radButton4_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog openFileDialog1 = new OpenFileDialog();
-            openFileDialog1.InitialDirectory = "C://";
-            openFileDialog1.Filter = "Excel files (*.xls,*.xlsx)|*.xls;*.xlsx|All files (*.*)|*.*";
-            openFileDialog1.FilterIndex = 1;
-            openFileDialog1.RestoreDirectory = true;
-            if (openFileDialog1.ShowDialog() == DialogResult.OK)
-                qx_addr.Text = openFileDialog1.FileName;
-        }
+        
 
         private void radButton5_Click(object sender, EventArgs e)
         {
@@ -755,7 +765,7 @@ namespace ExamReport
         private void radButton6_Click(object sender, EventArgs e)
         {
             
-            if (string.IsNullOrEmpty(qx_addr.Text.Trim()))
+            if (string.IsNullOrEmpty(qxxx_addr.Text.Trim()))
             {
                 Error("请输入区县学校分类文件地址！");
                 return;
@@ -775,7 +785,7 @@ namespace ExamReport
             
             Analysis analysis = new Analysis(this);
             analysis._gridview = zk_gridview;
-            analysis.qx_addr = qx_addr.Text.Trim();
+            analysis.qx_addr = qxxx_addr.Text.Trim();
             analysis.cj_addr = cj_addr.Text.Trim();
             analysis.qx_code = QX_code;
             analysis.curryear = zk_yearlist.SelectedItem.ToString().Trim();
@@ -1829,6 +1839,7 @@ namespace ExamReport
             Analysis analysis = new Analysis(this);
             analysis.compare_year1 = compare_year1.SelectedItem.ToString().Trim();
             analysis.compare_year2 = compare_year2.SelectedItem.ToString().Trim();
+            analysis.CurrentDirectory = currentdic;
 
             Thread thread = new Thread(new ThreadStart(analysis.gk_comp_start));
             thread.IsBackground = true;
@@ -1938,6 +1949,69 @@ namespace ExamReport
                     thread.Abort();
                     thread_store.Remove("gk_export");
                     ShowPro("gk_export", 2, "");
+                }
+            }
+        }
+
+        private void radButton4_Click_1(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+            openFileDialog1.InitialDirectory = "C://";
+            openFileDialog1.Filter = "Excel files (*.xls,*.xlsx)|*.xls;*.xlsx|All files (*.*)|*.*";
+            openFileDialog1.FilterIndex = 1;
+            openFileDialog1.RestoreDirectory = true;
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+                qxxx_addr.Text = openFileDialog1.FileName;
+        }
+
+        private void radButton22_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+            openFileDialog1.InitialDirectory = "C://";
+            openFileDialog1.Filter = "Excel files (*.xls,*.xlsx)|*.xls;*.xlsx|All files (*.*)|*.*";
+            openFileDialog1.FilterIndex = 1;
+            openFileDialog1.RestoreDirectory = true;
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+                cj_cj_addr.Text = openFileDialog1.FileName;
+        }
+
+        private void radButton21_Click_1(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(cj_cj_addr.Text.Trim()))
+            {
+                Error("请输入城郊分类文件地址！");
+                return;
+            }
+
+            if (CheckGridView(zk_gridview))
+                return;
+
+            Analysis analysis = new Analysis(this);
+            analysis._gridview = zk_gridview;
+            analysis.cj_addr = cj_cj_addr.Text.Trim();
+            analysis.curryear = zk_yearlist.SelectedItem.ToString().Trim();
+            analysis.currmonth = zk_currmonth.SelectedItem.ToString().Trim();
+            analysis.CurrentDirectory = currentdic;
+            analysis.save_address = save_address.Text;
+            analysis.isVisible = zk_isVisible.Checked;
+
+            Thread thread = new Thread(new ThreadStart(analysis.zk_cj_start));
+            thread.IsBackground = true;
+            thread.SetApartmentState(ApartmentState.STA);
+            thread_store.Add("zk_cj", thread);
+            thread.Start();
+        }
+
+        private void zk_cj_cancel_Click(object sender, EventArgs e)
+        {
+            if (thread_store.ContainsKey("zk_cj"))
+            {
+                Thread thread = thread_store["zk_cj"];
+                if (thread.IsAlive)
+                {
+                    thread.Abort();
+                    thread_store.Remove("zk_cj");
+                    ShowPro("zk_cj", 2, "");
                 }
             }
         }

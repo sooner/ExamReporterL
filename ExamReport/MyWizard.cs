@@ -254,6 +254,10 @@ namespace ExamReport
                     subject.Items.Add("英语");
                     subject.Items.Add("物理");
                     subject.Items.Add("化学");
+                    subject.Items.Add("生物");
+                    subject.Items.Add("地理");
+                    subject.Items.Add("历史");
+                    subject.Items.Add("思想品德");
                     subject.Items.Add("中考行政版");
                     subject.ResetText();
 

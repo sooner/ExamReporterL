@@ -72,9 +72,10 @@ namespace ExamReport
         public static string XX_title = "学校数据统计分析报告";
 
         public static string[] qx_in_order = { "东城区", "西城区", "海淀区", "朝阳区", "石景山区", "丰台区", "燕 山", "通州区", "顺义区", "昌平区", "门头沟区", "房山区", "大兴区", "怀柔区", "平谷区", "密云县", "延庆县" };
-        public static string[] qxdm_in_order = { "01", "02","08","05","07","06", "10","12", "13","14","09","11","15","16", "17", "28","29"};
+        public static string[] qxdm_in_order = { "01", "02","08","05","07","06", "10","12", "13","14","09","11","15","16", "17", "18","19"};
         public static void WSLG_WriteFrontPage(Configuration config, Microsoft.Office.Interop.Word._Document oDoc)
         {
+            WriteIntoDocument(oDoc, "date", config.year + "年" + config.month);
             WriteIntoDocument(oDoc, "title_1", GK_title_1);
             WriteIntoDocument(oDoc, "title_2", GK_WSLG_title_2);
             if (config.report_style.Equals("区县"))
@@ -96,6 +97,7 @@ namespace ExamReport
 
         public static void WriteFrontPage(Configuration config, Microsoft.Office.Interop.Word._Document oDoc, string school)
         {
+            WriteIntoDocument(oDoc, "date", config.year + "年" + config.month);
             if (config.subject.Equals("总分"))
             {
                 WriteIntoDocument(oDoc, "title_1", config.year + GK_ZF_title_1);
@@ -144,6 +146,13 @@ namespace ExamReport
                         WriteIntoDocument(oDoc, "title_1", ZK_title_1);
                         WriteIntoDocument(oDoc, "title_2", ZK_QX_title_2);
                         WriteIntoDocument(oDoc, "QX", config.QX);
+                        WriteIntoDocument(oDoc, "QX_subject", config.subject);
+                    }
+                    else if (config.report_style.Equals("城郊"))
+                    {
+                        WriteIntoDocument(oDoc, "title_1", ZK_title_1);
+                        WriteIntoDocument(oDoc, "title_2", GK_CJ_title_2);
+                        WriteIntoDocument(oDoc, "QX", "全市");
                         WriteIntoDocument(oDoc, "QX_subject", config.subject);
                     }
                     else if (config.subject.Equals("中考行政版"))

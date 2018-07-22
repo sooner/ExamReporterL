@@ -271,7 +271,7 @@ namespace ExamReport
             new_freq.PrimaryKey = new DataColumn[] { new_freq.Columns["totalmark"] };
             foreach (DataRow dr in data.frequency.Rows)
             {
-                decimal keyMark = Convert.ToDecimal(Math.Floor(Convert.ToDouble(dr["totalmark"])));
+                decimal keyMark = cus_round(1, (decimal)dr["totalmark"]);
 
                 if (!new_freq.Rows.Contains(keyMark))
                 {
@@ -294,6 +294,16 @@ namespace ExamReport
             //    dr["rate"] = (decimal)dr["rate"] / Convert.ToDecimal(data.total_num) * 100m;
             //}
 
+        }
+
+        public decimal cus_round(double mark, decimal num)
+        {
+            decimal temp = num * Convert.ToDecimal(Math.Pow(10.0, mark - 1));
+            decimal floor = Convert.ToDecimal(Math.Floor(Convert.ToDouble(temp)));
+            if (temp < (floor + 0.5m))
+                return floor / Convert.ToDecimal(Math.Pow(10.0, mark - 1));
+            else
+                return (floor + 1) / Convert.ToDecimal(Math.Pow(10.0, mark - 1));
         }
     }
 }

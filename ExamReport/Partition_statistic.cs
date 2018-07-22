@@ -593,6 +593,7 @@ namespace ExamReport
         public void xz_single_postprocess(string th)
         {
             #region 选做题部分
+
             DataTable xz_data = new DataTable();
             List<DataTable> xz_total = new List<DataTable>();
             List<List<PartitionData.single_data>> xz_single = new List<List<PartitionData.single_data>>();
@@ -604,6 +605,7 @@ namespace ExamReport
             xz_data.Columns.Add("X" + th, typeof(string));
             //xz_data.Columns.Add("xz_groups", typeof(string));
             xz_data.Columns.Add("T" + th, typeof(decimal));
+            
             DataRow ans_dr = _standard_ans.Rows.Find(th);
 
             if (!ans_dr["da"].Equals(""))
@@ -631,6 +633,7 @@ namespace ExamReport
                 DataTable dt_temp = dv.ToTable();
                 dt_temp.Columns.Add("xz_groups", typeof(string));
                 dt_temp.SeperateGroups(_config._grouptype, _config._group_num, "xz_groups");
+                
                 xz_group_analysis(dt_temp, item.count, xz_total, xz_single, xz_total_disc);
             }
 
@@ -642,10 +645,8 @@ namespace ExamReport
                     dr["number"] = (string)dr["number"] + "选" + xz_name[j];
                     result.total_analysis.ImportRow(dr);
                     result.single_topic_analysis.Add(xz_single[j][i]);
-
                     result.total_discriminant.Add(xz_total_disc[j][i]);
 
-                    
                 }
             }
 
@@ -656,6 +657,84 @@ namespace ExamReport
         {
             foreach (string th in xz_th)
                 xz_single_postprocess(th);
+        }
+
+        public void xz_postprocess(List<string> xz_th, DataTable total, string[] xx_code)
+        {
+            foreach (string th in xz_th)
+            {
+                #region 选做题部分
+
+                
+                List<DataTable> xz_total = new List<DataTable>();
+                List<List<PartitionData.single_data>> xz_single = new List<List<PartitionData.single_data>>();
+                List<string> xz_name = new List<string>();
+                List<List<decimal>> xz_total_disc = new List<List<decimal>>();
+
+                
+                var xz_tuple = from row in total.AsEnumerable()
+                               group row by row.Field<string>("X" + th) into grp
+                               orderby grp.Key ascending
+                               select new
+                               {
+                                   name = grp.Key,
+                                   count = grp.Count()
+                               };
+                foreach (var item in xz_tuple)
+                {
+                    DataView dv = total.equalfilter("X" + th, item.name).DefaultView;
+                    dv.Sort = "totalmark";
+                    xz_name.Add(item.name);
+                    DataTable dt_temp = dv.ToTable();
+                    dt_temp.Columns.Add("xz_groups", typeof(string));
+                    dt_temp.SeperateGroups(_config._grouptype, _config._group_num, "xz_groups");
+
+                    DataTable xz_data = new DataTable();
+                    xz_data.Columns.Add("totalmark", typeof(decimal));
+                    xz_data.Columns.Add("X" + th, typeof(string));
+                    //xz_data.Columns.Add("xz_groups", typeof(string));
+                    xz_data.Columns.Add("T" + th, typeof(decimal));
+                    xz_data.Columns.Add("xz_groups", typeof(string));
+                    xz_data.Columns.Add("xxdm", typeof(string));
+
+                    DataRow ans_dr = _standard_ans.Rows.Find(th);
+
+                    if (!ans_dr["da"].Equals(""))
+                        xz_data.Columns.Add("D" + th, typeof(string));
+                    foreach (DataRow dr in dt_temp.Rows)
+                    {
+                        DataRow newrow = xz_data.NewRow();
+                        foreach (DataColumn dc in xz_data.Columns)
+                            newrow[dc.ColumnName] = dr[dc.ColumnName];
+                        xz_data.Rows.Add(newrow);
+                    }
+
+                    try
+                    {
+                        dt_temp = xz_data.filteredtable("xxdm", xx_code);
+                    }
+                    catch (ArgumentException exp)
+                    {
+                        continue;
+                    }
+                    xz_group_analysis(dt_temp, dt_temp.Rows.Count, xz_total, xz_single, xz_total_disc);
+                }
+
+                for (int i = 0; i < xz_total[0].Rows.Count; i++)
+                {
+                    for (int j = 0; j < xz_total.Count; j++)
+                    {
+                        DataRow dr = xz_total[j].Rows[i];
+                        dr["number"] = (string)dr["number"] + "选" + xz_name[j];
+                        result.total_analysis.ImportRow(dr);
+                        result.single_topic_analysis.Add(xz_single[j][i]);
+                        result.total_discriminant.Add(xz_total_disc[j][i]);
+
+                    }
+                }
+
+                #endregion
+            }
         }
         //public void xz_postprocess(List<string> xz_th)
         //{
@@ -1165,13 +1244,13 @@ namespace ExamReport
                 int dist_num = 0;
                 foreach (var item in freq)
                 {
-                    if (!data.group_detail.Rows.Contains(Convert.ToInt32(Math.Ceiling(item.mark)).ToString() + "～"))
+                    if (!data.group_detail.Rows.Contains(string.Format("{0:F1}", cus_round(2, item.mark)) + "～"))
                     {
                         DataRow newrow = data.group_detail.NewRow();
                         //DataRow dist_row = data.group_dist.NewRow();
                         //dist_row["mark"] = Convert.ToDecimal(Convert.ToInt32(Math.Ceiling(item.mark)));
                         //dist_row["rate"] = Convert.ToDecimal(item.count);
-                        newrow["mark"] = Convert.ToInt32(Math.Ceiling(item.mark)).ToString() + "～";
+                        newrow["mark"] = string.Format("{0:F1}", cus_round(2, item.mark)) + "～";
                         newrow["frequency"] = item.count;
                         newrow["rate"] = 0;
                         newrow["avg"] = item.count * item.avg;
@@ -1182,7 +1261,7 @@ namespace ExamReport
                     }
                     else
                     {
-                        DataRow oldrow = data.group_detail.Rows.Find(Convert.ToInt32(Math.Ceiling(item.mark)).ToString() + "～");
+                        DataRow oldrow = data.group_detail.Rows.Find(string.Format("{0:F1}", cus_round(2, item.mark)) + "～");
                         
                         oldrow["frequency"] = (int)oldrow["frequency"] + item.count;
                         oldrow["avg"] = (decimal)oldrow["avg"] + item.count * item.avg;
@@ -1225,7 +1304,7 @@ namespace ExamReport
                              };
                 foreach (var item in groups)
                 {
-                    DataRow target = data.group_detail.Rows.Find(Convert.ToInt32(Math.Ceiling(item.mark)).ToString() + "～");
+                    DataRow target = data.group_detail.Rows.Find(string.Format("{0:F1}", cus_round(2, item.mark)) + "～");
                     target[item.groups.ToString().Trim()] = (decimal)target[item.groups.ToString().Trim()] + item.count;
                 }
 
@@ -1349,7 +1428,7 @@ namespace ExamReport
             new_freq.PrimaryKey = new DataColumn[] { new_freq.Columns["totalmark"] };
             foreach (DataRow dr in result.freq_analysis.Rows)
             {
-                decimal keyMark = Convert.ToDecimal(Math.Floor(Convert.ToDouble(dr["totalmark"])));
+                decimal keyMark = cus_round(1, (decimal)dr["totalmark"]);
 
                 if (!new_freq.Rows.Contains(keyMark))
                 {
@@ -1488,6 +1567,16 @@ namespace ExamReport
             {
                 _config.GroupMark.Add(temp.max);
             }
+        }
+
+        public decimal cus_round(double mark, decimal num)
+        {
+            decimal temp = num * Convert.ToDecimal(Math.Pow(10.0, mark - 1));
+            decimal floor = Convert.ToDecimal(Math.Floor(Convert.ToDouble(temp)));
+            if (temp < (floor + 0.5m))
+                return floor / Convert.ToDecimal(Math.Pow(10.0, mark - 1));
+            else
+                return (floor + 1) / Convert.ToDecimal(Math.Pow(10.0, mark - 1));
         }
     }
 }

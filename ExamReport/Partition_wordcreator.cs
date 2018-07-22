@@ -221,7 +221,7 @@ namespace ExamReport
         }
         public void creating_word_part3()
         {
-            
+
             insertText(ExamTitle1, "总体分析");
             insertTotalTable("    总分分析表", _sdata);
 
@@ -291,7 +291,7 @@ namespace ExamReport
         }
         public void creating_word_part2()
         {
-            
+
             insertText(ExamTitle1, "总体分析");
             if (_report_type.Equals("区县"))
                 insertTotalTable("    总分分析表", _totaldata);
@@ -342,19 +342,7 @@ namespace ExamReport
                     group_count++;
                 }
             }
-            //for (int i = 0; i < ((PartitionData)_sdata[_sdata.Count - 1]).groups_analysis.Rows.Count; i++)
-            //{
-            //    insertText(ExamTitle2, getGroupName(_sdata, _sdata.Count - 1, i));
-            //    insertText(ExamBodyText, "本题组包含题号：" + _groups.Rows[i]["th"].ToString().Trim());
-            //    insertSingleGroupTotal(getGroupName(_sdata, _sdata.Count - 1, i) + "总分分析表", i, true, _sdata);
-            //    ChartCombine tempdata = new ChartCombine();
-            //    for (int j = 0; j < _sdata.Count; j++)
-            //    {
-            //        tempdata.Add(getGroupData(_sdata, j, i).group_dist, ((PartitionData)_sdata[j]).name);
-            //    }
-            //    insertChart(getGroupName(_sdata, _sdata.Count - 1, i) + "分数分布图", tempdata.target, "分数", "频率(%)", Excel.XlChartType.xlLineMarkers);
-            //    insertSingleGrouptuple(_groups.Rows[i]["tz"].ToString().Trim() + "分组分析表", i, _sdata);
-            //}
+         
             insertText(ExamTitle1, "题目分析");
             for (int i = 0; i < ((PartitionData)_sdata[_sdata.Count - 1]).total_analysis.Rows.Count; i++)
             {
@@ -457,6 +445,7 @@ namespace ExamReport
                         }
                         else
                         {
+
                             int j;
 
                             table.Cell(row, 1).Range.Text = dr["mark"].ToString().Trim();
@@ -488,6 +477,33 @@ namespace ExamReport
 
 
                         }
+                        else if (dr["mark"].ToString().Trim().Equals("合计"))
+                        {
+                            int j;
+                            int temp_rownum = (rownum - 2) * _sdata.Count + 2 + k;
+                            table.Cell(temp_rownum, 1).Range.Text = dr["mark"].ToString().Trim();
+                            table.Cell(temp_rownum, 2).Range.Text = ((PartitionData)_sdata[k]).name;
+                            for (j = 1; j < colnum - 3; j++)
+                                table.Cell(temp_rownum, j + 2).Range.Text = "0";
+                            table.Cell(temp_rownum, j + 2).Range.Text = "0";
+                            table.Cell(temp_rownum, j + 3).Range.Text = "0.00";
+                            table.Cell(temp_rownum, j + 4).Range.Text = "0.00";
+
+
+                        }
+                        else if (dr["mark"].ToString().Trim().Equals("得分率"))
+                        {
+                            int j;
+                            int temp_rownum = (rownum - 1) * _sdata.Count + 2 + k;
+                            table.Cell(temp_rownum, 1).Range.Text = dr["mark"].ToString().Trim();
+                            table.Cell(temp_rownum, 2).Range.Text = ((PartitionData)_sdata[k]).name;
+                            for (j = 1; j < colnum - 3; j++)
+                                table.Cell(temp_rownum, j + 2).Range.Text = "0.00";
+                            table.Cell(temp_rownum, j + 2).Range.Text = "0.00";
+                            table.Cell(temp_rownum, j + 3).Range.Text = "-";
+                            table.Cell(temp_rownum, j + 4).Range.Text = "-";
+
+                        }
                         else
                         {
                             int j;
@@ -508,6 +524,12 @@ namespace ExamReport
 
 
             table.Select();
+            oWord.Selection.set_Style(ref TableContent2);
+
+            table.Columns[2].Select();
+            oWord.Selection.Font.Size = 8;
+
+            table.Cell(1, 2).Select();
             oWord.Selection.set_Style(ref TableContent2);
 
             verticalCellMerge(table, 2, 1);
@@ -609,6 +631,12 @@ namespace ExamReport
             table.Select();
             oWord.Selection.set_Style(ref TableContent2);
 
+            table.Columns[2].Select();
+            oWord.Selection.Font.Size = 8;
+
+            table.Cell(1, 2).Select();
+            oWord.Selection.set_Style(ref TableContent2);
+
             verticalCellMerge(table, 2, 1);
 
 
@@ -647,6 +675,9 @@ namespace ExamReport
             table.Cell(1, 9).Range.Text = "得分率";
             if(_config.WSLG)
                 table.Cell(1, 10).Range.Text = "鉴别指数";
+            string keyword = "";
+            if (!isGroup)
+                keyword = (string)((PartitionData)sdata[sdata.Count - 1]).total_analysis.Rows[total]["number"];
 
             for (int i = 0; i < sdata.Count; i++)
             {
@@ -655,7 +686,35 @@ namespace ExamReport
                 if (isGroup)
                     data = partition.groups_analysis;
                 else
+                {
                     data = partition.total_analysis;
+                    if (!((string)data.Rows[total]["number"]).Equals(keyword))
+                    {
+                        table.Cell(i + 2, 1).Range.Text = partition.name;
+                        table.Cell(i + 2, 2).Range.Text = "0";
+                        table.Cell(i + 2, 3).Range.Text = FullmarkFormat((decimal)((PartitionData)sdata[sdata.Count - 1]).total_analysis.Rows[total]["fullmark"]);
+                        table.Cell(i + 2, 4).Range.Text = "0.0";
+                        table.Cell(i + 2, 5).Range.Text = "0.0";
+                        table.Cell(i + 2, 6).Range.Text = "0.00";
+                        table.Cell(i + 2, 7).Range.Text = "0.00";
+                        table.Cell(i + 2, 8).Range.Text = "0.00";
+                        table.Cell(i + 2, 9).Range.Text = "0.00";
+                        if (_config.WSLG)
+                        {
+                            table.Cell(i + 2, 10).Range.Text = "0.00";
+                        }
+                        DataRow dr = data.NewRow();
+                        dr.ItemArray = data.Rows[total].ItemArray;
+                        dr["number"] = keyword;
+                        data.Rows.InsertAt(dr, total);
+
+                        PartitionData.single_data single = new PartitionData.single_data();
+                        single.stype = getSingleData(i, total).stype;
+                        single.single_detail = getSingleData(i, total).single_detail.Clone();
+                        ((PartitionData)_sdata[i]).single_topic_analysis.Insert(total, single);
+                        continue;
+                    }
+                }
                 table.Cell(i + 2, 1).Range.Text = partition.name;
                 table.Cell(i + 2, 2).Range.Text = isGroup ? partition.total_num.ToString() : data.Rows[total]["total_num"].ToString();
                 table.Cell(i + 2, 3).Range.Text = FullmarkFormat((decimal)data.Rows[total]["fullmark"]);
@@ -862,11 +921,13 @@ namespace ExamReport
         }
         public void insertTotalTopic(string title, ArrayList totaldata)
         {
-            int count = ((PartitionData)totaldata[totaldata.Count - 1]).total_analysis.Rows.Count;
+            int pcount = 0;
+            foreach(PartitionData pdata in totaldata)
+                pcount += pdata.total_analysis.Rows.Count;
             Word.Table table;
             Word.Range range = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
             int col = 11;
-            table = oDoc.Tables.Add(range, totaldata.Count * count + 1, col, ref oMissing, oTrue);
+            table = oDoc.Tables.Add(range, pcount + 1, col, ref oMissing, oTrue);
             table.Range.InsertCaption(oWord.CaptionLabels["表"], title, oMissing, Word.WdCaptionPosition.wdCaptionPositionAbove, oMissing);
             range.MoveEnd(Word.WdUnits.wdParagraph, 1);
             range.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
@@ -888,11 +949,34 @@ namespace ExamReport
             table.Cell(1, 10).Range.Text = "得分率";
             table.Cell(1, 11).Range.Text = "鉴别指数";
 
+            int count = ((PartitionData)totaldata[0]).total_analysis.Rows.Count;
+            int tablerow = 2;
             for (int i = 0; i < count; i++)
             {
-                int tablerow = i * totaldata.Count + 2;
+                
+                bool first = true;
+                string keyword = "";
                 foreach (PartitionData data in totaldata)
                 {
+                    if (!first)
+                    {
+                        if (!keyword.Equals(data.total_analysis.Rows[i]["number"].ToString().Trim().Substring(1)))
+                        {
+                            DataRow dr = data.total_analysis.NewRow();
+                            dr.ItemArray = data.total_analysis.Rows[i].ItemArray;
+                            dr["number"] = keyword;
+                            data.total_analysis.Rows.InsertAt(dr, i);
+                            data.total_discriminant.Insert(i, 0);
+                            continue;
+                        }
+
+                    }
+                    else
+                    {
+                        keyword = data.total_analysis.Rows[i]["number"].ToString().Trim().Substring(1);
+                        first = false;
+                    }
+
                     table.Cell(tablerow, 1).Range.Text = data.total_analysis.Rows[i]["number"].ToString().Trim().Substring(1);
                     table.Cell(tablerow, 2).Range.Text = data.name;
                     table.Cell(tablerow, 3).Range.Text = ((int)data.total_analysis.Rows[i]["total_num"]).ToString();
@@ -907,6 +991,8 @@ namespace ExamReport
                     tablerow++;
                 }
             }
+
+            
             table.Select();
             oWord.Selection.set_Style(ref TableContent2);
 

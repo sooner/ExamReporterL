@@ -207,7 +207,7 @@ namespace ExamReport
             
 
             string charsize = ConfigurationManager.AppSettings["charsize"].ToString().Trim();
-            create_mysql_table(groups_data, filename, charsize, "decimal(4,1)");
+            create_mysql_table(groups_data, filename, charsize, "decimal(5,2)");
 
             
 
@@ -216,7 +216,7 @@ namespace ExamReport
         public static void create_mysql_table_datastyle(DataTable groups_data, string filename)
         {
             string charsize = ConfigurationManager.AppSettings["charsize"].ToString().Trim();
-            create_mysql_table(groups_data, filename, charsize, "decimal(4,2)");
+            create_mysql_table(groups_data, filename, charsize, "decimal(5,2)");
         }
     }
 }

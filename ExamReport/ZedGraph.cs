@@ -503,6 +503,11 @@ namespace ExamReport
                 zgc.Width = 523;
                 zgc.Height = 267;
             }
+            else if (config.subject.Equals("comp"))
+            {
+                zgc.Width = 265;
+                zgc.Height = 135;
+            }
             else
             {
                 zgc.Width = 531;

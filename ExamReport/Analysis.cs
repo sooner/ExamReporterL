@@ -249,6 +249,10 @@ namespace ExamReport
                                     mdata.get_QXSF_data(qx_addr);
                                     zk_qx_process(mdata);
                                     break;
+                                case "zk_cj":
+                                    mdata.get_CJ_data(cj_addr);
+                                    zk_cj_process(mdata);
+                                    break;
                                 case "zk_xz":
                                     mdata.get_CJ_data(cj_addr);
                                     zk_xz_process(mdata);
@@ -386,31 +390,58 @@ namespace ExamReport
         }
         public void gk_comp_start()
         {
-            try
-            {
+            //try
+            //{
+            Configuration config = initConfig("comp", "行政", "高考");
+            config.isVisible = true;
                 _form.ShowPro("gk_cp", 0, "历年对比开始处理...");
                 Comparison comp = new Comparison();
                 comp.start(compare_year1, compare_year2, "gk");
                 Compare_wordcreator comp_wc = new Compare_wordcreator();
+                comp_wc._config = config;
                 comp_wc.year1_comb = comp.year1_comb;
                 comp_wc.year2_comb = comp.year2_comb;
                 comp_wc.year1_data = comp.year1_data;
                 comp_wc.year2_data = comp.year2_data;
+                comp_wc.year1 = compare_year1;
+                comp_wc.year2 = compare_year2;
+                comp_wc.summary = comp.summary;
                 comp_wc.creating_word();
                 _form.ShowPro("gk_cp", 2, "完成！");
-            }
-            catch(Exception e)
-            {
-                _form.ErrorM("gk_cp", e.Message);
-            }
+            //}
+            //catch(Exception e)
+            //{
+            //    _form.ErrorM("gk_cp", e.Message);
+            //}
             
         }
+        public void zk_cj_start()
+        {
+            exam_type = "zk_cj";
+            _exam = "zk";
+            start();
+        }
+        public void zk_cj_process(MetaData mdata)
+        {
+            Configuration config = initConfig(mdata._sub, "城郊", "中考");
+
+            ArrayList list = new ArrayList();
+            _form.ShowPro("zk_cj", 1, mdata.log_name + "数据分析中...");
+            PartitionDataProcess(config, mdata, list, mdata.CJ_list, "qxdm", mdata.basic, mdata.group, mdata._group_num, false);
+            _form.ShowPro("zk_cj", 1, mdata.log_name + "报告生成中...");
+            Partition_wordcreator create = new Partition_wordcreator(list, mdata.grp, mdata.groups_group);
+            create.SetConfig(config);
+            create.creating_word();
+        }
+
         public void zk_xz_start()
         {
             exam_type = "zk_xz";
             _exam = "zk";
             start();
         }
+
+        
         public void zk_xz_process(MetaData mdata)
         {
             Configuration config = initConfig(mdata._sub, "行政", "中考");
@@ -1588,8 +1619,10 @@ namespace ExamReport
             DataTable dt_group = group.filteredtable(filter, SF_code);
             dt.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
             dt_group.SeperateGroups(mdata._grouptype, mdata._group_num, "groups");
+            //if (mdata.xz.Count > 0)
+                
             //if (dt.Columns.Contains("XZ"))
-            //    XZ_group_separate(dt, mdata);
+                //XZ_group_separate(dt, mdata);
             Partition_statistic total = new Partition_statistic("分类整体", dt, mdata._fullmark, mdata.ans, dt_group, mdata.grp, groupnum);
             total._config = config;
             total.statistic_process(false);
@@ -1609,7 +1642,7 @@ namespace ExamReport
                 stat._config = config;
                 stat.statistic_process(false);
                 if (mdata.xz.Count > 0)
-                    stat.xz_postprocess(mdata.xz);
+                    stat.xz_postprocess(mdata.xz, dt, xx_code);
                 result.Add(stat.result);
             }
             if (!isQXSF)

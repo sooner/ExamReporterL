@@ -391,7 +391,7 @@ namespace ExamReport
             new_freq.PrimaryKey = new DataColumn[] { new_freq.Columns["totalmark"] };
             foreach (DataRow dr in result.frequency_dist.Rows)
             {
-                decimal keyMark = Convert.ToDecimal(Math.Floor(Convert.ToDouble(dr["totalmark"])));
+                decimal keyMark = cus_round(1, (decimal)dr["totalmark"]);
 
                 if (!new_freq.Rows.Contains(keyMark))
                 {
@@ -998,14 +998,16 @@ namespace ExamReport
                         foreach (var item in single_avg)
                         {
                             //if (!temp.single_detail.Rows.Contains(Convert.ToInt32(Math.Floor(item.mark)).ToString() + "～"))
-                            if (!temp.single_detail.Rows.Contains(string.Format("{0:F1}",item.mark) + "～"))
+                            if (!temp.single_detail.Rows.Contains(string.Format("{0:F1}",cus_round(2, item.mark)) + "～"))
+//                            if (!temp.single_detail.Rows.Contains(string.Format("{0:F1}", item.mark) + "～"))
                             {
                                 DataRow temp_dr = temp.single_detail.NewRow();
-                                temp_dr["mark"] = string.Format("{0:F1}", item.mark) + "～";
+                                temp_dr["mark"] = string.Format("{0:F1}", cus_round(2, item.mark)) + "～";
+//                              temp_dr["mark"] = string.Format("{0:F1}",  item.mark) + "～";
                                 temp_dr["frequency"] = item.count;
                                 temp_dr["rate"] = 0;
                                 temp_dr["correlation"] = item.avg * item.count;
-                                for (i = 1; i <= _groupnum; i++)
+                                for(i = 1; i <= _groupnum; i++)
                                 {
                                     temp_dr["G" + i.ToString().Trim()] = 0m;
                                 }
@@ -1013,7 +1015,7 @@ namespace ExamReport
                             }
                             else
                             {
-                                DataRow oldrow = temp.single_detail.Rows.Find(string.Format("{0:F1}", item.mark) + "～");
+                                DataRow oldrow = temp.single_detail.Rows.Find(string.Format("{0:F1}", cus_round(2, item.mark)) + "～");
                                 oldrow["frequency"] = (int)oldrow["frequency"] + item.count;
                                 oldrow["correlation"] = (decimal)oldrow["correlation"] + item.avg * item.count;
                             }
@@ -1037,7 +1039,7 @@ namespace ExamReport
                                     };
                         foreach (var item in gdata)
                         {
-                            DataRow temp_dr = temp.single_detail.Rows.Find(string.Format("{0:F1}", item.mark) + "～");
+                            DataRow temp_dr = temp.single_detail.Rows.Find(string.Format("{0:F1}", cus_round(2, item.mark)) + "～");
                             temp_dr[item.groups.ToString().Trim()] = (decimal)temp_dr[item.groups.ToString().Trim()] + Convert.ToDecimal(item.count);
 
                         }
@@ -2215,6 +2217,16 @@ namespace ExamReport
                     break;
 
             return columnname.Substring(0, count);
+        }
+
+        public decimal cus_round(double mark, decimal num)
+        {
+            decimal temp = num * Convert.ToDecimal(Math.Pow(10.0, mark - 1));
+            decimal floor = Convert.ToDecimal(Math.Floor(Convert.ToDouble(temp)));
+            if (temp < (floor + 0.5m))
+                return floor / Convert.ToDecimal(Math.Pow(10.0, mark - 1));
+            else
+                return (floor + 1) / Convert.ToDecimal(Math.Pow(10.0, mark - 1));
         }
     }
 }

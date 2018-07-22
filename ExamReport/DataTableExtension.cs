@@ -361,8 +361,11 @@ namespace ExamReport
             decimal numerator = XYSqure - Xtotal * Ytotal / totalnum;
             decimal Xdenominator = XSquare - Xtotal * Xtotal / totalnum;
             decimal Ydenominator = YSquare - Ytotal * Ytotal / totalnum;
-
-            return numerator / Convert.ToDecimal(Math.Sqrt(Convert.ToDouble(Xdenominator * Ydenominator)));
+            decimal deno = Convert.ToDecimal(Math.Sqrt(Convert.ToDouble(Xdenominator * Ydenominator)));
+            if(deno == 0)
+                return 0;
+            else
+                return numerator / deno;
         }
     }
 }

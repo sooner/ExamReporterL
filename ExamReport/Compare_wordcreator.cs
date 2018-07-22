@@ -7,6 +7,7 @@ using System.Collections;
 using Word = Microsoft.Office.Interop.Word;
 using Excel = Microsoft.Office.Interop.Excel;
 using Graph = Microsoft.Office.Interop.Graph;
+using Controls = Microsoft.Office.Tools.Word.Controls;
 
 namespace ExamReport
 {
@@ -30,7 +31,7 @@ namespace ExamReport
         Object oTrue = true;
         Object oFalse = false;
 
-        private Configuration _config;
+        public Configuration _config;
         DataTable _groups;
         object oClassType = "Excel.Chart.8";
         string _addr;
@@ -45,9 +46,9 @@ namespace ExamReport
 
         Dictionary<string, string> subname = new Dictionary<string, string> {
             {"wk","文科"},{"yww","语文（文）"},{"sxw","数学（文）"}, {"yyw","英语（文）"},
-            {"wz","文科综合"},{"ls","历史"},{"dl","地理"},{"zz","政治"},
-            {"lz","理科综合"},{"ywl","语文（理）"},{"sxl","数学（理）"}, {"yyl","英语（理）"},
-            {"wl","物理"},{"hx","化学"},{"sw","生物"},
+            {"wz","文科综合"},{"ls","文科综合历史"},{"dl","文科综合地理"},{"zz","文科综合政治"},
+            {"lk","理科"},{"ywl","语文（理）"},{"sxl","数学（理）"}, {"yyl","英语（理）"},
+            {"lz","理科综合"},{"wl","理科综合物理"},{"hx","理科综合化学"},{"sw","理科综合生物"},
             {"yw","语文"},{"yy","英语"}
         };
 
@@ -56,8 +57,8 @@ namespace ExamReport
             string subject = _config.subject;
             object filepath = @_config.CurrentDirectory + @"\template2.dotx";
             //Start Word and create a new document.
-            _addr = _config.save_address + @"\" + subject + ".docx";
-            oWord = new Word.Application();
+            _addr = _config.save_address + @"\" + "" + ".docx";
+            oWord = new Word.Application(); 
 
             oWord.Visible = _config.isVisible;
             oDoc = oWord.Documents.Add(ref filepath, ref oMissing,
@@ -67,11 +68,12 @@ namespace ExamReport
             insertText(ExamTitle0, "  "+ year1 + "、" + year2 +"年高考北京卷总分分布曲线图");
             insertChart("    "+ year1 + "总分分布曲线图", year1_comb.target, "分数", "比率", Excel.XlChartType.xlLineMarkers, 750);
             insertChart("    " + year2 + "总分分布曲线图", year2_comb.target, "分数", "比率", Excel.XlChartType.xlLineMarkers, 750);
-
+            oDoc.Characters.Last.InsertBreak(oPagebreak);
             insertText(ExamTitle0, "  " + year1 + "、" + year2 + "年高考北京卷整体对比分析");
             insertTotalTable("    试卷（文理科）总分分析表");
+            oDoc.Characters.Last.InsertBreak(oPagebreak);
 
-            insertText(ExamTitle0, "  " + year2 + "年数据分析（简缩版）发现的主要学科问题");
+            insertText(ExamTitle0, "  " + year2 + "年数据分析（简缩版）发现的主要学科问 题");
             oDoc.Characters.Last.InsertBreak(oPagebreak);
             insertText(ExamTitle0, "  " + year1 + "、" + year2 + "年分学科数据分析（简缩版）");
             foreach (string sub in year1_data.Keys)
@@ -81,8 +83,11 @@ namespace ExamReport
                 string sub_cn = subname[sub];
                 insertText(ExamTitle1, sub_cn + "学科数据分析（简缩版）");
                 insertTotalTable("    " + year2 + "年" + sub_cn + "总分分析表", year2_data[sub]);
-                insertTotalChart("    " + year1 + "年" + sub_cn + "总分分布曲线图", year1_data[sub]);
-                insertTotalChart("    " + year2 + "年" + sub_cn + "总分分布曲线图", year2_data[sub]);
+                Word.Range rng1 = insertTotalChart("    " + year1 + "年" + sub_cn + "总分分布曲线图", year1_data[sub]);
+                Word.Range rng2 = insertTotalChart("    " + year2 + "年" + sub_cn + "总分分布曲线图", year2_data[sub]);
+                
+                //insertCaption(rng2, "    " + year1 + "年" + sub_cn + "总分分布曲线图");
+                //insertCaption(rng2, "    " + year2 + "年" + sub_cn + "总分分布曲线图");
                 if (sub.Equals("wz") || sub.Equals("lz"))
                 {
                     rowcount = 4;
@@ -253,7 +258,7 @@ namespace ExamReport
             dist_rng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
             dist_rng.InsertParagraphAfter();
         }
-        public void insertTotalChart(string title, WordData sdata)
+        public Word.Range insertTotalChart(string title, WordData sdata)
         {
             DataTable dt = sdata.totalmark_dist;
             double[][] data = new double[dt.Rows.Count][];
@@ -269,18 +274,38 @@ namespace ExamReport
             cuvedata[1] = Convert.ToDouble(sdata.stDev);
             ZedGraph.createCuveAndBar(_config, cuvedata, data, Convert.ToDouble(sdata.max));
             Word.Range dist_rng = oDoc.Bookmarks.get_Item(oEndOfDoc).Range;
+            //float leftpos = (float)dist_rng.get_Information(Word.WdInformation.wdHorizontalPositionRelativeToTextBoundary);
+            //float toppos = (float)dist_rng.get_Information(Word.WdInformation.wdVerticalPositionRelativeToTextBoundary);
+            //leftpos += 70;
+            //toppos += 70;
+            //Word.Shape textbox = oDoc.Shapes.AddTextbox(Microsoft.Office.Core.MsoTextOrientation.msoTextOrientationHorizontal, leftpos, toppos, 265, 135);
+            //textbox.WrapFormat.Type = Word.WdWrapType.wdWrapSquare;
+            //textbox.TextFrame.TextRange.Paste();
             dist_rng.Paste();
             Utils.mutex_clipboard.ReleaseMutex();
-            dist_rng.InsertCaption(oWord.CaptionLabels["图"], title, oMissing, Word.WdCaptionPosition.wdCaptionPositionAbove, oMissing);
-            dist_rng.MoveEnd(Word.WdUnits.wdParagraph, 1);
-            dist_rng.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
-            dist_rng = oDoc.Bookmarks.get_Item(oEndOfDoc).Range;
-            dist_rng.MoveStart(Word.WdUnits.wdParagraph, 1);
-            dist_rng.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
-            dist_rng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-            dist_rng.InsertParagraphAfter();
+            return dist_rng;
+            //dist_rng.InsertCaption(oWord.CaptionLabels["图"], title, oMissing, Word.WdCaptionPosition.wdCaptionPositionBelow, oMissing);
+            //dist_rng.MoveEnd(Word.WdUnits.wdParagraph, 1);
+            //dist_rng.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+            //dist_rng = oDoc.Bookmarks.get_Item(oEndOfDoc).Range;
+            //dist_rng.MoveStart(Word.WdUnits.wdParagraph, 1);
+            //dist_rng.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+            //dist_rng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+            //dist_rng.InsertParagraphAfter();
 
         }
+        public void insertCaption(Word.Range dist_rng, string title)
+        {
+            dist_rng.InsertCaption(oWord.CaptionLabels["图"], title, oMissing, Word.WdCaptionPosition.wdCaptionPositionBelow, oMissing);
+            //dist_rng.MoveEnd(Word.WdUnits.wdParagraph, 1);
+            //dist_rng.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+            //dist_rng = oDoc.Bookmarks.get_Item(oEndOfDoc).Range;
+            //dist_rng.MoveStart(Word.WdUnits.wdParagraph, 1);
+            //dist_rng.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+            //dist_rng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+            //dist_rng.InsertParagraphAfter();
+        }
+
         public void insertTotalTable(string name, WordData sdata)
         {
             Word.Table Total_Table;
@@ -360,7 +385,7 @@ namespace ExamReport
             Word.Table table;
             Word.Range range = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
 
-            table = oDoc.Tables.Add(range, 18, 11, ref oMissing, oTrue);
+            table = oDoc.Tables.Add(range, 33, 11, ref oMissing, oTrue);
             table.Range.InsertCaption(oWord.CaptionLabels["表"], title, oMissing, Word.WdCaptionPosition.wdCaptionPositionAbove, oMissing);
             range.MoveEnd(Word.WdUnits.wdParagraph, 1);
             range.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
@@ -511,6 +536,9 @@ namespace ExamReport
             //dist_shape.Height = 220;
             ////dist_rng.PasteExcelTable(true, true, false);
             ////dist_shape.ConvertToShape();
+            dist_rng.InsertCaption(oWord.CaptionLabels["图"], title, oMissing, Word.WdCaptionPosition.wdCaptionPositionBelow, oMissing);
+            dist_rng.MoveEnd(Word.WdUnits.wdParagraph, 1);
+            dist_rng.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
             dist_rng = oDoc.Bookmarks.get_Item(oEndOfDoc).Range;
             dist_rng.MoveStart(Word.WdUnits.wdParagraph, 1);
             dist_rng.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;

@@ -67,7 +67,7 @@ namespace ExamReport
             {
                 qxdm = c.Key.ToString().Trim(),
                 count = c.Count(),
-                yw = c.Average(p => p.Field<decimal>("yw")) / sub_fullmark["yw"],
+                yw = c.Average(p => p.Field<decimal>("yw")) / sub_fullmark["yw"], 
                 sx = c.Average(p => p.Field<decimal>("sx")) / sub_fullmark["sx"],
                 yy = c.Average(p => p.Field<decimal>("yy")) / sub_fullmark["yy"],
                 hx_zz = c.Average(p => p.Field<decimal>("hx_zz")) / sub_fullmark["hx_zz"],

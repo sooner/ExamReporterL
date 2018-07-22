@@ -12,6 +12,7 @@ namespace ExamReport
     {
         public void save_partitiondata(string year, string exam, string sub, PartitionData pdata)
         {
+
             string tablename = "total_statistic";
             string basic = year + "_" + exam + "_" + sub;
 
@@ -34,13 +35,14 @@ namespace ExamReport
             if (val <= 0)
                 throw new Exception("未知错误，数据库写入错误");
 
-            //DBHelper.create_mysql_table_datastyle(pdata.total_analysis, basic + "_total_analysis");
-            //DBHelper.create_mysql_table_datastyle(pdata.groups_analysis, basic + "_group_analysis");
+            DBHelper.create_mysql_table_datastyle(pdata.total_analysis, basic + "_total_analysis");
+            DBHelper.create_mysql_table_datastyle(pdata.groups_analysis, basic + "_group_analysis");
             //DBHelper.create_mysql_table_datastyle(pdata.totalmark_dist, basic + "_totalmark_dist");
         }
 
         public void load_partitiondata(string year, string exam, string sub, PartitionData pdata)
         {
+
             string tablename = "total_statistic";
             string basic = year + "_" + exam + "_" + sub;
 
@@ -64,6 +66,7 @@ namespace ExamReport
         }
         public void save_totaldata(string year, string exam, string sub, WordData total)
         {
+
             string tablename = "total_statistic";
             string basic = year + "_" + exam + "_" + sub;
 
@@ -100,6 +103,7 @@ namespace ExamReport
 
         public void load_totaldata(string year, string exam, string sub, WordData total)
         {
+
             string tablename = "total_statistic";
             string basic = year + "_" + exam + "_" + sub;
 
@@ -126,14 +130,21 @@ namespace ExamReport
             total.skewness = Convert.ToDecimal(reader["skewness"]);
             total.kertosis = Convert.ToDecimal(reader["kertosis"]);
 
-            total.total_analysis = MySqlHelper.GetDataSet(MySqlHelper.Conn, CommandType.Text, basic + "_total_analysis", null).Tables[0];
-            total.group_analysis = MySqlHelper.GetDataSet(MySqlHelper.Conn, CommandType.Text, basic + "_group_analysis", null).Tables[0];
-            total.totalmark_dist = MySqlHelper.GetDataSet(MySqlHelper.Conn, CommandType.Text, basic + "_totalmark_dist", null).Tables[0];
+            total.total_analysis = MySqlHelper.GetDataSet(MySqlHelper.Conn, CommandType.Text, "select * from " + basic + "_total_analysis", null).Tables[0];
+            total.group_analysis = MySqlHelper.GetDataSet(MySqlHelper.Conn, CommandType.Text, "select * from " + basic + "_group_analysis", null).Tables[0];
+            total.totalmark_dist = MySqlHelper.GetDataSet(MySqlHelper.Conn, CommandType.Text, "select * from " + basic + "_totalmark_dist", null).Tables[0];
+            if(sub.Equals("lz"))
+                total._groups_ans = MySqlHelper.GetDataSet(MySqlHelper.Conn, CommandType.Text, "select * from " + "zh_" + year + "_gk_wl_fz", null).Tables[0];
+            else if(sub.Equals("wz"))
+                total._groups_ans = MySqlHelper.GetDataSet(MySqlHelper.Conn, CommandType.Text, "select * from " + "zh_" + year + "_gk_dl_fz", null).Tables[0];
+            else
+                total._groups_ans = MySqlHelper.GetDataSet(MySqlHelper.Conn, CommandType.Text, "select * from " + basic + "_fz", null).Tables[0];
 
         }
 
         public void save_zf_data(string year, string exam, string sub, ZF_worddata total)
         {
+
             string tablename = "total_statistic";
             string basic = year + "_" + exam + "_" + sub;
 
@@ -167,6 +178,7 @@ namespace ExamReport
 
         public void load_zf_data(string year, string exam, string sub, ZF_worddata total)
         {
+
             string tablename = "total_statistic";
             string basic = year + "_" + exam + "_" + sub;
 
@@ -187,15 +199,15 @@ namespace ExamReport
             total.Dfactor = Convert.ToDecimal(reader["Dfactor"]);
             total.difficulty = Convert.ToDecimal(reader["difficulty"]);
 
-            total.dist = MySqlHelper.GetDataSet(MySqlHelper.Conn, CommandType.Text, basic + "_dist", null).Tables[0];
+            total.dist = MySqlHelper.GetDataSet(MySqlHelper.Conn, CommandType.Text, "select * from " + basic + "_dist", null).Tables[0];
         }
 
         public void create_init_table(string tablename)
         {
             //MySqlHelper.ExecuteNonQuery(MySqlHelper.Conn, CommandType.Text, "drop table if exists " + tablename, null);
             MySqlHelper.ExecuteNonQuery(MySqlHelper.Conn, CommandType.Text, "create table if not exists " + tablename
-               + " (year varchar(255), exam varchar(255), sub varchar(255), total_num int, fullmark decimal(4,1), max decimal(4,1), min decimal(4,1), avg decimal(4,2), stDev decimal(4,2), Dfactor decimal(4,2), difficulty decimal(4,2),"
-           + "alfa decimal(4,2), standardErr decimal(4,2), mean decimal(4,2), mode decimal(4,2), skewness decimal(4,2), kertosis decimal(4,2))", null);
+               + " (year varchar(255), exam varchar(255), sub varchar(255), total_num int, fullmark decimal(4,1), max decimal(4,1), min decimal(4,1), avg decimal(5,2), stDev decimal(5,2), Dfactor decimal(5,2), difficulty decimal(5,2),"
+           + "alfa decimal(5,2), standardErr decimal(5,2), mean decimal(5,2), mode decimal(5,2), skewness decimal(5,2), kertosis decimal(5,2))", null);
 
 
         }
