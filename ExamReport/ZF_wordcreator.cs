@@ -148,6 +148,262 @@ namespace ExamReport
             freq_rng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
             freq_rng.InsertParagraphAfter();
         }
+        public void zk_qx_wordcreate(List<ZF_statistic> data, string _subject)
+        {
+            object filepath = @_config.CurrentDirectory + @"\template2.dotx";
+            //object filepath = @"D:\项目\给王卅的编程资料\中考\c.dotx";
+            //Start Word and create a new document.
+
+            oWord = new Word.Application();
+
+            oWord.Visible = _config.isVisible;
+            oDoc = oWord.Documents.Add(ref filepath, ref oMissing,
+            ref oMissing, ref oMissing);
+            Utils.WriteFrontPage(_config, oDoc);
+            object oPageBreak = Microsoft.Office.Interop.Word.WdBreakType.wdPageBreak;
+
+            List<ZF_statistic> temp_data = new List<ZF_statistic>();
+            for (int i = 3; i < data.Count; i++)
+                temp_data.Add(data[i]);
+            foreach (int key in Utils.sub_choice.Keys)
+            {
+                string keyword = Utils.sub_choice[key];
+                insertText(ExamTitle0, keyword);
+                insertText(ExamTitle1, keyword + "总分分析");
+                insertTotalTable_zk_qx("    " + keyword + "总分分析表", data, keyword);
+                Partition_wordcreator.ChartCombine comb = new Partition_wordcreator.ChartCombine();
+
+                comb.Add(data[3].results[keyword].dist, data[3]._name);
+                for (int i = 5; i < data.Count; i++)
+                {
+                    if (data[i].results[keyword].dist == null)
+                        continue;
+                    comb.Add(data[i].results[keyword].dist, data[i]._name);
+                }
+                decimal chart_fullmark = data[3].results[keyword].fullmark;
+                insertChart("    " + key + "总分分布曲线图", comb.target, "分数", "比率(%)", Excel.XlChartType.xlLineMarkers, chart_fullmark);
+                insertQXFreqTable("    " + key + "总分分数分布表", temp_data, keyword);
+            }
+
+        }
+
+        public void insertQXFreqTable(string title, List<ZF_statistic> data, string keyword)
+        {
+
+            Word.Table table;
+            Word.Range range = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+
+            int count = data[0].results[keyword].frequency.Rows.Count;
+
+            table = oDoc.Tables.Add(range, count * data.Count + 1, 6, ref oMissing, oTrue);
+
+            table.Range.InsertCaption(oWord.CaptionLabels["表"], title, oMissing, Word.WdCaptionPosition.wdCaptionPositionAbove, oMissing);
+            range.MoveEnd(Word.WdUnits.wdParagraph, 1);
+            range.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+            table.Rows[1].HeadingFormat = -1;
+
+
+            table.Borders.OutsideLineStyle = Word.WdLineStyle.wdLineStyleSingle;
+            table.Borders.InsideLineStyle = Word.WdLineStyle.wdLineStyleSingle;
+
+            table.Cell(1, 1).Range.Text = "分值";
+            table.Cell(1, 2).Range.Text = "分类";
+            table.Cell(1, 3).Range.Text = "人数";
+            table.Cell(1, 4).Range.Text = "比率(%)";
+            table.Cell(1, 5).Range.Text = "累计人数";
+            table.Cell(1, 6).Range.Text = "累计比率(%)";
+
+
+
+            string[] lastFreq = new string[data.Count];
+            string[] lastRate = new string[data.Count];
+            for (int i = 0; i < data.Count; i++)
+            {
+                lastFreq[i] = "0";
+                lastRate[i] = "0.00";
+            }
+            for (int i = 0; i < count; i++)
+            {
+                int tablerow = i * data.Count + 2;
+                decimal primarykey  = (decimal)data[0].results[keyword].frequency.Rows[i]["totalmark"];            
+                int j = 0;
+                DataTable freq;
+                      
+                foreach (ZF_statistic stat in data)
+                {
+                    freq = stat.results[keyword].frequency;
+
+                    if (freq != null && freq.Rows.Contains(primarykey))
+                    {
+                        table.Cell(tablerow, 1).Range.Text = freq.Rows.Find(primarykey)["totalmark"].ToString().Trim() + "～";
+                        table.Cell(tablerow, 2).Range.Text = stat._name;
+                        table.Cell(tablerow, 3).Range.Text = freq.Rows.Find(primarykey)["frequency"].ToString().Trim();
+                        table.Cell(tablerow, 4).Range.Text = string.Format("{0:F2}", freq.Rows.Find(primarykey)["rate"]);
+                        table.Cell(tablerow, 5).Range.Text = freq.Rows.Find(primarykey)["accumulateFreq"].ToString().Trim();
+                        table.Cell(tablerow, 6).Range.Text = string.Format("{0:F2}", freq.Rows.Find(primarykey)["accumulateRate"]);
+
+                        lastFreq[j] = freq.Rows.Find(primarykey)["accumulateFreq"].ToString().Trim();
+                        lastRate[j] = string.Format("{0:F2}", freq.Rows.Find(primarykey)["accumulateRate"]);
+                    }
+                    else
+                    {
+                        table.Cell(tablerow, 1).Range.Text = primarykey.ToString().Trim() + "～";
+                        table.Cell(tablerow, 2).Range.Text = stat._name;
+                        table.Cell(tablerow, 3).Range.Text = "0";
+                        table.Cell(tablerow, 4).Range.Text = "0.00";
+                        table.Cell(tablerow, 5).Range.Text = lastFreq[j];
+                        table.Cell(tablerow, 6).Range.Text = lastRate[j];
+                    }
+                    tablerow++;
+                    j++;
+                }
+            }
+
+            table.Select();
+            oWord.Selection.set_Style(ref TableContent2);
+
+            verticalCellMerge(table, 2, 1);
+
+
+            range = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+            range.InsertParagraphAfter();
+        }
+
+        public void insertTotalTable_zk_qx(string title, List<ZF_statistic> data, string key)
+        {
+            Word.Table table;
+            Word.Range range = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+            int count = data.Count;
+            table = oDoc.Tables.Add(range, count + 1, 10, ref oMissing, oTrue);
+            table.Range.InsertCaption(oWord.CaptionLabels["表"], title, oMissing, Word.WdCaptionPosition.wdCaptionPositionAbove, oMissing);
+            //range.MoveEnd(Word.WdUnits.wdParagraph, 1);
+            range.Select();
+            range.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+
+
+            table.Rows[1].HeadingFormat = -1;
+
+
+            table.Borders.OutsideLineStyle = Word.WdLineStyle.wdLineStyleSingle;
+            table.Borders.InsideLineStyle = Word.WdLineStyle.wdLineStyleSingle;
+
+            table.Cell(1, 1).Range.Text = "分类";
+            table.Cell(1, 2).Range.Text = "人数";
+            table.Cell(1, 3).Range.Text = "满分值";
+            table.Cell(1, 4).Range.Text = "最大值";
+            table.Cell(1, 5).Range.Text = "最小值";
+            table.Cell(1, 6).Range.Text = "平均值";
+            table.Cell(1, 7).Range.Text = "标准差";
+            table.Cell(1, 8).Range.Text = "差异系数";
+            table.Cell(1, 9).Range.Text = "得分率";
+            table.Cell(1, 10).Range.Text = "中数";
+
+            int i = 2;
+            foreach (ZF_statistic zf in data)
+            {
+
+                ZF_worddata ddata = zf.results[key];
+                table.Cell(i, 1).Range.Text = zf._name;
+                table.Cell(i, 2).Range.Text = ddata.total_num.ToString();
+                table.Cell(i, 3).Range.Text = string.Format("{0:F1}", ddata.fullmark);
+                table.Cell(i, 4).Range.Text = string.Format("{0:F1}", ddata.max);
+                table.Cell(i, 5).Range.Text = string.Format("{0:F1}", ddata.min);
+                table.Cell(i, 6).Range.Text = string.Format("{0:F1}", ddata.avg);
+                table.Cell(i, 7).Range.Text = string.Format("{0:F2}", ddata.stDev);
+                table.Cell(i, 8).Range.Text = string.Format("{0:F2}", ddata.Dfactor);
+                table.Cell(i, 9).Range.Text = string.Format("{0:F2}", ddata.difficulty);
+                table.Cell(i, 10).Range.Text = string.Format("{0:F2}", ddata.mean);
+                i++;
+            }
+
+            table.Select();
+            oWord.Selection.set_Style(ref TableContent2);
+
+            range = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+            range.InsertParagraphAfter();
+        }
+        public void zk_total_create(ZF_statistic data)
+        {
+            object filepath = @_config.CurrentDirectory + @"\template.dotx";
+            //object filepath = @"D:\项目\给王卅的编程资料\中考\c.dotx";
+            //Start Word and create a new document.
+
+            oWord = new Word.Application();
+
+            oWord.Visible = _config.isVisible;
+            oDoc = oWord.Documents.Add(ref filepath, ref oMissing,
+            ref oMissing, ref oMissing);
+            Utils.WriteFrontPage(_config, oDoc);
+
+            insertText(ExamTitle1, "试卷整体分析");
+            insertTotalTable_zk("    不同组合试卷总分分析表", data);
+            insertText(ExamTitle1, "总分分布曲线图");
+            Partition_wordcreator.ChartCombine comb = new Partition_wordcreator.ChartCombine();
+            foreach (string key in data.results.Keys)
+            {
+                comb.Add(data.results[key].dist, key);
+            }
+            insertChart("    总分分布曲线图", comb.target, "分数", "比率(%)", Excel.XlChartType.xlLineMarkers, data._fullmark);
+            insertText(ExamTitle1, "总分分数表");
+            foreach(string key in data.results.Keys)
+                insertFreqTable_single("    " + key + "总分分数分布表", data.results[key].frequency);
+
+            foreach (Word.TableOfContents table in oDoc.TablesOfContents)
+                table.Update();
+            Utils.Save(_config, oDoc, oWord);
+        }
+        public void insertTotalTable_zk(string title, ZF_statistic data)
+        {
+            Word.Table table;
+            Word.Range range = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+            int count = data.results.Count;
+            table = oDoc.Tables.Add(range, count + 1,10, ref oMissing, oTrue);
+            table.Range.InsertCaption(oWord.CaptionLabels["表"], title, oMissing, Word.WdCaptionPosition.wdCaptionPositionAbove, oMissing);
+            //range.MoveEnd(Word.WdUnits.wdParagraph, 1);
+            range.Select();
+            range.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+
+
+            table.Rows[1].HeadingFormat = -1;
+
+
+            table.Borders.OutsideLineStyle = Word.WdLineStyle.wdLineStyleSingle;
+            table.Borders.InsideLineStyle = Word.WdLineStyle.wdLineStyleSingle;
+
+            table.Cell(1, 1).Range.Text = "分类";
+            table.Cell(1, 2).Range.Text = "人数";
+            table.Cell(1, 3).Range.Text = "满分值";
+            table.Cell(1, 4).Range.Text = "最大值";
+            table.Cell(1, 5).Range.Text = "最小值";
+            table.Cell(1, 6).Range.Text = "平均值";
+            table.Cell(1, 7).Range.Text = "标准差";
+            table.Cell(1, 8).Range.Text = "差异系数";
+            table.Cell(1, 9).Range.Text = "得分率";
+            table.Cell(1, 10).Range.Text = "中数";
+
+            int i = 2;
+            foreach(string key in data.results.Keys)
+            {
+                ZF_worddata ddata = data.results[key];
+                table.Cell(i, 1).Range.Text = key;
+                table.Cell(i, 2).Range.Text = ddata.total_num.ToString();
+                table.Cell(i, 3).Range.Text = string.Format("{0:F1}", ddata.fullmark);
+                table.Cell(i, 4).Range.Text = string.Format("{0:F1}", ddata.max);
+                table.Cell(i, 5).Range.Text = string.Format("{0:F1}", ddata.min);
+                table.Cell(i, 6).Range.Text = string.Format("{0:F1}", ddata.avg);
+                table.Cell(i, 7).Range.Text = string.Format("{0:F2}", ddata.stDev);
+                table.Cell(i, 8).Range.Text = string.Format("{0:F2}", ddata.Dfactor);
+                table.Cell(i, 9).Range.Text = string.Format("{0:F2}", ddata.difficulty);
+                table.Cell(i, 10).Range.Text = string.Format("{0:F2}", ddata.mean);
+                i++;
+            }
+
+            table.Select();
+            oWord.Selection.set_Style(ref TableContent2);
+
+            range = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+            range.InsertParagraphAfter();
+        }
         public void total_create(ZF_statistic data)
         {
             object filepath = @_config.CurrentDirectory + @"\template.dotx";

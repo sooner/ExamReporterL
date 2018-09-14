@@ -28,10 +28,11 @@ namespace ExamReport
 
             total_topic_rank = new DataTable();
             total_topic_rank.Columns.Add("number", typeof(string));
-            total_topic_rank.Columns.Add("outstanding", typeof(decimal));
-            total_topic_rank.Columns.Add("good", typeof(decimal));
-            total_topic_rank.Columns.Add("pass", typeof(decimal));
-            total_topic_rank.Columns.Add("fail", typeof(decimal));
+            total_topic_rank.Columns.Add("A", typeof(decimal));
+            total_topic_rank.Columns.Add("B", typeof(decimal));
+            total_topic_rank.Columns.Add("C", typeof(decimal));
+            total_topic_rank.Columns.Add("D", typeof(decimal));
+            total_topic_rank.Columns.Add("E", typeof(decimal));
 
             single_group_rank = new List<DataTable>();
             single_topic_rank = new List<DataTable>();

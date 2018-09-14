@@ -30,21 +30,26 @@ namespace ExamReport
                         dr[dc] = 0;
                 }
                 decimal totalmark = (decimal)dr["totalmark"];
-                if ( totalmark >= hk_hierarchy.excellent_low)
+                if ( totalmark >= hk_hierarchy.A_low)
                 {
-                    dr["rank"] = "excellent";
+                    dr["rank"] = "A";
                 }
-                else if (totalmark >= hk_hierarchy.well_low)
+                else if (totalmark >= hk_hierarchy.B_low)
                 {
-                    dr["rank"] = "well";
+                    dr["rank"] = "B";
                 }
-                else if (totalmark >= hk_hierarchy.pass_low)
+                else if (totalmark >= hk_hierarchy.C_low)
                 {
-                    dr["rank"] = "pass";
+                 
+                    dr["rank"] = "C";
+                }
+                else if (totalmark >= hk_hierarchy.D_low)
+                {
+                    dr["rank"] = "D";
                 }
                 else
                 {
-                    dr["rank"] = "fail";
+                    dr["rank"] = "E";
                 }
             }
 

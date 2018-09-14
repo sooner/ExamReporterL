@@ -399,7 +399,7 @@ namespace ExamReport
                 string primarykey = stand.Rows[i]["mark"].ToString().Trim();
                 for (int k = 0; k < _sdata.Count; k++)
                 {
-                    if (getSingleData(k, topicnum).single_detail.Rows.Contains(primarykey))
+                    if (topicnum < ((PartitionData)_sdata[k]).single_topic_analysis.Count && getSingleData(k, topicnum).single_detail.Rows.Contains(primarykey))
                     {
                         DataRow dr = getSingleData(k, topicnum).single_detail.Rows.Find(primarykey);
                         if (dr["mark"].ToString().Trim().Equals("未选") || dr["mark"].ToString().Trim().Equals("未选或多选"))
@@ -688,6 +688,23 @@ namespace ExamReport
                 else
                 {
                     data = partition.total_analysis;
+                    if (total >= data.Rows.Count)
+                    {
+                        table.Cell(i + 2, 1).Range.Text = partition.name;
+                        table.Cell(i + 2, 2).Range.Text = "0";
+                        table.Cell(i + 2, 3).Range.Text = FullmarkFormat((decimal)((PartitionData)sdata[sdata.Count - 1]).total_analysis.Rows[total]["fullmark"]);
+                        table.Cell(i + 2, 4).Range.Text = "0.0";
+                        table.Cell(i + 2, 5).Range.Text = "0.0";
+                        table.Cell(i + 2, 6).Range.Text = "0.00";
+                        table.Cell(i + 2, 7).Range.Text = "0.00";
+                        table.Cell(i + 2, 8).Range.Text = "0.00";
+                        table.Cell(i + 2, 9).Range.Text = "0.00";
+                        if (_config.WSLG)
+                        {
+                            table.Cell(i + 2, 10).Range.Text = "0.00";
+                        }
+                        continue;
+                    }
                     if (!((string)data.Rows[total]["number"]).Equals(keyword))
                     {
                         table.Cell(i + 2, 1).Range.Text = partition.name;
@@ -960,6 +977,8 @@ namespace ExamReport
                 {
                     if (!first)
                     {
+                        if (i >= data.total_analysis.Rows.Count)
+                            continue;
                         if (!keyword.Equals(data.total_analysis.Rows[i]["number"].ToString().Trim().Substring(1)))
                         {
                             DataRow dr = data.total_analysis.NewRow();

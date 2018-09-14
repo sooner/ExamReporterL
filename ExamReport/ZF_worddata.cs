@@ -16,6 +16,7 @@ namespace ExamReport
         public decimal stDev;
         public decimal Dfactor;
         public decimal difficulty;
+        public decimal mean;
 
         public DataTable dist;
         public DataTable frequency;
@@ -30,6 +31,7 @@ namespace ExamReport
             stDev = 0m;
             Dfactor = 0m;
             difficulty = 0m;
+            mean = 0m;
 
             dist = new DataTable();
             frequency = new DataTable();

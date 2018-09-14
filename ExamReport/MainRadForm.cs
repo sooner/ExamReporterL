@@ -34,6 +34,7 @@ namespace ExamReport
         CustomRelation temp_cust = new CustomRelation();
         public DataTable schoolcode_table;
         public DataTable school;
+        public DataTable zk_school;
         public Dictionary<string, string> qx_kv;
         string currentdic = System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath);
         //Thread thread;
@@ -63,14 +64,16 @@ namespace ExamReport
             wk_radio.IsChecked = true;
             lk_radio.IsChecked = false;
 
-            excellent_high.Value = 100m;
-            excellent_low.Value = 85m;
-            well_high.Value = 85m;
-            well_low.Value = 70m;
-            pass_high.Value = 70m;
-            pass_low.Value = 60m;
-            fail_high.Value = 60m;
-            fail_low.Value = 0m;
+            A_high.Value = 100m;
+            A_low.Value = 90m;
+            B_high.Value = 90m;
+            B_low.Value = 80m;
+            C_high.Value = 80m;
+            C_low.Value = 70m;
+            D_high.Value = 70m;
+            D_low.Value = 60m;
+            E_high.Value = 60m;
+            E_low.Value = 0m;
 
             int curryear = DateTime.Now.Year;
             for (int i = curryear - 10; i < curryear + 10; i++)
@@ -389,13 +392,16 @@ namespace ExamReport
 
             OleDbDataAdapter adpt = new OleDbDataAdapter("select * from " + "schoolcode", dbfConnection);
             OleDbDataAdapter adpt2 = new OleDbDataAdapter("select * from " + "school", dbfConnection);
+            OleDbDataAdapter adpt3 = new OleDbDataAdapter("select * from " + "schoolcode1", dbfConnection);
             //OleDbDataAdapter adpt = new OleDbDataAdapter("select * from " + file + " where Qk<>1", dbfConnection);
             DataSet mySet = new DataSet();
             DataSet mySet2 = new DataSet();
+            DataSet mySet3 = new DataSet();
             try
             {
                 adpt.Fill(mySet);
                 adpt2.Fill(mySet2);
+                adpt3.Fill(mySet3);
             }
             catch (OleDbException e)
             {
@@ -405,6 +411,7 @@ namespace ExamReport
 
             schoolcode_table = mySet.Tables[0];
             school = mySet2.Tables[0];
+            zk_school = mySet3.Tables[0];
             DataTable qxdm = schoolcode_table.AsEnumerable().GroupBy(c => c.Field<string>("qxmc")).Select(c => new
             {
                 qxmc = c.Key.ToString().Trim(),
@@ -779,7 +786,7 @@ namespace ExamReport
             if (CheckGridView(zk_gridview))
                 return;
 
-            string QX_code = schoolcode_table.AsEnumerable().GroupBy(c => c.Field<string>("qxmc")).Select(c => new {
+            string QX_code = zk_school.AsEnumerable().GroupBy(c => c.Field<string>("qxmc")).Select(c => new {
                 school = c.Key.ToString().Trim(), code = string.Join(",", c.GroupBy(p => p.Field<string>("qxdm")).Select(p => p.Key.ToString().Trim()).ToArray())})
                 .Where(c => c.school.Equals(ZKTreeView.SelectedNode.Text.Trim())).Select(c => c.code).First();
             
@@ -788,6 +795,7 @@ namespace ExamReport
             analysis.qx_addr = qxxx_addr.Text.Trim();
             analysis.cj_addr = cj_addr.Text.Trim();
             analysis.qx_code = QX_code;
+            analysis.QX = ZKTreeView.SelectedNode.Text.Trim();
             analysis.curryear = zk_yearlist.SelectedItem.ToString().Trim();
             analysis.currmonth = zk_currmonth.SelectedItem.ToString().Trim();
             analysis.CurrentDirectory = currentdic;
@@ -1319,14 +1327,16 @@ namespace ExamReport
             analysis.isVisible = hk_isVisible.Checked;
             analysis.CurrentDirectory = currentdic;
             analysis.hk_hierarchy = new Analysis.HK_hierarchy();
-            analysis.hk_hierarchy.excellent_low = excellent_low.Value;
-            analysis.hk_hierarchy.excellent_high = excellent_high.Value;
-            analysis.hk_hierarchy.well_low = well_low.Value;
-            analysis.hk_hierarchy.well_high = well_high.Value;
-            analysis.hk_hierarchy.pass_low = pass_low.Value;
-            analysis.hk_hierarchy.pass_high = pass_high.Value;
-            analysis.hk_hierarchy.fail_low = fail_low.Value;
-            analysis.hk_hierarchy.fail_high = fail_high.Value;
+            analysis.hk_hierarchy.A_low = A_low.Value;
+            analysis.hk_hierarchy.A_high = A_high.Value;
+            analysis.hk_hierarchy.B_low = B_low.Value;
+            analysis.hk_hierarchy.B_high = B_high.Value;
+            analysis.hk_hierarchy.C_low = C_low.Value;
+            analysis.hk_hierarchy.C_high = C_high.Value;
+            analysis.hk_hierarchy.D_low = D_low.Value;
+            analysis.hk_hierarchy.D_high = D_high.Value;
+            analysis.hk_hierarchy.E_low = E_low.Value;
+            analysis.hk_hierarchy.E_high = E_high.Value;
             Thread thread = new Thread(new ThreadStart(analysis.hk_zt_start));
             thread.IsBackground = true;
             thread.SetApartmentState(ApartmentState.STA);
@@ -1337,19 +1347,22 @@ namespace ExamReport
 
         private bool hk_check()
         {
-            if (Math.Abs(excellent_low.Value) != excellent_low.Value ||
-                Math.Abs(excellent_high.Value) != excellent_high.Value ||
-                Math.Abs(well_low.Value) != well_low.Value ||
-                Math.Abs(well_high.Value) != well_high.Value ||
-                Math.Abs(pass_low.Value) != pass_low.Value ||
-                Math.Abs(pass_high.Value) != pass_high.Value ||
-                Math.Abs(fail_low.Value) != fail_low.Value ||
-                Math.Abs(fail_high.Value) != fail_high.Value)
+            if (Math.Abs(A_low.Value) != A_low.Value ||
+                Math.Abs(A_high.Value) != A_high.Value ||
+                Math.Abs(B_low.Value) != B_low.Value ||
+                Math.Abs(B_high.Value) != B_high.Value ||
+                Math.Abs(C_low.Value) != C_low.Value ||
+                Math.Abs(C_high.Value) != C_high.Value ||
+                Math.Abs(D_low.Value) != D_low.Value ||
+                Math.Abs(D_high.Value) != D_high.Value ||
+                Math.Abs(E_high.Value) != E_high.Value ||
+                Math.Abs(E_low.Value) != E_low.Value)
                 return Error("会考成绩区域不能为负！");
-            if (!(fail_low.Value < fail_high.Value &&
-                pass_low.Value < pass_high.Value &&
-                well_low.Value < well_high.Value &&
-                excellent_low.Value < excellent_high.Value))
+            if (!(D_low.Value < D_high.Value &&
+                C_low.Value < C_high.Value &&
+                B_low.Value < B_high.Value &&
+                A_low.Value < A_high.Value &&
+                E_low.Value < E_high.Value))
                 return Error("会考成绩设置错误！");
             return true;
         }
@@ -1638,14 +1651,16 @@ namespace ExamReport
             analysis.isVisible = hk_isVisible.Checked;
             analysis.CurrentDirectory = currentdic;
             analysis.hk_hierarchy = new Analysis.HK_hierarchy();
-            analysis.hk_hierarchy.excellent_low = excellent_low.Value;
-            analysis.hk_hierarchy.excellent_high = excellent_high.Value;
-            analysis.hk_hierarchy.well_low = well_low.Value;
-            analysis.hk_hierarchy.well_high = well_high.Value;
-            analysis.hk_hierarchy.pass_low = pass_low.Value;
-            analysis.hk_hierarchy.pass_high = pass_high.Value;
-            analysis.hk_hierarchy.fail_low = fail_low.Value;
-            analysis.hk_hierarchy.fail_high = fail_high.Value;
+            analysis.hk_hierarchy.A_low = A_low.Value;
+            analysis.hk_hierarchy.A_high = A_high.Value;
+            analysis.hk_hierarchy.B_low = B_low.Value;
+            analysis.hk_hierarchy.B_high = B_high.Value;
+            analysis.hk_hierarchy.C_low = C_low.Value;
+            analysis.hk_hierarchy.C_high = C_high.Value;
+            analysis.hk_hierarchy.D_low = D_low.Value;
+            analysis.hk_hierarchy.D_high = D_high.Value;
+            analysis.hk_hierarchy.E_low = E_low.Value;
+            analysis.hk_hierarchy.E_high = E_high.Value;
             analysis.date = dateTimePicker.Value.Year.ToString() + "年" + dateTimePicker.Value.Month.ToString() + "月";
             if (hk_group_button.IsChecked)
             {

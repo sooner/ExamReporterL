@@ -47,14 +47,16 @@ namespace ExamReport
         public HK_hierarchy hk_hierarchy;
         public class HK_hierarchy
         {
-            public decimal excellent_low;
-            public decimal excellent_high;
-            public decimal well_low;
-            public decimal well_high;
-            public decimal pass_low;
-            public decimal pass_high;
-            public decimal fail_low;
-            public decimal fail_high;
+            public decimal A_low;
+            public decimal A_high;
+            public decimal B_low;
+            public decimal B_high;
+            public decimal C_low;
+            public decimal C_high;
+            public decimal D_low;
+            public decimal D_high;
+            public decimal E_low;
+            public decimal E_high;
 
         }
 
@@ -233,6 +235,14 @@ namespace ExamReport
                                 case "gk_cus":
                                     gk_zf_custom_process(mdata);
                                     break;
+                                case "zk_zt":
+                                    zk_zf_zt_process(mdata);
+                                    break;
+                                case "zk_qx":
+                                    mdata.get_QXSF_data(qx_addr);
+                                    mdata.get_CJ_data(cj_addr);
+                                    zk_zf_qx_process(mdata);
+                                    break;
                                 default:
                                     break;
                             }
@@ -315,6 +325,88 @@ namespace ExamReport
             }
             _form.ShowPro(exam_type, 2, "完成！");
         }
+
+        public void zk_zf_qx_process(MetaData mdata)
+        {
+            Configuration config = initConfig(mdata._sub, "区县", "中考");
+            _form.ShowPro(exam_type, 1, mdata.log_name + "数据分析中...");
+            List<ZF_statistic> result = new List<ZF_statistic>();
+            ZF_statistic total = new ZF_statistic(config, mdata.basic, mdata._fullmark, "市整体");
+            total.zk_process();
+            result.Add(total);
+            for (int i = 0; i < mdata.CJ_list.Count; i++)
+            {
+                string[] cj_code = new string[mdata.CJ_list[i].Count - 1];
+                for (int j = 1; j < mdata.CJ_list[i].Count; j++)
+                    cj_code[j - 1] = mdata.CJ_list[i][j].ToString().Trim();
+                DataTable temp = mdata.basic.filteredtable("qxdm", cj_code);
+                ZF_statistic stat = new ZF_statistic(config, temp, mdata._fullmark, mdata.CJ_list[i][0].ToString().Trim());
+                stat.zk_process();
+                result.Add(stat);
+            }
+            DataTable bq_data = mdata.basic.filteredtable("qxdm", QXTransfer(qx_code));
+            ZF_statistic bq = new ZF_statistic(config, bq_data, mdata._fullmark, "本区");
+            bq.zk_process();
+            result.Add(bq);
+            CalculateZKZF(config, mdata, bq_data, result);
+            _form.ShowPro(exam_type, 1, mdata.log_name + "报告生成中...");
+            ZF_wordcreator create = new ZF_wordcreator(config);
+            create.zk_qx_wordcreate(result, "区县");
+        }
+
+        void CalculateZKZF(Configuration config, MetaData mdata, DataTable total, List<ZF_statistic> result)
+        {
+            int totalnum = 0;
+            for (int i = 0; i < mdata.QXSF_list.Count; i++)
+                totalnum += (mdata.QXSF_list[i].Count - 1);
+            string[] SF_code = new string[totalnum];
+            totalnum = 0;
+            for (int i = 0; i < mdata.QXSF_list.Count; i++)
+            {
+                for (int j = 1; j < mdata.QXSF_list[i].Count; j++)
+                {
+                    SF_code[totalnum] = mdata.QXSF_list[i][j].ToString().Trim();
+                    totalnum++;
+                }
+            }
+
+            DataTable flztdata = total.filteredtable("xxdm", SF_code);
+            ZF_statistic flzt = new ZF_statistic(config, flztdata, mdata._fullmark, "分类整体");
+            flzt.zk_process();
+            result.Add(flzt);
+
+            for (int i = 0; i < mdata.QXSF_list.Count; i++)
+            {
+                ArrayList temp = mdata.QXSF_list[i];
+                string[] xx_code = new string[temp.Count - 1];
+                for (int j = 1; j < temp.Count; j++)
+                    xx_code[j - 1] = temp[j].ToString().Trim();
+                DataTable data = flztdata.filteredtable("xxdm", xx_code);
+                ZF_statistic stat = new ZF_statistic(config, data, mdata._fullmark, temp[0].ToString().Trim());
+                stat.zk_process();
+                result.Add(stat);
+
+            }
+
+        }
+
+        public void zk_zf_zt_process(MetaData mdata)
+        {
+            Configuration config = initConfig(mdata._sub, "总体", "中考");
+            //CacheData cdata = new CacheData();
+            _form.ShowPro(exam_type, 1, mdata.log_name + "数据分析中...");
+            ZF_statistic stat = new ZF_statistic(config, mdata.basic, mdata._fullmark, "总体");
+
+            stat.zk_process();
+            //cdata.save_zf_data(mdata._year, mdata._exam, "wk", stat.w_result);
+            //cdata.save_zf_data(mdata._year, mdata._exam, "lk", stat.l_result);
+
+            _form.ShowPro(exam_type, 1, mdata.log_name + "报告生成中...");
+            ZF_wordcreator create = new ZF_wordcreator(config);
+            create.zk_total_create(stat);
+
+        }
+
         public void gk_export_start()
         {
             exam_type = "gk_export";
@@ -829,9 +921,9 @@ namespace ExamReport
             Total_statistic stat = new Total_statistic(result, mdata.basic, mdata._fullmark, mdata.ans, mdata.group, mdata.grp, mdata._group_num);
             stat._config = config;
             stat.statistic_process(false);
-            stat.HK_postprocess(hk_hierarchy);
             if (mdata.xz.Count > 0)
                 stat.xz_postprocess(mdata.xz);
+            stat.HK_postprocess(hk_hierarchy);
             _form.ShowPro(exam_type, 1, mdata.log_name + "报告生成中...");
             WordCreator create = new WordCreator(result, config);
             create.creating_HK_word();
@@ -1917,7 +2009,7 @@ namespace ExamReport
                 XXTotal._config = config;
                 XXTotal.statistic_process(false);
                 if (mdata.xz.Count > 0)
-                    XXTotal.xz_postprocess(mdata.xz);
+                    XXTotal.xz_postprocess(mdata.xz, ClassTotal_data, xx_code);
                 totaldata.Add(XXTotal.result);
                 sdata.Add(XXTotal.result);
 

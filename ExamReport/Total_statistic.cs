@@ -1790,26 +1790,31 @@ namespace ExamReport
 
             for(int i = 0; i < _basic_data.Rows.Count; i++)
             {
-                decimal totalmark = (decimal)_basic_data.Rows[i]["totalmark"];
-                if (totalmark >= HK_hierarchy.excellent_low && totalmark <= HK_hierarchy.excellent_high)
+                decimal totalmark =  cus_round(1, (decimal)_basic_data.Rows[i]["totalmark"]);
+                if (totalmark >= HK_hierarchy.A_low && totalmark <= HK_hierarchy.A_high)
                 {
                     _basic_data.Rows[i]["rank"] = "1";//outstanding
                     _groups_table.Rows[i]["rank"] = "1";
                 }
-                else if (totalmark >= HK_hierarchy.well_low && totalmark < HK_hierarchy.well_high)
+                else if (totalmark >= HK_hierarchy.B_low && totalmark < HK_hierarchy.B_high)
                 {
                     _basic_data.Rows[i]["rank"] = "2";//good
                     _groups_table.Rows[i]["rank"] = "2";
                 }
-                else if (totalmark >= HK_hierarchy.pass_low && totalmark < HK_hierarchy.pass_high)
+                else if (totalmark >= HK_hierarchy.C_low && totalmark < HK_hierarchy.C_high)
                 {
                     _basic_data.Rows[i]["rank"] = "3";//pass
                     _groups_table.Rows[i]["rank"] = "3";
                 }
-                else if (totalmark >= HK_hierarchy.fail_low && totalmark < HK_hierarchy.fail_high)
+                else if (totalmark >= HK_hierarchy.D_low && totalmark < HK_hierarchy.D_high)
                 {
                     _basic_data.Rows[i]["rank"] = "4";//fail
                     _groups_table.Rows[i]["rank"] = "4";
+                }
+                else if (totalmark >= HK_hierarchy.E_low && totalmark < HK_hierarchy.E_high)
+                {
+                    _basic_data.Rows[i]["rank"] = "5";//fail
+                    _groups_table.Rows[i]["rank"] = "5";
                 }
                 else
                 {
@@ -1818,7 +1823,7 @@ namespace ExamReport
                 }
             }
 
-            string[] ranks = { "1", "2", "3", "4" };
+            string[] ranks = { "1", "2", "3", "4", "5" };
             foreach (string rank in ranks)
             {
                 DataTable temp = _basic_data.equalfilter("rank", rank);
@@ -1896,14 +1901,16 @@ namespace ExamReport
                 WordData.group_data single_group = (WordData.group_data)data.single_group_analysis[i];
                 DataTable group = new DataTable();
                 group.Columns.Add("mark", typeof(string));
-                group.Columns.Add("outstanding", typeof(int));
-                group.Columns.Add("out_percent", typeof(decimal));
-                group.Columns.Add("good", typeof(int));
-                group.Columns.Add("good_percent", typeof(decimal));
-                group.Columns.Add("pass", typeof(int));
-                group.Columns.Add("pass_percent", typeof(decimal));
-                group.Columns.Add("fail", typeof(int));
-                group.Columns.Add("fail_percent", typeof(decimal));
+                group.Columns.Add("A", typeof(int));
+                group.Columns.Add("A_percent", typeof(decimal));
+                group.Columns.Add("B", typeof(int));
+                group.Columns.Add("B_percent", typeof(decimal));
+                group.Columns.Add("C", typeof(int));
+                group.Columns.Add("C_percent", typeof(decimal));
+                group.Columns.Add("D", typeof(int));
+                group.Columns.Add("D_percent", typeof(decimal));
+                group.Columns.Add("E", typeof(int));
+                group.Columns.Add("E_percent", typeof(decimal));
                 group.Columns.Add("total", typeof(int));
                 group.Columns.Add("total_percent", typeof(decimal));
                 group.PrimaryKey = new DataColumn[]{group.Columns["mark"]};
@@ -1954,14 +1961,16 @@ namespace ExamReport
 
                 DataTable topic = new DataTable();
                 topic.Columns.Add("mark", typeof(string));
-                topic.Columns.Add("outstanding", typeof(int));
-                topic.Columns.Add("out_percent", typeof(decimal));
-                topic.Columns.Add("good", typeof(int));
-                topic.Columns.Add("good_percent", typeof(decimal));
-                topic.Columns.Add("pass", typeof(int));
-                topic.Columns.Add("pass_percent", typeof(decimal));
-                topic.Columns.Add("fail", typeof(int));
-                topic.Columns.Add("fail_percent", typeof(decimal));
+                topic.Columns.Add("A", typeof(int));
+                topic.Columns.Add("A_percent", typeof(decimal));
+                topic.Columns.Add("B", typeof(int));
+                topic.Columns.Add("B_percent", typeof(decimal));
+                topic.Columns.Add("C", typeof(int));
+                topic.Columns.Add("C_percent", typeof(decimal));
+                topic.Columns.Add("D", typeof(int));
+                topic.Columns.Add("D_percent", typeof(decimal));
+                topic.Columns.Add("E", typeof(int));
+                topic.Columns.Add("E_percent", typeof(decimal));
                 topic.Columns.Add("total", typeof(int));
                 topic.Columns.Add("total_percent", typeof(decimal));
                 topic.PrimaryKey = new DataColumn[] { topic.Columns["mark"] };
@@ -2053,14 +2062,16 @@ namespace ExamReport
         }
         public class TotalCal
         {
-            int outstanding;
-            decimal out_percent;
-            int good;
-            decimal good_percent;
-            int pass;
-            decimal pass_percent;
-            int fail;
-            decimal fail_percent;
+            int A;
+            decimal A_percent;
+            int B;
+            decimal B_percent;
+            int C;
+            decimal C_percent;
+            int D;
+            decimal D_percent;
+            int E;
+            decimal E_percent;
             public TotalCal(DataTable dt, int totalnum)
             {
                 var mark = from row in dt.AsEnumerable()
@@ -2074,23 +2085,28 @@ namespace ExamReport
                 {
                     if (item.rank == "1")
                     {
-                        outstanding = item.count;
-                        out_percent = outstanding / Convert.ToDecimal(totalnum) * 100;
+                        A = item.count;
+                        A_percent = A / Convert.ToDecimal(totalnum) * 100;
                     }
                     else if (item.rank == "2")
                     {
-                        good = item.count;
-                        good_percent = good / Convert.ToDecimal(totalnum) * 100;
+                        B = item.count;
+                        B_percent = B / Convert.ToDecimal(totalnum) * 100;
                     }
                     else if (item.rank == "3")
                     {
-                        pass = item.count;
-                        pass_percent = pass / Convert.ToDecimal(totalnum) * 100;
+                        C = item.count;
+                        C_percent = C / Convert.ToDecimal(totalnum) * 100;
                     }
                     else if (item.rank == "4")
                     {
-                        fail = item.count;
-                        fail_percent = fail / Convert.ToDecimal(totalnum) * 100;
+                        D = item.count;
+                        D_percent = D / Convert.ToDecimal(totalnum) * 100;
+                    }
+                    else if (item.rank == "5")
+                    {
+                        E = item.count;
+                        E_percent = E / Convert.ToDecimal(totalnum) * 100;
                     }
 
                 }
@@ -2101,14 +2117,16 @@ namespace ExamReport
             public void AddTotalRow(DataTable dt)
             {
                 DataRow dr = dt.Rows[dt.Rows.Count - 1];
-                dr["outstanding"] = outstanding;
-                dr["out_percent"] = out_percent;
-                dr["good"] = good;
-                dr["good_percent"] = good_percent;
-                dr["pass"] = pass;
-                dr["pass_percent"] = pass_percent;
-                dr["fail"] = fail;
-                dr["fail_percent"] = fail_percent;
+                dr["A"] = A;
+                dr["A_percent"] = A_percent;
+                dr["B"] = B;
+                dr["B_percent"] = B_percent;
+                dr["C"] = C;
+                dr["C_percent"] = C_percent;
+                dr["D"] = D;
+                dr["D_percent"] = D_percent;
+                dr["E"] = E;
+                dr["E_percent"] = E_percent;
             }
         }
         public string RankConverter2(string number)
@@ -2116,13 +2134,15 @@ namespace ExamReport
             switch (number)
             {
                 case "1":
-                    return "outstanding";
+                    return "A";
                 case "2":
-                    return "good";
+                    return "B";
                 case "3":
-                    return "pass";
+                    return "C";
                 case "4":
-                    return "fail";
+                    return "D";
+                case "5":
+                    return "E";
                 default:
                     return null;
             }
@@ -2132,13 +2152,15 @@ namespace ExamReport
             switch (number)
             {
                 case "1":
-                    return "优秀" + " (" + Convert.ToInt32(HK_hierarchy.excellent_low).ToString() + " - " + Convert.ToInt32(HK_hierarchy.excellent_high).ToString() + ")";
+                    return "I" + " (" + Convert.ToInt32(HK_hierarchy.A_low).ToString() + " - " + Convert.ToInt32(HK_hierarchy.A_high).ToString() + ")";
                 case "2":
-                    return "良好" + " (" + Convert.ToInt32(HK_hierarchy.well_low).ToString() + " - " + Convert.ToInt32(HK_hierarchy.well_high).ToString() + ")";
+                    return "II" + " (" + Convert.ToInt32(HK_hierarchy.B_low).ToString() + " - " + Convert.ToInt32(HK_hierarchy.B_high).ToString() + ")";
                 case "3":
-                    return "及格" + " (" + Convert.ToInt32(HK_hierarchy.pass_low).ToString() + " - " + Convert.ToInt32(HK_hierarchy.pass_high).ToString() + ")";
+                    return "III" + " (" + Convert.ToInt32(HK_hierarchy.C_low).ToString() + " - " + Convert.ToInt32(HK_hierarchy.C_high).ToString() + ")";
                 case "4":
-                    return "不及格" + " (" + Convert.ToInt32(HK_hierarchy.fail_low).ToString() + " - " + Convert.ToInt32(HK_hierarchy.fail_high).ToString() + ")";
+                    return "IV" + " (" + Convert.ToInt32(HK_hierarchy.D_low).ToString() + " - " + Convert.ToInt32(HK_hierarchy.D_high).ToString() + ")";
+                case "5":
+                    return "V" + " (" + Convert.ToInt32(HK_hierarchy.E_low).ToString() + " - " + Convert.ToInt32(HK_hierarchy.E_high).ToString() + ")";
                 default:
                     return "";
             }

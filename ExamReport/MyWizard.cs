@@ -259,6 +259,7 @@ namespace ExamReport
                     subject.Items.Add("历史");
                     subject.Items.Add("思想品德");
                     subject.Items.Add("中考行政版");
+                    subject.Items.Add("总分");
                     subject.ResetText();
 
 

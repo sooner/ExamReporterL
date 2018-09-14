@@ -73,6 +73,17 @@ namespace ExamReport
 
         public static string[] qx_in_order = { "东城区", "西城区", "海淀区", "朝阳区", "石景山区", "丰台区", "燕 山", "通州区", "顺义区", "昌平区", "门头沟区", "房山区", "大兴区", "怀柔区", "平谷区", "密云县", "延庆县" };
         public static string[] qxdm_in_order = { "01", "02","08","05","07","06", "10","12", "13","14","09","11","15","16", "17", "18","19"};
+
+        public static Dictionary<int, string> sub_choice = new Dictionary<int,string>() {
+        {1, "物理+生化+地理"}, 
+        {2, "物理+生化+历史"}, 
+        {3, "物理+生化+思品"}, 
+        {4, "物理+地理+历史"}, 
+        {5, "物理+地理+思品"},
+        {6, "物理+历史+思品"}, 
+        {7, "生化+地理+历史"}, 
+        {8, "生化+地理+思品"}, 
+        {9, "生化+历史+思品"}};
         public static void WSLG_WriteFrontPage(Configuration config, Microsoft.Office.Interop.Word._Document oDoc)
         {
             WriteIntoDocument(oDoc, "date", config.year + "年" + config.month);
@@ -654,6 +665,10 @@ namespace ExamReport
                     return "高考行政版";
                 case "zk_xz":
                     return "中考行政版";
+                case "思想品德":
+                    return "sxpd";
+                case "sxpd":
+                    return "思想品德";
                 default:
                     return "";
             }
@@ -702,6 +717,8 @@ namespace ExamReport
                     return "gk_xz";
                 case "中考行政版":
                     return "zk_xz";
+                case "思想品德":
+                    return "sxpd";
 
                 case "yw":
                     return "语文";
@@ -731,6 +748,8 @@ namespace ExamReport
                     return "高考行政版";
                 case "zk_xz":
                     return "中考行政版";
+                case "sxpd":
+                    return "思想品德";
                 default:
                     return "";
             }

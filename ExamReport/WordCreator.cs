@@ -72,10 +72,10 @@ namespace ExamReport
             object oPageBreak = Microsoft.Office.Interop.Word.WdBreakType.wdPageBreak;
             insertText(ExamTitle1, "总体分析");
             insertHKTotalTable("    " + subject + "试卷总分分析表");
-            insertHKTotalRank("    " + subject + "等级成绩分析表");
+            insertHKTotalRank("    " + subject + "分数段成绩分析表");
             insertTotalChart("    " + subject + "试卷总分分布曲线图", _sdata);
             insertHKTotalAnalysisTable("    " + subject + "题目、题组整体分析表");
-            insertHKTotalRankTable("    " + subject + "题目、题组等级得分率分析表");
+            insertHKTotalRankTable("    " + subject + "题目、题组分数段得分率分析表");
             insertHKFreq("    " + subject + "试卷总分次数分布表");
 
             insertText(ExamTitle1, "题组分析");
@@ -93,27 +93,27 @@ namespace ExamReport
                     DataRow group_dr = _sdata.group_analysis.Rows.Find(group);
 
                     insertHKSingleGrouptable("    " + group + "总分分析表", _sdata.group_analysis.Rows[group_num]);
-                    insertHKSingleGroupRank("    " + group + "等级得分率分析表", data.total_topic_rank.Rows[data.total_analysis.Rows.Count + group_num], (decimal)_sdata.group_analysis.Rows[group_num]["difficulty"]);
+                    insertHKSingleGroupRank("    " + group + "分数段得分率分析表", data.total_topic_rank.Rows[data.total_analysis.Rows.Count + group_num], (decimal)_sdata.group_analysis.Rows[group_num]["difficulty"]);
                     insertHKSingleGroupDistChart("    " + group + "分数分布曲线图", group_num);
                     insertHKSingleGroupDiffChart("    " + group + "难度曲线图", group_num);
                     insertHKSingleGroupAnalysisTable("    " + group + "分组分析表", group_num);
-                    insertHKSingleGroupRankTable("    " + group + "等级分析表", data.single_group_rank[group_num]);
+                    insertHKSingleGroupRankTable("    " + group + "分数段分析表", data.single_group_rank[group_num]);
                     oDoc.Characters.Last.InsertBreak(oPagebreak);
                     group_num++;
                 }
             }
-            //for (int i = 0; i < _sdata.group_analysis.Rows.Count; i++)
-            //{
-            //    string groupID = _sdata.group_analysis.Rows[i]["number"].ToString();
-            //    insertText(ExamTitle3, groupID);
-            //    insertText(ExamBodyText, "本题组包含试题：" + _sdata._groups_ans.Rows[i]["th"]);
-            //    insertHKSingleGrouptable(groupID + "总分分析表", _sdata.group_analysis.Rows[i]);
-            //    insertHKSingleGroupRank(groupID + "等级得分率分析表", data.total_topic_rank.Rows[data.total_analysis.Rows.Count + i], (decimal)_sdata.group_analysis.Rows[i]["difficulty"]);
-            //    insertHKSingleGroupDistChart(groupID + "分数分布曲线图", i);
-            //    insertHKSingleGroupDiffChart(groupID + "难度曲线图", i);
-            //    insertHKSingleGroupAnalysisTable(groupID + "分组分析表", i);
-            //    insertHKSingleGroupRankTable(groupID + "等级分析表", data.single_group_rank[i]);
-            //}
+            for (int i = 0; i < _sdata.group_analysis.Rows.Count; i++)
+            {
+                string groupID = _sdata.group_analysis.Rows[i]["number"].ToString();
+                insertText(ExamTitle3, groupID);
+                insertText(ExamBodyText, "本题组包含试题：" + _sdata._groups_ans.Rows[i]["th"]);
+                insertHKSingleGrouptable(groupID + "总分分析表", _sdata.group_analysis.Rows[i]);
+                insertHKSingleGroupRank(groupID + "分数段得分率分析表", data.total_topic_rank.Rows[data.total_analysis.Rows.Count + i], (decimal)_sdata.group_analysis.Rows[i]["difficulty"]);
+                insertHKSingleGroupDistChart(groupID + "分数分布曲线图", i);
+                insertHKSingleGroupDiffChart(groupID + "难度曲线图", i);
+                insertHKSingleGroupAnalysisTable(groupID + "分组分析表", i);
+                insertHKSingleGroupRankTable(groupID + "分数段分析表", data.single_group_rank[i]);
+            }
 
             insertText(ExamTitle1, "题目分析");
             for (int i = 0; i < _sdata.total_analysis.Rows.Count; i++)
@@ -121,11 +121,11 @@ namespace ExamReport
                 string topicID = "第" + _sdata.total_analysis.Rows[i]["number"].ToString().Substring(1) + "题";
                 insertText(ExamTitle3, topicID);
                 insertHKSingleGrouptable("    " + topicID + "分析表", _sdata.total_analysis.Rows[i]);
-                insertHKSingleGroupRank("    " + topicID + "等级得分率分析表", data.total_topic_rank.Rows[i], (decimal)_sdata.total_analysis.Rows[i]["difficulty"]);
+                insertHKSingleGroupRank("    " + topicID + "分数段得分率分析表", data.total_topic_rank.Rows[i], (decimal)_sdata.total_analysis.Rows[i]["difficulty"]);
                 insertChart("    " + topicID + "难度曲线图", ((WordData.single_data)_sdata.single_topic_analysis[i]).single_difficulty, "分数", "难度", Excel.XlChartType.xlXYScatterSmooth);
                 insertMultipleChart("    " + topicID + "分组难度曲线图", ((WordData.single_data)_sdata.single_topic_analysis[i]).single_dist, "分组", "难度", Excel.XlChartType.xlLineMarkers);
                 insertGroupTable("    " + topicID + "分组分析表", ((WordData.single_data)_sdata.single_topic_analysis[i]).single_detail, ((WordData.single_data)_sdata.single_topic_analysis[i]).stype);
-                insertHKSingleGroupRankTable("    " + topicID + "等级分析表", data.single_topic_rank[i]);
+                insertHKSingleGroupRankTable("    " + topicID + "分数段分析表", data.single_topic_rank[i]);
                 oDoc.Characters.Last.InsertBreak(oPagebreak);
 
             }
@@ -151,7 +151,7 @@ namespace ExamReport
             Word.Table table;
             Word.Range range = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
 
-            table = oDoc.Tables.Add(range, dt.Rows.Count + 2, 11, ref oMissing, oTrue);
+            table = oDoc.Tables.Add(range, dt.Rows.Count + 2, 13, ref oMissing, oTrue);
             table.Range.InsertCaption(oWord.CaptionLabels["表"], title, oMissing, Word.WdCaptionPosition.wdCaptionPositionAbove, oMissing);
             range.MoveEnd(Word.WdUnits.wdParagraph, 1);
             range.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
@@ -161,13 +161,14 @@ namespace ExamReport
             table.Borders.InsideLineStyle = Word.WdLineStyle.wdLineStyleSingle;
 
             table.Cell(1, 1).Range.Text = "分值";
-            for (int i = 2; i < 7; i++)
+            for (int i = 2; i < 8; i++)
                 table.Cell(1, i).Merge(table.Cell(1, i + 1));
-            table.Cell(1, 2).Range.Text = "优秀";
-            table.Cell(1, 3).Range.Text = "良好";
-            table.Cell(1, 4).Range.Text = "合格";
-            table.Cell(1, 5).Range.Text = "不合格";
-            table.Cell(1, 6).Range.Text = "全体";
+            table.Cell(1, 2).Range.Text = "I";
+            table.Cell(1, 3).Range.Text = "II";
+            table.Cell(1, 4).Range.Text = "III";
+            table.Cell(1, 5).Range.Text = "IV";
+            table.Cell(1, 6).Range.Text = "V";
+            table.Cell(1, 7).Range.Text = "全体";
 
             table.Cell(2, 2).Range.Text = "人数";
             table.Cell(2, 3).Range.Text = "比率";
@@ -179,6 +180,8 @@ namespace ExamReport
             table.Cell(2, 9).Range.Text = "比率";
             table.Cell(2, 10).Range.Text = "人数";
             table.Cell(2, 11).Range.Text = "比率";
+            table.Cell(2, 12).Range.Text = "人数";
+            table.Cell(2, 13).Range.Text = "比率";
 
             for(int i = 0; i < dt.Rows.Count; i++)
             {
@@ -444,7 +447,7 @@ namespace ExamReport
             Word.Table single_total_table;
             Word.Range single_table_range = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
 
-            single_total_table = oDoc.Tables.Add(single_table_range, 2, 5, ref oMissing, oTrue);
+            single_total_table = oDoc.Tables.Add(single_table_range, 2, 6, ref oMissing, oTrue);
             single_total_table.Range.InsertCaption(oWord.CaptionLabels["表"], title, oMissing, Word.WdCaptionPosition.wdCaptionPositionAbove, oMissing);
 
             single_table_range.MoveEnd(Word.WdUnits.wdParagraph, 1);
@@ -452,17 +455,19 @@ namespace ExamReport
             single_total_table.Borders.OutsideLineStyle = Word.WdLineStyle.wdLineStyleSingle;
             single_total_table.Borders.InsideLineStyle = Word.WdLineStyle.wdLineStyleSingle;
 
-            single_total_table.Cell(1, 1).Range.Text = "优秀";
-            single_total_table.Cell(1, 2).Range.Text = "良好";
-            single_total_table.Cell(1, 3).Range.Text = "合格";
-            single_total_table.Cell(1, 4).Range.Text = "不及格";
-            single_total_table.Cell(1, 5).Range.Text = "全体";
+            single_total_table.Cell(1, 1).Range.Text = "I";
+            single_total_table.Cell(1, 2).Range.Text = "II";
+            single_total_table.Cell(1, 3).Range.Text = "III";
+            single_total_table.Cell(1, 4).Range.Text = "IV";
+            single_total_table.Cell(1, 5).Range.Text = "V";
+            single_total_table.Cell(1, 6).Range.Text = "全体";
 
-            single_total_table.Cell(2, 1).Range.Text = string.Format("{0:F2}", dr["outstanding"]) == "" ? "0" : string.Format("{0:F2}", dr["outstanding"]);
-            single_total_table.Cell(2, 2).Range.Text = string.Format("{0:F2}", dr["good"]) == "" ? "0" : string.Format("{0:F2}", dr["good"]);
-            single_total_table.Cell(2, 3).Range.Text = string.Format("{0:F2}", dr["pass"]) == "" ? "0" : string.Format("{0:F2}", dr["pass"]);
-            single_total_table.Cell(2, 4).Range.Text = string.Format("{0:F2}", dr["fail"]) == "" ? "0" : string.Format("{0:F2}", dr["fail"]);
-            single_total_table.Cell(2, 5).Range.Text = string.Format("{0:F2}", diff) == "" ? "0" : string.Format("{0:F2}", diff);
+            single_total_table.Cell(2, 1).Range.Text = string.Format("{0:F2}", dr["A"]) == "" ? "0" : string.Format("{0:F2}", dr["A"]);
+            single_total_table.Cell(2, 2).Range.Text = string.Format("{0:F2}", dr["B"]) == "" ? "0" : string.Format("{0:F2}", dr["B"]);
+            single_total_table.Cell(2, 3).Range.Text = string.Format("{0:F2}", dr["C"]) == "" ? "0" : string.Format("{0:F2}", dr["C"]);
+            single_total_table.Cell(2, 4).Range.Text = string.Format("{0:F2}", dr["D"]) == "" ? "0" : string.Format("{0:F2}", dr["D"]);
+            single_total_table.Cell(2, 5).Range.Text = string.Format("{0:F2}", dr["E"]) == "" ? "0" : string.Format("{0:F2}", dr["E"]);
+            single_total_table.Cell(2, 6).Range.Text = string.Format("{0:F2}", diff) == "" ? "0" : string.Format("{0:F2}", diff);
 
             single_total_table.Select();
             oWord.Selection.set_Style(ref TableContent2);
@@ -556,7 +561,7 @@ namespace ExamReport
             Word.Table table;
             Word.Range range = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
 
-            table = oDoc.Tables.Add(range, data.total_topic_rank.Rows.Count + 1, 5, ref oMissing, oTrue);
+            table = oDoc.Tables.Add(range, data.total_topic_rank.Rows.Count + 1, 6, ref oMissing, oTrue);
             table.Range.InsertCaption(oWord.CaptionLabels["表"], title, oMissing, Word.WdCaptionPosition.wdCaptionPositionAbove, oMissing);
             range.MoveEnd(Word.WdUnits.wdParagraph, 1);
             range.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
@@ -567,19 +572,21 @@ namespace ExamReport
             table.Borders.InsideLineStyle = Word.WdLineStyle.wdLineStyleSingle;
 
             table.Cell(1, 1).Range.Text = "题目或题组";
-            table.Cell(1, 2).Range.Text = "优秀";
-            table.Cell(1, 3).Range.Text = "良好";
-            table.Cell(1, 4).Range.Text = "合格";
-            table.Cell(1, 5).Range.Text = "不合格";
+            table.Cell(1, 2).Range.Text = "I";
+            table.Cell(1, 3).Range.Text = "II";
+            table.Cell(1, 4).Range.Text = "III";
+            table.Cell(1, 5).Range.Text = "IV";
+            table.Cell(1, 6).Range.Text = "V";
 
             for (int i = 0; i < data.total_topic_rank.Rows.Count; i++)
             {
                 DataRow dr = data.total_topic_rank.Rows[i];
                 table.Cell(i + 2, 1).Range.Text = dr["number"].ToString();
-                table.Cell(i + 2, 2).Range.Text = string.Format("{0:F2}", dr["outstanding"]) == "" ? "0" : string.Format("{0:F2}", dr["outstanding"]);
-                table.Cell(i + 2, 3).Range.Text = string.Format("{0:F2}", dr["good"]) == "" ? "0" : string.Format("{0:F2}", dr["good"]);
-                table.Cell(i + 2, 4).Range.Text = string.Format("{0:F2}", dr["pass"]) == "" ? "0" : string.Format("{0:F2}", dr["pass"]);
-                table.Cell(i + 2, 5).Range.Text = string.Format("{0:F2}", dr["fail"]) == "" ? "0" : string.Format("{0:F2}", dr["fail"]);
+                table.Cell(i + 2, 2).Range.Text = string.Format("{0:F2}", dr["A"]) == "" ? "0" : string.Format("{0:F2}", dr["A"]);
+                table.Cell(i + 2, 3).Range.Text = string.Format("{0:F2}", dr["B"]) == "" ? "0" : string.Format("{0:F2}", dr["B"]);
+                table.Cell(i + 2, 4).Range.Text = string.Format("{0:F2}", dr["C"]) == "" ? "0" : string.Format("{0:F2}", dr["C"]);
+                table.Cell(i + 2, 5).Range.Text = string.Format("{0:F2}", dr["D"]) == "" ? "0" : string.Format("{0:F2}", dr["D"]);
+                table.Cell(i + 2, 6).Range.Text = string.Format("{0:F2}", dr["E"]) == "" ? "0" : string.Format("{0:F2}", dr["E"]);
 
             }
             table.Select();
@@ -673,7 +680,7 @@ namespace ExamReport
             Word.Table table;
             Word.Range range = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
 
-            table = oDoc.Tables.Add(range, 6, 7, ref oMissing, oTrue);
+            table = oDoc.Tables.Add(range, 7, 7, ref oMissing, oTrue);
             table.Range.InsertCaption(oWord.CaptionLabels["表"], title, oMissing, Word.WdCaptionPosition.wdCaptionPositionAbove, oMissing);
             range.MoveEnd(Word.WdUnits.wdParagraph, 1);
             range.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
@@ -683,7 +690,7 @@ namespace ExamReport
             table.Borders.OutsideLineStyle = Word.WdLineStyle.wdLineStyleSingle;
             table.Borders.InsideLineStyle = Word.WdLineStyle.wdLineStyleSingle;
 
-            table.Cell(1, 1).Range.Text = "等级";
+            table.Cell(1, 1).Range.Text = "分数段";
             table.Cell(1, 2).Range.Text = "人数";
             table.Cell(1, 3).Range.Text = "比率";
             table.Cell(1, 4).Range.Text = "平均值";

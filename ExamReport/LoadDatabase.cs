@@ -131,6 +131,15 @@ namespace ExamReport
                 DBHelper.create_mysql_table(basic_data, Utils.get_zt_tablename(year, Utils.language_trans(sub)));
                 
             }
+            else if (sub.Equals("总分"))
+            {
+                Database db = new Database();
+                db.zk_zf_process(database_str);
+
+                basic_data = db._basic_data;
+
+                DBHelper.create_mysql_table(basic_data, Utils.get_zt_tablename(year, Utils.language_trans(sub)));
+            }
             else
             {
 

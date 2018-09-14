@@ -63,8 +63,8 @@ namespace ExamReport
             qx_code.Add(new string[1] { "15" });
             qx_code.Add(new string[1] { "16" });
             qx_code.Add(new string[1] { "17" });
-            qx_code.Add(new string[1] { "28" });
-            qx_code.Add(new string[1] { "29" });
+            qx_code.Add(new string[1] { "18" });
+            qx_code.Add(new string[1] { "19" });
         }
         public void zk_Calculate()
         {

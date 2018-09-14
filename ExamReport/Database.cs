@@ -283,7 +283,25 @@ namespace ExamReport
                     tzs.Add(temp);
             }
         }
+        public void zk_zf_process(string fileadd)
+        {
+            filePath = @fileadd;
+            file = System.IO.Path.GetFileName(filePath);
+            path = System.IO.Path.GetDirectoryName(filePath);
+            filename = System.IO.Path.GetFileNameWithoutExtension(filePath);
+            filext = System.IO.Path.GetExtension(filePath);
 
+            string conn = @"Provider=vfpoledb;Data Source=" + path + ";Collating Sequence=machine;";
+
+            dbfConnection = new OleDbConnection(conn);
+
+            OleDbDataAdapter adpt = new OleDbDataAdapter("select * from " + file + " where zf<>0", dbfConnection);
+            DataSet mySet = new DataSet();
+            adpt.Fill(mySet);
+            dbfConnection.Close();
+            _basic_data = mySet.Tables[0];
+
+        }
         public void ZF_data_process(string fileadd)
         {
             filePath = @fileadd;
