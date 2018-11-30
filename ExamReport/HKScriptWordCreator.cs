@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using Word = Microsoft.Office.Interop.Word;
 using Excel = Microsoft.Office.Interop.Excel;
 using ZedGraph;
 using System.Windows.Forms;
+using Microsoft.International.Converters.PinYinConverter;
 
 namespace ExamReport
 {
@@ -16,6 +18,316 @@ namespace ExamReport
         Word._Application oWord;
         Word._Document oDoc;
         object oMissing = System.Reflection.Missing.Value;
+
+        public string get_pinyin_of_name(string name)
+        {
+            string r = string.Empty;
+            if (name.Length == 2)
+            {
+                ChineseChar familyname = new ChineseChar(name[0]);
+                string fname = familyname.Pinyins[0].ToString().TrimEnd("0123456789".ToCharArray());
+
+                ChineseChar lastname = new ChineseChar(name[1]);
+                string lname = lastname.Pinyins[0].ToString().TrimEnd("0123456789".ToCharArray());
+
+                r = lname + " " + fname;
+            }
+
+            if (name.Length == 3)
+            {
+                ChineseChar familyname = new ChineseChar(name[0]);
+                string fname = familyname.Pinyins[0].ToString().TrimEnd("0123456789".ToCharArray());
+
+                ChineseChar lastname1 = new ChineseChar(name[1]);
+                string lname1 = lastname1.Pinyins[0].ToString().TrimEnd("0123456789".ToCharArray());
+
+                ChineseChar lastname2 = new ChineseChar(name[2]);
+                string lname2 = lastname2.Pinyins[0].ToString().TrimEnd("0123456789".ToCharArray());
+
+                r = lname1 + lname2 + " " + fname;
+
+            }
+            return r;
+        }
+
+        public string insertHistGraph(string title, DataRow dr, DataTable group, string subject_en, string key, Dictionary<string, List<string>> group_dict, int start)
+        {
+            List<string> colnames = group_dict[key];
+            DataTable dt = new DataTable();
+            dt.Columns.Add("tz", typeof(string));
+            dt.Columns.Add("num", typeof(decimal));
+
+            for (int i = 0; i < colnames.Count; i++)
+            {
+                DataRow temp = dt.NewRow();
+                temp[0] = colnames[i];
+                temp[1] = dr["FZ" + (start + i + 1).ToString()];
+                dt.Rows.Add(temp);
+            }
+            return DotNetCharting.CreateColumn_wh(dt, 360, 250, title + "分维度评价的百分位\nPercentile of " + subject_en + "\nevaluated in different Dimensions of the Candidate", false, 40);
+            //ZedGraph.createSubDiffBar(data_list);
+
+            //Word.Range dist_rng = oDoc.Bookmarks.get_Item(oEndOfDoc).Range;
+            //dist_rng.Paste();
+            //Utils.mutex_clipboard.ReleaseMutex();
+            //dist_rng.InsertCaption(oWord.CaptionLabels["图"], title, oMissing, Word.WdCaptionPosition.wdCaptionPositionBelow, oMissing);
+            //dist_rng.MoveEnd(Word.WdUnits.wdParagraph, 1);
+            //dist_rng.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+            //dist_rng = oDoc.Bookmarks.get_Item(oEndOfDoc).Range;
+            //dist_rng.MoveStart(Word.WdUnits.wdParagraph, 1);
+            //dist_rng.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+            //dist_rng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+            //dist_rng.InsertParagraphAfter();
+        }
+        public string insertZFHistGraph(DataRow dr)
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add("tz", typeof(string));
+            dt.Columns.Add("num", typeof(decimal));
+
+            for (int i = Utils.hk_subject.Length - 1; i >= 0; i-- )
+            {
+                string sub = Utils.hk_subject[i];
+                DataRow temp = dt.NewRow();
+                temp[0] = Utils.hk_lang_trans(sub) + Utils.hk_en_trans(Utils.hk_lang_trans(sub));
+                temp[1] = dr[sub];
+                dt.Rows.Add(temp);
+            }
+            return DotNetCharting.CreateColumn_wh(dt, 400, 300, "考生各学科成绩百分位\nPercentile of the Candidate's Scores in Each Subject", true, 15);
+        }
+        public string insertsubHistGraph(DataRow dr, DataTable group, string subject_en, string key, Dictionary<string, List<string>> group_dict, int start)
+        {
+            List<string> colnames = group_dict[key];
+            DataTable dt = new DataTable();
+            dt.Columns.Add("tz", typeof(string));
+            dt.Columns.Add("num", typeof(decimal));
+
+            for (int i = 0; i < colnames.Count; i++)
+            {
+                DataRow temp = dt.NewRow();
+                temp[0] = colnames[i];
+                temp[1] = dr["FZ" + (start + i + 1).ToString()];
+                dt.Rows.Add(temp);
+            }
+            return DotNetCharting.CreateColumn_wh(dt, 360, 220, key + "百分位", true, 20);
+            
+        }
+        public void create_word_zf(DataRow realdata, Configuration config, DataRow dr, DataTable group, Dictionary<string, List<string>> group_dict, DataRow basic_dr, String adr, string date, DataTable schools)
+        {
+            object filepath = @Utils.CurrentDirectory + @"\HKscript_zf_template.docx";
+            oWord = new Word.Application();
+            oWord.Visible = Utils.isVisible;
+            oDoc = oWord.Documents.Add(ref filepath, ref oMissing,
+            ref oMissing, ref oMissing);
+            schools.PrimaryKey = new DataColumn[] { schools.Columns["xxdm"] };
+            DataRow school = schools.Rows.Find((string)basic_dr["xxdm"]);
+            string schoolname = "";
+            string schoolen = "";
+            if (school != null)
+            {
+                schoolen = (string)school["school_en"];
+                schoolname = (string)school["school_nam"];
+            }
+            WriteIntoDocument("name", (string)basic_dr["xm"]);
+            WriteIntoDocument("name_en", get_pinyin_of_name((string)basic_dr["xm"]));
+            WriteIntoDocument("id", (string)basic_dr["sfzjh"]);
+            WriteIntoDocument("id2", (string)basic_dr["sfzjh"]);
+            //WriteIntoDocument("school", schoolname);
+            //WriteIntoDocument("school_en", schoolen);
+            WriteIntoDocument("year", config.year);
+            WriteIntoDocument("year2", config.year);
+            WriteIntoDocument("exam_id", dr["zkzh"].ToString().Trim());
+            WriteIntoDocument("exam_id2", dr["zkzh"].ToString().Trim());
+            WriteIntoDocument("date", date.Trim());
+            WriteIntoDocument("date2", date.Trim());
+
+            foreach (string sub in Utils.hk_subject)
+            {
+                string subject_name = Utils.hk_en_trans_dt(Utils.hk_lang_trans(sub));
+                switch (realdata[subject_name].ToString().Trim())
+                {
+                    case "合格":
+                        WriteIntoDocument(sub, "合格");
+                        WriteIntoDocument(sub + "_en", "Pass");
+                        break;
+                    case "不合格":
+                        WriteIntoDocument(sub, "不合格");
+                        WriteIntoDocument(sub + "_en", "Fail");
+                        break;
+                    default:
+                        WriteIntoDocument(sub, "");
+                        WriteIntoDocument(sub + "_en", "");
+                        break;
+                }
+
+                
+            }
+            string imagedir = insertZFHistGraph(dr);
+            //Word.Range dist_rng = oDoc.Bookmarks.get_Item("figure1").Range;
+            Word.InlineShape shape = oDoc.Bookmarks.get_Item("figure").Range.InlineShapes.AddPicture(imagedir);
+            shape.Width = 360;
+            shape.Height = 260;
+            adr = adr + Path.DirectorySeparatorChar + dr["zkzh"].ToString().Trim();
+            if (!Directory.Exists(adr))
+                Directory.CreateDirectory(adr);
+            string name = "合格考全科成绩_" + dr["zkzh"];
+            string addr = adr + @"\" + name;
+            object fileformat = Microsoft.Office.Interop.Word.WdSaveFormat.wdFormatPDF;
+            //object fileformat = Microsoft.Office.Interop.Word.WdSaveFormat.wdFormatDocument;
+            oDoc.SaveAs(addr, fileformat, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing);
+            oDoc.Close(false, oMissing, oMissing);
+            oWord.Quit(false, oMissing, oMissing);
+        }
+        public void create_word2(DataRow realdata, Configuration config, DataRow dr, DataTable group, Dictionary<string, List<string>> group_dict, DataRow basic_dr, String adr, string date, DataTable schools)
+        {
+            object filepath = @Utils.CurrentDirectory + @"\HKscript_subject_template.docx";
+            oWord = new Word.Application();
+            oWord.Visible = Utils.isVisible;
+            oDoc = oWord.Documents.Add(ref filepath, ref oMissing,
+            ref oMissing, ref oMissing);
+            schools.PrimaryKey = new DataColumn[] { schools.Columns["xxdm"] };
+            DataRow school = schools.Rows.Find((string)basic_dr["xxdm"]);
+            string schoolname = "";
+            string schoolen = "";
+            if (school != null)
+            {
+                schoolen = (string)school["school_en"];
+                schoolname = (string)school["school_nam"];
+            }
+
+            WriteIntoDocument("name", (string)basic_dr["xm"]);
+            WriteIntoDocument("name_en", get_pinyin_of_name((string)basic_dr["xm"]));
+            WriteIntoDocument("id", (string)basic_dr["sfzjh"]);
+            WriteIntoDocument("id2", (string)basic_dr["sfzjh"]);
+            //WriteIntoDocument("school", schoolname);
+            //WriteIntoDocument("school_en", schoolen);
+            WriteIntoDocument("year", config.year);
+            WriteIntoDocument("year2", config.year);
+            WriteIntoDocument("subject", config.subject);
+            WriteIntoDocument("subject2", config.subject);
+            WriteIntoDocument("subject_en", Utils.hk_en_trans(config.subject));
+            WriteIntoDocument("subject_en2", Utils.hk_en_trans(config.subject));
+            WriteIntoDocument("exam_id", dr["zkzh"].ToString().Trim());
+            WriteIntoDocument("exam_id2", dr["zkzh"].ToString().Trim());
+            WriteIntoDocument("date", date.Trim());
+            WriteIntoDocument("date2", date.Trim());
+            string subject_name = Utils.hk_en_trans_dt(config.subject);
+            switch (realdata[subject_name].ToString().Trim())
+            {
+                case "合格":
+                    WriteIntoDocument("mark", "合格");
+                    WriteIntoDocument("mark" + "_en", "Pass");
+                    break;
+                case "不合格":
+                    WriteIntoDocument("mark", "不合格");
+                    WriteIntoDocument("mark" + "_en", "Fail");
+                    break;
+                default:
+                    WriteIntoDocument("mark", "");
+                    WriteIntoDocument("mark" + "_en", "");
+                    break;
+            }
+            //WriteIntoDocument("mark", (decimal)dr["totalmark"] >= 60 ? "合格" : "不合格");
+            //WriteIntoDocument("mark_en", (decimal)dr["totalmark"] >= 60 ? "Pass" : "Fail");
+
+            //draw_bar(group, dr, config.subject, Utils.hk_en_trans(config.subject), adr);
+            string imagedir = insertHistGraph(config.subject, dr, group, Utils.hk_en_trans(config.subject), group_dict.Keys.ElementAt(0), group_dict, 0);
+            //Word.Range dist_rng = oDoc.Bookmarks.get_Item("figure1").Range;
+            Word.InlineShape shape = oDoc.Bookmarks.get_Item("figure1").Range.InlineShapes.AddPicture(imagedir);
+            shape.Width = 200;
+            shape.Height = 140;
+            int count1 = group_dict[group_dict.Keys.ElementAt(0)].Count;
+            string imagedir2 = insertsubHistGraph(dr, group, Utils.hk_en_trans(config.subject), group_dict.Keys.ElementAt(1), group_dict, count1);
+            Word.InlineShape shape2 = oDoc.Bookmarks.get_Item("figure2").Range.InlineShapes.AddPicture(imagedir2);
+            //dist_rng.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+            //dist_rng.Paste();
+            int count2 = count1 + group_dict[group_dict.Keys.ElementAt(1)].Count;
+            string imagedir3 = insertsubHistGraph(dr, group, Utils.hk_en_trans(config.subject), group_dict.Keys.ElementAt(2), group_dict, count2);
+            Word.InlineShape shape3 = oDoc.Bookmarks.get_Item("figure3").Range.InlineShapes.AddPicture(imagedir3);
+
+            adr = adr + Path.DirectorySeparatorChar + dr["zkzh"].ToString().Trim();
+            if (!Directory.Exists(adr))
+                Directory.CreateDirectory(adr);
+            string name = "合格考成绩_" + config.subject+ "_" + dr["zkzh"];
+            string addr = adr + @"\" + name;
+            //object fileformat = Microsoft.Office.Interop.Word.WdSaveFormat.wdFormatPDF;
+            object fileformat = Microsoft.Office.Interop.Word.WdSaveFormat.wdFormatPDF;
+            oDoc.SaveAs(addr, fileformat, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing);
+            oDoc.Close(false, oMissing, oMissing);
+            oWord.Quit(false, oMissing, oMissing);
+
+        }
+
+        public void draw_bar(DataTable dt, DataRow basic, string subject, string subject_en, string adr)
+        {
+            int fontsize = 20;
+            ZedGraphControl zgc = new ZedGraphControl();
+            GraphPane myPane = zgc.GraphPane;
+
+            zgc.Width = 531;
+            zgc.Height = 271;
+            //zgc.Height = 450;
+
+            List<double[]> data = new List<double[]>();
+
+            string[] xlabels = new string[dt.Rows.Count];
+            int tz_name_max = 0;
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                string tz_name = dt.Rows[i]["tz"].ToString().Trim();
+                if (tz_name.Length > tz_name_max)
+                    tz_name_max = tz_name.Length;
+                //xlabels[i] = AxisTransfer(tz_name);
+                xlabels[i] = tz_name;
+            }
+            //zgc.Height = 300 + tz_name_max * 15;
+            AddData(basic, data, dt.Rows.Count);
+
+            AddBar(data[0], "本人平均得分率", ref myPane, SymbolType.Diamond, Color.Red, 3);
+
+            myPane.XAxis.Scale.TextLabels = xlabels;
+            myPane.XAxis.Scale.FontSpec.Size = fontsize;
+            //myPane.XAxis.Scale.FontSpec.Angle = 90;
+            myPane.XAxis.Type = AxisType.Text;
+            myPane.XAxis.Scale.Align = AlignP.Inside;
+            //myPane.XAxis.Scale.AlignH = AlignH.Left;
+            myPane.IsFontsScaled = true;
+            myPane.XAxis.Title.Text = "";
+            myPane.YAxis.Title.Text = AxisTransfer("得分率");
+            myPane.YAxis.Title.FontSpec.Size = fontsize;
+            myPane.YAxis.Title.FontSpec.Angle = 90;
+
+            myPane.Title.Text = subject + "分维度评价的百分位\nPercentile of "+subject_en+"\nevaluated in different Dimensions of the Candidate";
+
+            myPane.XAxis.Scale.Max = dt.Rows.Count + 1;
+            myPane.XAxis.Scale.MajorStep = 1;
+            myPane.YAxis.Scale.Max = 100;
+            myPane.YAxis.Scale.MajorStep = 25;
+            myPane.YAxis.Scale.Min = 0;
+            myPane.YAxis.MinorTic.IsAllTics = false;
+            myPane.XAxis.MinorTic.IsAllTics = false;
+            myPane.YAxis.MajorTic.IsOpposite = false;
+            myPane.XAxis.MajorTic.IsOpposite = false;
+
+            myPane.Legend.IsVisible = false;
+            //myPane.Legend.Position = LegendPos.BottomFlushLeft;
+            //myPane.Legend.FontSpec.Size = 11;
+
+            myPane.Title.IsVisible = true;
+            myPane.Chart.Fill = new Fill(Color.White);
+            zgc.AxisChange();
+            //Bitmap sourceBitmap = new Bitmap(zgc.Width, zgc.Height, System.Drawing.Imaging.PixelFormat.Format48bppRgb);
+
+            //Bitmap sourceBitmap = myPane.GetImage(zgc.Width, zgc.Height, 300);
+            //myPane.GetImage().Save(adr + "a.jpg");
+            //zgc.DrawToBitmap(sourceBitmap, new Rectangle(0, 0, zgc.Width, zgc.Height));
+            //Thread.CurrentThread.SetApartmentState(ApartmentState.STA);
+            Bitmap sourceBitmap = new Bitmap(zgc.Width, zgc.Height);
+            zgc.DrawToBitmap(sourceBitmap, new Rectangle(0, 0, zgc.Width, zgc.Height));
+            
+            Clipboard.Clear();
+            Clipboard.SetImage(sourceBitmap);
+        }
         public void create_word(DataTable dt, DataRow dr, DataTable group, Dictionary<string, List<string>> group_dict, DataRow basic_dr, String adr, string date)
         {
             object filepath = @Utils.CurrentDirectory + @"\template.doc";

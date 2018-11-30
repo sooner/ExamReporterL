@@ -39,6 +39,7 @@ namespace ExamReport
             xz_th = new List<string>();
 
         }
+        
         public List<ArrayList> getData()
         {
             data = new List<ArrayList>();

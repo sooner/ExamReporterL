@@ -74,6 +74,7 @@ namespace ExamReport
         public static string[] qx_in_order = { "东城区", "西城区", "海淀区", "朝阳区", "石景山区", "丰台区", "燕 山", "通州区", "顺义区", "昌平区", "门头沟区", "房山区", "大兴区", "怀柔区", "平谷区", "密云县", "延庆县" };
         public static string[] qxdm_in_order = { "01", "02","08","05","07","06", "10","12", "13","14","09","11","15","16", "17", "18","19"};
 
+        public static string[] hk_subject = { "yw", "sx", "yy", "wl", "hx", "sw", "ls", "dl" };
         public static Dictionary<int, string> sub_choice = new Dictionary<int,string>() {
         {1, "物理+生化+地理"}, 
         {2, "物理+生化+历史"}, 
@@ -599,6 +600,58 @@ namespace ExamReport
             }
             return true;
         }
+        public static string hk_en_trans(string name)
+        {
+            switch (name)
+            {
+                case "语文":
+                    return "Chinese";
+                case "数学":
+                    return "Mathematics";
+                case "英语":
+                    return "English";
+                case "化学":
+                    return "Chemistry";
+                case "物理":
+                    return "Physics";
+                case "生物":
+                    return "Biology";
+                case "政治":
+                    return "Politics";
+                case "地理":
+                    return "Geography";
+                case "历史":
+                    return "History";
+                default:
+                    return "";
+            }
+        }
+        public static string hk_en_trans_dt(string name)
+        {
+            switch (name)
+            {
+                case "语文":
+                    return "chinese";
+                case "数学":
+                    return "math";
+                case "英语":
+                    return "english";
+                case "化学":
+                    return "chemistry";
+                case "物理":
+                    return "physics";
+                case "生物":
+                    return "biology";
+                case "政治":
+                    return "politics";
+                case "地理":
+                    return "geography";
+                case "历史":
+                    return "history";
+                default:
+                    return "";
+            }
+        }
         public static string hk_lang_trans(string name)
         {
             switch (name)
@@ -765,9 +818,9 @@ namespace ExamReport
             }
             return false;
         }
-        public static string get_zt_tablename(string year, string sub)
+        public static string get_zt_tablename(string year, string exam, string sub)
         {
-            return year + "_" + sub;
+            return year + "_" + exam + "_" + sub;
         }
         public static string get_tablename(string year, string exam, string sub)
         {

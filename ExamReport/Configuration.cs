@@ -52,7 +52,7 @@ namespace ExamReport
 
         public string[] urban_code;
         public string[] country_code;
-        
+
 
         public void change()
         {

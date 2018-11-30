@@ -128,7 +128,7 @@ namespace ExamReport
 
                 basic_data = db._basic_data;
 
-                DBHelper.create_mysql_table(basic_data, Utils.get_zt_tablename(year, Utils.language_trans(sub)));
+                DBHelper.create_mysql_table(basic_data, Utils.get_zt_tablename(year, "zk", Utils.language_trans(sub)));
                 
             }
             else if (sub.Equals("总分"))
@@ -138,7 +138,7 @@ namespace ExamReport
 
                 basic_data = db._basic_data;
 
-                DBHelper.create_mysql_table(basic_data, Utils.get_zt_tablename(year, Utils.language_trans(sub)));
+                DBHelper.create_mysql_table(basic_data, Utils.get_zt_tablename(year, "zk", Utils.language_trans(sub)));
             }
             else
             {
@@ -188,7 +188,7 @@ namespace ExamReport
 
                 basic_data = db._basic_data;
 
-                DBHelper.create_mysql_table(basic_data, Utils.get_zt_tablename(year, Utils.language_trans(sub)));
+                DBHelper.create_mysql_table(basic_data, Utils.get_zt_tablename(year, "gk", Utils.language_trans(sub)));
                 wizard.ShowPro(100, 3);
             }
             else if (sub.Contains("理综") ||

@@ -35,6 +35,8 @@ namespace ExamReport
         public DataTable schoolcode_table;
         public DataTable school;
         public DataTable zk_school;
+        public DataTable hk_xxdm_dt;
+        public DataTable hgk_temp;
         public Dictionary<string, string> qx_kv;
         string currentdic = System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath);
         //Thread thread;
@@ -118,6 +120,7 @@ namespace ExamReport
         {
             string cj_addr = @"\config\gk_cj.xlsx";
             string sf_addr = @"\config\gk_sf.xlsx";
+            string hk_xxdm_addr = @"\config\hk_xxdm.xlsx";
 
             gk_cj_addr.Text = currentdic + cj_addr;
             gk_qx_cj_addr.Text = currentdic + cj_addr;
@@ -135,6 +138,10 @@ namespace ExamReport
             export_sf_addr.Text = currentdic + sf_addr;
             export_cj_addr.Text = currentdic + cj_addr;
             export_addr.Text = currentdic;
+            hk_xxdm.Text = currentdic + hk_xxdm;
+
+            stu_id.Text = "15171430138";
+            hk_id_button.IsChecked = true;
         }
         void init_dictionary()
         {
@@ -393,25 +400,32 @@ namespace ExamReport
             OleDbDataAdapter adpt = new OleDbDataAdapter("select * from " + "schoolcode", dbfConnection);
             OleDbDataAdapter adpt2 = new OleDbDataAdapter("select * from " + "school", dbfConnection);
             OleDbDataAdapter adpt3 = new OleDbDataAdapter("select * from " + "schoolcode1", dbfConnection);
+            OleDbDataAdapter adpt4 = new OleDbDataAdapter("select * from " + "hk_xxdm", dbfConnection);
+            OleDbDataAdapter adpt5 = new OleDbDataAdapter("select * from " + "hgk", dbfConnection);
             //OleDbDataAdapter adpt = new OleDbDataAdapter("select * from " + file + " where Qk<>1", dbfConnection);
             DataSet mySet = new DataSet();
             DataSet mySet2 = new DataSet();
             DataSet mySet3 = new DataSet();
+            DataSet mySet4 = new DataSet();
+            DataSet mySet5 = new DataSet();
             try
             {
                 adpt.Fill(mySet);
                 adpt2.Fill(mySet2);
                 adpt3.Fill(mySet3);
+                adpt4.Fill(mySet4);
+                adpt5.Fill(mySet5);
             }
             catch (OleDbException e)
             {
                 throw new Exception("数据库文件被占用，请关闭！");
             }
             dbfConnection.Close();
-
+            hk_xxdm_dt = mySet4.Tables[0];
             schoolcode_table = mySet.Tables[0];
             school = mySet2.Tables[0];
             zk_school = mySet3.Tables[0];
+            hgk_temp = mySet5.Tables[0];
             DataTable qxdm = schoolcode_table.AsEnumerable().GroupBy(c => c.Field<string>("qxmc")).Select(c => new
             {
                 qxmc = c.Key.ToString().Trim(),
@@ -1661,7 +1675,16 @@ namespace ExamReport
             analysis.hk_hierarchy.D_high = D_high.Value;
             analysis.hk_hierarchy.E_low = E_low.Value;
             analysis.hk_hierarchy.E_high = E_high.Value;
-            analysis.date = dateTimePicker.Value.Year.ToString() + "年" + dateTimePicker.Value.Month.ToString() + "月";
+            analysis.curryear = dateTimePicker.Value.Year.ToString();
+            analysis.currmonth = dateTimePicker.Value.Month.ToString();
+            analysis.hk_xxdm = hk_xxdm_dt;
+            analysis.hgk_temp = hgk_temp;
+            analysis.date = dateTimePicker.Value.Year.ToString() + "/" + dateTimePicker.Value.Month.ToString() + "/" + dateTimePicker.Value.Day.ToString();
+
+            analysis.endmonth = dateTimePicker1.Value.Month.ToString();
+            analysis.endday = dateTimePicker1.Value.Day.ToString();
+
+            
             if (hk_group_button.IsChecked)
             {
                 analysis.hk_script_type = Utils.UnionType.QX_XX;
@@ -2029,6 +2052,22 @@ namespace ExamReport
                     ShowPro("zk_cj", 2, "");
                 }
             }
+        }
+
+        private void radButton19_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+            openFileDialog1.InitialDirectory = "C://";
+            openFileDialog1.Filter = "Excel files (*.xls,*.xlsx)|*.xls;*.xlsx|All files (*.*)|*.*";
+            openFileDialog1.FilterIndex = 1;
+            openFileDialog1.RestoreDirectory = true;
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+                hk_xxdm.Text = openFileDialog1.FileName;
+        }
+
+        private void stu_id_TextChanged(object sender, EventArgs e)
+        {
+
         }
 
        

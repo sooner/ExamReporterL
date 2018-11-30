@@ -391,6 +391,9 @@ namespace ExamReport
 
             _basic_data.Columns.Add("kh", System.Type.GetType("System.String"));
             _basic_data.Columns.Add("zkzh", System.Type.GetType("System.String"));
+            _basic_data.Columns.Add("xm", System.Type.GetType("System.String"));
+            _basic_data.Columns.Add("sfzjh", System.Type.GetType("System.String"));
+            _basic_data.Columns.Add("xjh", System.Type.GetType("System.String"));
             _basic_data.Columns.Add("xxdm", System.Type.GetType("System.String"));
             _basic_data.Columns.Add("totalmark", typeof(decimal));
             _basic_data.Columns.Add("xb", typeof(string));
@@ -454,6 +457,9 @@ namespace ExamReport
                 newRow["kh"] = dr["kh"].ToString().Trim();
                 newRow["zkzh"] = dr["zkzh"].ToString().Trim();
                 newRow["xxdm"] = dr["xxdm"].ToString().Trim();
+                newRow["xm"] = dr["xm"].ToString().Trim();
+                newRow["sfzjh"] = dr["sfzjh"].ToString().Trim();
+                newRow["xjh"] = dr["xjh"].ToString().Trim();
                 newRow["totalmark"] = 0;
                 newRow["xb"] = dr["xb"].ToString().Trim();
                 newRow["Groups"] = "";

@@ -102,18 +102,18 @@ namespace ExamReport
                     group_num++;
                 }
             }
-            for (int i = 0; i < _sdata.group_analysis.Rows.Count; i++)
-            {
-                string groupID = _sdata.group_analysis.Rows[i]["number"].ToString();
-                insertText(ExamTitle3, groupID);
-                insertText(ExamBodyText, "本题组包含试题：" + _sdata._groups_ans.Rows[i]["th"]);
-                insertHKSingleGrouptable(groupID + "总分分析表", _sdata.group_analysis.Rows[i]);
-                insertHKSingleGroupRank(groupID + "分数段得分率分析表", data.total_topic_rank.Rows[data.total_analysis.Rows.Count + i], (decimal)_sdata.group_analysis.Rows[i]["difficulty"]);
-                insertHKSingleGroupDistChart(groupID + "分数分布曲线图", i);
-                insertHKSingleGroupDiffChart(groupID + "难度曲线图", i);
-                insertHKSingleGroupAnalysisTable(groupID + "分组分析表", i);
-                insertHKSingleGroupRankTable(groupID + "分数段分析表", data.single_group_rank[i]);
-            }
+            //for (int i = 0; i < _sdata.group_analysis.Rows.Count; i++)
+            //{
+            //    string groupID = _sdata.group_analysis.Rows[i]["number"].ToString();
+            //    insertText(ExamTitle3, groupID);
+            //    insertText(ExamBodyText, "本题组包含试题：" + _sdata._groups_ans.Rows[i]["th"]);
+            //    insertHKSingleGrouptable(groupID + "总分分析表", _sdata.group_analysis.Rows[i]);
+            //    insertHKSingleGroupRank(groupID + "分数段得分率分析表", data.total_topic_rank.Rows[data.total_analysis.Rows.Count + i], (decimal)_sdata.group_analysis.Rows[i]["difficulty"]);
+            //    insertHKSingleGroupDistChart(groupID + "分数分布曲线图", i);
+            //    insertHKSingleGroupDiffChart(groupID + "难度曲线图", i);
+            //    insertHKSingleGroupAnalysisTable(groupID + "分组分析表", i);
+            //    insertHKSingleGroupRankTable(groupID + "分数段分析表", data.single_group_rank[i]);
+            //}
 
             insertText(ExamTitle1, "题目分析");
             for (int i = 0; i < _sdata.total_analysis.Rows.Count; i++)
@@ -502,7 +502,7 @@ namespace ExamReport
             single_total_table.Cell(1, 9).Range.Text = "区分度";
 
             single_total_table.Cell(2, 1).Range.Text = _sdata.total_num.ToString();
-            single_total_table.Cell(2, 2).Range.Text = Convert.ToInt32(dr["fullmark"]).ToString();
+            single_total_table.Cell(2, 2).Range.Text = string.Format("{0:F1}", dr["fullmark"]);
             single_total_table.Cell(2, 3).Range.Text = string.Format("{0:F1}", dr["max"]);
             single_total_table.Cell(2, 4).Range.Text = string.Format("{0:F1}", dr["min"]);
             single_total_table.Cell(2, 5).Range.Text = string.Format("{0:F2}", dr["avg"]);
@@ -627,7 +627,7 @@ namespace ExamReport
                 DataRow dr = _sdata.total_analysis.Rows[i];
                 table.Cell(i + 2, 1).Range.Text = dr["number"].ToString().Substring(1);
                 table.Cell(i + 2, 2).Range.Text = _sdata.total_num.ToString();
-                table.Cell(i + 2, 3).Range.Text = Convert.ToInt32(dr["fullmark"]).ToString();
+                table.Cell(i + 2, 3).Range.Text = string.Format("{0:F1}", dr["fullmark"]);
                 table.Cell(i + 2, 4).Range.Text = string.Format("{0:F1}", dr["max"]);
                 table.Cell(i + 2, 5).Range.Text = string.Format("{0:F1}", dr["min"]);
                 table.Cell(i + 2, 6).Range.Text = string.Format("{0:F2}", dr["avg"]);
@@ -641,7 +641,7 @@ namespace ExamReport
             }
             table.Cell(i + 2, 1).Range.Text = "总分";
             table.Cell(i + 2, 2).Range.Text = _sdata.total_num.ToString();
-            table.Cell(i + 2, 3).Range.Text = Convert.ToInt32(_sdata.fullmark).ToString();
+            table.Cell(i + 2, 3).Range.Text = string.Format("{0:F1}", _sdata.fullmark);
             table.Cell(i + 2, 4).Range.Text = string.Format("{0:F1}", _sdata.max);
             table.Cell(i + 2, 5).Range.Text = string.Format("{0:F1}", _sdata.min);
             table.Cell(i + 2, 6).Range.Text = string.Format("{0:F2}", _sdata.avg);
@@ -655,7 +655,7 @@ namespace ExamReport
                 DataRow dr = _sdata.group_analysis.Rows[j];
                 table.Cell(j + i + 3, 1).Range.Text = _sdata._groups_ans.Rows[j][0].ToString().Trim();
                 table.Cell(j + i + 3, 2).Range.Text = _sdata.total_num.ToString();
-                table.Cell(j + i + 3, 3).Range.Text = Convert.ToInt32(dr["fullmark"]).ToString();
+                table.Cell(j + i + 3, 3).Range.Text = string.Format("{0:F1}", dr["fullmark"]);
                 table.Cell(j + i + 3, 4).Range.Text = string.Format("{0:F1}", dr["max"]);
                 table.Cell(j + i + 3, 5).Range.Text = string.Format("{0:F1}", dr["min"]);
                 table.Cell(j + i + 3, 6).Range.Text = string.Format("{0:F2}", dr["avg"]);

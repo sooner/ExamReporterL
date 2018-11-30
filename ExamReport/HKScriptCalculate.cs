@@ -10,6 +10,64 @@ namespace ExamReport
     {
         public DataTable total;
         public DataTable _data;
+        public DataTable group_order;
+        public DataTable execute_batch_zf(DataTable zf, string key, string field)
+        {
+            DataTable ret = zf.Clone();
+            List<string> stu_tuples = zf.AsEnumerable().Where(c => c.Field<string>(field).Equals(key)).Select(c => c.Field<string>("zkzh")).ToList();
+            foreach (string stu_id in stu_tuples)
+            {
+                DataRow single = ret.NewRow();
+                single.ItemArray = execute_zf(zf, stu_id).ItemArray;
+                ret.Rows.Add(single);
+            }
+            return ret;
+        }
+        public DataTable execute_batch(DataTable group, DataTable data, string key, string field)
+        {
+            DataTable ret = data.Clone();
+            List<string> stu_tuples = data.AsEnumerable().Where(c => c.Field<string>(field).Equals(key)).Select(c => c.Field<string>("zkzh")).ToList();
+            foreach(string stu_id in stu_tuples)
+            {
+                DataRow single = ret.NewRow();
+                single.ItemArray = execute2(group, data, stu_id).ItemArray;
+                ret.Rows.Add(single);
+            }
+            return ret;
+        }
+        public DataRow execute_zf(DataTable zf, string stu_id)
+        {
+            zf.PrimaryKey = new DataColumn[] { zf.Columns["zkzh"] };
+            DataRow dr = zf.Rows.Find(stu_id);
+            DataRow ret = zf.NewRow();
+            ret.ItemArray = dr.ItemArray;
+            int totalcount = zf.Rows.Count;
+            for (int i = 0; i < Utils.hk_subject.Length; i++)
+            {
+                string col = Utils.hk_subject[i];
+                decimal mark = (decimal)dr[col];
+                int count = zf.AsEnumerable().Count(c => c.Field<decimal>(col) < mark);
+                ret[col] = Convert.ToDecimal(count) / Convert.ToDecimal(totalcount) * 100;
+            }
+            return ret;
+        }
+        public DataRow execute2(DataTable group, DataTable data, string stu_id)
+        {
+            DataRow dr = data.Rows.Find(stu_id);
+            DataRow ret = data.NewRow();
+            ret.ItemArray = dr.ItemArray;
+            int totalcount = data.Rows.Count;
+            for (int i = 0; i < group.Rows.Count; i++)
+            {
+                string col = "FZ" + (i+1).ToString();
+                decimal mark = (decimal)dr[col];
+                int count = data.AsEnumerable().Count(c => c.Field<decimal>(col) < mark);
+                ret[col] = Convert.ToDecimal(count) / Convert.ToDecimal(totalcount) * 100;
+            }
+
+            return ret;
+
+        }
         public void preprocess(DataTable data, Analysis.HK_hierarchy hk_hierarchy)
         {
             data.Columns.Add("PR_total", System.Type.GetType("System.Decimal"));

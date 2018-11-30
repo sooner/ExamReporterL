@@ -32,6 +32,9 @@ namespace ExamReport
         public string curryear;
         public string currmonth;
 
+        public string endmonth;
+        public string endday;
+
         public ZK_database.GroupType _grouptype;
         public int _group_num = 0;
 
@@ -85,6 +88,8 @@ namespace ExamReport
         public bool compare_cj_is_wk;
         public string cj_comp_year;
         public Dictionary<string, string> qx_kv;
+        public DataTable hk_xxdm;
+        public DataTable hgk_temp;
 
         public Analysis(mainform form)
         {
@@ -107,8 +112,8 @@ namespace ExamReport
                     string log = year + "年" + Utils.language_trans(exam) + row.Cells["sub"].Value.ToString().Trim();
                     _form.ShowPro(exam_type, 1, log + "数据读取...");
                     MetaData mdata = new MetaData(year, exam, sub);
-                    try
-                    {
+                    //try
+                    //{
                         mdata.get_meta_data();
                         _fullmark = mdata._fullmark;
 
@@ -206,7 +211,7 @@ namespace ExamReport
                                     break;
                             }
                         }
-                        else if (sub.Equals("zf"))
+                        else if (sub.Equals("zf") && !exam_type.Equals("hk_script"))
                         {
                             switch (exam_type)
                             {
@@ -271,7 +276,8 @@ namespace ExamReport
                                     hk_zt_process(mdata);
                                     break;
                                 case "hk_script":
-                                    hk_script_process(mdata);
+                                    //hk_script_process(mdata);
+                                    hk_script_process2(sub, mdata);
                                     break;
                                 case "gk_zt":
                                     gk_schedule(mdata, gk_zt_process, gk_zt_wl_process);
@@ -312,14 +318,14 @@ namespace ExamReport
                             }
 
                         }
-                    }
-                    catch (System.Threading.ThreadAbortException e)
-                    {
-                    }
-                    catch (Exception e)
-                    {
-                        _form.ErrorM(exam_type, e.Message);
-                    }
+                    //}
+                    //catch (System.Threading.ThreadAbortException e)
+                    //{
+                    //}
+                    //catch (Exception e)
+                    //{
+                    //    _form.ErrorM(exam_type, e.Message);
+                    //}
 
                 }
             }
@@ -608,7 +614,158 @@ namespace ExamReport
             _exam = "hk";
             start();
         }
+        public void hk_script_process2(string sub, MetaData mdata)
+        {
+            try
+            {
+                Configuration config = initConfig(mdata._sub, "报告单", "会考");
+                mdata.basic.PrimaryKey = new DataColumn[] { mdata.basic.Columns["zkzh"] };
+                hgk_temp.PrimaryKey = new DataColumn[] { hgk_temp.Columns["id"]};
+                if(!sub.Equals("zf"))
+                    mdata.group.PrimaryKey = new DataColumn[] { mdata.group.Columns["zkzh"] };
+                if (hk_script_type == Utils.UnionType.ID)
+                {
+                    if (FindRow(stu_id, mdata.basic) == null)
+                        _form.CheckStuID(2, "找不到该ID学生成绩！");
+                }
 
+                _form.ShowPro(exam_type, 1, mdata.log_name + "数据分析中...");
+                //HK_worddata result = new HK_worddata(mdata.groups_group);
+                //Total_statistic stat = new Total_statistic(result, mdata.basic, mdata._fullmark, mdata.ans, mdata.group, mdata.grp, mdata._group_num);
+                //stat._config = config;
+                //stat.statistic_process(false);
+                //stat.HK_postprocess(hk_hierarchy);
+
+
+                
+                if (hk_script_type == Utils.UnionType.ID)
+                {
+                    HKScriptCalculate cal = new HKScriptCalculate();
+                    DataRow dr;
+                    if (!sub.Equals("zf"))
+                        dr = cal.execute2(mdata.grp, mdata.group, stu_id);
+                    else
+                        dr = cal.execute_zf(mdata.basic, stu_id);
+                    _form.ShowPro(exam_type, 1, mdata.log_name + "报告生成中...");
+                    HKScriptWordCreator wc = new HKScriptWordCreator();
+                    //DataRow dr = FindRow(stu_id, cal.group_order);
+                    DataRow basic_dr = FindRow(stu_id, mdata.basic);
+                    DataRow realdata = FindRow((string)basic_dr["sfzjh"], hgk_temp);
+                    if(realdata == null)
+                        _form.CheckStuID(2, "中招数据无此学生成绩！");
+
+                    if (!sub.Equals("zf"))
+                    {
+                        if (realdata[Utils.hk_en_trans_dt(Utils.hk_lang_trans(sub))].Equals(""))
+                            _form.CheckStuID(2, "此学生成绩中招成绩该科为空！");
+                        wc.create_word2(realdata, config, dr, mdata.grp, mdata.groups_group, basic_dr, CurrentDirectory, date, hk_xxdm);
+                    }
+                    else
+                    {
+                        int nullcount = 0;
+                        foreach (string subject in Utils.hk_subject)
+                        {
+                            if (!realdata[Utils.hk_en_trans_dt(Utils.hk_lang_trans(subject))].Equals(""))
+                                break;
+                            nullcount++;
+                        }
+                        if (nullcount == 8)
+                            _form.CheckStuID(2, "此学生成绩中招成绩8科全为空！");
+                        string fulldate = date + "~" + curryear + "/" + endmonth + "/" + endday;
+                        wc.create_word_zf(realdata, config, dr, mdata.grp, mdata.groups_group, basic_dr, CurrentDirectory, fulldate, hk_xxdm);
+                    }
+                }
+                else
+                {
+
+                    if (CurrentDirectory[CurrentDirectory.Length - 1] != Path.DirectorySeparatorChar)
+                        CurrentDirectory += Path.DirectorySeparatorChar;
+                    string save_adr = CurrentDirectory + "会考成绩报告单";
+                    save_adr += Path.DirectorySeparatorChar;
+                    if (!Directory.Exists(save_adr))
+                        Directory.CreateDirectory(save_adr);
+                    if (qx.Equals("0") || xx.Equals("0"))
+                    {
+
+                        if (qx.Equals("0"))
+                        {
+                            var qxtuples = from row in hk_xxdm.AsEnumerable()
+                                           group row by row.Field<string>("qxdm") into grp
+                                           select new
+                                           {
+                                               qxdm = grp.Key.ToString().Trim()
+                                           };
+                            foreach (var qxtuple in qxtuples)
+                                hgkCreateWord(save_adr, qxtuple.qxdm, mdata, sub.Equals("zf"), config, "qxdm");
+                        }
+                        else
+                        {
+                            hgkCreateWord(save_adr, qx, mdata, sub.Equals("zf"), config, "qxdm");
+                        }
+
+                    }
+                    else
+                    {
+                        hgkCreateWord(save_adr, xx, mdata, sub.Equals("zf"), config, "xxdm");
+                    }
+                }
+            }
+            catch (System.Threading.ThreadAbortException e)
+            {
+            }
+            catch (Exception e)
+            {
+                _form.CheckStuID(2, e.Message.ToString());
+            }
+        }
+        public void hgkCreateWord(string adr, string key, MetaData mdata, bool iszf, Configuration config, string field)
+        {
+            HKScriptCalculate cal = new HKScriptCalculate();
+            DataTable calret = new DataTable();
+            if (iszf)
+                calret = cal.execute_batch_zf(mdata.basic, key, field);
+            else
+                calret = cal.execute_batch(mdata.grp, mdata.group, key, field);
+
+            string save_adr;
+            if (field.Equals("xxdm"))
+                save_adr = adr + xx_name;
+            else
+                save_adr = adr + qx;
+            
+            save_adr += Path.DirectorySeparatorChar;
+            if (!Directory.Exists(save_adr))
+                Directory.CreateDirectory(save_adr);
+
+            foreach (DataRow dr in calret.Rows)
+            {
+                HKScriptWordCreator wc = new HKScriptWordCreator();
+                //DataRow dr = FindRow(stu_id, cal.group_order);
+                DataRow basic_dr = FindRow((string)dr["zkzh"], mdata.basic);
+                DataRow realdata = FindRow((string)basic_dr["sfzjh"], hgk_temp);
+                if (realdata == null)
+                    continue;
+                
+                if (!iszf)
+                    wc.create_word2(realdata, config, dr, mdata.grp, mdata.groups_group, basic_dr, save_adr, date, hk_xxdm);
+                else
+                {
+                    int nullcount = 0;
+                    foreach (string sub in Utils.hk_subject)
+                    {
+                        if (!realdata[Utils.hk_en_trans_dt(Utils.hk_lang_trans(sub))].Equals(""))
+                            break;
+                        nullcount++;
+                    }
+                    if (nullcount == 8)
+                        continue;
+                    string fulldate = date + "~" + curryear + "/" + endmonth + "/" + endday;
+                    wc.create_word_zf(realdata, config, dr, mdata.grp, mdata.groups_group, basic_dr, save_adr, fulldate, hk_xxdm);
+                }
+            }
+
+
+        }
         public void hk_script_process(MetaData mdata)
         {
             try

@@ -123,7 +123,7 @@ namespace ExamReport
                 Utils.get_group_tablename(_year, _exam, Utils.language_trans(_sub)), null);
 
             MySqlHelper.ExecuteNonQuery(MySqlHelper.Conn, CommandType.Text, "drop table if exists " +
-                Utils.get_zt_tablename(_year, Utils.language_trans(_sub)), null);
+                Utils.get_zt_tablename(_year, _exam, Utils.language_trans(_sub)), null);
 
 
         }
@@ -172,7 +172,7 @@ namespace ExamReport
             if (_sub.Contains("理综") || _sub.Contains("文综"))
                 table_name = table_name;//留个地方
             else if (_sub.Equals("总分") || _sub.Contains("行政版"))
-                table_name = Utils.get_zt_tablename(_year, Utils.language_trans(_sub));
+                table_name = Utils.get_zt_tablename(_year, _exam, Utils.language_trans(_sub));
             reader = MySqlHelper.ExecuteReader(MySqlHelper.Conn, CommandType.Text, "select COLUMN_NAME from information_schema.COLUMNS where table_name = '" + table_name + "'", null);
             List<string> name = new List<string>();
             while (reader.Read())
@@ -195,7 +195,7 @@ namespace ExamReport
             if (_sub.Contains("理综") || _sub.Contains("文综"))
                 table_name = table_name;//留个地方
             else if (_sub.Equals("总分") || _sub.Contains("行政版"))
-                table_name = Utils.get_zt_tablename(_year, Utils.language_trans(_sub));
+                table_name = Utils.get_zt_tablename(_year, _exam, Utils.language_trans(_sub));
             reader = MySqlHelper.ExecuteReader(MySqlHelper.Conn, CommandType.Text, "describe " + table_name + " " + column_name, null);
 
             if(!reader.Read())
@@ -280,6 +280,7 @@ namespace ExamReport
         {
             QXSF_list = get_excel_data(addr);
         }
+        
         public List<ArrayList> get_excel_data(string addr)
         {
             excel_process pro = new excel_process(addr);
@@ -298,7 +299,7 @@ namespace ExamReport
         }
         public void get_zf_data()
         {
-            basic = get_mysql_table(Utils.get_zt_tablename(_year, Utils.language_trans(_sub)));
+            basic = get_mysql_table(Utils.get_zt_tablename(_year, _exam, Utils.language_trans(_sub)));
         }
         public void get_basic_data()
         {
