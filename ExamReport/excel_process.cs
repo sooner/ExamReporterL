@@ -8,6 +8,7 @@ using Microsoft.Office.Core;
 using Microsoft.Office.Interop.Excel;
 using System.Runtime.InteropServices;
 using System.IO;
+using System.Diagnostics;
 
 
 
@@ -23,6 +24,7 @@ namespace ExamReport
         public System.Data.DataTable dt;
         public List<ArrayList> data;
         public List<string> xz_th;
+        public string _filepath;
 
         string[] answer_colnam = { "th", "fs", "da" };
         string[] groups_colnam = { "tz", "th" };
@@ -33,6 +35,7 @@ namespace ExamReport
         public excel_process(string filepath)
         {
             app = new Application();
+            _filepath = filepath;
             wbks = app.Workbooks;
             _wbk = wbks.Add(filepath);
             groups_group = new Dictionary<string,List<string>>();
@@ -276,8 +279,13 @@ namespace ExamReport
         }
         public void release()
         {
-            _wbk.Close();
-            _wbk = null;
+            object oMissing = System.Reflection.Missing.Value;
+            
+            //wbks.Close();
+            //_wbk = null;
+            //app.DisplayAlerts = false;
+            //_wbk.close.Save();
+            _wbk.Close(false, oMissing, oMissing);
             app.Quit();
             KillSpecialExcel();
             //System.Runtime.InteropServices.Marshal.ReleaseComObject((object)app);
@@ -291,41 +299,51 @@ namespace ExamReport
             shs = null;
             sheet = null;
         }
-        [DllImport("user32.dll", SetLastError = true)]
+        //[DllImport("user32.dll", SetLastError = true)]
 
-        static extern int GetWindowThreadProcessId(IntPtr hWnd, out int lpdwProcessId);
+        //static extern int GetWindowThreadProcessId(IntPtr hWnd, out int lpdwProcessId);
 
-
+        [DllImport("user32.dll")]
+        private static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
 
         //推荐这个方法，找了很久，不容易啊  
 
         public void KillSpecialExcel()
         {
+            int hWnd = app.Hwnd;
+            uint processID;
 
-            try
-            {
+            GetWindowThreadProcessId((IntPtr)hWnd, out processID);
+            Process.GetProcessById((int)processID).Kill();
 
-                if (app != null)
-                {
+            //_excelWorkBook = null;
+            //_excelApp = null;
+            //_excelSheet = null;
 
-                    int lpdwProcessId;
+            //try
+            //{
 
-                    GetWindowThreadProcessId(new IntPtr(app.Hwnd), out lpdwProcessId);
+            //    if (app != null)
+            //    {
+
+            //        int lpdwProcessId;
+
+            //        GetWindowThreadProcessId(new IntPtr(app.Hwnd), out lpdwProcessId);
 
 
 
-                    System.Diagnostics.Process.GetProcessById(lpdwProcessId).Kill();
+            //        System.Diagnostics.Process.GetProcessById(lpdwProcessId).Kill();
 
-                }
+            //    }
 
-            }
+            //}
 
-            catch (Exception ex)
-            {
+            //catch (Exception ex)
+            //{
 
-                Console.WriteLine("Delete Excel Process Error:" + ex.Message);
+            //    Console.WriteLine("Delete Excel Process Error:" + ex.Message);
 
-            }
+            //}
 
         }
 

@@ -367,8 +367,12 @@ namespace ExamReport
 
                 if (midCheck && (int)dr["accumulateFreq"] >= mid)
                 {
-
-                    DataRow midRow = result.frequency_dist.Rows[result.frequency_dist.Rows.Count - 1];
+                    int row = result.frequency_dist.Rows.Count - 1;
+                    DataRow midRow;
+                    if (row < 0)
+                        midRow = dr;
+                    else
+                        midRow = result.frequency_dist.Rows[row];
                     if ((int)dr["frequency"] == 1)
                         if (isEven)
                             result.mean = ((decimal)dr["totalmark"] + ( decimal)midRow["totalmark"]) / 2;

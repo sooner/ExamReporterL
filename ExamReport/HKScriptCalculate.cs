@@ -41,13 +41,21 @@ namespace ExamReport
             DataRow dr = zf.Rows.Find(stu_id);
             DataRow ret = zf.NewRow();
             ret.ItemArray = dr.ItemArray;
-            int totalcount = zf.Rows.Count;
             for (int i = 0; i < Utils.hk_subject.Length; i++)
             {
                 string col = Utils.hk_subject[i];
-                decimal mark = (decimal)dr[col];
-                int count = zf.AsEnumerable().Count(c => c.Field<decimal>(col) < mark);
-                ret[col] = Convert.ToDecimal(count) / Convert.ToDecimal(totalcount) * 100;
+                decimal mark = 0;
+                if (dr[col] != DBNull.Value)
+                {
+                    mark = (decimal)dr[col];
+                    int count = zf.AsEnumerable().Count(c => c[col] != DBNull.Value && c.Field<decimal>(col) < mark);
+                    int totalcount = zf.AsEnumerable().Count(c => c[col] != DBNull.Value);
+                    ret[col] = Convert.ToDecimal(count) / Convert.ToDecimal(totalcount) * 100;
+                }
+                else
+                    ret[col] = 0;
+
+                
             }
             return ret;
         }

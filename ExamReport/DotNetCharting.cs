@@ -16,7 +16,7 @@ namespace ExamReport
     public static class DotNetCharting
     {
         public static Color[] color = new Color[] {Color.LightSkyBlue, Color.LightSeaGreen, Color.FromArgb(0, 156, 255), Color.FromArgb(255, 255, 0), Color.FromArgb(0, 156, 255), Color.FromArgb(255, 99, 49), Color.FromArgb(49, 255, 49) };
-        public static string CreateColumn_wh(DataTable dt, int weight, int height, string title, bool ishorizontal, int columnwidth)
+        public static string CreateColumn_wh(DataTable dt, int weight, int height, string title, bool ishorizontal, int columnwidth, bool iszf)
         {
             Chart chart = new Chart();
             //清空图片
@@ -143,7 +143,8 @@ namespace ExamReport
             chart.Use3D = false;
             chart.Series.DefaultElement.ShowValue = true;
             chart.DefaultElement.SmartLabel.Text = "%Value%";
-            chart.DefaultElement.SmartLabel.Color = Color.Black;
+            chart.DefaultElement.SmartLabel.Color = Color.DarkBlue;
+            
 
             if (ishorizontal)
             {
@@ -164,7 +165,7 @@ namespace ExamReport
            
             chart.ImageFormat = ImageFormat.Emf;
             SeriesCollection sc = new SeriesCollection();
-            chart.SeriesCollection.Add(GetArrayData(dt, sc, "百分位 Percentile", color[0]));
+            chart.SeriesCollection.Add(GetArrayData(dt, sc, "百分位 Percentile", color[0], iszf));
             //Bitmap sourceBitmap = new Bitmap(chart.Width, chart.Height);
             //chart.DrawToBitmap(sourceBitmap, new Rectangle(0, 0, chart.Width, chart.Height));
             
@@ -276,7 +277,7 @@ namespace ExamReport
                 chart.Use3D = true;
                 chart.Series.DefaultElement.ShowValue = true;
                 SeriesCollection sc = new SeriesCollection();
-                chart.SeriesCollection.Add(GetArrayData(dt, sc, "", color[0]));
+                chart.SeriesCollection.Add(GetArrayData(dt, sc, "", color[0], false));
                 Bitmap sourceBitmap = new Bitmap(chart.Width, chart.Height);
                 chart.DrawToBitmap(sourceBitmap, new Rectangle(0, 0, chart.Width, chart.Height));
                 //Thread.CurrentThread.SetApartmentState(ApartmentState.STA);
@@ -287,7 +288,7 @@ namespace ExamReport
             
         }
 
-        private static SeriesCollection GetArrayData(DataTable dt, SeriesCollection sc, string name, Color my_color)
+        private static SeriesCollection GetArrayData(DataTable dt, SeriesCollection sc, string name, Color my_color, bool iszf)
         {
             
             try
@@ -310,9 +311,11 @@ namespace ExamReport
                     //e.SmartLabel.DynamicDisplay = true;
                     //e.SmartLabel.AutoWrap = true;
                     // 每元素的大小数值
+            
                     e.YValue = Convert.ToDouble(dt.Rows[i][1].ToString());
                     e.Color = my_color;
-                    
+                    if ((decimal)dt.Rows[i][1] == 0 && iszf)
+                        e.SmartLabel.Text = "";        
                     //调整柱子颜色 
                     //s.PaletteName = Palette.Three;
                     
@@ -444,7 +447,7 @@ namespace ExamReport
             SeriesCollection sc = new SeriesCollection();
             foreach (var kv in dts)
             {
-                GetArrayData(kv.Value, sc, kv.Key, color[count % 5]);
+                GetArrayData(kv.Value, sc, kv.Key, color[count % 5], false);
                 
                 count++;
             }

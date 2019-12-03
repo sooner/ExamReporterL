@@ -658,7 +658,7 @@ namespace ExamReport
                     {
                         if (realdata[Utils.hk_en_trans_dt(Utils.hk_lang_trans(sub))].Equals(""))
                             _form.CheckStuID(2, "此学生成绩中招成绩该科为空！");
-                        wc.create_word2(realdata, config, dr, mdata.grp, mdata.groups_group, basic_dr, CurrentDirectory, date, hk_xxdm);
+                        wc.create_word2(realdata, config, dr, mdata.grp, mdata.groups_group, basic_dr, save_address, date, hk_xxdm);
                     }
                     else
                     {
@@ -672,15 +672,15 @@ namespace ExamReport
                         if (nullcount == 8)
                             _form.CheckStuID(2, "此学生成绩中招成绩8科全为空！");
                         string fulldate = date + "~" + curryear + "/" + endmonth + "/" + endday;
-                        wc.create_word_zf(realdata, config, dr, mdata.grp, mdata.groups_group, basic_dr, CurrentDirectory, fulldate, hk_xxdm);
+                        wc.create_word_zf(realdata, config, dr, mdata.grp, mdata.groups_group, basic_dr, save_address, fulldate, hk_xxdm);
                     }
                 }
                 else
                 {
 
-                    if (CurrentDirectory[CurrentDirectory.Length - 1] != Path.DirectorySeparatorChar)
-                        CurrentDirectory += Path.DirectorySeparatorChar;
-                    string save_adr = CurrentDirectory + "会考成绩报告单";
+                    if (save_address[save_address.Length - 1] != Path.DirectorySeparatorChar)
+                        save_address += Path.DirectorySeparatorChar;
+                    string save_adr = save_address + "会考成绩报告单";
                     save_adr += Path.DirectorySeparatorChar;
                     if (!Directory.Exists(save_adr))
                         Directory.CreateDirectory(save_adr);
@@ -695,18 +695,53 @@ namespace ExamReport
                                            {
                                                qxdm = grp.Key.ToString().Trim()
                                            };
+                  
+
                             foreach (var qxtuple in qxtuples)
-                                hgkCreateWord(save_adr, qxtuple.qxdm, mdata, sub.Equals("zf"), config, "qxdm");
+                            {
+                                DataTable xxdt = hk_xxdm.AsEnumerable().Where(c => c.Field<string>("qxdm").Equals(qxtuple.qxdm)).Select(c => new
+                                    {
+                                        xxdm = c.Field<string>("xxdm"),
+                                        school = c.Field<string>("school_nam")
+                                    }).ToDataTable();
+                                string temp_adr1 = save_adr + qxtuple.qxdm;
+                                if (!Directory.Exists(temp_adr1))
+                                    Directory.CreateDirectory(temp_adr1);
+                                foreach (DataRow dr in xxdt.Rows)
+                                {
+                                    string temp_adr = temp_adr1 + Path.DirectorySeparatorChar + dr["school"].ToString().Trim() + Path.DirectorySeparatorChar;
+                                    if (!Directory.Exists(temp_adr))
+                                        Directory.CreateDirectory(temp_adr);
+                                    hgkCreateWord(temp_adr, dr["xxdm"].ToString().Trim(), mdata, sub.Equals("zf"), config, "xxdm");
+                                }
+                            }
                         }
                         else
                         {
-                            hgkCreateWord(save_adr, qx, mdata, sub.Equals("zf"), config, "qxdm");
+                            DataTable xxdt = hk_xxdm.AsEnumerable().Where(c => c.Field<string>("qxdm").Equals(qx)).Select(c => new
+                                    {
+                                        xxdm = c.Field<string>("xxdm"),
+                                        school = c.Field<string>("school_nam")
+                                    }).ToDataTable();
+                            string temp_adr1 = save_adr + qx;
+                            if (!Directory.Exists(temp_adr1))
+                                Directory.CreateDirectory(temp_adr1);
+                            foreach (DataRow dr in xxdt.Rows)
+                            {
+                                string temp_adr = temp_adr1 + Path.DirectorySeparatorChar + dr["school"].ToString().Trim() + Path.DirectorySeparatorChar;
+                                if (!Directory.Exists(temp_adr))
+                                    Directory.CreateDirectory(temp_adr);
+                                hgkCreateWord(temp_adr, dr["xxdm"].ToString().Trim(), mdata, sub.Equals("zf"), config, "xxdm");
+                            }
                         }
 
                     }
                     else
                     {
-                        hgkCreateWord(save_adr, xx, mdata, sub.Equals("zf"), config, "xxdm");
+                        string temp_adr1 = save_adr + xx_name + Path.DirectorySeparatorChar;
+                        if (!Directory.Exists(temp_adr1))
+                            Directory.CreateDirectory(temp_adr1);
+                        hgkCreateWord(temp_adr1, xx, mdata, sub.Equals("zf"), config, "xxdm");
                     }
                 }
             }
@@ -722,21 +757,23 @@ namespace ExamReport
         {
             HKScriptCalculate cal = new HKScriptCalculate();
             DataTable calret = new DataTable();
+            _form.ShowPro(exam_type, 1, mdata.log_name + "数据分析中...");
             if (iszf)
                 calret = cal.execute_batch_zf(mdata.basic, key, field);
             else
                 calret = cal.execute_batch(mdata.grp, mdata.group, key, field);
 
-            string save_adr;
-            if (field.Equals("xxdm"))
-                save_adr = adr + xx_name;
-            else
-                save_adr = adr + qx;
+            //string save_adr;
+            //if (field.Equals("xxdm"))
+            //    save_adr = adr + xx_name;
+            //else
+            //    save_adr = adr + qx;
             
-            save_adr += Path.DirectorySeparatorChar;
-            if (!Directory.Exists(save_adr))
-                Directory.CreateDirectory(save_adr);
-
+            //save_adr += Path.DirectorySeparatorChar;
+            //if (!Directory.Exists(save_adr))
+            //    Directory.CreateDirectory(save_adr);
+            
+            _form.ShowPro(exam_type, 1, mdata.log_name + "报告生成中...");
             foreach (DataRow dr in calret.Rows)
             {
                 HKScriptWordCreator wc = new HKScriptWordCreator();
@@ -747,7 +784,7 @@ namespace ExamReport
                     continue;
                 
                 if (!iszf)
-                    wc.create_word2(realdata, config, dr, mdata.grp, mdata.groups_group, basic_dr, save_adr, date, hk_xxdm);
+                    wc.create_word2(realdata, config, dr, mdata.grp, mdata.groups_group, basic_dr, adr, date, hk_xxdm);
                 else
                 {
                     int nullcount = 0;
@@ -760,7 +797,7 @@ namespace ExamReport
                     if (nullcount == 8)
                         continue;
                     string fulldate = date + "~" + curryear + "/" + endmonth + "/" + endday;
-                    wc.create_word_zf(realdata, config, dr, mdata.grp, mdata.groups_group, basic_dr, save_adr, fulldate, hk_xxdm);
+                    wc.create_word_zf(realdata, config, dr, mdata.grp, mdata.groups_group, basic_dr, adr, fulldate, hk_xxdm);
                 }
             }
 
@@ -1612,7 +1649,7 @@ namespace ExamReport
             w_stat._config = config;
             w_stat.statistic_process(false);
             if (mdata.xz.Count > 0)
-                w_stat.xz_postprocess(mdata.xz);
+                w_stat.xz_postprocess(mdata.xz,flzt,"zkzh","'1*'");
             WSLG.Add(w_stat.result);
 
             DataTable l_data = flzt.Likefilter("zkzh", "'5*'");
@@ -1622,7 +1659,7 @@ namespace ExamReport
             l_stat._config = config;
             l_stat.statistic_process(false);
             if (mdata.xz.Count > 0)
-                l_stat.xz_postprocess(mdata.xz);
+                l_stat.xz_postprocess(mdata.xz,flzt,"zkzh","'5*'");
             WSLG.Add(l_stat.result);
 
             Partition_statistic total_stat = new Partition_statistic("分类整体", flzt, mdata._fullmark, mdata.ans, flzt_group, mdata.grp, group);
@@ -1891,7 +1928,7 @@ namespace ExamReport
                 stat._config = config;
                 stat.statistic_process(false);
                 if (mdata.xz.Count > 0)
-                    stat.xz_postprocess(mdata.xz, dt, xx_code);
+                    stat.xz_postprocess(mdata.xz, dt, filter, xx_code);
                 result.Add(stat.result);
             }
             if (!isQXSF)
@@ -1977,7 +2014,7 @@ namespace ExamReport
             w_stat._config = config;
             w_stat.statistic_process(false);
             if (mdata.xz.Count > 0)
-                w_stat.xz_postprocess(mdata.xz);
+                w_stat.xz_postprocess(mdata.xz, mdata.basic, "zkzh", "'1*'");
             WSLG.Add(w_stat.result);
 
             cdata.save_partitiondata(mdata._year, mdata._exam, subname + "w", w_stat.result);
@@ -1989,7 +2026,7 @@ namespace ExamReport
             l_stat._config = config;
             l_stat.statistic_process(false);
             if (mdata.xz.Count > 0)
-                l_stat.xz_postprocess(mdata.xz);
+                l_stat.xz_postprocess(mdata.xz, mdata.basic, "zkzh", "'5*'");
             WSLG.Add(l_stat.result);
 
             cdata.save_partitiondata(mdata._year, mdata._exam, subname + "l", l_stat.result);
@@ -2166,7 +2203,7 @@ namespace ExamReport
                 XXTotal._config = config;
                 XXTotal.statistic_process(false);
                 if (mdata.xz.Count > 0)
-                    XXTotal.xz_postprocess(mdata.xz, ClassTotal_data, xx_code);
+                    XXTotal.xz_postprocess(mdata.xz, ClassTotal_data, "xxdm", xx_code);
                 totaldata.Add(XXTotal.result);
                 sdata.Add(XXTotal.result);
 

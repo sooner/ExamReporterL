@@ -659,7 +659,85 @@ namespace ExamReport
                 xz_single_postprocess(th);
         }
 
-        public void xz_postprocess(List<string> xz_th, DataTable total, string[] xx_code)
+        public void xz_postprocess(List<string> xz_th, DataTable total, string filter, string filtercode)
+        {
+            foreach (string th in xz_th)
+            {
+                #region 选做题部分
+
+
+                List<DataTable> xz_total = new List<DataTable>();
+                List<List<PartitionData.single_data>> xz_single = new List<List<PartitionData.single_data>>();
+                List<string> xz_name = new List<string>();
+                List<List<decimal>> xz_total_disc = new List<List<decimal>>();
+
+
+                var xz_tuple = from row in total.AsEnumerable()
+                               group row by row.Field<string>("X" + th) into grp
+                               orderby grp.Key ascending
+                               select new
+                               {
+                                   name = grp.Key,
+                                   count = grp.Count()
+                               };
+                foreach (var item in xz_tuple)
+                {
+                    DataView dv = total.equalfilter("X" + th, item.name).DefaultView;
+                    dv.Sort = "totalmark";
+                    xz_name.Add(item.name);
+                    DataTable dt_temp = dv.ToTable();
+                    dt_temp.Columns.Add("xz_groups", typeof(string));
+                    dt_temp.SeperateGroups(_config._grouptype, _config._group_num, "xz_groups");
+
+                    DataTable xz_data = new DataTable();
+                    xz_data.Columns.Add("totalmark", typeof(decimal));
+                    xz_data.Columns.Add("X" + th, typeof(string));
+                    //xz_data.Columns.Add("xz_groups", typeof(string));
+                    xz_data.Columns.Add("T" + th, typeof(decimal));
+                    xz_data.Columns.Add("xz_groups", typeof(string));
+                    xz_data.Columns.Add(filter, typeof(string));
+
+                    DataRow ans_dr = _standard_ans.Rows.Find(th);
+
+                    if (!ans_dr["da"].Equals(""))
+                        xz_data.Columns.Add("D" + th, typeof(string));
+                    foreach (DataRow dr in dt_temp.Rows)
+                    {
+                        DataRow newrow = xz_data.NewRow();
+                        foreach (DataColumn dc in xz_data.Columns)
+                            newrow[dc.ColumnName] = dr[dc.ColumnName];
+                        xz_data.Rows.Add(newrow);
+                    }
+
+                    try
+                    {
+                        dt_temp = xz_data.Likefilter(filter, filtercode);
+                    }
+                    catch (ArgumentException exp)
+                    {
+                        continue;
+                    }
+                    xz_group_analysis(dt_temp, dt_temp.Rows.Count, xz_total, xz_single, xz_total_disc);
+                }
+
+                for (int i = 0; i < xz_total[0].Rows.Count; i++)
+                {
+                    for (int j = 0; j < xz_total.Count; j++)
+                    {
+                        DataRow dr = xz_total[j].Rows[i];
+                        dr["number"] = (string)dr["number"] + "选" + xz_name[j];
+                        result.total_analysis.ImportRow(dr);
+                        result.single_topic_analysis.Add(xz_single[j][i]);
+                        result.total_discriminant.Add(xz_total_disc[j][i]);
+
+                    }
+                }
+
+                #endregion
+            }
+        }
+
+        public void xz_postprocess(List<string> xz_th, DataTable total, string filter, string[] xx_code)
         {
             foreach (string th in xz_th)
             {
@@ -695,7 +773,7 @@ namespace ExamReport
                     //xz_data.Columns.Add("xz_groups", typeof(string));
                     xz_data.Columns.Add("T" + th, typeof(decimal));
                     xz_data.Columns.Add("xz_groups", typeof(string));
-                    xz_data.Columns.Add("xxdm", typeof(string));
+                    xz_data.Columns.Add(filter, typeof(string));
 
                     DataRow ans_dr = _standard_ans.Rows.Find(th);
 
@@ -711,7 +789,7 @@ namespace ExamReport
 
                     try
                     {
-                        dt_temp = xz_data.filteredtable("xxdm", xx_code);
+                        dt_temp = xz_data.filteredtable(filter, xx_code);
                     }
                     catch (ArgumentException exp)
                     {
@@ -800,7 +878,7 @@ namespace ExamReport
             List<WSLG_partitiondata.Disc> xz_disc = new List<WSLG_partitiondata.Disc>();
             List<decimal> total_discriminant = new List<decimal>();
             int PLN = Convert.ToInt32(Math.Ceiling(xz_count * 0.27));
-            int PHN = xz_count - PLN + 1;
+            int PHN = xz_count - PLN;
             Regex number = new Regex("^[Tt]\\d+");
  
             foreach (DataColumn dc in dt.Columns)

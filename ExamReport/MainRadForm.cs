@@ -486,10 +486,10 @@ namespace ExamReport
             ZKTreeView.ExpandAll();
 
             DataTable qx_data =
-                schoolcode_table.AsEnumerable().GroupBy(c => c.Field<string>("qxmc")).Select(c => new
+                hk_xxdm_dt.AsEnumerable().GroupBy(c => c.Field<string>("qxdm")).Select(c => new
                 {
                     school = c.Key.ToString().Trim(),
-                    code = string.Join(",", c.GroupBy(p => p.Field<string>("qxdm")).Select(p => p.Key.ToString().Trim()).ToArray())
+                    code = c.Key.ToString().Trim()
                 }).ToDataTable();
 
             DataRow total = qx_data.NewRow();
@@ -1713,13 +1713,13 @@ namespace ExamReport
             if (qx_combo.DataSource != null && !qx_combo.Text.Equals("0"))
             {
 
-                string code_str = qx_combo.SelectedValue.ToString();
-                string[] code = code_str.Split(new char[1] { ',' });
+                string code_str = qx_combo.SelectedValue.ToString().Trim();
+                //string[] code = code_str.Split(new char[1] { ',' });
 
-                DataTable DT = school.AsEnumerable().Where(c => code.Contains(c.Field<string>("xxdm").ToString().Trim().Substring(0, 2))).Select(c => new
+                DataTable DT = hk_xxdm_dt.AsEnumerable().Where(c => c.Field<string>("qxdm").ToString().Trim().Equals(code_str)).Select(c => new
                 {
                     code = c.Field<string>("xxdm").ToString().Trim(),
-                    school = c.Field<string>("xxmc").ToString().Trim()
+                    school = c.Field<string>("school_nam").ToString().Trim()
                 }).ToDataTable();
                 DataRow total = DT.NewRow();
                 total["code"] = "0";
@@ -2066,6 +2066,25 @@ namespace ExamReport
         }
 
         private void stu_id_TextChanged(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void hk_script_cancel_Click(object sender, EventArgs e)
+        {
+            if (thread_store.ContainsKey("hk_script"))
+            {
+                Thread thread = thread_store["hk_script"];
+                if (thread.IsAlive)
+                {
+                    thread.Abort();
+                    thread_store.Remove("hk_script");
+                    ShowPro("hk_script", 2, "");
+                }
+            }
+        }
+
+        private void xx_combo_SelectedIndexChanged(object sender, Twin.UI.Data.PositionChangedEventArgs e)
         {
 
         }

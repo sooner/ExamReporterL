@@ -123,6 +123,8 @@
             this.ZKTreeView = new Telerik.WinControls.UI.RadTreeView();
             this.HKPageView = new Telerik.WinControls.UI.RadPageViewPage();
             this.hk_config_panel = new Telerik.WinControls.UI.RadGroupBox();
+            this.radLabel40 = new Telerik.WinControls.UI.RadLabel();
+            this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             this.radButton19 = new Telerik.WinControls.UI.RadButton();
             this.hk_xxdm = new Telerik.WinControls.UI.RadTextBox();
             this.radLabel38 = new Telerik.WinControls.UI.RadLabel();
@@ -335,8 +337,6 @@
             this.radLabel13 = new Telerik.WinControls.UI.RadLabel();
             this.GKTreeView = new Telerik.WinControls.UI.RadTreeView();
             this.gk_gridview = new Telerik.WinControls.UI.RadGridView();
-            this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
-            this.radLabel40 = new Telerik.WinControls.UI.RadLabel();
             ((System.ComponentModel.ISupportInitialize)(this.wholepage)).BeginInit();
             this.wholepage.SuspendLayout();
             this.ZKPageView.SuspendLayout();
@@ -395,6 +395,7 @@
             this.HKPageView.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.hk_config_panel)).BeginInit();
             this.hk_config_panel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.radLabel40)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radButton19)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.hk_xxdm)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radLabel38)).BeginInit();
@@ -588,7 +589,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.GKTreeView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gk_gridview)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gk_gridview.MasterTemplate)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radLabel40)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
             this.SuspendLayout();
             // 
@@ -1237,6 +1237,25 @@
             this.hk_config_panel.TabIndex = 88;
             this.hk_config_panel.Text = "文档生成";
             // 
+            // radLabel40
+            // 
+            this.radLabel40.AutoSize = true;
+            this.radLabel40.Location = new System.Drawing.Point(180, 69);
+            this.radLabel40.Name = "radLabel40";
+            this.radLabel40.Size = new System.Drawing.Size(18, 18);
+            this.radLabel40.TabIndex = 3;
+            this.radLabel40.Text = "至";
+            // 
+            // dateTimePicker1
+            // 
+            this.dateTimePicker1.CustomFormat = "yyyy-MM-dd";
+            this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dateTimePicker1.Location = new System.Drawing.Point(204, 68);
+            this.dateTimePicker1.Name = "dateTimePicker1";
+            this.dateTimePicker1.ShowUpDown = true;
+            this.dateTimePicker1.Size = new System.Drawing.Size(101, 21);
+            this.dateTimePicker1.TabIndex = 49;
+            // 
             // radButton19
             // 
             this.radButton19.Location = new System.Drawing.Point(311, 104);
@@ -1594,6 +1613,7 @@
             this.hk_script_cancel.Size = new System.Drawing.Size(95, 24);
             this.hk_script_cancel.TabIndex = 47;
             this.hk_script_cancel.Text = "取消";
+            this.hk_script_cancel.Click += new System.EventHandler(this.hk_script_cancel_Click);
             // 
             // hk_script_start
             // 
@@ -1676,6 +1696,7 @@
             this.xx_combo.Name = "xx_combo";
             this.xx_combo.Size = new System.Drawing.Size(125, 20);
             this.xx_combo.TabIndex = 3;
+            this.xx_combo.SelectedIndexChanged += new Telerik.WinControls.UI.Data.PositionChangedEventHandler(this.xx_combo_SelectedIndexChanged);
             // 
             // qx_combo
             // 
@@ -3509,25 +3530,6 @@
             this.gk_gridview.TabIndex = 0;
             this.gk_gridview.Text = "radGridView2";
             // 
-            // dateTimePicker1
-            // 
-            this.dateTimePicker1.CustomFormat = "yyyy-MM-dd";
-            this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dateTimePicker1.Location = new System.Drawing.Point(204, 68);
-            this.dateTimePicker1.Name = "dateTimePicker1";
-            this.dateTimePicker1.ShowUpDown = true;
-            this.dateTimePicker1.Size = new System.Drawing.Size(101, 21);
-            this.dateTimePicker1.TabIndex = 49;
-            // 
-            // radLabel40
-            // 
-            this.radLabel40.AutoSize = true;
-            this.radLabel40.Location = new System.Drawing.Point(180, 69);
-            this.radLabel40.Name = "radLabel40";
-            this.radLabel40.Size = new System.Drawing.Size(18, 18);
-            this.radLabel40.TabIndex = 3;
-            this.radLabel40.Text = "至";
-            // 
             // mainform
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -3607,6 +3609,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.hk_config_panel)).EndInit();
             this.hk_config_panel.ResumeLayout(false);
             this.hk_config_panel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.radLabel40)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radButton19)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.hk_xxdm)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radLabel38)).EndInit();
@@ -3819,7 +3822,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.GKTreeView)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gk_gridview.MasterTemplate)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gk_gridview)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radLabel40)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
             this.ResumeLayout(false);
 

@@ -10,6 +10,7 @@ using Excel = Microsoft.Office.Interop.Excel;
 using ZedGraph;
 using System.Windows.Forms;
 using Microsoft.International.Converters.PinYinConverter;
+using NPinyin;
 
 namespace ExamReport
 {
@@ -25,10 +26,12 @@ namespace ExamReport
             if (name.Length == 2)
             {
                 ChineseChar familyname = new ChineseChar(name[0]);
-                string fname = familyname.Pinyins[0].ToString().TrimEnd("0123456789".ToCharArray());
+                //string fname = familyname.Pinyins[0].ToString().TrimEnd("0123456789".ToCharArray());
+                string fname = Pinyin.GetPinyin(name[0]).ToUpper();
 
                 ChineseChar lastname = new ChineseChar(name[1]);
-                string lname = lastname.Pinyins[0].ToString().TrimEnd("0123456789".ToCharArray());
+                //string lname = lastname.Pinyins[0].ToString().TrimEnd("0123456789".ToCharArray());
+                string lname = Pinyin.GetPinyin(name[1]).ToUpper();
 
                 r = lname + " " + fname;
             }
@@ -36,14 +39,19 @@ namespace ExamReport
             if (name.Length == 3)
             {
                 ChineseChar familyname = new ChineseChar(name[0]);
-                string fname = familyname.Pinyins[0].ToString().TrimEnd("0123456789".ToCharArray());
+                //string fname = familyname.Pinyins[0].ToString().TrimEnd("0123456789".ToCharArray());
+                string fname = Pinyin.GetPinyin(name[0]).ToUpper();
 
                 ChineseChar lastname1 = new ChineseChar(name[1]);
-                string lname1 = lastname1.Pinyins[0].ToString().TrimEnd("0123456789".ToCharArray());
+                //string lname1 = lastname1.Pinyins[0].ToString().TrimEnd("0123456789".ToCharArray());
+                string lname1 = Pinyin.GetPinyin(name[1]).ToUpper();
 
                 ChineseChar lastname2 = new ChineseChar(name[2]);
-                string lname2 = lastname2.Pinyins[0].ToString().TrimEnd("0123456789".ToCharArray());
+                //string lname2 = lastname2.Pinyins[0].ToString().TrimEnd("0123456789".ToCharArray());
+                string lname2 = Pinyin.GetPinyin(name[2]).ToUpper();
 
+                if (lname2.Equals("芃"))
+                    lname2 = "PENG";
                 r = lname1 + lname2 + " " + fname;
 
             }
@@ -64,7 +72,7 @@ namespace ExamReport
                 temp[1] = dr["FZ" + (start + i + 1).ToString()];
                 dt.Rows.Add(temp);
             }
-            return DotNetCharting.CreateColumn_wh(dt, 360, 250, title + "分维度评价的百分位\nPercentile of " + subject_en + "\nevaluated in different Dimensions of the Candidate", false, 40);
+            return DotNetCharting.CreateColumn_wh(dt, 360, 250, title + "分维度评价的百分位\nPercentile of " + subject_en + "\nevaluated in different Dimensions of the Candidate", false, 40, false);
             //ZedGraph.createSubDiffBar(data_list);
 
             //Word.Range dist_rng = oDoc.Bookmarks.get_Item(oEndOfDoc).Range;
@@ -93,7 +101,7 @@ namespace ExamReport
                 temp[1] = dr[sub];
                 dt.Rows.Add(temp);
             }
-            return DotNetCharting.CreateColumn_wh(dt, 400, 300, "考生各学科成绩百分位\nPercentile of the Candidate's Scores in Each Subject", true, 15);
+            return DotNetCharting.CreateColumn_wh(dt, 400, 300, "考生各学科成绩百分位\nPercentile of the Candidate's Scores in Each Subject", true, 15, true);
         }
         public string insertsubHistGraph(DataRow dr, DataTable group, string subject_en, string key, Dictionary<string, List<string>> group_dict, int start)
         {
@@ -109,7 +117,7 @@ namespace ExamReport
                 temp[1] = dr["FZ" + (start + i + 1).ToString()];
                 dt.Rows.Add(temp);
             }
-            return DotNetCharting.CreateColumn_wh(dt, 360, 220, key + "百分位", true, 20);
+            return DotNetCharting.CreateColumn_wh(dt, 360, 220, key + "百分位", true, 20, false);
             
         }
         public void create_word_zf(DataRow realdata, Configuration config, DataRow dr, DataTable group, Dictionary<string, List<string>> group_dict, DataRow basic_dr, String adr, string date, DataTable schools)
@@ -128,8 +136,8 @@ namespace ExamReport
                 schoolen = (string)school["school_en"];
                 schoolname = (string)school["school_nam"];
             }
-            WriteIntoDocument("name", (string)basic_dr["xm"]);
-            WriteIntoDocument("name_en", get_pinyin_of_name((string)basic_dr["xm"]));
+            WriteIntoDocument("name", realdata["name"].ToString().Trim());
+            WriteIntoDocument("name_en", get_pinyin_of_name(realdata["name"].ToString().Trim()));
             WriteIntoDocument("id", (string)basic_dr["sfzjh"]);
             WriteIntoDocument("id2", (string)basic_dr["sfzjh"]);
             //WriteIntoDocument("school", schoolname);
@@ -195,8 +203,8 @@ namespace ExamReport
                 schoolname = (string)school["school_nam"];
             }
 
-            WriteIntoDocument("name", (string)basic_dr["xm"]);
-            WriteIntoDocument("name_en", get_pinyin_of_name((string)basic_dr["xm"]));
+            WriteIntoDocument("name", realdata["name"].ToString().Trim());
+            WriteIntoDocument("name_en", get_pinyin_of_name(basic_dr["xm"].ToString().Trim()));
             WriteIntoDocument("id", (string)basic_dr["sfzjh"]);
             WriteIntoDocument("id2", (string)basic_dr["sfzjh"]);
             //WriteIntoDocument("school", schoolname);

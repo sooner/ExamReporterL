@@ -358,7 +358,7 @@ namespace ExamReport
             }
             catch (OleDbException e)
             {
-                throw new Exception("数据库文件被占用，请关闭！");
+                throw e;
             }
             dbfConnection.Close();
             if (mySet.Tables.Count > 1)
@@ -457,9 +457,9 @@ namespace ExamReport
                 newRow["kh"] = dr["kh"].ToString().Trim();
                 newRow["zkzh"] = dr["zkzh"].ToString().Trim();
                 newRow["xxdm"] = dr["xxdm"].ToString().Trim();
-                newRow["xm"] = dr["xm"].ToString().Trim();
-                newRow["sfzjh"] = dr["sfzjh"].ToString().Trim();
-                newRow["xjh"] = dr["xjh"].ToString().Trim();
+                newRow["xm"] = dt.Columns.Contains("xm")? dr["xm"].ToString().Trim(): "";
+                newRow["sfzjh"] = dt.Columns.Contains("sfzjh")? dr["sfzjh"].ToString().Trim() : "";
+                newRow["xjh"] = dt.Columns.Contains("xjh")? dr["xjh"].ToString().Trim() : "";
                 newRow["totalmark"] = 0;
                 newRow["xb"] = dr["xb"].ToString().Trim();
                 newRow["Groups"] = "";
