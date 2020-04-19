@@ -785,7 +785,19 @@ namespace ExamReport
                                 single_row["G" + i.ToString().Trim()] = 0m;
                             }
 
-                            temp.single_detail.Rows.Add(single_row);
+                            if (temp.single_detail.Rows.Contains(single_row["mark"]))
+                            {
+                                DataRow temp_row = temp.single_detail.Rows.Find(single_row["mark"]);
+                                int pre_freq = (int)temp_row["frequency"];
+                                decimal pre_avg = (decimal)temp_row["avg"];
+                                temp_row["frequency"] = pre_freq + (int)single_row["frequency"];
+                                temp_row["rate"] = (int)temp_row["frequency"] / Convert.ToDecimal(result.total_num) * 100;
+                                temp_row["avg"] = (pre_freq * pre_avg + (int)single_row["frequency"] * (decimal)single_row["avg"]) / (int)temp_row["frequency"];
+                                temp_row["correlation"] = correlation((int)temp_row["frequency"], (decimal)temp_row["avg"], ZH_avg, result.total_num, ZH_stDev);
+
+                            }
+                            else
+                                temp.single_detail.Rows.Add(single_row);
 
                         }
 
@@ -1779,7 +1791,7 @@ namespace ExamReport
             Regex reg = new Regex("^[A-Za-z]+$");
             if (reg.IsMatch(choice))
                 return Utils.ToSBC(choice);
-            else if (choice.Trim().Equals("0") || choice.Trim().Equals(""))
+            else if (choice.Trim().Equals("0") || choice.Trim().Equals("") || choice.Trim().Equals("#"))
                 return "未选";
             else
                 return choice.Trim();

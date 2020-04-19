@@ -758,6 +758,8 @@ namespace ExamReport
                     return "zk";
                 case "高考":
                     return "gk";
+                case "2020新高考":
+                    return "ngk";
                 case "会考":
                     return "hk";
                 case "数学理":

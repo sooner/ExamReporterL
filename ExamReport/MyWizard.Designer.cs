@@ -44,6 +44,10 @@
             this.exam = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.panel5 = new System.Windows.Forms.Panel();
+            this.zh_panel2 = new Telerik.WinControls.UI.RadPanel();
+            this.label11 = new System.Windows.Forms.Label();
+            this.zh_addr = new System.Windows.Forms.TextBox();
+            this.button4 = new System.Windows.Forms.Button();
             this.zf_panel = new System.Windows.Forms.Panel();
             this.fullmark = new System.Windows.Forms.NumericUpDown();
             this.label7 = new System.Windows.Forms.Label();
@@ -79,10 +83,6 @@
             this.label3 = new System.Windows.Forms.Label();
             this.wizardWelcomePage1 = new Telerik.WinControls.UI.WizardWelcomePage();
             this.wizardPage3 = new Telerik.WinControls.UI.WizardPage();
-            this.button4 = new System.Windows.Forms.Button();
-            this.zh_addr = new System.Windows.Forms.TextBox();
-            this.label11 = new System.Windows.Forms.Label();
-            this.zh_panel2 = new Telerik.WinControls.UI.RadPanel();
             ((System.ComponentModel.ISupportInitialize)(this.radWizard1)).BeginInit();
             this.radWizard1.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -90,6 +90,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.basic_gridView)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.zh_panel2)).BeginInit();
+            this.zh_panel2.SuspendLayout();
             this.zf_panel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fullmark)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -99,8 +101,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.PartialRight)).BeginInit();
             this.zh_panel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.single_fullmark)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.zh_panel2)).BeginInit();
-            this.zh_panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // radWizard1
@@ -236,7 +236,8 @@
             this.exam.Items.AddRange(new object[] {
             "中考",
             "会考",
-            "高考"});
+            "高考",
+            "2020新高考"});
             this.exam.Location = new System.Drawing.Point(99, 66);
             this.exam.Name = "exam";
             this.exam.Size = new System.Drawing.Size(121, 20);
@@ -276,6 +277,42 @@
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(642, 412);
             this.panel5.TabIndex = 4;
+            // 
+            // zh_panel2
+            // 
+            this.zh_panel2.Controls.Add(this.label11);
+            this.zh_panel2.Controls.Add(this.zh_addr);
+            this.zh_panel2.Controls.Add(this.button4);
+            this.zh_panel2.Location = new System.Drawing.Point(26, 161);
+            this.zh_panel2.Name = "zh_panel2";
+            this.zh_panel2.Size = new System.Drawing.Size(590, 33);
+            this.zh_panel2.TabIndex = 79;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(0, 11);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(65, 12);
+            this.label11.TabIndex = 76;
+            this.label11.Text = "综合分类：";
+            // 
+            // zh_addr
+            // 
+            this.zh_addr.Location = new System.Drawing.Point(62, 8);
+            this.zh_addr.Name = "zh_addr";
+            this.zh_addr.Size = new System.Drawing.Size(423, 21);
+            this.zh_addr.TabIndex = 77;
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(507, 6);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(75, 23);
+            this.button4.TabIndex = 78;
+            this.button4.Text = "打开";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // zf_panel
             // 
@@ -603,42 +640,6 @@
             this.wizardPage3.Title = "科目信息";
             this.wizardPage3.Visibility = Telerik.WinControls.ElementVisibility.Visible;
             // 
-            // button4
-            // 
-            this.button4.Location = new System.Drawing.Point(507, 6);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(75, 23);
-            this.button4.TabIndex = 78;
-            this.button4.Text = "打开";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
-            // 
-            // zh_addr
-            // 
-            this.zh_addr.Location = new System.Drawing.Point(62, 8);
-            this.zh_addr.Name = "zh_addr";
-            this.zh_addr.Size = new System.Drawing.Size(423, 21);
-            this.zh_addr.TabIndex = 77;
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(0, 11);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(67, 13);
-            this.label11.TabIndex = 76;
-            this.label11.Text = "综合分类：";
-            // 
-            // zh_panel2
-            // 
-            this.zh_panel2.Controls.Add(this.label11);
-            this.zh_panel2.Controls.Add(this.zh_addr);
-            this.zh_panel2.Controls.Add(this.button4);
-            this.zh_panel2.Location = new System.Drawing.Point(26, 161);
-            this.zh_panel2.Name = "zh_panel2";
-            this.zh_panel2.Size = new System.Drawing.Size(590, 33);
-            this.zh_panel2.TabIndex = 79;
-            // 
             // MyWizard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -658,6 +659,9 @@
             this.panel1.PerformLayout();
             this.panel5.ResumeLayout(false);
             this.panel5.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.zh_panel2)).EndInit();
+            this.zh_panel2.ResumeLayout(false);
+            this.zh_panel2.PerformLayout();
             this.zf_panel.ResumeLayout(false);
             this.zf_panel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fullmark)).EndInit();
@@ -671,9 +675,6 @@
             this.zh_panel.ResumeLayout(false);
             this.zh_panel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.single_fullmark)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.zh_panel2)).EndInit();
-            this.zh_panel2.ResumeLayout(false);
-            this.zh_panel2.PerformLayout();
             this.ResumeLayout(false);
 
         }

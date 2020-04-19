@@ -277,7 +277,21 @@ namespace ExamReport
                 gtype = c.Field<string>("gtype"),
                 gnum = c.Field<int>("gnum")
             }).ToDataTable();
-            gk_gridview.DataSource = gk_data.LanguageTrans("gk");
+
+            
+
+            DataTable gk2020_data = data.AsEnumerable().AsEnumerable().Where(c => c.Field<string>("exam").Equals("ngk")).Select(c => new
+            {
+                year = c.Field<string>("year"),
+                sub = c.Field<string>("sub"),
+                ans = c.Field<string>("ans"),
+                grp = c.Field<string>("grp"),
+                fullmark = c.Field<int>("fullmark"),
+                gtype = c.Field<string>("gtype"),
+                gnum = c.Field<int>("gnum")
+            }).ToDataTable();
+
+            gk_gridview.DataSource = gk_data.LanguageTrans("gk").AsEnumerable().Union(gk2020_data.LanguageTrans("ngk").AsEnumerable()).CopyToDataTable<DataRow>();
 
             foreach (GridViewRowInfo row in gk_gridview.Rows)
             {
@@ -2085,6 +2099,11 @@ namespace ExamReport
         }
 
         private void xx_combo_SelectedIndexChanged(object sender, Twin.UI.Data.PositionChangedEventArgs e)
+        {
+
+        }
+
+        private void gk_gridview_Click(object sender, EventArgs e)
         {
 
         }

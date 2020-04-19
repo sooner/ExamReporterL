@@ -297,6 +297,21 @@ namespace ExamReport
                     subject.ResetText();
 
                     break;
+                case 3:
+                    subject.Items.Clear();
+                    subject.Items.Add("总分");
+                    subject.Items.Add("高考行政版");
+                    subject.Items.Add("语文");
+                    subject.Items.Add("数学");
+                    subject.Items.Add("英语");
+                    subject.Items.Add("物理");
+                    subject.Items.Add("化学");
+                    subject.Items.Add("生物");
+                    subject.Items.Add("政治");
+                    subject.Items.Add("历史");
+                    subject.Items.Add("地理");
+                    subject.ResetText();
+                    break;
                 default:
                     break;
 

@@ -79,8 +79,8 @@ namespace ExamReport
                 md._grouptype = grouptype;
                 md._group_num = Convert.ToInt32(divider);
             }
-            //try
-            //{
+            try
+            {
             if (!md.check())
                 wizard.ErrorM("该数据已存储，请先删除后再添加");
             //try
@@ -97,26 +97,29 @@ namespace ExamReport
                     case "高考":
                         gk_database_process(md);
                         break;
+                    case "2020新高考":
+                        new_gk_database_process(md);
+                        break;
                     default:
                         break;
 
                 }
                 md.insert_data();
-            //}
-            //catch (System.Threading.ThreadAbortException e)
-            //{
-            //}
-            //catch (DuplicateNameException ex)
-            //{
+            }
+            catch (System.Threading.ThreadAbortException e)
+            {
+            }
+            catch (DuplicateNameException ex)
+            {
 
-            //    wizard.ErrorM("该数据已存储，请先删除后再添加");
-            //}
-            //catch (Exception ex)
-            //{
-            //    md.rollback();
-            //    wizard.ErrorM(ex.Message);
+                wizard.ErrorM("该数据已存储，请先删除后再添加");
+            }
+            catch (Exception ex)
+            {
+                md.rollback();
+                wizard.ErrorM(ex.Message);
 
-            //}
+            }
         }
 
         public void zk_database_process(MetaData mdata)
@@ -176,6 +179,41 @@ namespace ExamReport
             DBHelper.create_ans_table(Utils.get_tablename(year, Utils.hk_lang_trans(exam), Utils.hk_lang_trans(sub)), hk.newStandard, ans.xz_th);
             DBHelper.create_fz_table(Utils.get_tablename(year, Utils.hk_lang_trans(exam), Utils.hk_lang_trans(sub)), groups.dt, groups.groups_group);
             wizard.ShowPro(100, 3);
+        }
+        public void new_gk_database_process(MetaData mdata)
+        {
+            if (sub.Equals("总分") || sub.Equals("高考行政版"))
+            {
+                GK_database db = new GK_database();
+                db.ZF_data_process(database_str);
+
+                basic_data = db._basic_data;
+
+                DBHelper.create_mysql_table(basic_data, Utils.get_zt_tablename(year, "ngk", Utils.hk_lang_trans(sub)));
+                wizard.ShowPro(100, 3);
+            }
+            else
+            {
+                //GK_database db = new GK_database(mdata, ans.dt, groups.dt, grouptype, divider);
+                //db.DBF_data_process(database_str);
+
+                Database db = new Database(mdata, ans.dt, groups.dt, grouptype, divider);
+                db.DBF_data_process(database_str);
+
+                //if (db._basic_data.Columns.Contains("XZ"))
+                //{
+                //    XZ_group_separate(db._basic_data);
+                //}
+
+                basic_data = db._basic_data;
+                group_data = db._group_data;
+
+                DBHelper.create_mysql_table(basic_data, Utils.get_basic_tablename(year, "ngk", Utils.hk_lang_trans(sub)));
+                DBHelper.create_mysql_table(group_data, Utils.get_group_tablename(year, "ngk", Utils.hk_lang_trans(sub)));
+                DBHelper.create_ans_table(Utils.get_tablename(year, "ngk", Utils.hk_lang_trans(sub)), db.newStandard, ans.xz_th);
+                DBHelper.create_fz_table(Utils.get_tablename(year, "ngk", Utils.hk_lang_trans(sub)), groups.dt, groups.groups_group);
+                wizard.ShowPro(100, 3);
+            }
         }
 
         public void gk_database_process(MetaData mdata)

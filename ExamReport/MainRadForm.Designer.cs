@@ -599,7 +599,7 @@
             this.wholepage.Controls.Add(this.GKPageView);
             this.wholepage.Location = new System.Drawing.Point(2, -1);
             this.wholepage.Name = "wholepage";
-            this.wholepage.SelectedPage = this.HKPageView;
+            this.wholepage.SelectedPage = this.GKPageView;
             this.wholepage.Size = new System.Drawing.Size(876, 628);
             this.wholepage.TabIndex = 0;
             this.wholepage.Text = "radPageView1";
@@ -1889,8 +1889,8 @@
             // 
             // GKPageView
             // 
-            this.GKPageView.Controls.Add(this.compare_panel);
             this.GKPageView.Controls.Add(this.gk_data_pre_panel);
+            this.GKPageView.Controls.Add(this.compare_panel);
             this.GKPageView.Controls.Add(this.gk_xx_panel);
             this.GKPageView.Controls.Add(this.gk_docGroupBox);
             this.GKPageView.Controls.Add(this.gk_qx_panel);
@@ -3246,7 +3246,7 @@
             this.CustomGridView.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.CustomGridView.Location = new System.Drawing.Point(43, 88);
             // 
-            // 
+            // CustomGridView
             // 
             this.CustomGridView.MasterTemplate.AllowAddNewRow = false;
             this.CustomGridView.MasterTemplate.AllowColumnReorder = false;
@@ -3463,7 +3463,7 @@
             this.gk_gridview.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.gk_gridview.Location = new System.Drawing.Point(141, 3);
             // 
-            // 
+            // gk_gridview
             // 
             gridViewCheckBoxColumn3.EnableExpressionEditor = false;
             gridViewCheckBoxColumn3.HeaderText = "选择";
@@ -3529,6 +3529,7 @@
             this.gk_gridview.Size = new System.Drawing.Size(711, 225);
             this.gk_gridview.TabIndex = 0;
             this.gk_gridview.Text = "radGridView2";
+            this.gk_gridview.Click += new System.EventHandler(this.gk_gridview_Click);
             // 
             // mainform
             // 

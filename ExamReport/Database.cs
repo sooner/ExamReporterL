@@ -451,6 +451,8 @@ namespace ExamReport
                 
             }
             int rowline = 0;
+            int total_count = 0;
+            Dictionary<string, int> errcount = new Dictionary<string, int>();
             foreach (DataRow dr in dt.Rows)
             {
                 DataRow newRow = _basic_data.NewRow();
@@ -465,9 +467,8 @@ namespace ExamReport
                 newRow["Groups"] = "";
                 newRow["qxdm"] = dr["qxdm"].ToString().Trim();
                 decimal obj_mark = 0;
-                
-                int total_count = 0;
-                
+
+                total_count = 0;
                 foreach (DataRow ans_dr in newStandard.Rows)
                 {
                     if (ans_dr["da"].ToString().Trim().Equals(""))
@@ -475,10 +476,22 @@ namespace ExamReport
                         if (name_list[total_count] == null)
                         {
                             if ((decimal)dr["T" + (string)ans_dr["th"]] > Convert.ToDecimal(ans_dr["fs"]))
-                                throw new ArgumentException("第" + (string)ans_dr["th"] + "题满分值小于实际分值！");
-                            newRow["T" + (string)ans_dr["th"]] = (decimal)dr["T" + (string)ans_dr["th"]];
-                            //sub_mark += (decimal)dr["T" + (string)ans_dr["th"]];
-                            newRow["totalmark"] = (decimal)newRow["totalmark"] + (decimal)dr["T" + (string)ans_dr["th"]];
+                            {
+                                if (errcount.Keys.Contains((string)ans_dr["th"]))
+                                    errcount[(string)ans_dr["th"]]++;
+                                else
+                                    errcount.Add((string)ans_dr["th"], 1);
+
+                                newRow["T" + (string)ans_dr["th"]] = Convert.ToDecimal(ans_dr["fs"]);
+                                newRow["totalmark"] = (decimal)newRow["totalmark"] + Convert.ToDecimal(ans_dr["fs"]);
+                            }
+                            else
+                            {
+                                //throw new ArgumentException("第" + (string)ans_dr["th"] + "题满分值小于实际分值！");
+                                newRow["T" + (string)ans_dr["th"]] = (decimal)dr["T" + (string)ans_dr["th"]];
+                                //sub_mark += (decimal)dr["T" + (string)ans_dr["th"]];
+                                newRow["totalmark"] = (decimal)newRow["totalmark"] + (decimal)dr["T" + (string)ans_dr["th"]];
+                            }
                         }
                         else
                         {
@@ -572,8 +585,13 @@ namespace ExamReport
                 
                 rowline++;
             }
-
-           
+            if (errcount.Keys.Count != 0)
+            {
+                StringBuilder sb = new StringBuilder();
+                foreach (string str in errcount.Keys)
+                    sb.Append("第" + str + "题共" + errcount[str] + "人，");
+                _mdata.wizard.CheckData(1, "数据中存在得分超过满分的情况，其中" + sb.ToString() + "是否按满分计算？");
+            }
             _basic_data.DefaultView.Sort = "totalmark asc";
             _basic_data = _basic_data.DefaultView.ToTable();
             int totalsize = _basic_data.Rows.Count;

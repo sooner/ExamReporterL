@@ -1,15 +1,7 @@
-System.Data.EvaluateException: Cannot find column [zf].
-   at System.Data.AggregateNode.Bind(DataTable table, List`1 list)
-   at System.Data.DataExpression.Bind(DataTable table)
-   at System.Data.DataExpression..ctor(DataTable table, String expression, Type type)
-   at System.Data.DataTable.Compute(String expression, String filter)
-   at ExamReport.DataTableExtension.Max(DataTable dt, String col) in G:\wangsa\wangsa\ExamReporterL\ExamReport\DataTableExtension.cs:line 32
-   at ExamReport.AdminCal.total_statistic(DataTable data, basic_stat stat) in G:\wangsa\wangsa\ExamReporterL\ExamReport\AdminCal.cs:line 285
-   at ExamReport.AdminCal.single_process(DataTable data, Admin_WordData result, Int32 first, Int32 second, Int32 third) in G:\wangsa\wangsa\ExamReporterL\ExamReport\AdminCal.cs:line 211
-   at ExamReport.AdminCal.Calculate() in G:\wangsa\wangsa\ExamReporterL\ExamReport\AdminCal.cs:line 79
-   at ExamReport.Analysis.gk_xz_process(MetaData mdata) in G:\wangsa\wangsa\ExamReporterL\ExamReport\Analysis.cs:line 601
-   at ExamReport.Analysis.start() in G:\wangsa\wangsa\ExamReporterL\ExamReport\Analysis.cs:line 309
-   at ExamReport.Analysis.gk_xz_start() in G:\wangsa\wangsa\ExamReporterL\ExamReport\Analysis.cs:line 573
+System.Exception: 数据库异常，不存在该数据
+   at ExamReport.MetaData.get_meta_data() in G:\wangsa\wangsa\ExamReporterL\ExamReport\MetaData.cs:line 153
+   at ExamReport.Analysis.start() in G:\wangsa\wangsa\ExamReporterL\ExamReport\Analysis.cs:line 117
+   at ExamReport.Analysis.gk_zt_start() in G:\wangsa\wangsa\ExamReporterL\ExamReport\Analysis.cs:line 1491
    at System.Threading.ThreadHelper.ThreadStart_Context(Object state)
    at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
    at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)

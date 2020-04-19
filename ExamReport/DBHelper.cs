@@ -86,7 +86,18 @@ namespace ExamReport
                 + year + "' and exam='"
                 + _exam + "' and sub='"
                 + _sub + "'", null);
-            if(!reader.Read())
+            if (!reader.Read() || _exam.Equals("gk"))
+            {
+                reader = MySqlHelper.ExecuteReader(MySqlHelper.Conn, CommandType.Text, "select * from exam_meta_data where year='"
+                + year + "' and exam='"
+                + "ngk" + "' and sub='"
+                + _sub + "'", null);
+                if (!reader.Read())
+                    throw new ArgumentException("数据库不一致，该条数据不存在");
+                else
+                    _exam = "ngk";
+            }
+            else
                 throw new ArgumentException("数据库不一致，该条数据不存在");
             //int val = MySqlHelper.ExecuteNonQuery(MySqlHelper.Conn, CommandType.Text, "select * from exam_meta_data where year='"
             //    + year + "' and exam='"

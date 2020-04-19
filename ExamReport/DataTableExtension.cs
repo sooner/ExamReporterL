@@ -47,6 +47,7 @@ namespace ExamReport
                         {
                             case "zk":
                             case "hk":
+                            case "ngk":
                                 dr[dc] = Utils.hk_lang_trans(dr[dc].ToString());
                                 break;
                             
@@ -110,6 +111,7 @@ namespace ExamReport
                                 dr[dc] = "会考";
                                 break;
                             case "gk":
+                            case "gk2020":
                                 dr[dc] = "高考";
                                 break;
                             default:

@@ -53,13 +53,28 @@ namespace ExamReport
         public MyWizard wizard;
         public MetaData(string year, string exam, string sub)
         {
+            MySqlDataReader reader = MySqlHelper.ExecuteReader(MySqlHelper.Conn, CommandType.Text, "select * from exam_meta_data where year='"
+                + year + "' and exam='"
+                + exam + "' and sub='"
+                + sub + "'", null);
+            if (!reader.Read())
+            {
+                reader = MySqlHelper.ExecuteReader(MySqlHelper.Conn, CommandType.Text, "select * from exam_meta_data where year='"
+                + year + "' and exam='"
+                + "ngk" + "' and sub='"
+                + sub + "'", null);
+                if (!reader.Read())
+                    throw new Exception("数据库异常，不存在该数据");
+                _exam = "ngk";
+            }
+            else
+                _exam = exam;
             _year = year;
-            _exam = exam;
-            if (exam.Equals("gk"))
+            if (_exam.Equals("gk"))
                 _sub = Utils.language_trans(sub);
-            else if (exam.Equals("hk"))
+            else if (_exam.Equals("hk") || _exam.Equals("ngk"))
                 _sub = Utils.hk_lang_trans(sub);
-            else if(exam.Equals("zk"))
+            else if(_exam.Equals("zk"))
                 _sub = Utils.hk_lang_trans(sub);
             else
                 _sub = Utils.language_trans(sub);
@@ -150,7 +165,9 @@ namespace ExamReport
                 + _exam + "' and sub='"
                 + Utils.language_trans(_sub) + "'", null);
             if (!reader.Read())
+            {
                 throw new Exception("数据库异常，不存在该数据");
+            }
             _fullmark = Convert.ToDecimal(reader["fullmark"]);
             _grouptype = string_to_gtype(reader["gtype"].ToString().Trim());
             _group_num = Convert.ToInt32(reader["gnum"]);
@@ -258,7 +275,7 @@ namespace ExamReport
             string sub;
             if (_exam.Equals("gk"))
                 sub = Utils.language_trans(_sub);
-            else if (_exam.Equals("hk"))
+            else if (_exam.Equals("hk") || _exam.Equals("ngk"))
                 sub = Utils.hk_lang_trans(_sub);
             else if (_exam.Equals("zk"))
                 sub = Utils.hk_lang_trans(_sub);
