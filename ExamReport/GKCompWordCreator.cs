@@ -5,7 +5,7 @@ using System.Text;
 using System.Data;
 using Word = Microsoft.Office.Interop.Word;
 using Excel = Microsoft.Office.Interop.Excel;
-using Graph = Microsoft.Office.Interop.Graph;
+//using Graph = Microsoft.Office.Interop.Graph;
 
 namespace ExamReport
 {
@@ -123,7 +123,9 @@ namespace ExamReport
             //int count = ((PartitionData)totaldata[totaldata.Count - 1]).groups_analysis.Rows.Count;
             Word.Table table;
             Word.Range range = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+#pragma warning disable CS0219 // 变量“col”已被赋值，但从未使用过它的值
             int col = 11;
+#pragma warning restore CS0219 // 变量“col”已被赋值，但从未使用过它的值
             table = oDoc.Tables.Add(range, 7 + qx.Rows.Count, 13, ref oMissing, oTrue);
             //table.Range.InsertCaption(oWord.CaptionLabels["表格"], year + "年全市" + (is_wk ? "文科" : "理科") + "城郊对比报告", oMissing, Word.WdCaptionPosition.wdCaptionPositionAbove, oMissing);
             range.MoveEnd(Word.WdUnits.wdParagraph, 1);

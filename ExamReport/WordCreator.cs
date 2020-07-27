@@ -5,14 +5,13 @@ using System.Text;
 using System.Data;
 using Word = Microsoft.Office.Interop.Word;
 using Excel = Microsoft.Office.Interop.Excel;
-using Graph = Microsoft.Office.Interop.Graph;
+//using Graph = Microsoft.Office.Interop.Graph;
 using System.Drawing;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Threading;
 using ZedGraph;
-using Microsoft.Practices.EnterpriseLibrary.Common;
 
 
 namespace ExamReport
@@ -760,8 +759,12 @@ namespace ExamReport
         {
             Word.Table Total_Table;
             Word.Range total_rng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-
-            Total_Table = oDoc.Tables.Add(total_rng, 4, 7, ref oMissing, oTrue);
+            if (Utils.isNewGK)
+            {
+                Total_Table = oDoc.Tables.Add(total_rng, 4, 6, ref oMissing, oTrue);
+            }
+            else
+                Total_Table = oDoc.Tables.Add(total_rng, 4, 7, ref oMissing, oTrue);
             object Total_title = "    总分分析表";
             Total_Table.Range.InsertCaption(oWord.CaptionLabels["表"], Total_title, oMissing, Word.WdCaptionPosition.wdCaptionPositionAbove, oMissing);
             total_rng.MoveEnd(Word.WdUnits.wdParagraph, 1);
@@ -777,38 +780,74 @@ namespace ExamReport
             //Total_Table.Range.Paragraphs.OutlineLevel = Word.WdOutlineLevel.wdOutlineLevelBodyText;
             //Total_Table.Range.Font.Size = 10;
             //Total_Table.Range.Font.Name = "黑体";
-            Total_Table.Cell(1, 1).Range.Text = "总人数";
-            Total_Table.Cell(1, 2).Range.Text = "满分值";
-            Total_Table.Cell(1, 3).Range.Text = "最大值";
-            Total_Table.Cell(1, 4).Range.Text = "最小值";
-            Total_Table.Cell(1, 5).Range.Text = "平均值";
-            Total_Table.Cell(1, 6).Range.Text = "标准差";
-            Total_Table.Cell(1, 7).Range.Text = "差异系数";
+            if (Utils.isNewGK)
+            {
+                //Total_Table.Cell(1, 1).Range.Text = "总人数";
+                Total_Table.Cell(1, 1).Range.Text = "满分值";
+                Total_Table.Cell(1, 2).Range.Text = "最大值";
+                Total_Table.Cell(1, 3).Range.Text = "最小值";
+                Total_Table.Cell(1, 4).Range.Text = "平均值";
+                Total_Table.Cell(1, 5).Range.Text = "标准差";
+                Total_Table.Cell(1, 6).Range.Text = "差异系数";
 
-            Total_Table.Cell(2, 1).Range.Text = sdata.total_num.ToString();
-            Total_Table.Cell(2, 2).Range.Text = Convert.ToInt32(sdata.fullmark).ToString();
-            Total_Table.Cell(2, 3).Range.Text = string.Format("{0:F1}", sdata.max);
-            Total_Table.Cell(2, 4).Range.Text = string.Format("{0:F1}", sdata.min);
-            Total_Table.Cell(2, 5).Range.Text = string.Format("{0:F2}", sdata.avg);
-            Total_Table.Cell(2, 6).Range.Text = string.Format("{0:F2}", sdata.stDev);
-            Total_Table.Cell(2, 7).Range.Text = string.Format("{0:F2}", sdata.Dfactor);
+                //Total_Table.Cell(2, 1).Range.Text = sdata.total_num.ToString();
+                Total_Table.Cell(2, 1).Range.Text = Convert.ToInt32(sdata.fullmark).ToString();
+                Total_Table.Cell(2, 2).Range.Text = string.Format("{0:F1}", sdata.max);
+                Total_Table.Cell(2, 3).Range.Text = string.Format("{0:F1}", sdata.min);
+                Total_Table.Cell(2, 4).Range.Text = string.Format("{0:F2}", sdata.avg);
+                Total_Table.Cell(2, 5).Range.Text = string.Format("{0:F2}", sdata.stDev);
+                Total_Table.Cell(2, 6).Range.Text = string.Format("{0:F2}", sdata.Dfactor);
 
-            Total_Table.Cell(3, 1).Range.Text = "难度";
-            Total_Table.Cell(3, 2).Range.Text = "alpha系数";
-            Total_Table.Cell(3, 3).Range.Text = "标准误";
-            Total_Table.Cell(3, 4).Range.Text = "中数";
-            Total_Table.Cell(3, 5).Range.Text = "众数";
-            Total_Table.Cell(3, 6).Range.Text = "偏度";
-            Total_Table.Cell(3, 7).Range.Text = "峰度";
+                Total_Table.Cell(3, 1).Range.Text = "得分率";
+                Total_Table.Cell(3, 2).Range.Text = "alpha系数";
+                //Total_Table.Cell(3, 3).Range.Text = "标准误";
+                Total_Table.Cell(3, 3).Range.Text = "中数";
+                Total_Table.Cell(3, 4).Range.Text = "众数";
+                Total_Table.Cell(3, 5).Range.Text = "偏度";
+                Total_Table.Cell(3, 6).Range.Text = "峰度";
 
-            Total_Table.Cell(4, 1).Range.Text = string.Format("{0:F2}", sdata.difficulty);
-            Total_Table.Cell(4, 2).Range.Text = string.Format("{0:F2}", sdata.alfa);
-            Total_Table.Cell(4, 3).Range.Text = string.Format("{0:F2}", sdata.standardErr);
-            Total_Table.Cell(4, 4).Range.Text = string.Format("{0:F2}", sdata.mean);
-            Total_Table.Cell(4, 5).Range.Text = string.Format("{0:F1}", sdata.mode);
-            Total_Table.Cell(4, 6).Range.Text = string.Format("{0:F2}", sdata.skewness);
-            Total_Table.Cell(4, 7).Range.Text = string.Format("{0:F2}", sdata.kertosis);
+                Total_Table.Cell(4, 1).Range.Text = string.Format("{0:F2}", sdata.difficulty);
+                Total_Table.Cell(4, 2).Range.Text = string.Format("{0:F2}", sdata.alfa);
+                //Total_Table.Cell(4, 3).Range.Text = string.Format("{0:F2}", sdata.standardErr);
+                Total_Table.Cell(4, 3).Range.Text = string.Format("{0:F2}", sdata.mean);
+                Total_Table.Cell(4, 4).Range.Text = string.Format("{0:F1}", sdata.mode);
+                Total_Table.Cell(4, 5).Range.Text = string.Format("{0:F2}", sdata.skewness);
+                Total_Table.Cell(4, 6).Range.Text = string.Format("{0:F2}", sdata.kertosis);
+            }
+            else
+            {
+                Total_Table.Cell(1, 1).Range.Text = "总人数";
+                Total_Table.Cell(1, 2).Range.Text = "满分值";
+                Total_Table.Cell(1, 3).Range.Text = "最大值";
+                Total_Table.Cell(1, 4).Range.Text = "最小值";
+                Total_Table.Cell(1, 5).Range.Text = "平均值";
+                Total_Table.Cell(1, 6).Range.Text = "标准差";
+                Total_Table.Cell(1, 7).Range.Text = "差异系数";
 
+                Total_Table.Cell(2, 1).Range.Text = sdata.total_num.ToString();
+                Total_Table.Cell(2, 2).Range.Text = Convert.ToInt32(sdata.fullmark).ToString();
+                Total_Table.Cell(2, 3).Range.Text = string.Format("{0:F1}", sdata.max);
+                Total_Table.Cell(2, 4).Range.Text = string.Format("{0:F1}", sdata.min);
+                Total_Table.Cell(2, 5).Range.Text = string.Format("{0:F2}", sdata.avg);
+                Total_Table.Cell(2, 6).Range.Text = string.Format("{0:F2}", sdata.stDev);
+                Total_Table.Cell(2, 7).Range.Text = string.Format("{0:F2}", sdata.Dfactor);
+
+                Total_Table.Cell(3, 1).Range.Text = "得分率";
+                Total_Table.Cell(3, 2).Range.Text = "alpha系数";
+                Total_Table.Cell(3, 3).Range.Text = "标准误";
+                Total_Table.Cell(3, 4).Range.Text = "中数";
+                Total_Table.Cell(3, 5).Range.Text = "众数";
+                Total_Table.Cell(3, 6).Range.Text = "偏度";
+                Total_Table.Cell(3, 7).Range.Text = "峰度";
+
+                Total_Table.Cell(4, 1).Range.Text = string.Format("{0:F2}", sdata.difficulty);
+                Total_Table.Cell(4, 2).Range.Text = string.Format("{0:F2}", sdata.alfa);
+                Total_Table.Cell(4, 3).Range.Text = string.Format("{0:F2}", sdata.standardErr);
+                Total_Table.Cell(4, 4).Range.Text = string.Format("{0:F2}", sdata.mean);
+                Total_Table.Cell(4, 5).Range.Text = string.Format("{0:F1}", sdata.mode);
+                Total_Table.Cell(4, 6).Range.Text = string.Format("{0:F2}", sdata.skewness);
+                Total_Table.Cell(4, 7).Range.Text = string.Format("{0:F2}", sdata.kertosis);
+            }
             Total_Table.Range.Select();
             oWord.Selection.set_Style(ref TableContent2);
 
@@ -848,7 +887,10 @@ namespace ExamReport
             groups_table.Cell(1, 5).Range.Text = "平均值";
             groups_table.Cell(1, 6).Range.Text = "标准差";
             groups_table.Cell(1, 7).Range.Text = "差异系数";
-            groups_table.Cell(1, 8).Range.Text = "难度";
+            if(Utils.isNewGK)
+                groups_table.Cell(1, 8).Range.Text = "得分率";
+            else
+                groups_table.Cell(1, 8).Range.Text = "难度";
             groups_table.Cell(1, 9).Range.Text = "相关系数";
             groups_table.Cell(1, 10).Range.Text = "鉴别指数";
 
@@ -980,7 +1022,10 @@ namespace ExamReport
             single_total_table.Cell(1, 4).Range.Text = "平均值";
             single_total_table.Cell(1, 5).Range.Text = "标准差";
             single_total_table.Cell(1, 6).Range.Text = "差异系数";
-            single_total_table.Cell(1, 7).Range.Text = "难度";
+            if (Utils.isNewGK)
+                single_total_table.Cell(1, 7).Range.Text = "得分率";
+            else
+                single_total_table.Cell(1, 7).Range.Text = "难度";
             single_total_table.Cell(1, 8).Range.Text = "相关系数";
             single_total_table.Cell(1, 9).Range.Text = "鉴别指数";
 
@@ -1037,7 +1082,12 @@ namespace ExamReport
                 else if (single_group_dt.Columns[i].ColumnName.Trim().Equals("frequency"))
                     single_group_analysis.Cell(1, i + 1).Range.Text = "人数";
                 else
-                    single_group_analysis.Cell(1, i + 1).Range.Text = single_group_dt.Columns[i].ColumnName;
+                {
+                    if(Utils.isNewGK)
+                        single_group_analysis.Cell(1, i + 1).Range.Text = single_group_dt.Columns[i].ColumnName + "(%)";
+                    else
+                        single_group_analysis.Cell(1, i + 1).Range.Text = single_group_dt.Columns[i].ColumnName;
+                }
             }
             for (i = 0; i < single_group_dt.Rows.Count; i++)
             {
@@ -1046,8 +1096,14 @@ namespace ExamReport
                 {
                     if (i == single_group_dt.Rows.Count - 1)
                     {
-                        if (single_group_dt.Columns[j].ColumnName.Trim().Equals("rate") ||
-                        single_group_dt.Columns[j].ColumnName.Trim().Equals("avg") || single_group_dt.Columns[j].ColumnName.Trim().Equals("frequency"))
+                        if (single_group_dt.Columns[j].ColumnName.Trim().Equals("rate"))
+                        {
+                            if(Utils.isNewGK)
+                                single_group_analysis.Cell(i + 2, j + 1).Range.Text = string.Format("{0:F2}", single_group_dt.Rows[i][j]);
+                            else
+                                single_group_analysis.Cell(i + 2, j + 1).Range.Text = "-";
+                        }
+                        else if(single_group_dt.Columns[j].ColumnName.Trim().Equals("avg") || single_group_dt.Columns[j].ColumnName.Trim().Equals("frequency"))
                             single_group_analysis.Cell(i + 2, j + 1).Range.Text = "-";
                         else if (single_group_dt.Columns[j].ColumnName.Trim().Equals("mark"))
                             single_group_analysis.Cell(i + 2, j + 1).Range.Text = single_group_dt.Rows[i][j].ToString().Trim();
@@ -1065,7 +1121,12 @@ namespace ExamReport
                         else if (single_group_dt.Columns[j].ColumnName.Trim().Equals("frequency"))
                             single_group_analysis.Cell(i + 2, j + 1).Range.Text = single_group_dt.Rows[i][j].ToString();
                         else
-                            single_group_analysis.Cell(i + 2, j + 1).Range.Text = Convert.ToInt32(single_group_dt.Rows[i][j]).ToString().Trim();
+                        {
+                            if(Utils.isNewGK)
+                                single_group_analysis.Cell(i + 2, j + 1).Range.Text = string.Format("{0:F1}", single_group_dt.Rows[i][j]);
+                            else
+                                single_group_analysis.Cell(i + 2, j + 1).Range.Text = Convert.ToInt32(single_group_dt.Rows[i][j]).ToString().Trim();
+                        }
                     }
 
 
@@ -1341,6 +1402,263 @@ namespace ExamReport
             
 
         }
+        public void creating_word_sample()
+        {
+            string subject = _config.subject;
+            object filepath;
+            if (isZonghe)
+                filepath = @_config.CurrentDirectory + @"\template2.dotx";
+            else
+                filepath = @_config.CurrentDirectory + @"\template.dotx";
+            //Start Word and create a new document.
+            _addr = _config.save_address + @"\" + _config.subject + ".docx";
+            oWord = new Word.Application();
+
+            oWord.Visible = _config.isVisible;
+            oDoc = oWord.Documents.Add(ref filepath, ref oMissing,
+            ref oMissing, ref oMissing);
+            Utils.WriteFrontPage(_config, oDoc);
+
+            object oPageBreak = Microsoft.Office.Interop.Word.WdBreakType.wdPageBreak;
+
+            //oDoc.Characters.Last.InsertBreak(oPageBreak);
+            if (isZonghe)
+            {
+                insertText(ExamTitle0, "整体统计分析");
+                insertText(ExamTitle1, "总体分析");
+                insertTotalTable(_ZH_data);
+                insertTotalChart("    总分分布曲线图", _ZH_data);
+                insertTotalGroupTable("    科目整体分析表", _ZH_data, 4);
+                insertTotalFreqTable(_ZH_data);
+                insertTotalTupleTable(_ZH_data, "    综合总体分组分析表");
+                insertText(ExamTitle1, "题组分析");
+                List<string> keys = new List<string>(_ZH_data.groups_group.Keys);
+                int zh_group_count = 3;
+                for (int i = 1; i < _ZH_data.groups_group.Count; i++)
+                {
+                    string key = keys[i];
+                    insertText(ExamTitle2, key);
+                    List<string> groups = _ZH_data.groups_group[key];
+                    foreach (string group in groups)
+                    {
+                        if (group.Equals("totalmark"))
+                            continue;
+                        WordData.group_data group_dt = (WordData.group_data)_ZH_data.single_group_analysis[zh_group_count];
+                        DataRow group_dr = _ZH_data.group_analysis.Rows[zh_group_count];
+                        insertText(ExamTitle3, group);
+                        insertTH(_ZH_data._groups_ans.Rows[zh_group_count]["th"].ToString().Trim());
+                        insertGroupTotalTable(group_dr, group);
+                        insertGroupDistChart("    " + group + "分数分布图", group_dt.group_dist);
+                        insertGroupDiffChart("    " + group + "难度曲线图", group_dt.group_difficulty);
+                        insertGroupSingleAnalysis("    " + group + "分组分析表", group_dt.group_detail);
+                        zh_group_count++;
+                        oDoc.Characters.Last.InsertBreak(oPagebreak);
+                    }
+                }
+                //for (int i = 3; i < _ZH_data.single_group_analysis.Count; i++)
+                //{
+                //    WordData.group_data group_dt = (WordData.group_data)_ZH_data.single_group_analysis[i];
+                //    DataRow group_dr = _ZH_data.group_analysis.Rows[i];
+                //    insertText(ExamTitle3, _ZH_data.group_analysis.Rows[i]["number"].ToString());
+                //    insertText(ExamBodyText, "本题组包含:" + _ZH_data._groups_ans.Rows[i]["th"].ToString().Trim());
+                //    insertGroupTotalTable(group_dr);
+                //    insertGroupDistChart(group_dr["number"].ToString().Trim() + "分数分布图", group_dt.group_dist);
+                //    insertGroupDiffChart(group_dr["number"].ToString().Trim() + "难度曲线图", group_dt.group_difficulty);
+                //    insertGroupSingleAnalysis(group_dr["number"].ToString().Trim() + "分组分析表", group_dt.group_detail);
+                //}
+                insertText(ExamTitle0, _config.subject.Substring(3) + "统计分析");
+            }
+
+            Word.Range first = oDoc.Paragraphs.Add(ref oMissing).Range;
+            first.set_Style(ExamTitle1);
+            first.InsertBefore("总体分析\n");
+
+
+
+            oDoc.Characters.Last.Select();
+            oWord.Selection.HomeKey(Word.WdUnits.wdLine, oMissing);
+            oWord.Selection.Delete(Word.WdUnits.wdCharacter, oMissing);
+            oWord.Selection.Range.set_Style(ExamBodyText);
+
+            //oPara2.Range.ListFormat.ApplyListTemplate(listTemp, ref bContinuousPrev, ref applyTo, ref defaultListBehaviour);
+            //oPara2.Format.SpaceAfter = 6;
+            //oPara2.Range.InsertParagraphAfter();
+
+
+            insertTotalTable(_sdata);
+
+            ///////////////////////////////////////////////////////////
+            //总分分布图表
+            insertTotalChart("    总分分布曲线图", _sdata);
+
+            //区分度图表
+            insertTotalDifficultyChart();
+
+            //oDoc.Characters.Last.InsertBreak(oParagrahbreak);
+
+
+
+            Word.Table topic_table;
+            Word.Range topic_Rng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+
+            topic_table = oDoc.Tables.Add(topic_Rng, _sdata.total_analysis.Rows.Count + 1, 10, ref oMissing, oTrue);
+            topic_table.Rows[1].HeadingFormat = -1;
+            object topic_title = "    题目整体分析表";
+            topic_table.Range.InsertCaption(oWord.CaptionLabels["表"], topic_title, oMissing, Word.WdCaptionPosition.wdCaptionPositionAbove, oMissing);
+            topic_Rng.MoveEnd(Word.WdUnits.wdParagraph, 1);
+            topic_Rng.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+
+            //topic_table.Range.Select();
+            //oWord.Selection.Cells.VerticalAlignment = Word.WdCellVerticalAlignment.wdCellAlignVerticalCenter;
+            //oWord.Selection.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+            //topic_table.Range.ParagraphFormat.Space1();
+            topic_table.Borders.OutsideLineStyle = Word.WdLineStyle.wdLineStyleSingle;
+            topic_table.Borders.InsideLineStyle = Word.WdLineStyle.wdLineStyleSingle;
+
+            //topic_table.Range.Paragraphs.OutlineLevel = Word.WdOutlineLevel.wdOutlineLevelBodyText;
+            //topic_table.Range.Font.Size = 10;
+            //topic_table.Range.Font.Name = "黑体";
+
+            topic_table.Cell(1, 1).Range.Text = "题目";
+            topic_table.Cell(1, 2).Range.Text = "满分值";
+            topic_table.Cell(1, 3).Range.Text = "最大值";
+            topic_table.Cell(1, 4).Range.Text = "最小值";
+            topic_table.Cell(1, 5).Range.Text = "平均值";
+            topic_table.Cell(1, 6).Range.Text = "标准差";
+            topic_table.Cell(1, 7).Range.Text = "差异系数";
+            topic_table.Cell(1, 8).Range.Text = "得分率";
+            topic_table.Cell(1, 9).Range.Text = "相关系数";
+            topic_table.Cell(1, 10).Range.Text = "鉴别指数";
+
+            for (int i = 0; i < _sdata.total_analysis.Rows.Count; i++)
+            {
+                topic_table.Cell(i + 2, 1).Range.Text = _sdata.total_analysis.Rows[i]["number"].ToString().Substring(1);
+                topic_table.Cell(i + 2, 2).Range.Text = FullmarkFormat((decimal)_sdata.total_analysis.Rows[i]["fullmark"]);
+                topic_table.Cell(i + 2, 3).Range.Text = string.Format("{0:F1}", _sdata.total_analysis.Rows[i]["max"]);
+                topic_table.Cell(i + 2, 4).Range.Text = string.Format("{0:F1}", _sdata.total_analysis.Rows[i]["min"]);
+                topic_table.Cell(i + 2, 5).Range.Text = string.Format("{0:F2}", _sdata.total_analysis.Rows[i]["avg"]);
+                topic_table.Cell(i + 2, 6).Range.Text = string.Format("{0:F2}", _sdata.total_analysis.Rows[i]["standardErr"]);
+                topic_table.Cell(i + 2, 7).Range.Text = string.Format("{0:F2}", _sdata.total_analysis.Rows[i]["dfactor"]);
+                topic_table.Cell(i + 2, 8).Range.Text = string.Format("{0:F2}", _sdata.total_analysis.Rows[i]["difficulty"]);
+                topic_table.Cell(i + 2, 9).Range.Text = string.Format("{0:F2}", _sdata.total_analysis.Rows[i]["correlation"]);
+                topic_table.Cell(i + 2, 10).Range.Text = string.Format("{0:F2}", _sdata.total_analysis.Rows[i]["discriminant"]);
+                if (Math.Abs((decimal)_sdata.total_analysis.Rows[i]["correlation"]) != (decimal)_sdata.total_analysis.Rows[i]["correlation"] ||
+                    Math.Abs((decimal)_sdata.total_analysis.Rows[i]["discriminant"]) != (decimal)_sdata.total_analysis.Rows[i]["discriminant"])
+                    for (int j = 1; j < 11; j++)
+                        topic_table.Cell(i + 2, j).Range.Shading.BackgroundPatternColor = Word.WdColor.wdColorGray10;
+            }
+            //oWord.Selection.MoveEnd();
+            //oWord.Selection.MoveDown(WdLine, _sdata.total_analysis.Rows.Count + 1, oMissing);
+            //oWord.Selection.InsertParagraphAfter();
+
+            //topic_table.Range.set_Style(ref TableContent2);
+            topic_table.Select();
+            oWord.Selection.set_Style(ref TableContent2);
+
+            topic_Rng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+            topic_Rng.InsertParagraphAfter();
+            //oDoc.Characters.Last.InsertBreak(oParagrahbreak);
+
+
+            insertTotalGroupTable("    题组整体分析表", _sdata, _sdata.group_analysis.Rows.Count + 1);
+
+            //oDoc.Characters.Last.InsertBreak(oParagrahbreak);
+
+
+            //insertTotalFreqTable(_sdata);
+            insertTotalTupleTable(_sdata, "    总体分组分析表");
+            //oDoc.Characters.Last.InsertBreak(oPageBreak);
+            oDoc.Characters.Last.InsertBreak(oPagebreak);
+            first = oDoc.Paragraphs.Add(ref oMissing).Range;
+            first.set_Style(ExamTitle1);
+            first.InsertBefore("题组分析\n");
+
+
+
+            oDoc.Characters.Last.Select();
+            oWord.Selection.HomeKey(Word.WdUnits.wdLine, oMissing);
+            oWord.Selection.Delete(Word.WdUnits.wdCharacter, oMissing);
+            oWord.Selection.Range.set_Style(ExamBodyText);
+
+            int group_num = 0;
+            foreach (string key in _sdata.groups_group.Keys)
+            {
+                insertText(ExamTitle2, key);
+                List<string> groups = _sdata.groups_group[key];
+                foreach (string group in groups)
+                {
+                    if (group.Equals("totalmark"))
+                        continue;
+
+                    insertText(ExamTitle3, group);
+                    insertTH(_sdata._groups_ans.Rows[group_num]["th"].ToString().Trim());
+                    DataRow group_dr = _sdata.group_analysis.Rows[group_num];
+
+                    insertGroupTotalTable(group_dr, group);
+                    insertGroupDistChart("    " + group + "分数分布图", ((WordData.group_data)_sdata.single_group_analysis[group_num]).group_dist);
+                    if (isZonghe)
+                        insertZHGroupDiffChart("    " + group + "难度曲线图", ((WordData.group_data)_sdata.single_group_analysis[group_num]).group_difficulty);
+                    else
+                        insertGroupDiffChart("    " + group + "得分率曲线图", ((WordData.group_data)_sdata.single_group_analysis[group_num]).group_difficulty);
+                    oDoc.Characters.Last.InsertBreak(oPageBreak);
+                    if(Utils.isNewGK)
+                    {
+                        int columnnum = ((WordData.group_data)_sdata.single_group_analysis[group_num]).group_detail.Columns.Count;
+                        int rownum = ((WordData.group_data)_sdata.single_group_analysis[group_num]).group_detail.Rows.Count;
+                        ((WordData.group_data)_sdata.single_group_analysis[group_num]).group_detail.Columns.RemoveAt(columnnum - 3);
+                        ((WordData.group_data)_sdata.single_group_analysis[group_num]).group_detail.Rows.RemoveAt(rownum - 2);
+                    }
+                    insertGroupSingleAnalysis("    " + group + "分组分析表", ((WordData.group_data)_sdata.single_group_analysis[group_num]).group_detail);
+                    group_num++;
+                    oDoc.Characters.Last.InsertBreak(oPagebreak);
+                }
+            }
+
+           
+            #region single topic analysis
+
+            insertText(ExamTitle1, "题目分析");
+
+            int topic_num = 0;
+            foreach (DataRow dr in _sdata.total_analysis.Rows)
+            {
+                insertText(ExamTitle3, "第" + dr["number"].ToString().Trim().Substring(1) + "题");
+                insertTotalTable("    " + "第" + dr["number"].ToString().Trim().Substring(1) + "题分析表", dr);
+                if (isZonghe)
+                    insertZHChart("    " + "第" + dr["number"].ToString().Trim().Substring(1) + "题难度曲线图", ((WordData.single_data)_sdata.single_topic_analysis[topic_num]).single_difficulty, "分数", "难度", Excel.XlChartType.xlXYScatterSmooth);
+                else
+                    insertChart("    " + "第" + dr["number"].ToString().Trim().Substring(1) + "题得分率曲线图", ((WordData.single_data)_sdata.single_topic_analysis[topic_num]).single_difficulty, "分数", "得分率", Excel.XlChartType.xlXYScatterSmooth);
+                
+                insertMultipleChart("    " + "第" + dr["number"].ToString().Trim().Substring(1) + "题分组得分率曲线图", ((WordData.single_data)_sdata.single_topic_analysis[topic_num]).single_dist, "分组", "得分率", Excel.XlChartType.xlLineMarkers);
+                oDoc.Characters.Last.InsertBreak(oPageBreak);
+                if(Utils.isNewGK)
+                {
+                    int columnum = ((WordData.single_data)_sdata.single_topic_analysis[topic_num]).single_detail.Columns.Count;
+                    int rownum = ((WordData.single_data)_sdata.single_topic_analysis[topic_num]).single_detail.Rows.Count;
+                    ((WordData.single_data)_sdata.single_topic_analysis[topic_num]).single_detail.Columns.RemoveAt(columnum - 3);
+                    ((WordData.single_data)_sdata.single_topic_analysis[topic_num]).single_detail.Rows.RemoveAt(rownum - 2);
+                }
+                insertGroupTable("    " + "第" + dr["number"].ToString().Trim().Substring(1) + "题分组分析表", ((WordData.single_data)_sdata.single_topic_analysis[topic_num]).single_detail, ((WordData.single_data)_sdata.single_topic_analysis[topic_num]).stype);
+                topic_num++;
+                oDoc.Characters.Last.InsertBreak(oPagebreak);
+            }
+
+            insertText(ExamTitle1, "相关分析");
+            group_num = 0;
+            foreach (string key in _sdata.groups_group.Keys)
+            {
+                insertText(ExamTitle3, key);
+                insertCorTable(key, _sdata.group_cor[group_num]);
+                group_num++;
+            }
+            oDoc.Characters.Last.InsertBreak(oPagebreak);
+            #endregion
+            foreach (Word.TableOfContents table in oDoc.TablesOfContents)
+                table.Update();
+            Utils.Save(_config, oDoc, oWord);
+
+
+        }
         public void insertCorTable(string title, DataTable dt)
         {
             Word.Table table;
@@ -1452,7 +1770,8 @@ namespace ExamReport
             {
                 data[i] = new double[2];
                 data[i][0] = Convert.ToDouble((decimal)dt.Rows[i][0]);
-                data[i][1] = Convert.ToDouble((int)dt.Rows[i][1]);
+                
+                data[i][1] = Convert.ToDouble(dt.Rows[i][1]);
 
             }
 
@@ -1543,7 +1862,10 @@ namespace ExamReport
             Word.Range dist_rng = oDoc.Bookmarks.get_Item(oEndOfDoc).Range;
             dist_rng.Paste();
             Utils.mutex_clipboard.ReleaseMutex();
-            dist_rng.InsertCaption(oWord.CaptionLabels["图"], "    题目难度与区分度坐标图", oMissing, Word.WdCaptionPosition.wdCaptionPositionAbove, oMissing);
+            if(Utils.isNewGK)
+                dist_rng.InsertCaption(oWord.CaptionLabels["图"], "    题目得分率与区分度坐标图", oMissing, Word.WdCaptionPosition.wdCaptionPositionAbove, oMissing);
+            else
+                dist_rng.InsertCaption(oWord.CaptionLabels["图"], "    题目难度与区分度坐标图", oMissing, Word.WdCaptionPosition.wdCaptionPositionAbove, oMissing);
             dist_rng.MoveEnd(Word.WdUnits.wdParagraph, 1);
             dist_rng.Paragraphs.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
             dist_rng = oDoc.Bookmarks.get_Item(oEndOfDoc).Range;
@@ -1652,7 +1974,10 @@ namespace ExamReport
             single_total_table.Cell(1, 4).Range.Text = "平均值";
             single_total_table.Cell(1, 5).Range.Text = "标准差";
             single_total_table.Cell(1, 6).Range.Text = "差异系数";
-            single_total_table.Cell(1, 7).Range.Text = "难度";
+            if(Utils.isNewGK)
+                single_total_table.Cell(1, 7).Range.Text = "得分率";
+            else
+                single_total_table.Cell(1, 7).Range.Text = "难度";
             single_total_table.Cell(1, 8).Range.Text = "相关系数";
             single_total_table.Cell(1, 9).Range.Text = "鉴别指数";
 
@@ -1836,24 +2161,39 @@ namespace ExamReport
                         table.Cell(1, i + 1).Range.Text = "相关系数";
                 }
                 else
-                    table.Cell(1, i + 1).Range.Text = dt.Columns[i].ColumnName;
+                {
+                    if(Utils.isNewGK)
+                        table.Cell(1, i + 1).Range.Text = dt.Columns[i].ColumnName + "(%)";
+                    else
+                        table.Cell(1, i + 1).Range.Text = dt.Columns[i].ColumnName;
+                }
             }
             int row = 2;
             foreach (DataRow dr in dt.Rows)
             {
                 if (dr["mark"].ToString().Trim().Equals("未选") || dr["mark"].ToString().Trim().Equals("未选或多选"))
                 {
+                    int rowline = 0;
+                    if (Utils.isNewGK)
+                        rowline = dt.Rows.Count;
+                    else
+                        rowline = dt.Rows.Count - 1;
                     for (int j = 0; j < dt.Columns.Count; j++)
                     {
                         if (dt.Columns[j].ColumnName.Trim().Equals("rate") ||
                                 dt.Columns[j].ColumnName.Trim().Equals("correlation"))
-                            table.Cell(dt.Rows.Count - 1, j + 1).Range.Text = string.Format("{0:F2}", dr[j]);
+                            table.Cell(rowline, j + 1).Range.Text = string.Format("{0:F2}", dr[j]);
                         else if (dt.Columns[j].ColumnName.Trim().Equals("mark"))
-                            table.Cell(dt.Rows.Count - 1, j + 1).Range.Text = dr[j].ToString().Trim();
+                            table.Cell(rowline, j + 1).Range.Text = dr[j].ToString().Trim();
                         else if (dt.Columns[j].ColumnName.Trim().Equals("frequency"))
-                            table.Cell(dt.Rows.Count - 1, j + 1).Range.Text = dr[j].ToString();
+                            table.Cell(rowline, j + 1).Range.Text = dr[j].ToString();
                         else
-                            table.Cell(dt.Rows.Count - 1, j + 1).Range.Text = Convert.ToInt32(dr[j]).ToString().Trim();
+                        {
+                            if (Utils.isNewGK)
+                                table.Cell(rowline, j + 1).Range.Text = string.Format("{0:F1}", dr[j]).ToString().Trim();
+                            else
+                                table.Cell(rowline, j + 1).Range.Text = Convert.ToInt32(dr[j]).ToString();
+                        }
                     }
                 }
                 else if (dr["mark"].ToString().Trim().Equals("合计"))
@@ -1877,8 +2217,14 @@ namespace ExamReport
                 {
                     for (int j = 0; j < dt.Columns.Count; j++)
                     {
-                        if (dt.Columns[j].ColumnName.Trim().Equals("rate") ||
-                            dt.Columns[j].ColumnName.Trim().Equals("correlation") ||
+                        if (dt.Columns[j].ColumnName.Trim().Equals("rate"))
+                        {
+                            if(Utils.isNewGK)
+                                table.Cell(dt.Rows.Count + 1, j + 1).Range.Text = string.Format("{0:F2}", dr[j]);
+                            else
+                                table.Cell(dt.Rows.Count + 1, j + 1).Range.Text = "-";
+                        }
+                        else if(dt.Columns[j].ColumnName.Trim().Equals("correlation") ||
                             dt.Columns[j].ColumnName.Trim().Equals("frequency"))
                             table.Cell(dt.Rows.Count + 1, j + 1).Range.Text = "-";
                         else if (dt.Columns[j].ColumnName.Trim().Equals("mark"))
@@ -1900,7 +2246,12 @@ namespace ExamReport
                         else if (dt.Columns[j].ColumnName.Trim().Equals("frequency"))
                             table.Cell(row, j + 1).Range.Text = dr[j].ToString();
                         else
-                            table.Cell(row, j + 1).Range.Text = Convert.ToInt32(dr[j]).ToString().Trim();
+                        {
+                            if(Utils.isNewGK)
+                                table.Cell(row, j + 1).Range.Text = string.Format("{0:F1}", dr[j]).ToString().Trim();
+                            else
+                                table.Cell(row, j + 1).Range.Text = Convert.ToInt32(dr[j]).ToString().Trim();
+                        }
                     }
                     row++;
                 }
@@ -1989,14 +2340,17 @@ namespace ExamReport
         
         public void insertTotalChart(string title, WordData sdata)
         {
-            DataTable dt = sdata.totalmark_dist;
+            DataTable dt;
+            if (Utils.isNewGK)
+                dt = sdata.totalmark_dist_sample;
+            else
+                dt = sdata.totalmark_dist;
             double[][] data = new double[dt.Rows.Count][];
             for (int i = 0; i < dt.Rows.Count; i++)
             {
                 data[i] = new double[2];
                 data[i][0] = Convert.ToDouble((decimal)dt.Rows[i][0]);
-                data[i][1] = Convert.ToDouble((int)dt.Rows[i][1]);
-
+                data[i][1] = Convert.ToDouble(dt.Rows[i][1]);
             }
             double[] cuvedata = new double[2];
             cuvedata[0] = Convert.ToDouble(sdata.avg);

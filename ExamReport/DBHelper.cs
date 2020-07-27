@@ -82,7 +82,10 @@ namespace ExamReport
             string _sub = Utils.language_trans(sub);
 
             //检查是否存在这一条数据
-            MySqlDataReader reader = MySqlHelper.ExecuteReader(MySqlHelper.Conn, CommandType.Text, "select * from exam_meta_data where year='"
+            MySqlDataReader reader = MySqlHelper.ExecuteReader(
+                MySqlHelper.Conn, 
+                CommandType.Text, 
+                "select * from exam_meta_data where year='"
                 + year + "' and exam='"
                 + _exam + "' and sub='"
                 + _sub + "'", null);
@@ -134,6 +137,13 @@ namespace ExamReport
                     MySqlHelper.ExecuteNonQuery(trans, CommandType.Text, "drop table " + "zh_" + Utils.get_fz_tablename(year, _exam, _sub), null);
 
                 }
+                if (_exam.Equals("ngk"))
+                {
+                    MySqlHelper.ExecuteNonQuery(trans, CommandType.Text, "drop table if exists " + Utils.get_basic_tablename(year, _exam, _sub) + "_sample", null);
+                    MySqlHelper.ExecuteNonQuery(trans, CommandType.Text, "drop table if exists " + Utils.get_group_tablename(year, _exam, _sub) + "_sample", null);
+                    MySqlHelper.ExecuteNonQuery(trans, CommandType.Text, "drop table if exists " + Utils.get_sample_ans_tablename(year, _exam, _sub), null);
+                    MySqlHelper.ExecuteNonQuery(trans, CommandType.Text, "drop table if exists " + Utils.get_sample_fz_tablename(year, _exam, _sub), null);
+                }
             }
             trans.Commit();
             conn.Close();
@@ -153,7 +163,7 @@ namespace ExamReport
             int count = 0;
             foreach (DataColumn dc in groups_data.Columns)
             {
-                objectdata.Append("\t" + dc.ColumnName + " ");
+                objectdata.Append("\t`" + dc.ColumnName + "` ");
                 if (dc.DataType.ToString().Equals("System.String"))
                     objectdata.Append("text");
                 else if (dc.DataType.ToString().Equals("System.Decimal"))

@@ -43,6 +43,7 @@ namespace ExamReport
             {
                 ans = new excel_process(ans_str);
                 ans.run(true);
+
                 wizard.ShowPro(5, 1);
                 groups = new excel_process(group_str);
                 groups.run(false);
@@ -58,13 +59,15 @@ namespace ExamReport
                 wizard.ShowPro(10, 1);
             MetaData md = new MetaData(year,
                 Utils.language_trans(exam),
-                Utils.language_trans(sub));
+                Utils.language_trans(sub),
+                true);
             md.fullmark_iszero = fullmark_iszero;
             md.sub_iszero = sub_iszero;
             md.PartialRight = PartialRight;
             if (!(sub.Equals("总分")  || sub.Contains("行政版")))
             {
                 md.xz = ans.xz_th;
+                md.isSampled = ans.isSampled;
             }
             md.wizard = wizard;
             if (sub.Contains("理综") || sub.Contains("文综"))
@@ -79,12 +82,16 @@ namespace ExamReport
                 md._grouptype = grouptype;
                 md._group_num = Convert.ToInt32(divider);
             }
-            try
-            {
-            if (!md.check())
-                wizard.ErrorM("该数据已存储，请先删除后再添加");
             //try
             //{
+            if (!md.check())
+            {
+                wizard.CheckData(1, "该数据数据库中已存在，是否覆盖?");
+                DBHelper.delete_row(md._year, md._exam, md._sub);
+            }
+
+            try
+            {
 
                 switch (exam)
                 {
@@ -200,6 +207,8 @@ namespace ExamReport
                 Database db = new Database(mdata, ans.dt, groups.dt, grouptype, divider);
                 db.DBF_data_process(database_str);
 
+                
+
                 //if (db._basic_data.Columns.Contains("XZ"))
                 //{
                 //    XZ_group_separate(db._basic_data);
@@ -212,6 +221,25 @@ namespace ExamReport
                 DBHelper.create_mysql_table(group_data, Utils.get_group_tablename(year, "ngk", Utils.hk_lang_trans(sub)));
                 DBHelper.create_ans_table(Utils.get_tablename(year, "ngk", Utils.hk_lang_trans(sub)), db.newStandard, ans.xz_th);
                 DBHelper.create_fz_table(Utils.get_tablename(year, "ngk", Utils.hk_lang_trans(sub)), groups.dt, groups.groups_group);
+                if (mdata.isSampled)
+                {
+                    DataTable ans_samples = new DataTable();
+                    ans_samples = ans.dt.Copy();
+
+                    for (int i = ans_samples.Rows.Count - 1; i >= 0; i--)
+                    {
+                        if (ans_samples.Rows[i]["sample"].ToString().Equals("0"))
+                            ans_samples.Rows.RemoveAt(i);
+                    }
+
+                    Database db_sample = new Database(mdata, ans_samples, groups.dt, grouptype, divider);
+                    db_sample.DBF_data_process(database_str);
+
+                    DBHelper.create_mysql_table(db_sample._basic_data, Utils.get_basic_tablename(year, "ngk", Utils.hk_lang_trans(sub))+"_sample");
+                    DBHelper.create_mysql_table(db_sample._group_data, Utils.get_group_tablename(year, "ngk", Utils.hk_lang_trans(sub)) + "_sample");
+                    DBHelper.create_ans_table(Utils.get_tablename(year, "ngk", Utils.hk_lang_trans(sub)) + "_sample", db_sample.newStandard, ans.xz_th);
+                    DBHelper.create_fz_table(Utils.get_tablename(year, "ngk", Utils.hk_lang_trans(sub)) + "_sample", db_sample._groups, groups.groups_group);
+                }
                 wizard.ShowPro(100, 3);
             }
         }

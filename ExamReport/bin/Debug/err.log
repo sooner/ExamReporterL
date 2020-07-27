@@ -1,9 +1,17 @@
-System.Exception: 数据库异常，不存在该数据
-   at ExamReport.MetaData.get_meta_data() in G:\wangsa\wangsa\ExamReporterL\ExamReport\MetaData.cs:line 153
-   at ExamReport.Analysis.start() in G:\wangsa\wangsa\ExamReporterL\ExamReport\Analysis.cs:line 117
-   at ExamReport.Analysis.gk_zt_start() in G:\wangsa\wangsa\ExamReporterL\ExamReport\Analysis.cs:line 1491
-   at System.Threading.ThreadHelper.ThreadStart_Context(Object state)
-   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
-   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
-   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
-   at System.Threading.ThreadHelper.ThreadStart()
+System.Threading.AbandonedMutexException: 由于出现被放弃的 mutex，等待过程结束。
+   在 System.Threading.WaitHandle.InternalWaitOne(SafeHandle waitableSafeHandle, Int64 millisecondsTimeout, Boolean hasThreadAffinity, Boolean exitContext)
+   在 System.Threading.WaitHandle.WaitOne(Int32 millisecondsTimeout, Boolean exitContext)
+   在 System.Threading.WaitHandle.WaitOne()
+   在 ExamReport.ZedGraph.createMultipleCuve(DataTable dt, String xStr, String yStr, Double minX, Double maxX, Decimal fullmark) 位置 C:\Users\wangs\Documents\Project\ExamReporterL\ExamReporterL\ExamReport\ZedGraph.cs:行号 209
+   在 ExamReport.Partition_wordcreator.insertChart(String title, DataTable dt, String x_axis, String y_axis, Object type, Decimal fullmark) 位置 C:\Users\wangs\Documents\Project\ExamReporterL\ExamReporterL\ExamReport\Partition_wordcreator.cs:行号 1684
+   在 ExamReport.Partition_wordcreator.creating_word_part2() 位置 C:\Users\wangs\Documents\Project\ExamReporterL\ExamReporterL\ExamReport\Partition_wordcreator.cs:行号 313
+   在 ExamReport.Partition_wordcreator.creating_word() 位置 C:\Users\wangs\Documents\Project\ExamReporterL\ExamReporterL\ExamReport\Partition_wordcreator.cs:行号 216
+   在 ExamReport.Analysis.gk_qx_process(MetaData mdata) 位置 C:\Users\wangs\Documents\Project\ExamReporterL\ExamReporterL\ExamReport\Analysis.cs:行号 1735
+   在 ExamReport.Analysis.gk_schedule(MetaData mdata, gk_process zt_process, gk_process wl_process) 位置 C:\Users\wangs\Documents\Project\ExamReporterL\ExamReporterL\ExamReport\Analysis.cs:行号 2029
+   在 ExamReport.Analysis.start() 位置 C:\Users\wangs\Documents\Project\ExamReporterL\ExamReporterL\ExamReport\Analysis.cs:行号 326
+   在 ExamReport.Analysis.gk_qx_start() 位置 C:\Users\wangs\Documents\Project\ExamReporterL\ExamReporterL\ExamReport\Analysis.cs:行号 1566
+   在 System.Threading.ThreadHelper.ThreadStart_Context(Object state)
+   在 System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   在 System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   在 System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+   在 System.Threading.ThreadHelper.ThreadStart()

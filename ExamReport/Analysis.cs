@@ -91,6 +91,8 @@ namespace ExamReport
         public DataTable hk_xxdm;
         public DataTable hgk_temp;
 
+        public bool isOrigin = true;
+
         public Analysis(mainform form)
         {
             _form = form;
@@ -106,12 +108,12 @@ namespace ExamReport
                     string exam = _exam;
                     string chi_sub = row.Cells["sub"].Value.ToString().Trim();
                     string sub = Utils.language_trans(chi_sub);
-
+                    
                     if (exam_type.Equals("gk_xz") && !sub.EndsWith("xz"))
                         continue;
                     string log = year + "年" + Utils.language_trans(exam) + row.Cells["sub"].Value.ToString().Trim();
                     _form.ShowPro(exam_type, 1, log + "数据读取...");
-                    MetaData mdata = new MetaData(year, exam, sub);
+                    MetaData mdata = new MetaData(year, exam, sub, false);
                     try
                     {
                         mdata.get_meta_data();
@@ -120,9 +122,24 @@ namespace ExamReport
                         _grouptype = mdata._grouptype;
                         _group_num = mdata._group_num;
 
-                        if (_exam.Equals("gk") && (sub.Equals("yy") || sub.Equals("yw")))
-                            mdata.ywyy_choice = row.Cells["SpecChoice"].Value.ToString().Trim();
-
+                    if (_exam.Equals("gk") && (sub.Equals("yy") || sub.Equals("yw")))
+                        mdata.ywyy_choice = row.Cells["SpecChoice"].Value.ToString().Trim();
+                    if (_exam.Equals("gk") && (sub.Equals("yw") || sub.Equals("yy") || sub.Equals("sx")))
+                    {
+                        Utils.isNewGK = false;
+                        isOrigin = true;
+                    }
+                    else if (_exam.Equals("gk") && row.Cells["ReportType"].Value.ToString().Equals("考生水平评价"))
+                    {
+                        isOrigin = false;
+                        Utils.isNewGK = true;
+                    }
+                    else
+                    {
+                        Utils.isNewGK = false;
+                        isOrigin = true;
+                    }
+                        
                         mdata.log_name = log;
                         if (sub.Equals("zf") || sub.EndsWith("xz"))
                         {
@@ -130,10 +147,22 @@ namespace ExamReport
                         }
                         else
                         {
-                            mdata.get_basic_data();
-                            mdata.get_group_data();
-                            mdata.get_ans();
-                            mdata.get_fz();
+                            if (isOrigin)
+                            {
+                                mdata.get_basic_data();
+                                mdata.get_group_data();
+                                mdata.get_ans();
+                                mdata.get_fz();
+                            }
+                            else
+                            {
+                                mdata.get_basic_sample_data();
+                                mdata.get_group_sample_data();
+                                mdata.get_sample_ans();
+                                mdata.get_sample_fz();
+                            }
+
+
                         }
                         if (Utils.is_gk_zh(exam, chi_sub))
                         {
@@ -319,7 +348,9 @@ namespace ExamReport
 
                         }
                     }
+
                     catch (System.Threading.ThreadAbortException e)
+
                     {
                     }
                     catch (Exception e)
@@ -446,17 +477,38 @@ namespace ExamReport
         public void gk_export_process(MetaData mdata)
         {
             _form.ShowPro("gk_export", 0, "开始导出...");
-            string table = save_address + @"\" + mdata.get_dbf_table_name();
+            string table;
+            if (Utils.isNewGK)
+                table = save_address + @"\" + mdata.get_dbf_sample_table_name();
+            else
+                table = save_address + @"\" + mdata.get_dbf_table_name();
             DBFExport export = new DBFExport(mdata.basic, mdata.group);
             export.join_cj(mdata.CJ_list);
             export.join_sf(mdata.SF_list);
             export.do_export(save_address, table);
+
+            //if (Utils.isNewGK)
+            //{
+                
+                
+            //    mdata.get_basic_data();
+            //    mdata.get_group_data();
+            //    mdata.get_ans();
+            //    mdata.get_fz();
+
+            //    string full_table = save_address + @"\" + mdata.get_dbf_table_name();
+            //    DBFExport fullexport = new DBFExport(mdata.basic, mdata.group);
+            //    export.join_cj(mdata.CJ_list);
+            //    export.join_sf(mdata.SF_list);
+            //    export.do_export(save_address, table);
+
+            //}
         }
 
         public void gk_cj_comp_start()
         {
             _form.ShowPro("gk_cj_cp", 0, "对比开始处理...");
-            MetaData mdata = new MetaData(cj_comp_year, "gk", "gk_xz");
+            MetaData mdata = new MetaData(cj_comp_year, "gk", "gk_xz", false);
             mdata.get_zf_data();
             mdata.get_CJ_data(Utils.CurrentDirectory + @"\config\gk_cj.xlsx");
 
@@ -745,7 +797,9 @@ namespace ExamReport
                     }
                 }
             }
+#pragma warning disable CS0168 // 声明了变量“e”，但从未使用过
             catch (System.Threading.ThreadAbortException e)
+#pragma warning restore CS0168 // 声明了变量“e”，但从未使用过
             {
             }
             catch (Exception e)
@@ -870,7 +924,9 @@ namespace ExamReport
                     }
                 }
             }
+#pragma warning disable CS0168 // 声明了变量“e”，但从未使用过
             catch (System.Threading.ThreadAbortException e)
+#pragma warning restore CS0168 // 声明了变量“e”，但从未使用过
             {
             }
             catch (Exception e)
@@ -1413,10 +1469,25 @@ namespace ExamReport
            
             WordData result = new WordData(mdata.groups_group);
             Total_statistic stat = new Total_statistic(result, XX, my_mark, my_ans, XX_group, my_group, groupnum);
-            stat._config = config;
-            stat.statistic_process(isZonghe);
-            if (mdata.xz.Count > 0)
-                stat.xz_postprocess(mdata.xz);
+
+            if (Utils.isNewGK)
+            {
+                config.fullmark = mdata._fullmark;
+                stat._config = config;
+                stat.statistic_sample_process(isZonghe);
+                if (mdata.xz.Count > 0)
+                    stat.xz_postprocess(mdata.xz);
+            }
+            else
+            {
+                
+                stat._config = config;
+
+                stat.statistic_process(isZonghe);
+                if (mdata.xz.Count > 0)
+                    stat.xz_postprocess(mdata.xz);
+            }
+            
 
             return result;
         }
@@ -1673,6 +1744,7 @@ namespace ExamReport
         }
         public void gk_qx_process(MetaData mdata)
         {
+
             Configuration config = initConfig(mdata._sub, "区县", "高考");
             ArrayList QX = new ArrayList();
             ArrayList total = new ArrayList();
@@ -1682,6 +1754,7 @@ namespace ExamReport
             Partition_wordcreator create = new Partition_wordcreator(total, QX, mdata.grp, mdata.groups_group);
             create.SetConfig(config);
             create.creating_word();
+            
 
 
         }
@@ -1983,18 +2056,37 @@ namespace ExamReport
 
             WordData data = new WordData(mdata.groups_group);
             _form.ShowPro("gk_zt", 1, mdata.log_name + "数据分析中...");
+
+            if (isOrigin)
+            {
+                Total_statistic stat = new Total_statistic(data, mdata.basic, mdata._fullmark, mdata.ans, mdata.group, mdata.grp, mdata._group_num);
+                stat._config = config;
+                stat.statistic_process(false);
+                if (mdata.xz.Count > 0)
+                    stat.xz_postprocess(mdata.xz);
+
+                //cdata.save_totaldata(mdata._year, mdata._exam, mdata.get_sub(), data);
+
+                _form.ShowPro("gk_zt", 1, mdata.log_name + "报告生成中...");
+                WordCreator create = new WordCreator(data, config);
+                create.creating_word();
+            }
+            else
+            {
+
+                Total_statistic stat = new Total_statistic(data, mdata.basic, mdata._fullmark, mdata.ans, mdata.group, mdata.grp, mdata._group_num);
+                config.fullmark = mdata._fullmark;
+                stat._config = config;
+                stat.statistic_sample_process(false);
+                if (mdata.xz.Count > 0)
+                    stat.xz_postprocess(mdata.xz);
+
+                //cdata.save_totaldata(mdata._year, mdata._exam, mdata.get_sub(), data);
+                _form.ShowPro("gk_zt", 1, mdata.log_name + "报告生成中...");
+                WordCreator create = new WordCreator(data, config);
+                create.creating_word_sample();
+            }
             
-            Total_statistic stat = new Total_statistic(data, mdata.basic, mdata._fullmark, mdata.ans, mdata.group, mdata.grp, mdata._group_num);
-            stat._config = config;
-            stat.statistic_process(false);
-            if (mdata.xz.Count > 0)
-                stat.xz_postprocess(mdata.xz);
-
-            cdata.save_totaldata(mdata._year, mdata._exam, mdata.get_sub(), data);
-
-            _form.ShowPro("gk_zt", 1, mdata.log_name + "报告生成中...");
-            WordCreator create = new WordCreator(data, config);
-            create.creating_word();
         }
         public void gk_zt_wl_process(MetaData mdata)
         {

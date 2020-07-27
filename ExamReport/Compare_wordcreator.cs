@@ -6,8 +6,8 @@ using System.Data;
 using System.Collections;
 using Word = Microsoft.Office.Interop.Word;
 using Excel = Microsoft.Office.Interop.Excel;
-using Graph = Microsoft.Office.Interop.Graph;
-using Controls = Microsoft.Office.Tools.Word.Controls;
+//using Graph = Microsoft.Office.Interop.Graph;
+//using Controls = Microsoft.Office.Tools.Word.Controls;
 
 namespace ExamReport
 {
@@ -26,13 +26,17 @@ namespace ExamReport
         object oEndOfDoc = "\\endofdoc"; /* \endofdoc is a predefined bookmark */
         Word._Application oWord;
         Word._Document oDoc;
+#pragma warning disable CS0169 // 从不使用字段“Compare_wordcreator._sdata”
         ArrayList _sdata;
+#pragma warning restore CS0169 // 从不使用字段“Compare_wordcreator._sdata”
         object oParagrahbreak = Microsoft.Office.Interop.Word.WdBreakType.wdLineBreak;
         Object oTrue = true;
         Object oFalse = false;
 
         public Configuration _config;
+#pragma warning disable CS0169 // 从不使用字段“Compare_wordcreator._groups”
         DataTable _groups;
+#pragma warning restore CS0169 // 从不使用字段“Compare_wordcreator._groups”
         object oClassType = "Excel.Chart.8";
         string _addr;
 

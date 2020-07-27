@@ -26,7 +26,9 @@ namespace ExamReport
         public List<string> xz_th;
         public string _filepath;
 
-        string[] answer_colnam = { "th", "fs", "da" };
+        public bool isSampled = false;
+
+        string[] answer_colnam = { "th", "fs", "da", "sample"};
         string[] groups_colnam = { "tz", "th" };
         string[] colname;
 
@@ -110,44 +112,30 @@ namespace ExamReport
 
                     for (int iCol = 1; iCol <= colname.Length; iCol++)
                     {
-
-                        range = (Range)sheet.Cells[iRow, iCol];
-                        if (!_type && iCol == 1)
+                        switch (iCol)
                         {
-                            if (groups_group.ContainsKey(range.Text.ToString()))
-                            {
-                                List<string> temp = groups_group[range.Text.ToString()];
-
-                            }
-                            else
-                            {
-
-                            }
-
+                            case 1:
+                            case 2:
+                            case 3:
+                                range = (Range)sheet.Cells[iRow, iCol];
+                                cellContent = (range.Value2 == null) ? "" : range.Text.ToString();
+                                dr[iCol - 1] = cellContent;
+                                CheckCell(iCol, iRow, cellContent);
+                                break;
+                            case 4:
+                                range = (Range)sheet.Cells[iRow, iCol+1];
+                                cellContent = (range.Value2 == null || range.Text.ToString().Trim().Equals("")) ? "1" : "0";
+                                dr[iCol - 1] = cellContent;
+                                if (cellContent.Equals("0"))
+                                    isSampled = true;
+                                break;
+                            default:
+                                break;
                         }
-                        //switch (dt.Columns[iCol].ColumnName)
-                        //{
-                        //    case "th":
-                        //        cellContent = (range.Value2 == null) ? "" : range.Text.ToString();
-                        //        break;
-                        //    case "fs":
-                        //        cellContent = (range.Value2 == null) ? "" : range.Value;
-                        //}
 
-                        cellContent = (range.Value2 == null) ? "" : range.Text.ToString();
-
-                        //if (iRow == 1)  
-                        //{  
-                        //    dt.Columns.Add(cellContent);  
-                        //}  
-                        //else  
-                        //{  
-                        dr[iCol - 1] = cellContent;
-                        //}  
-                        CheckCell(iCol, iRow,cellContent);
+                        
                     }
 
-                    //if (iRow != 1)  
                     dt.Rows.Add(dr);
                     range = (Range)sheet.Cells[iRow, 4];
                     if (range.Value2 != null)
@@ -249,7 +237,9 @@ namespace ExamReport
                         if (Math.Abs(mark) != mark)
                             throw new FormatException();
                     }
+#pragma warning disable CS0168 // 声明了变量“e”，但从未使用过
                     catch (FormatException e)
+#pragma warning restore CS0168 // 声明了变量“e”，但从未使用过
                     {
                         release();
                         throw new ArgumentException("标准答案中第" + row.ToString() + "行满分值有问题！");

@@ -292,7 +292,9 @@ namespace ExamReport
             {
                 adpt.Fill(mySet);
             }
+#pragma warning disable CS0168 // 声明了变量“e”，但从未使用过
             catch (OleDbException e)
+#pragma warning restore CS0168 // 声明了变量“e”，但从未使用过
             {
                 throw new Exception("数据库文件被占用，请关闭！");
             }
@@ -352,7 +354,9 @@ namespace ExamReport
                             if(mark > Convert.ToDecimal(dr["fs"]))
                                 throw new ArgumentException("标准答案中第" + dr["th"].ToString() + "题第二个值应为得分，不能大于满分");
                         }
+#pragma warning disable CS0168 // 声明了变量“e”，但从未使用过
                         catch (FormatException e)
+#pragma warning restore CS0168 // 声明了变量“e”，但从未使用过
                         {
                             throw new ArgumentException("标准答案中第" + dr["th"].ToString() + "题第二个值应为得分，该得分无效");
                         }
@@ -382,7 +386,9 @@ namespace ExamReport
                             if(!ans_dr["da"].ToString().Trim().Equals(""))
                                 basic_data.Columns.Add("D" + ((string)ans_dr["th"]).Trim(), typeof(string));
                     }
+#pragma warning disable CS0168 // 声明了变量“e”，但从未使用过
                     catch (DuplicateNameException e)
+#pragma warning restore CS0168 // 声明了变量“e”，但从未使用过
                     {
                         throw new System.ArgumentException("标准答案题号“" + newStandard.Rows[i]["th"].ToString().Trim() + "”重复");
                     }

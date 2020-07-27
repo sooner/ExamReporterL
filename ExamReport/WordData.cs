@@ -43,6 +43,7 @@ namespace ExamReport
         public DataTable topicDifficultyTable;
 
         public DataTable totalmark_dist;
+        public DataTable totalmark_dist_sample;
 
         public class group_data
         {
@@ -90,9 +91,13 @@ namespace ExamReport
             Total_tuple_analysis = new DataTable();
 
             totalmark_dist = new DataTable();
+            totalmark_dist_sample = new DataTable();
 
             totalmark_dist.Columns.Add("mark", typeof(decimal));
             totalmark_dist.Columns.Add("num", typeof(int));
+
+            totalmark_dist_sample.Columns.Add("mark", typeof(decimal));
+            totalmark_dist_sample.Columns.Add("num", typeof(decimal));
 
 
             total_analysis.Columns.Add("number",typeof(string));

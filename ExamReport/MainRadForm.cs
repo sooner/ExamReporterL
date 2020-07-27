@@ -120,7 +120,9 @@ namespace ExamReport
         {
             string cj_addr = @"\config\gk_cj.xlsx";
             string sf_addr = @"\config\gk_sf.xlsx";
+#pragma warning disable CS0219 // 变量“hk_xxdm_addr”已被赋值，但从未使用过它的值
             string hk_xxdm_addr = @"\config\hk_xxdm.xlsx";
+#pragma warning restore CS0219 // 变量“hk_xxdm_addr”已被赋值，但从未使用过它的值
 
             gk_cj_addr.Text = currentdic + cj_addr;
             gk_qx_cj_addr.Text = currentdic + cj_addr;
@@ -314,6 +316,10 @@ namespace ExamReport
                     GridViewComboBoxColumn col = (GridViewComboBoxColumn)gk_gridview.Columns["SpecChoice"];
                     col.DataSource = Utils.null_combo;
                 }
+
+                GridViewComboBoxColumn cols = (GridViewComboBoxColumn)gk_gridview.Columns["ReportType"];
+                cols.DataSource = Utils.ReportType_combo;
+                row.Cells["ReportType"].Value = Utils.ReportType_combo[0];
             }
             gk_gridview.TableElement.EndUpdate();
 
@@ -338,7 +344,7 @@ namespace ExamReport
         }
         void radGridView1_EditorRequired(object sender, EditorRequiredEventArgs e)
         {
-            if (gk_gridview.CurrentColumn is GridViewComboBoxColumn)
+            if (gk_gridview.CurrentColumn.Name.Equals("SpecChoice"))
             //if (gk_gridview.CurrentColumn is GridViewCheckBoxColumn)
             {
                 if (gk_gridview.CurrentRow.Cells["sub"].Value.ToString().Trim().Equals("语文")
@@ -430,7 +436,9 @@ namespace ExamReport
                 adpt4.Fill(mySet4);
                 adpt5.Fill(mySet5);
             }
+#pragma warning disable CS0168 // 声明了变量“e”，但从未使用过
             catch (OleDbException e)
+#pragma warning restore CS0168 // 声明了变量“e”，但从未使用过
             {
                 throw new Exception("数据库文件被占用，请关闭！");
             }
@@ -1451,7 +1459,7 @@ namespace ExamReport
                     string sub = Utils.language_trans(chi_sub);
 
                     
-                    MetaData mdata = new MetaData(year, exam, sub);
+                    MetaData mdata = new MetaData(year, exam, sub, false);
 
                     names.AddRange(mdata.get_column_name());
                     count++;
@@ -1520,7 +1528,7 @@ namespace ExamReport
                     string sub = Utils.language_trans(chi_sub);
 
 
-                    MetaData mdata = new MetaData(year, exam, sub);
+                    MetaData mdata = new MetaData(year, exam, sub, false);
 
                     type = mdata.get_column_type(custom_col.SelectedItem.Text.Trim());
                     break;

@@ -20,7 +20,10 @@ namespace ExamReport
         public static List<float> myWidth = new List<float> { 2, 5, 2, 5, 2, 5, 5, 2, 5, 2, 5, 2};
         public static void createDiffCuve(Configuration config, double[][] cuveData, double minX, double maxX)
         {
-            createCuve(config, "分数", "难度", cuveData, minX, Convert.ToDouble(config.fullmark), 1.0);
+            if(Utils.isNewGK)
+                createCuve(config, "分数", "得分率", cuveData, minX, Convert.ToDouble(config.fullmark), 1.0);
+            else
+                createCuve(config, "分数", "难度", cuveData, minX, Convert.ToDouble(config.fullmark), 1.0);
         }
         public static void createMultipleChoiceCuve(Configuration config, DataTable dt, string xStr, string yStr)
         {
@@ -203,7 +206,7 @@ namespace ExamReport
             Bitmap sourceBitmap = new Bitmap(zgc.Width, zgc.Height);
             zgc.DrawToBitmap(sourceBitmap, new Rectangle(0, 0, zgc.Width, zgc.Height));
             //Thread.CurrentThread.SetApartmentState(ApartmentState.STA);
-            Utils.mutex_clipboard.WaitOne();
+           Utils.mutex_clipboard.WaitOne();
             Clipboard.Clear();
             Clipboard.SetImage(sourceBitmap);
         }
@@ -284,7 +287,7 @@ namespace ExamReport
             myPane.XAxis.Scale.Max = maxX;
             myPane.XAxis.Scale.Min = minX;
             myPane.XAxis.Scale.MajorStep = maxX / 10;
-            if (yStr.Equals("难度"))
+            if (yStr.Equals("难度") || yStr.Equals("得分率"))
             {
                 myPane.YAxis.Scale.Min = 0;
                 myPane.XAxis.Scale.Min = 0;
@@ -315,7 +318,7 @@ namespace ExamReport
             myPane.GraphObjList.Add(line);
             
 
-            if (yStr.Equals("难度") && config.GroupMark.Count > 0)
+            if ((yStr.Equals("难度") || yStr.Equals("得分率")) && config.GroupMark.Count > 0)
             {
                 foreach (decimal temp in config.GroupMark)
                 {
@@ -354,7 +357,10 @@ namespace ExamReport
 
             // Set the title and axis labels
             myPane.Title.Text = " ";
-            myPane.XAxis.Title.Text = "难度";
+            if(Utils.isNewGK)
+                myPane.XAxis.Title.Text = "得分率";
+            else
+                myPane.XAxis.Title.Text = "难度";
             myPane.YAxis.Title.Text = YaxisTransfer("区分度");
 
             // Enter some calculated data constants
@@ -526,7 +532,10 @@ namespace ExamReport
             //标题设置
 
             myPane.XAxis.Title.Text = "分数";
-            myPane.YAxis.Title.Text = YaxisTransfer("人数");
+            if(Utils.isNewGK)
+                myPane.YAxis.Title.Text = YaxisTransfer("百分比率");
+            else
+                myPane.YAxis.Title.Text = YaxisTransfer("人数");
 
             double pingjunzhi = cuveData[0];
             double biaozhuncha = cuveData[1];
@@ -850,7 +859,10 @@ namespace ExamReport
             //标题设置
 
             myPane.XAxis.Title.Text = "分数";
-            myPane.YAxis.Title.Text = YaxisTransfer("人数");
+            if(Utils.isNewGK)
+                myPane.YAxis.Title.Text = YaxisTransfer("百分比率");
+            else
+                myPane.YAxis.Title.Text = YaxisTransfer("人数");
             myPane.YAxis.Title.FontSpec.Angle = 90;
 
             double[] barX = new double[barData.Length];

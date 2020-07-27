@@ -290,7 +290,9 @@ namespace ExamReport
                         {
                             single_row["mark"] = choiceTransfer(item.choice.ToString());
                         }
+#pragma warning disable CS0168 // 声明了变量“e”，但从未使用过
                         catch (Exception e)
+#pragma warning restore CS0168 // 声明了变量“e”，但从未使用过
                         {
                             throw new ArgumentException("第" + dr["number"].ToString().Substring(1) + "题存在未知答案" + item.choice.ToString());
                         }
@@ -304,8 +306,18 @@ namespace ExamReport
                         {
                             single_row["G" + i.ToString().Trim()] = 0m;
                         }
+                        if (temp.single_detail.Rows.Contains(single_row["mark"]))
+                        {
+                            DataRow temp_row = temp.single_detail.Rows.Find(single_row["mark"]);
+                            int pre_freq = (int)temp_row["frequency"];
+                            decimal pre_avg = (decimal)temp_row["avg"];
+                            temp_row["frequency"] = pre_freq + (int)single_row["frequency"];
+                            temp_row["rate"] = (int)temp_row["frequency"] / Convert.ToDecimal(result.total_num) * 100;
+                            temp_row["avg"] = (pre_freq * pre_avg + (int)single_row["frequency"] * (decimal)single_row["avg"]) / (int)temp_row["frequency"];
+                        }
+                        else
+                            temp.single_detail.Rows.Add(single_row);
 
-                        temp.single_detail.Rows.Add(single_row);
 
                     }
 
@@ -713,7 +725,9 @@ namespace ExamReport
                     {
                         dt_temp = xz_data.Likefilter(filter, filtercode);
                     }
+#pragma warning disable CS0168 // 声明了变量“exp”，但从未使用过
                     catch (ArgumentException exp)
+#pragma warning restore CS0168 // 声明了变量“exp”，但从未使用过
                     {
                         continue;
                     }
@@ -791,7 +805,9 @@ namespace ExamReport
                     {
                         dt_temp = xz_data.filteredtable(filter, xx_code);
                     }
+#pragma warning disable CS0168 // 声明了变量“exp”，但从未使用过
                     catch (ArgumentException exp)
+#pragma warning restore CS0168 // 声明了变量“exp”，但从未使用过
                     {
                         continue;
                     }
@@ -1625,8 +1641,8 @@ namespace ExamReport
         {
             Regex reg = new Regex("^[A-Za-z]+$");
             if (reg.IsMatch(choice))
-                return Utils.ToSBC(choice);
-            else if (choice.Trim().Equals("0"))
+                return Utils.ToSBC(choice.ToUpper());
+            else if (choice.Trim().Equals("0") || choice.Trim().Equals("") || choice.Trim().Equals("#"))
                 return "未选";
             else
                 return choice.Trim();

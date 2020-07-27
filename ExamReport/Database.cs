@@ -8,6 +8,7 @@ using System.Data.OleDb;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using dotnetCHARTING;
 
 namespace ExamReport
 {
@@ -20,6 +21,9 @@ namespace ExamReport
         public DataTable _standard_ans;
         public DataTable _basic_data;
         public DataTable _group_data;
+
+        public DataTable _basic_data_sample;
+        public DataTable _group_data_sample;
 
         public DataTable newStandard;
 
@@ -36,6 +40,8 @@ namespace ExamReport
         public DataTable zh_groups;
         public string _sub_name = null;
 
+        public Dictionary<string, List<string>> delTHs;
+
         OleDbConnection dbfConnection;
 
         public Database(MetaData mdata, DataTable standard_ans, DataTable groups, ZK_database.GroupType gtype, decimal divider)
@@ -49,6 +55,7 @@ namespace ExamReport
             _group_data = new DataTable();
             name_list = new List<List<string>>();
             _mdata = mdata;
+            delTHs = new Dictionary<string, List<string>>();
         }
         public Database(MetaData mdata, DataTable standard_ans, DataTable groups, ZK_database.GroupType gtype, decimal divider, DataTable wenli, string sub_name)
         {
@@ -63,7 +70,7 @@ namespace ExamReport
             _group_data = new DataTable();
             name_list = new List<List<string>>();
             _mdata = mdata;
-
+            delTHs = new Dictionary<string, List<string>>();
         }
         public Database()
         {
@@ -379,16 +386,24 @@ namespace ExamReport
                 {
                     _mdata.wizard.CheckData(1, "数据分析题组中没有主观题，默认按无选择题选项的题目为主观题？");
                     foreach (DataRow dr in _standard_ans.Rows)
-                        if (dr["da"].ToString().Trim().Equals(""))
+                        if (dr["da"].ToString().Trim().Equals("") && dr["sample"].ToString().Trim().Equals("1"))
                             sub_tz.Add(dr["th"].ToString().Trim());
                 }
                 else
+                {
                     th_parse(group_t.AsEnumerable()
                         .Where(c => c.Field<string>("tz").Trim().Equals("主观题"))
                         .First().Field<string>("th").Trim(), sub_tz);
+                    
+                }
             }
             newStandard = StandardAnsRecontruction(_standard_ans, name_list);
+            for (int t = sub_tz.Count - 1; t >= 0; t--)
+            {
 
+                if (!newStandard.Rows.Contains(sub_tz[t]))
+                    sub_tz.RemoveAt(t);
+            }
             _basic_data.Columns.Add("kh", System.Type.GetType("System.String"));
             _basic_data.Columns.Add("zkzh", System.Type.GetType("System.String"));
             _basic_data.Columns.Add("xm", System.Type.GetType("System.String"));
@@ -431,7 +446,9 @@ namespace ExamReport
                             if(mark > Convert.ToDecimal(dr["fs"]))
                                 throw new ArgumentException("标准答案中第" + dr["th"].ToString() + "题第二个值应为得分，不能大于满分");
                         }
+#pragma warning disable CS0168 // 声明了变量“e”，但从未使用过
                         catch (FormatException e)
+#pragma warning restore CS0168 // 声明了变量“e”，但从未使用过
                         {
                             throw new ArgumentException("标准答案中第" + dr["th"].ToString() + "题第二个值应为得分，该得分无效");
                         }
@@ -594,6 +611,8 @@ namespace ExamReport
             }
             _basic_data.DefaultView.Sort = "totalmark asc";
             _basic_data = _basic_data.DefaultView.ToTable();
+
+            
             int totalsize = _basic_data.Rows.Count;
             if (_gtype.Equals(ZK_database.GroupType.population))
             {
@@ -646,6 +665,20 @@ namespace ExamReport
 
             }
             create_groups();
+
+            if(delTHs.Count != 0)
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.Append("数据需求删除了以下未知题目\n");
+                foreach(string key in delTHs.Keys)
+                {
+                    sb.Append(key + ": ");
+                    foreach (string th in delTHs[key])
+                        sb.Append(th + ",");
+                    sb.Append("\n");
+                }
+                _mdata.wizard.CheckData(1, sb.ToString());
+            }
             //if (Utils.saveMidData)
             //{
             //    Utils.create_groups_table(_basic_data, Utils.year + "高考" + Utils.subject + "基础数据");
@@ -774,14 +807,14 @@ namespace ExamReport
                     break;
             }
             sk.Push(omit_tail(temp_th));
-            if (record.Count > 1)
-            {
+            //if (record.Count > 1)
+            //{
                 dr["th"] = omit_tail(temp_th);
                 dr["fs"] = Convert.ToInt32(mark).ToString();
                 dr["da"] = "";
                 dt.Rows.Add(dr);
                 name.Add(record);
-            }
+            //}
         }
         public string omit_tail(string serial)
         {
@@ -809,10 +842,39 @@ namespace ExamReport
             for (int i = 0; i < _groups.Rows.Count; i++)
             {
                 List<string> tz = new List<string>();
-                //string row_name = _groups.Rows[i][0].ToString().Trim();
-                _group_data.Columns.Add("FZ"+(i+1).ToString(), System.Type.GetType("System.Decimal"));
+                string col_name = "FZ" + (i + 1).ToString();
                 string org = _groups.Rows[i][1].ToString().Trim();
                 th_parse(org, tz);
+
+                for (int j = tz.Count - 1; j >= 0; j--)
+                {
+                    if (!newStandard.Rows.Contains(tz[j]))
+                    {
+                        if (delTHs.Keys.Contains(col_name))
+                            delTHs[col_name].Add(tz[j]);
+                        else
+                        {
+                            List<string> newFz = new List<string>();
+                            newFz.Add(tz[j]);
+                            delTHs.Add(col_name, newFz);
+                        }
+
+                        tz.RemoveAt(j);
+                        
+                    }
+                }
+                StringBuilder sb = new StringBuilder();
+                foreach (string item in tz)
+                {
+                    sb.Append(item);
+                    sb.Append(",");
+                }
+                sb.Remove(sb.Length - 1, 1);
+                _groups.Rows[i][1] = sb.ToString();
+                //if (tz.Count == 0)
+                //    continue;
+                //string row_name = _groups.Rows[i][0].ToString().Trim();
+                _group_data.Columns.Add(col_name, System.Type.GetType("System.Decimal"));
                 
                 tm.Add(tz);
             }

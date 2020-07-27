@@ -45,27 +45,42 @@ namespace ExamReport
         public DataTable zh_ans;
         public DataTable zh_grp;
 
+
+        public bool isSampled;
+
         public Dictionary<string, List<string>> zh_groups_group;
 
         public List<string> xz;
         public Dictionary<string, List<string>> groups_group;
 
         public MyWizard wizard;
-        public MetaData(string year, string exam, string sub)
+        public MetaData(string year, string exam, string sub, bool isLoading)
         {
-            MySqlDataReader reader = MySqlHelper.ExecuteReader(MySqlHelper.Conn, CommandType.Text, "select * from exam_meta_data where year='"
-                + year + "' and exam='"
-                + exam + "' and sub='"
-                + sub + "'", null);
-            if (!reader.Read())
+            if (!isLoading)
             {
-                reader = MySqlHelper.ExecuteReader(MySqlHelper.Conn, CommandType.Text, "select * from exam_meta_data where year='"
-                + year + "' and exam='"
-                + "ngk" + "' and sub='"
-                + sub + "'", null);
-                if (!reader.Read())
-                    throw new Exception("数据库异常，不存在该数据");
-                _exam = "ngk";
+                MySqlDataReader reader = MySqlHelper.ExecuteReader(
+                    MySqlHelper.Conn,
+                    CommandType.Text,
+                    "select * from exam_meta_data where year='"
+                    + year + "' and exam='"
+                    + exam + "' and sub='"
+                    + sub + "'", null);
+
+                if (reader.Read())
+                    _exam = exam;
+                else
+                {
+                    //reader = MySqlHelper.ExecuteReader(
+                    //    MySqlHelper.Conn, 
+                    //    CommandType.Text, 
+                    //    "select * from exam_meta_data where year='"
+                    //    + year + "' and exam='"
+                    //    + "ngk" + "' and sub='"
+                    //    + sub + "'", null);
+                    //if (!reader.Read())
+                    //    throw new Exception("数据库异常，该数据不存在");
+                    _exam = "ngk";
+                }
             }
             else
                 _exam = exam;
@@ -187,7 +202,9 @@ namespace ExamReport
                 throw new Exception("数据库异常，不存在该数据");
             string table_name = Utils.get_basic_tablename(_year, _exam, Utils.language_trans(_sub));
             if (_sub.Contains("理综") || _sub.Contains("文综"))
+#pragma warning disable CS1717 // 对同一变量进行赋值；是否希望对其他变量赋值?
                 table_name = table_name;//留个地方
+#pragma warning restore CS1717 // 对同一变量进行赋值；是否希望对其他变量赋值?
             else if (_sub.Equals("总分") || _sub.Contains("行政版"))
                 table_name = Utils.get_zt_tablename(_year, _exam, Utils.language_trans(_sub));
             reader = MySqlHelper.ExecuteReader(MySqlHelper.Conn, CommandType.Text, "select COLUMN_NAME from information_schema.COLUMNS where table_name = '" + table_name + "'", null);
@@ -210,7 +227,9 @@ namespace ExamReport
                 throw new Exception("数据库异常，不存在该数据");
             string table_name = Utils.get_basic_tablename(_year, _exam, Utils.language_trans(_sub));
             if (_sub.Contains("理综") || _sub.Contains("文综"))
+#pragma warning disable CS1717 // 对同一变量进行赋值；是否希望对其他变量赋值?
                 table_name = table_name;//留个地方
+#pragma warning restore CS1717 // 对同一变量进行赋值；是否希望对其他变量赋值?
             else if (_sub.Equals("总分") || _sub.Contains("行政版"))
                 table_name = Utils.get_zt_tablename(_year, _exam, Utils.language_trans(_sub));
             reader = MySqlHelper.ExecuteReader(MySqlHelper.Conn, CommandType.Text, "describe " + table_name + " " + column_name, null);
@@ -303,16 +322,37 @@ namespace ExamReport
             excel_process pro = new excel_process(addr);
             return pro.getData();
         }
+
+        public void calculateFullmark()
+        {
+            int fmark = 0;
+            foreach (DataRow row in ans.Rows)
+            {
+                if (((string)row["sample"]).Equals("1"))
+                    fmark += Convert.ToInt32(row["fs"]);
+            }
+            _fullmark = fmark;
+        }
         public void get_ans()
         {
             xz = new List<string>();
             ans = DBHelper.get_ans(Utils.get_ans_tablename(_year, _exam, Utils.language_trans(_sub)), ref xz);
         }
-
+        public void get_sample_ans()
+        {
+            xz = new List<string>();
+            ans = DBHelper.get_ans(Utils.get_sample_ans_tablename(_year, _exam, Utils.language_trans(_sub)), ref xz);
+            calculateFullmark();
+        }
         public void get_fz()
         {
             groups_group = new Dictionary<string, List<string>>();
             grp = DBHelper.get_fz(Utils.get_fz_tablename(_year, _exam, Utils.language_trans(_sub)), ref groups_group);
+        }
+        public void get_sample_fz()
+        {
+            groups_group = new Dictionary<string, List<string>>();
+            grp = DBHelper.get_fz(Utils.get_sample_fz_tablename(_year, _exam, Utils.language_trans(_sub)), ref groups_group);
         }
         public void get_zf_data()
         {
@@ -322,10 +362,19 @@ namespace ExamReport
         {
             basic = get_mysql_table(Utils.get_basic_tablename(_year, _exam, Utils.language_trans(_sub)));
         }
+        public void get_basic_sample_data()
+        {
+            basic = get_mysql_table(Utils.get_basic_tablename(_year, "ngk", Utils.language_trans(_sub))+"_sample");
+        }
 
         public void get_group_data()
         {
             group = get_mysql_table(Utils.get_group_tablename(_year, _exam, Utils.language_trans(_sub)));
+        }
+
+        public void get_group_sample_data()
+        {
+            group = get_mysql_table(Utils.get_group_tablename(_year, "ngk", Utils.language_trans(_sub))+"_sample");
         }
 
         public void get_zh_basic_data()
@@ -360,6 +409,10 @@ namespace ExamReport
         public string get_dbf_table_name()
         {
             return _year + "_" + _exam + "_" + Utils.language_trans(_sub) + ".dbf";
+        }
+        public string get_dbf_sample_table_name()
+        {
+            return _year + "_" + _exam + "_" + Utils.language_trans(_sub) + "_sample" + ".dbf";
         }
     }
 }

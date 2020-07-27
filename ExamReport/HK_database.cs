@@ -68,7 +68,9 @@ namespace ExamReport
             {
                 adpt.Fill(mySet);
             }
+#pragma warning disable CS0168 // 声明了变量“e”，但从未使用过
             catch (OleDbException e)
+#pragma warning restore CS0168 // 声明了变量“e”，但从未使用过
             {
                 throw new Exception("数据库文件被占用，请关闭！");
             }
@@ -116,7 +118,9 @@ namespace ExamReport
                         {
                             basic_data.Columns.Add("T" + newStandard.Rows[i]["th"].ToString().Trim(), typeof(decimal));
                         }
+#pragma warning disable CS0168 // 声明了变量“e”，但从未使用过
                         catch (DuplicateNameException e)
+#pragma warning restore CS0168 // 声明了变量“e”，但从未使用过
                         {
                             throw new System.ArgumentException("标准答案题号“" + newStandard.Rows[i]["th"].ToString().Trim() + "”重复");
                         }
@@ -360,7 +364,9 @@ namespace ExamReport
                 {
                     _group_data.Columns.Add("FZ" + (i + 1).ToString(), System.Type.GetType("System.Decimal"));
                 }
+#pragma warning disable CS0168 // 声明了变量“e”，但从未使用过
                 catch (DuplicateNameException e)
+#pragma warning restore CS0168 // 声明了变量“e”，但从未使用过
                 {
                     throw new System.ArgumentException("分组名“" + row_name + "”重复");
                 }

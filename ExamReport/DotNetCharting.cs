@@ -213,7 +213,9 @@ namespace ExamReport
 
                 chart.LegendBox.HeaderLabel = new dotnetCHARTING.WinForms.Label("图表说明", new Font("Microsoft Sans Serif", 10F, FontStyle.Bold, GraphicsUnit.Point, 134));
                 //chart.LegendBox.HeaderLabel.Font = new Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 134);
+#pragma warning disable CS0618 // '“LegendBox.Label”已过时:“This property is obsolete, please use LegendBox.LabelStyle instead.”
                 chart.LegendBox.Label.Font = new Font("Microsoft Sans Serif", 9F, FontStyle.Bold, GraphicsUnit.Point, 134);
+#pragma warning restore CS0618 // '“LegendBox.Label”已过时:“This property is obsolete, please use LegendBox.LabelStyle instead.”
                 chart.Palette = new Color[] {  Color.FromArgb(0, 156, 255), Color.FromArgb(255, 99, 49), Color.FromArgb(49, 255, 49), Color.FromArgb(255, 255, 0), };
 
                 chart.Title = "";
@@ -328,7 +330,9 @@ namespace ExamReport
                 return sc;
 
             }
+#pragma warning disable CS0168 // 声明了变量“ex”，但从未使用过
             catch (Exception ex)
+#pragma warning restore CS0168 // 声明了变量“ex”，但从未使用过
             {
 
                 return sc;
@@ -374,7 +378,9 @@ namespace ExamReport
             chart.LegendBox.HeaderLabel = new dotnetCHARTING.WinForms.Label("图表说明", new Font("Microsoft Sans Serif", 10F, FontStyle.Bold, GraphicsUnit.Point, 134));
            
             //chart.LegendBox.HeaderLabel.Font = new Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 134);
+#pragma warning disable CS0618 // '“LegendBox.Label”已过时:“This property is obsolete, please use LegendBox.LabelStyle instead.”
             chart.LegendBox.Label.Font = new Font("Microsoft Sans Serif", 9F, FontStyle.Bold, GraphicsUnit.Point, 134);
+#pragma warning restore CS0618 // '“LegendBox.Label”已过时:“This property is obsolete, please use LegendBox.LabelStyle instead.”
             chart.Palette = new Color[] { Color.FromArgb(0, 156, 255), Color.FromArgb(255, 99, 49), Color.FromArgb(49, 255, 49), Color.FromArgb(255, 255, 0), };
 
             chart.Title = "";

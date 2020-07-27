@@ -10,12 +10,14 @@ using System.Threading;
 using MySql.Data;
 using MySql.Data.MySqlClient;
 using Ionic.Zip;
+using System.Windows.Forms.VisualStyles;
 
 namespace ExamReport
 {
     public class Utils
     {
         public enum UnionType { QX_XX, ID };
+        public static bool isNewGK;
         public static string save_address;
         public static string exam;
         public static string subject;
@@ -48,6 +50,7 @@ namespace ExamReport
 
         public static string[] ywyy_combo = new string[] { "文理报告", "类型报告", "两者均有"};
         public static string[] zh_combo = new string[] { "总体总分相关", "科目总分相关" };
+        public static string[] ReportType_combo = new string[] { "命题报告", "考生水平评价"};
         public static string[] null_combo = new string[] { };
 
         public static Mutex mutex_clipboard = new Mutex();
@@ -119,6 +122,7 @@ namespace ExamReport
 
             else
             {
+                WriteIntoDocument(oDoc, "title_1", GK_title_1);
                 WriteIntoDocument(oDoc, "title_2", XX_title);
                 if (config.subject.Contains("理综"))
                 {
@@ -840,10 +844,19 @@ namespace ExamReport
         {
             return get_tablename(year, exam, sub) + "_ans";
         }
+        public static string get_sample_ans_tablename(string year, string exam, string sub)
+        {
+            return get_tablename(year, exam, sub) + "_sample_ans";
+        }
         public static string get_fz_tablename(string year, string exam, string sub)
         {
             return get_tablename(year, exam, sub) + "_fz";
         }
+        public static string get_sample_fz_tablename(string year, string exam, string sub)
+        {
+            return get_tablename(year, exam, sub) + "_sample_fz";
+        }
+
         public static void create_groups_table(DataTable groups_data, string filename)
         {
             string conn = @"Provider=vfpoledb;Data Source=" + save_address + ";Collating Sequence=machine;";

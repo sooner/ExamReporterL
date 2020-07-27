@@ -71,7 +71,9 @@ namespace ExamReport
             {
                 adpt.Fill(mySet);
             }
+#pragma warning disable CS0168 // 声明了变量“e”，但从未使用过
             catch (OleDbException e)
+#pragma warning restore CS0168 // 声明了变量“e”，但从未使用过
             {
                 throw new Exception("数据库文件被占用，请关闭！");
             }
